@@ -17,6 +17,7 @@ input_select:
       - Standby
       - Handmatig
       - Nul op de meter
+      - Dynamisch NOM
       - Alleen slim ontladen
       - Alleen slim opladen
       - Opladen met 2400 watt
@@ -28,6 +29,30 @@ input_boolean:
     icon: mdi:clock-time-three-outline
 
 input_text:
+  zendure_2400_ac_ip_adres:
+    name: Zendure 2400 AC IP-adres
+    icon: mdi:ip
+    max: 50
+    mode: text
+
+  homewizard_p1_ip_adres:
+    name: Homewizard P1 IP-adres
+    icon: mdi:ip
+    max: 50
+    mode: text
+
+  afwijkende_p1_sensor:
+    name: Afwijkende P1 Sensor
+    icon: mdi:transmission-tower
+    max: 250
+    mode: text
+
+  dynamisch_nordpool_sensor:
+    name: Dynamisch Nordpool Sensor
+    icon: mdi:cash
+    max: 250
+    mode: text
+
   dynamisch_handmatige_periode:
     name: Dynamisch Handmatige Periode
     icon: mdi:view-grid
@@ -127,103 +152,145 @@ sensor:
 
 template:
   - sensor:
+      - name: "P1 Aansturing Vermogen"
+        unique_id: P1_Aansturing_Vermogen
+        unit_of_measurement: "W"
+        device_class: power
+        state: >
+          {% set afwijkend = states('input_text.afwijkende_p1_sensor') %}
+          {% if afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
+            {{ states(afwijkend) }}
+          {% else %}
+            {{ states('sensor.homewizard_p1_vermogen') }}
+          {% endif %}
+
       - name: "Dynamisch Nordpool"
         unique_id: dynamisch_nordpool
         icon: mdi:cash
         unit_of_measurement: "€/kWh"
         state: >-
-          {% set nordpool = 'sensor.<NORDPOOL>' %}
-          {% set use_15_min = is_state('input_boolean.dynamisch_15_minuten', 'on') %}
-          {% if use_15_min %}
-            {% set data = state_attr(nordpool, 'raw_today') or [] %}
-            {% set nowts = as_timestamp(now()) %}
-            {% set current = namespace(val=None) %}
-            {% for p in data %}
-              {% set s = as_timestamp(as_datetime(p.start)) %}
-              {% set e = as_timestamp(as_datetime(p.end)) %}
-              {% if nowts >= s and nowts < e %}
-                {% set current.val = (p.value) | round(5) %}
-              {% endif %}
-            {% endfor %}
-            {{ current.val if current.val is not none else 'unknown' }}
+          {% set ingevuld = states('input_text.dynamisch_nordpool_sensor') %}
+          {% if ingevuld | lower | regex_match('^sensor\\..+') and states(ingevuld) not in ['unknown', 'unavailable', 'none'] %}
+            {% set nordpool = ingevuld %}
           {% else %}
-            {% set raw = state_attr(nordpool, 'raw_today') %}
-            {% set now = now() %}
-            {% if raw %}
-              {% set current_hour_values = raw 
-                | selectattr('start', '>=', now.replace(minute=0, second=0, microsecond=0)) 
-                | selectattr('start', '<', now.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)) 
-                | map(attribute='value') 
-                | list %}
-              {% if current_hour_values %}
-                {{ (current_hour_values | sum / current_hour_values | count) | round(5) }}
+            {% set nordpool = none %}
+          {% endif %}
+
+          {% if nordpool is not none %}
+            {% set use_15_min = is_state('input_boolean.dynamisch_15_minuten', 'on') %}
+            {% if use_15_min %}
+              {% set data = state_attr(nordpool, 'raw_today') or [] %}
+              {% set nowts = as_timestamp(now()) %}
+              {% set current = namespace(val=None) %}
+              {% for p in data %}
+                {% set s = as_timestamp(as_datetime(p.start)) %}
+                {% set e = as_timestamp(as_datetime(p.end)) %}
+                {% if nowts >= s and nowts < e %}
+                  {% set current.val = (p.value) | round(5) %}
+                {% endif %}
+              {% endfor %}
+              {{ current.val if current.val is not none else 'unknown' }}
+            {% else %}
+              {% set raw = state_attr(nordpool, 'raw_today') %}
+              {% set nu = now() %}
+              {% if raw %}
+                {% set current_hour_values = raw 
+                  | selectattr('start', '>=', nu.replace(minute=0, second=0, microsecond=0)) 
+                  | selectattr('start', '<', nu.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)) 
+                  | map(attribute='value') 
+                  | list %}
+                {% if current_hour_values %}
+                  {{ (current_hour_values | sum / current_hour_values | count) | round(5) }}
+                {% else %}
+                  {{ states(nordpool) }}
+                {% endif %}
               {% else %}
                 {{ states(nordpool) }}
               {% endif %}
-            {% else %}
-              {{ states(nordpool) }}
             {% endif %}
+          {% else %}
+            unknown
           {% endif %}
         attributes:
           raw_today: >-
-            {% set nordpool = 'sensor.<NORDPOOL>' %}
-            {% set use_15_min = is_state('input_boolean.dynamisch_15_minuten', 'on') %}
-            {% set raw = state_attr(nordpool, 'raw_today') %}
-            {% if raw %}
-              [
-              {% if use_15_min %}
-                {% for item in raw %}
-                  {
-                    "start": "{{ item.start.isoformat() }}",
-                    "end": "{{ item.end.isoformat() }}",
-                    "value": {{ item.value }}
-                  }{% if not loop.last %},{% endif %}
-                {% endfor %}
+            {% set ingevuld = states('input_text.dynamisch_nordpool_sensor') %}
+            {% if ingevuld | lower | regex_match('^sensor\\..+') and states(ingevuld) not in ['unknown', 'unavailable', 'none'] %}
+              {% set nordpool = ingevuld %}
+            {% else %}
+              {% set nordpool = none %}
+            {% endif %}
+
+            {% if nordpool is not none %}
+              {% set use_15_min = is_state('input_boolean.dynamisch_15_minuten', 'on') %}
+              {% set raw = state_attr(nordpool, 'raw_today') %}
+              {% if raw %}
+                [
+                {% if use_15_min %}
+                  {% for item in raw %}
+                    {
+                      "start": "{{ item.start.isoformat() }}",
+                      "end": "{{ item.end.isoformat() }}",
+                      "value": {{ item.value }}
+                    }{% if not loop.last %},{% endif %}
+                  {% endfor %}
+                {% else %}
+                  {% set hourly = raw | groupby('start.hour') %}
+                  {% for hour_group in hourly %}
+                    {% set values = hour_group.list | map(attribute='value') | list %}
+                    {% set hour_start = hour_group.list[0].start.replace(minute=0, second=0, microsecond=0) %}
+                    {% set hour_end = hour_start + timedelta(hours=1) %}
+                    {
+                      "start": "{{ hour_start.isoformat() }}",
+                      "end": "{{ hour_end.isoformat() }}",
+                      "value": {{ (values | sum / values | count) | round(5) }}
+                    }{% if not loop.last %},{% endif %}
+                  {% endfor %}
+                {% endif %}
+                ]
               {% else %}
-                {% set hourly = raw | groupby('start.hour') %}
-                {% for hour_group in hourly %}
-                  {% set values = hour_group.list | map(attribute='value') | list %}
-                  {% set hour_start = hour_group.list[0].start.replace(minute=0, second=0, microsecond=0) %}
-                  {% set hour_end = hour_start + timedelta(hours=1) %}
-                  {
-                    "start": "{{ hour_start.isoformat() }}",
-                    "end": "{{ hour_end.isoformat() }}",
-                    "value": {{ (values | sum / values | count) | round(5) }}
-                  }{% if not loop.last %},{% endif %}
-                {% endfor %}
+                []
               {% endif %}
-              ]
             {% else %}
               []
             {% endif %}
           raw_tomorrow: >-
-            {% set nordpool = 'sensor.<NORDPOOL>' %}
-            {% set use_15_min = is_state('input_boolean.dynamisch_15_minuten', 'on') %}
-            {% set raw = state_attr(nordpool, 'raw_tomorrow') %}
-            {% if raw %}
-              [
-              {% if use_15_min %}
-                {% for item in raw %}
-                  {
-                    "start": "{{ item.start.isoformat() }}",
-                    "end": "{{ item.end.isoformat() }}",
-                    "value": {{ item.value }}
-                  }{% if not loop.last %},{% endif %}
-                {% endfor %}
+            {% set ingevuld = states('input_text.dynamisch_nordpool_sensor') %}
+            {% if ingevuld | lower | regex_match('^sensor\\..+') and states(ingevuld) not in ['unknown', 'unavailable', 'none'] %}
+              {% set nordpool = ingevuld %}
+            {% else %}
+              {% set nordpool = none %}
+            {% endif %}
+
+            {% if nordpool is not none %}
+              {% set use_15_min = is_state('input_boolean.dynamisch_15_minuten', 'on') %}
+              {% set raw = state_attr(nordpool, 'raw_tomorrow') %}
+              {% if raw %}
+                [
+                {% if use_15_min %}
+                  {% for item in raw %}
+                    {
+                      "start": "{{ item.start.isoformat() }}",
+                      "end": "{{ item.end.isoformat() }}",
+                      "value": {{ item.value }}
+                    }{% if not loop.last %},{% endif %}
+                  {% endfor %}
+                {% else %}
+                  {% set hourly = raw | groupby('start.hour') %}
+                  {% for hour_group in hourly %}
+                    {% set values = hour_group.list | map(attribute='value') | list %}
+                    {% set hour_start = hour_group.list[0].start.replace(minute=0, second=0, microsecond=0) %}
+                    {% set hour_end = hour_start + timedelta(hours=1) %}
+                    {
+                      "start": "{{ hour_start.isoformat() }}",
+                      "end": "{{ hour_end.isoformat() }}",
+                      "value": {{ (values | sum / values | count) | round(5) }}
+                    }{% if not loop.last %},{% endif %}
+                  {% endfor %}
+                {% endif %}
+                ]
               {% else %}
-                {% set hourly = raw | groupby('start.hour') %}
-                {% for hour_group in hourly %}
-                  {% set values = hour_group.list | map(attribute='value') | list %}
-                  {% set hour_start = hour_group.list[0].start.replace(minute=0, second=0, microsecond=0) %}
-                  {% set hour_end = hour_start + timedelta(hours=1) %}
-                  {
-                    "start": "{{ hour_start.isoformat() }}",
-                    "end": "{{ hour_end.isoformat() }}",
-                    "value": {{ (values | sum / values | count) | round(5) }}
-                  }{% if not loop.last %},{% endif %}
-                {% endfor %}
+                []
               {% endif %}
-              ]
             {% else %}
               []
             {% endif %}
@@ -986,9 +1053,9 @@ template:
               []
             {% endif %}
           gemiddelde_goedkoop: >
-            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode', 'raw_today') %}
-            {% set aantal_goedkoop = states('input_number.dynamisch_goedkoopste_x_periode') | int %}
-            {% set handmatige = states('input_text.dynamisch_handmatige_periode') %}
+            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode', 'raw_tomorrow') %}
+            {% set aantal_goedkoop = states('input_number.dynamisch_goedkoopste_x_periode_morgen') | int %}
+            {% set handmatige = states('input_text.dynamisch_handmatige_periode_morgen') %}
             {% set ns = namespace(uren=[]) %}
             {% if prijzen is iterable %}
               {% if handmatige | length > 0 %}
@@ -1434,7 +1501,6 @@ template:
       - name: "Zendure 2400 AC Indicatie Beschikbare Energie"
         unique_id: Zendure_2400_AC_Indicatie_Beschikbare_Energie
         unit_of_measurement: "kWh"
-        state_class: measurement
         device_class: energy
         state: >
           {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
@@ -1471,9 +1537,13 @@ template:
           {% endif %}
 
 rest:
-  - resource: http://<IP-BATTERIJ>/properties/report
+  - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC Serienummer"
+        unique_id: Zendure_2400_AC_Serienummer
+        value_template: "{{ value_json.sn }}"
+
       - name: "Zendure 2400 AC Vermogen Import (DC)"
         unique_id: Zendure_2400_AC_Vermogen_Import_(DC)
         value_template: >
@@ -1710,68 +1780,68 @@ rest:
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
-    
-  - resource: http://<IP-HOMEWIZARD-P1>/api/v1/data   # IP-adres van je Homewizard P1 voor V1 API
+
+  - resource_template: "http://{{ states('input_text.homewizard_p1_ip_adres') }}/api/v1/data"
     scan_interval: 1
     sensor:
-      - name: "P1 Aansturing API v1"
+      - name: "Homewizard P1 Vermogen"
         value_template: "{{ value_json.active_power_w | float }}"
-        unique_id: P1_Aansturing_API_V1
+        unique_id: Homewizard_P1_Vermogen
         unit_of_measurement: "W"
         device_class: power
- 
+
 rest_command:
   zendure_opslaan_in_ram:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"smartMode": 1 }}'
+    payload: '{"sn":"{{sn}}","properties":{"smartMode": 1 }}'
 
   zendure_snel_laden:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"acMode": 1, "inputLimit": 2400 }}'
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 1, "inputLimit": 2400 }}'
 
   zendure_stop_met_laden:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"acMode": 1, "inputLimit": 0 }}'
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 1, "inputLimit": 0 }}'
 
   zendure_x_laden:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"acMode": 1, "inputLimit": {{inputLimit}} }}'
+    payload: '{"sn": "{{sn}}","properties": {"acMode": 1, "inputLimit": {{inputLimit}} }}'
 
   zendure_x_laden_balanceren:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"inputLimit": {{inputLimit}} }}'
+    payload: '{"sn":"{{sn}}","properties":{"inputLimit": {{inputLimit}} }}'
 
   zendure_x_ontladen:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"acMode": 2, "outputLimit": {{outputLimit}} }}'
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": {{outputLimit}} }}'
 
   zendure_x_ontladen_balanceren:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"outputLimit": {{outputLimit}} }}'
+    payload: '{"sn":"{{sn}}","properties":{"outputLimit": {{outputLimit}} }}'
 
   zendure_snel_ontladen:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"acMode": 2, "outputLimit": 2400 }}'
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": 2400 }}'
 
   zendure_stop_met_ontladen:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"acMode": 2, "outputLimit": 0 }}'
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": 0 }}'
 
   zendure_stop_met_alles:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/writee
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"outputLimit": 0, "inputLimit": 0 }}'
+    payload: '{"sn":"{{sn}}","properties":{"outputLimit": 0, "inputLimit": 0 }}'
 
   zendure_standby:
-    url: http://<IP-BATTERIJ>/properties/write
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
-    payload: '{"sn":"<SERIAL-2400AC>","properties":{"smartMode": 0, "outputLimit": 0, "inputLimit": 0 }}'
+    payload: '{"sn":"{{sn}}","properties":{"smartMode": 0, "outputLimit": 0, "inputLimit": 0 }}'
