@@ -19,25 +19,24 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 - Homewizard P1 (of een andere P1/CT-meter die data per seconde levert)
 - één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro (geen aangesloten zonnepanelen)
 
-#### ℹ️ Vereiste gegevens
-
-| Variabele            | Waar te vinden                                 |
-|----------------------|------------------------------------------------|
-| `<IP-BATTERIJ>`      | In de Zendure app onder device Information |
-| `<SERIAL-2400AC>`    | In de Zendure app onder device Information  |
-| `<IP-HOMEWIZARD-P1>` | In de Homewizard app (lokale API aanzetten) |
-| `<NORDPOOL>         ` | Optioneel de eniteit van Nordpool toevoegen |
-
 ---
 
 ### #️⃣ Configuratie en herstart
 
 1. Maak eerst een **backup** van je `configuration.yaml`
-2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml` en vervang de **vereiste gegevens** zoals hierboven aangegeven
+2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`
 3. Herstart Home Assistant
-4. Na herstarten zie je onder integraties het onderstaande verschijnen
+5. Vul nu bij de onderstaande velden de juiste gegevens in
 
-![Preview](Images/Rest1.avif)
+| Variabele            | Extra info                                |
+|----------------------|------------------------------------------------|
+| `input_text.zendure_2400_ac_ip_adres`      | In de Zendure app onder device Information |
+| `input_text.homewizard_p1_ip_adres`    | In de Homewizard app (lokale API aanzetten)  |
+| `input_text.afwijkende_p1_sensor` | **Optioneel** een afwijkende P1 sensor toevoegen |
+| `input_text.dynamisch_nordpool_sensor` | **Optioneel** de sensor van Nordpool toevoegen |
+
+![Preview](Images/instellingen.png) 
+
 
 *Zelf toe te voegen entiteiten op een dashboard.
 ![Preview](Images/Rest2.png) 
