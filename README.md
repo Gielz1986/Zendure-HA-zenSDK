@@ -123,7 +123,7 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 
 | Modus                         | Werking                                | 
 | ----------------------------- | -------------------------------------- | 
-| Standby                | Zet volledig in standby en 'sensor.zendure_2400_ac_opslagmodus' zal naar **Opslaan in Flash** gaan. Hierdoor is het ook 0 watt op een KWH MID Meter.                                       |
+| Standby                | Zet volledig in standby en `sensor.zendure_2400_ac_opslagmodus` zal naar **Opslaan in Flash** gaan. Hierdoor is het ook 0 watt op een KWH MID Meter.                                       |
 | Handmatig              | Via `input_number.zendure_2400_ac_handmatig_vermogen` kun je zelf aangeven wat de batterij doet.       |
 | Nul op de meter        | Probeer constant 0 op de meter te houden (40 watt bij opladen en -2 watt bij ontladen).                |
 | Dynamisch NOM          | Wanneer `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie_nom` hoger is dan `input_number.dynamisch_minimale_spread`. Probeer daarna constant 0 op de meter te houden (40 watt bij opladen en -2 watt bij ontladen).                                        |
