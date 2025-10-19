@@ -49,6 +49,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch Nordpool Sensor              | bijv. sensor.nordpool_kwh_nl_eur_3_09_0                      |
 | Aansturing             | Handmatig Vermogen                     | Gebruikt in modus Handmatig                                  |
 |                        | Modus Selecteren                       | Zie **Modus uitleg bij ✅ Batterij mag aan de slag**        |
+|                        | P1 Aansturing Vermogen                 | Homewizard P1 of eigen P1 vermogen                           |
 | Informatie             | Aantal Batterijen                      | 1-6                                                          |
 |                        | Serienummer                            | Serienummer Omvormer                                         |
 |                        | Batterijspanning                       | Voltage                                                      |
@@ -61,7 +62,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Opslagmodus                            | Opslaan in RAM of Opslaan in Flash                           |
 | Vermogen & Energie     | Ingesteld Oplaadvermogen               | 0-2400 watt                                                  |
 |                        | Ingesteld Ontlaadvermogen              | 0-2400 watt                                                  |
-|                        | Vermogen Aansturing                    | -2400-2400 watt                                                  |
+|                        | Vermogen Aansturing                    | -2400-2400 watt                                              |
 |                        | Vermogen Import                        | 0-2400 watt                                                  |
 |                        | Vermogen Export                        | 0-2400 watt                                                  |
 |                        | Vermogen Import (DC)                   | 0-2400 watt                                                  |
@@ -73,13 +74,13 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
 |                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh                                                |
 |                        | SOC Status                             | Goed of Kalibreren                                           |
+|                        | Relais Schakelingen Vandaag            | Beperk deze tot 0-50 per dag. Bij bewolkte dagen 0-100 per dag |
 | Efficiëntie & RTE      | RTE Totaal                             | 0-100%                                                       |
 |                        | Efficiëntie Import                     | 0-100%                                                       |
 |                        | Efficiëntie Export                     | 0-100%                                                       |
 |                        | Efficiëntie Import (24u gemiddelde)    | 0-100%                                                       |
 |                        | Efficiëntie Export (24u gemiddelde)    | 0-100%                                                       |
-| Dynamische Aansturing  | P1 Aansturing Vermogen                 | Homewizard P1 of eigen P1 vermogen                           |
-|                        | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
+| Dynamische Aansturing  | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
 |                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten                                        |
 |                        | Dynamisch Handmatige Periode           | bijv. G11:00;D12:00;G15:00 of 'Geen'                         |
 |                        | Dynamisch Handmatige Periode Morgen    | bijv. G11:00;D12:00;G15:00 of 'Geen'                         |
@@ -126,8 +127,8 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 | ----------------------------- | -------------------------------------- | 
 | Standby                | Zet volledig in standby en `sensor.zendure_2400_ac_opslagmodus` zal naar **Opslaan in Flash** gaan. Hierdoor is het ook 0 watt op een KWH MID Meter.                                       |
 | Handmatig              | Via `input_number.zendure_2400_ac_handmatig_vermogen` kun je zelf aangeven wat de batterij doet.       |
-| Nul op de meter        | Probeer constant 0 op de meter te houden (-40 watt bij opladen en -2 watt bij ontladen).                |
-| Dynamisch NOM          | Wanneer `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie_nom` hoger is dan `input_number.dynamisch_minimale_spread`. Probeer daarna constant 0 op de meter te houden (-40 watt bij opladen en -2 watt bij ontladen).                                        |
+| Nul op de meter        | Constant 0 op de meter behouden (-40 watt bij opladen en -2 watt bij ontladen).                |
+| Dynamisch NOM          | Wanneer `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie_nom` hoger is dan `input_number.dynamisch_minimale_spread`. Wanneer `sensor.dynamisch_goedkoopste_periode` erg lang op JA staat zal hij pas weer gaan laden wanneer de batterij ontladen is tot 90%. Hij zal na laden constant 0 op de meter behouden (-40 watt bij opladen en -2 watt bij ontladen).                                        |
 | Alleen slim ontladen   | Identiek aan **Nul op de meter** alleen zonder opladen.                                                |
 | Alleen slim opladen    | Identiek aan **Nul op de meter** alleen zonder ontladen.                                               |
 | Opladen met 2400 watt  | Snel opladen op maximaal vermogen.                                                                     |
