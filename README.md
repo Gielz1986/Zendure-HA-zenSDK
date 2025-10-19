@@ -94,6 +94,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch Duurste X Periode            | 1-24                                                         |
 |                        | Dynamisch Goedkoopste X Periode Morgen | 1-24                                                         |
 |                        | Dynamisch Duurste X Periode Morgen     | 1-24                                                         |
+|                        | Dynamisch Recent Geladen               | Gebruikt in modus Dynamisch NOM. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat                                                      |
 
 
 ## 2️⃣ Zendure zenSDK (Gielz) automatisering
@@ -125,8 +126,8 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 | ----------------------------- | -------------------------------------- | 
 | Standby                | Zet volledig in standby en `sensor.zendure_2400_ac_opslagmodus` zal naar **Opslaan in Flash** gaan. Hierdoor is het ook 0 watt op een KWH MID Meter.                                       |
 | Handmatig              | Via `input_number.zendure_2400_ac_handmatig_vermogen` kun je zelf aangeven wat de batterij doet.       |
-| Nul op de meter        | Probeer constant 0 op de meter te houden (40 watt bij opladen en -2 watt bij ontladen).                |
-| Dynamisch NOM          | Wanneer `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie_nom` hoger is dan `input_number.dynamisch_minimale_spread`. Probeer daarna constant 0 op de meter te houden (40 watt bij opladen en -2 watt bij ontladen).                                        |
+| Nul op de meter        | Probeer constant 0 op de meter te houden (-40 watt bij opladen en -2 watt bij ontladen).                |
+| Dynamisch NOM          | Wanneer `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie_nom` hoger is dan `input_number.dynamisch_minimale_spread`. Probeer daarna constant 0 op de meter te houden (-40 watt bij opladen en -2 watt bij ontladen).                                        |
 | Alleen slim ontladen   | Identiek aan **Nul op de meter** alleen zonder opladen.                                                |
 | Alleen slim opladen    | Identiek aan **Nul op de meter** alleen zonder ontladen.                                               |
 | Opladen met 2400 watt  | Snel opladen op maximaal vermogen.                                                                     |
