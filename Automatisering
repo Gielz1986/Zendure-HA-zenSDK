@@ -1,12 +1,12 @@
 alias: Zendure zenSDK (Gielz)
 description: Versie 20251019
 triggers:
-  - at: "00:00:00"
-    id: middernacht_trigger
-    trigger: time
   - seconds: /4
     id: aansturing_trigger
     trigger: time_pattern
+  - at: "00:00:00"
+    id: middernacht_trigger
+    trigger: time
   - entity_id:
       - input_number.zendure_2400_ac_handmatig_vermogen
     id: handmatig_trigger
