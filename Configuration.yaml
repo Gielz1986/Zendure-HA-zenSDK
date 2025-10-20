@@ -119,7 +119,32 @@ input_number:
     step: 1
     mode: box
 
+utility_meter:
+  zendure_2400_ac_relais_schakelingen_totaal_vandaag:
+    name: "Sensor Zendure 2400 AC Releais Schakelingen Totaal Vandaag"
+    unique_id: zendure_2400_ac_relais_schakelingen_totaal_vandaag
+    source: sensor.zendure_2400_ac_relais_schakelingen_totaal
+    cycle: daily
+
 sensor:
+  - platform: history_stats
+    name: "Zendure 2400 AC Relais Schakelingen Opladen Vandaag"
+    unique_id: zendure_2400_ac_relais_schakelingen__opladen_vandaag
+    entity_id: sensor.zendure_2400_ac_modus
+    state: "Opladen"
+    type: count
+    start: "{{ today_at() }}"
+    end: "{{ now() if now() < today_at('23:59:59') and now().date() == today_at('23:59:59').date() else today_at('23:59:58') }}"
+
+  - platform: history_stats
+    name: "Zendure 2400 AC Relais Schakelingen Ontladen Vandaag"
+    unique_id: zendure_2400_ac_relais_schakelingen_ontladen_vandaag
+    entity_id: sensor.zendure_2400_ac_modus
+    state: "Ontladen"
+    type: count
+    start: "{{ today_at() }}"
+    end: "{{ now() if now() < today_at('23:59:59') and now().date() == today_at('23:59:59').date() else today_at('23:59:58') }}"
+
   - platform: statistics
     name: "Zendure 2400 AC Efficiëntie Import (24u gemiddelde)"
     unique_id: zendure_2400_ac_efficientie_import_24u
@@ -156,6 +181,13 @@ sensor:
 
 template:
   - sensor:
+      - name: "Zendure 2400 AC Relais Schakelingen Totaal"
+        unique_id: Zendure_2400_AC_Relais_Schakelingen_Totaal
+        icon: mdi:swap-vertical-bold
+        state_class: total_increasing
+        state: >
+          {{ states('sensor.zendure_2400_ac_relais_schakelingen_ontladen_vandaag') | int + states('sensor.zendure_2400_ac_relais_schakelingen_opladen_vandaag') | int }}
+
       - name: "P1 Aansturing Vermogen"
         unique_id: P1_Aansturing_Vermogen
         unit_of_measurement: "W"
