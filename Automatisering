@@ -2,12 +2,14 @@ alias: Zendure zenSDK (Gielz)
 description: Versie 20251019
 triggers:
   - at: "00:00:00"
-    trigger: time
     id: middernacht_trigger
+    trigger: time
   - seconds: /4
+    id: aansturing_trigger
     trigger: time_pattern
   - entity_id:
       - input_number.zendure_2400_ac_handmatig_vermogen
+    id: handmatig_trigger
     trigger: state
   - entity_id:
       - input_select.zendure_2400_ac_modus_selecteren
@@ -108,6 +110,9 @@ actions:
   - alias: Aansturing
     choose:
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: state
             entity_id: sensor.zendure_2400_ac_opslagmodus
             state: Opslaan in Flash
@@ -140,14 +145,15 @@ actions:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
         alias: Wanneer opslag modus op Flash staat deze op RAM instellen
       - conditions:
+          - condition: trigger
+            id:
+              - middernacht_trigger
           - condition: template
             value_template: >-
               {{
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
-          - condition: trigger
-            id: middernacht_trigger
         sequence:
           - alias: Zet goedkoopste periode van morgen naar vandaag
             target:
@@ -181,6 +187,9 @@ actions:
           Dynamisch omzetten van morgen naar vandaag (alleen wanneer Nordpool
           sensor in gebruik)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: template
             value_template: >-
               {{
@@ -212,6 +221,9 @@ actions:
           Dynamisch recent geladen uitzetten onder de 90% SOC (alleen wanneer
           Nordpool sensor in gebruik)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: template
             value_template: >-
               {{
@@ -224,7 +236,6 @@ actions:
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state: Dynamisch NOM
-            enabled: true
           - condition: state
             entity_id: input_boolean.dynamisch_recent_geladen
             state: "off"
@@ -263,6 +274,9 @@ actions:
             alias: input_boolean.dynamisch_recent_geladen aanzetten
         alias: Dynamisch goedkoop laden (alleen wanneer Nordpool sensor in gebruik)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: numeric_state
             entity_id: sensor.p1_aansturing_vermogen
             above: 100
@@ -310,6 +324,9 @@ actions:
             action: rest_command.zendure_x_ontladen
         alias: Start met ontladen bij +100 watt (75% van de vraag)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: template
             value_template: |
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
@@ -357,6 +374,9 @@ actions:
             action: rest_command.zendure_x_ontladen_balanceren
         alias: Tijdens ontladen balanceren naar 0 watt (100% van de vraag)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: numeric_state
             entity_id: sensor.p1_aansturing_vermogen
             below: -100
@@ -410,6 +430,9 @@ actions:
             action: rest_command.zendure_x_laden
         alias: Start met opladen bij -100 watt (75% van aanbod)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: template
             value_template: >
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
@@ -473,6 +496,14 @@ actions:
             action: rest_command.zendure_x_laden_balanceren
         alias: Tijdens opladen balanceren naar -40 watt (100% van aanbod)
       - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - aansturing_trigger
+              - condition: trigger
+                id:
+                  - handmatig_trigger
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state: Handmatig
@@ -488,6 +519,14 @@ actions:
             action: rest_command.zendure_x_ontladen
         alias: Handmatig ontladen
       - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - aansturing_trigger
+              - condition: trigger
+                id:
+                  - handmatig_trigger
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state: Handmatig
@@ -503,6 +542,9 @@ actions:
             action: rest_command.zendure_x_laden
         alias: Handmatig laden
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: or
             conditions:
               - condition: template
@@ -547,4 +589,5 @@ actions:
                 | round(0) %} {{ 1200 if soc < min_soc else 0 }}
             action: rest_command.zendure_x_laden
         alias: Opladen naar minimale SOC (bescherming)
-mode: single
+mode: queued
+max: 2
