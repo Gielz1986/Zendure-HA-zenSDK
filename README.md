@@ -74,7 +74,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
 |                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh                                                |
 |                        | SOC Status                             | Goed of Kalibreren                                           |
-|                        | Relais Schakelingen Vandaag            | Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
+|                        | Relais Schakelingen Totaal Vandaag     | Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
 | Efficiëntie & RTE      | RTE Totaal                             | 0-100%                                                       |
 |                        | Efficiëntie Import                     | 0-100%                                                       |
 |                        | Efficiëntie Export                     | 0-100%                                                       |
