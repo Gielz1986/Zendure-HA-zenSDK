@@ -121,7 +121,7 @@ input_number:
 
 utility_meter:
   zendure_2400_ac_relais_schakelingen_totaal_vandaag:
-    name: "Sensor Zendure 2400 AC Relais Schakelingen Totaal Vandaag"
+    name: "Zendure 2400 AC Relais Schakelingen Totaal Vandaag"
     unique_id: zendure_2400_ac_relais_schakelingen_totaal_vandaag
     source: sensor.zendure_2400_ac_relais_schakelingen_totaal
     cycle: daily
