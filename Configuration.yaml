@@ -1873,7 +1873,7 @@ rest_command:
     payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": 0 }}'
 
   zendure_stop_met_alles:
-    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/writee
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
     payload: '{"sn":"{{sn}}","properties":{"outputLimit": 0, "inputLimit": 0 }}'
 
