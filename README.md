@@ -91,10 +91,10 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch Spread Indicatie NOM Morgen  | Berekening spread NOM, duurste na eerste laadactie           |
 |                        | Dynamisch Goedkoopste Periode          | Ja of Nee                                                    |
 |                        | Dynamisch Duurste Periode              | Ja of Nee                                                    |
-|                        | Dynamisch Goedkoopste X Periode        | 1-24                                                         |
-|                        | Dynamisch Duurste X Periode            | 1-24                                                         |
-|                        | Dynamisch Goedkoopste X Periode Morgen | 1-24                                                         |
-|                        | Dynamisch Duurste X Periode Morgen     | 1-24                                                         |
+|                        | Dynamisch Goedkoopste X Periode        | 1-96                                                         |
+|                        | Dynamisch Duurste X Periode            | 1-96                                                         |
+|                        | Dynamisch Goedkoopste X Periode Morgen | 1-96                                                         |
+|                        | Dynamisch Duurste X Periode Morgen     | 1-96                                                         |
 |                        | Dynamisch Recent Geladen               | Gebruikt in modus Dynamisch NOM. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat                                                      |
 
 
