@@ -33,7 +33,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_text.zendure_2400_ac_ip_adres`      | In de Zendure app onder device Information |
 | `input_text.homewizard_p1_ip_adres`    | In de Homewizard app (lokale API aanzetten)  |
 | `input_text.afwijkende_p1_sensor` | **Optioneel** een afwijkende P1 sensor toevoegen |
-| `input_text.dynamisch_nordpool_sensor` | **Optioneel** de sensor van Nordpool toevoegen |
+| `input_text.dynamisch_nordpool_sensor` | **Optioneel** de sensor van Nordpool (HACS) toevoegen |
 
 ![Preview](Images/instellingen.png) 
 
