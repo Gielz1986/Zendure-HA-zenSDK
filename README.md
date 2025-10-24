@@ -47,7 +47,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Zendure 2400 AC IP-adres               | bijv. 192.168.0.172                                          |
 |                        | Afwijkende P1 Sensor                   | bijv. sensor.eigen_P1 (vul je hier je eigen sensor in dan is deze altijd leidend.                                        |
 |                        | Dynamisch Nordpool Sensor              | bijv. sensor.nordpool_kwh_nl_eur_3_09_0                      |
-| Aansturing             | Handmatig Vermogen                     | Gebruikt in modus Handmatig                                  |
+| Aansturing             | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                                  |
 |                        | Modus Selecteren                       | Zie **Modus uitleg bij ✅ Batterij mag aan de slag**        |
 |                        | P1 Aansturing Vermogen                 | Homewizard P1 of eigen P1 vermogen                           |
 | Informatie             | Aantal Batterijen                      | 1-6                                                          |
@@ -82,8 +82,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Efficiëntie Export (24u gemiddelde)    | 0-100%                                                       |
 | Dynamische Aansturing  | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
 |                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten                                        |
-|                        | Dynamisch Handmatige Periode           | bijv. G11:00;D12:00;G15:00 of 'Geen'                         |
-|                        | Dynamisch Handmatige Periode Morgen    | bijv. G11:00;D12:00;G15:00 of 'Geen'                         |
+|                        | Dynamisch Handmatige Periode           | bijv. **G11:00;D12:00;G15:00** of **Geen**                       |
+|                        | Dynamisch Handmatige Periode Morgen    | bijv. **G11:00;D12:00;G15:00** of **Geen**                         |
 |                        | Dynamisch Minimale Spread              | Gebruikt in modus Dynamisch NOM. Boven minimale spread laden |
 |                        | Dynamisch Spread Indicatie             | Berekening spread                                            |
 |                        | Dynamisch Spread Indicatie NOM         | Berekening spread NOM, duurste na eerste laadactie           |
