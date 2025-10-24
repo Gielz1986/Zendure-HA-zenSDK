@@ -134,6 +134,10 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 | Opladen met 2400 watt  | Snel opladen op maximaal vermogen.                                                                     |
 | Ontladen met 2400 watt | Snel ontladen op maximaal vermogen.                                                                    |
 
+#### ℹ️ Batterij Logboek
+Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_select.zendure_2400_ac_modus_selecteren`<br><br>
+![Preview](Images/Logboek.png) 
+
 <br><br>
 
 ## 🔃 (Optioneel) Nordpool
