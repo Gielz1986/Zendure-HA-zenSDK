@@ -1,13 +1,15 @@
 alias: Zendure zenSDK (Gielz)
-description: Versie 20251004
+description: Versie 20251020
 triggers:
-  - at: "00:00:00"
-    trigger: time
-    id: middernacht_trigger
   - seconds: /4
+    id: aansturing_trigger
     trigger: time_pattern
+  - at: "00:00:00"
+    id: middernacht_trigger
+    trigger: time
   - entity_id:
       - input_number.zendure_2400_ac_handmatig_vermogen
+    id: handmatig_trigger
     trigger: state
   - entity_id:
       - input_select.zendure_2400_ac_modus_selecteren
@@ -25,7 +27,13 @@ actions:
             state: Standby
         sequence:
           - action: rest_command.zendure_standby
-            data: {}
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - action: logbook.log
+            data:
+              message: ⚠️ Opslagmodus omzetten naar Flash —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Standby
       - conditions:
           - condition: trigger
@@ -35,7 +43,8 @@ actions:
             state: Handmatig
         sequence:
           - action: rest_command.zendure_stop_met_alles
-            data: {}
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
         alias: Handmatig
       - conditions:
           - condition: trigger
@@ -45,23 +54,42 @@ actions:
             state: Nul op de meter
         sequence:
           - action: rest_command.zendure_stop_met_alles
-            data: {}
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
         alias: Nul op de meter
       - conditions:
           - condition: trigger
             id: modus_trigger
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: input_select.zendure_2400_ac_modus_selecteren
-                state: Alleen slim ontladen
-              - condition: state
-                entity_id: input_select.zendure_2400_ac_modus_selecteren
-                state: Alleen slim opladen
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state: Dynamisch NOM
         sequence:
           - action: rest_command.zendure_stop_met_alles
-            data: {}
-        alias: Alleen slim opladen/ontladen
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+        alias: Dynamisch NOM
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state: Alleen slim opladen
+        sequence:
+          - action: rest_command.zendure_stop_met_alles
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+        alias: Alleen slim opladen
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state: Alleen slim ontladen
+        sequence:
+          - action: rest_command.zendure_stop_met_alles
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+        alias: Alleen slim ontladen
       - conditions:
           - condition: trigger
             id: modus_trigger
@@ -70,7 +98,8 @@ actions:
             state: Ontladen met 2400 watt
         sequence:
           - action: rest_command.zendure_snel_ontladen
-            data: {}
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
         alias: Ontladen met 2400 watt
       - conditions:
           - condition: trigger
@@ -80,11 +109,15 @@ actions:
             state: Opladen met 2400 watt
         sequence:
           - action: rest_command.zendure_snel_laden
-            data: {}
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
         alias: Opladen met 2400 watt
   - alias: Aansturing
     choose:
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: state
             entity_id: sensor.zendure_2400_ac_opslagmodus
             state: Opslaan in Flash
@@ -108,13 +141,30 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state: Ontladen met 2400 watt
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Dynamisch NOM
         sequence:
           - action: rest_command.zendure_opslaan_in_ram
-            data: {}
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - action: logbook.log
+            data:
+              message: |
+                ⚠️ Opslagmodus omzetten naar RAM —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Wanneer opslag modus op Flash staat deze op RAM instellen
       - conditions:
           - condition: trigger
-            id: middernacht_trigger
+            id:
+              - middernacht_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamisch_nordpool_sensor is gevuld
         sequence:
           - alias: Zet goedkoopste periode van morgen naar vandaag
             target:
@@ -144,15 +194,123 @@ actions:
             data:
               value: ""
             action: input_text.set_value
-        alias: Dynamisch omzetten van morgen naar vandaag
+          - action: logbook.log
+            data:
+              message: ⚙️ Dynamische instelling overzetten van morgen naar vandaag —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: >-
+          Dynamisch omzetten van morgen naar vandaag (alleen wanneer Nordpool
+          sensor in gebruik)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamisch_nordpool_sensor is gevuld
+          - condition: state
+            entity_id: sensor.dynamisch_goedkoopste_periode
+            state: Ja
+          - condition: state
+            entity_id: input_boolean.dynamisch_recent_geladen
+            state: "on"
+            for:
+              hours: 0
+              minutes: 0
+              seconds: 0
+          - alias: SOC 10% lager dan maximale ingestelde SOC
+            condition: template
+            value_template: |
+              {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0) <= 
+                 (states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) - 10) }}
+        sequence:
+          - action: input_boolean.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: input_boolean.dynamisch_recent_geladen
+        alias: >-
+          Dynamisch recent geladen uitzetten onder de 90% SOC (alleen wanneer
+          Nordpool sensor in gebruik)
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamisch_nordpool_sensor is gevuld
+          - condition: state
+            entity_id: sensor.dynamisch_goedkoopste_periode
+            state: Ja
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state: Dynamisch NOM
+          - condition: state
+            entity_id: input_boolean.dynamisch_recent_geladen
+            state: "off"
+          - alias: SOC lager dan maximaal ingestelde SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0) < 
+                       states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
+          - alias: >-
+              sensor.dynamisch_spread_indicatie_nom moet hoger of gelijk zijn
+              aan input_number.dynamisch_minimale_spread
+            condition: template
+            value_template: >-
+              {{ states('sensor.dynamisch_spread_indicatie_nom') | float >=
+              states('input_number.dynamisch_minimale_spread') | float }}
+        sequence:
+          - action: rest_command.zendure_snel_laden
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - action: logbook.log
+            data:
+              message: 💲 Dynamisch goedkoop laden gestart —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+          - wait_for_trigger:
+              - entity_id: sensor.dynamisch_goedkoopste_periode
+                to: Nee
+                trigger: state
+              - trigger: template
+                value_template: >
+                  {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
+                  ==
+                     states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
+                alias: Maximale ingestelde SOC bereikt
+            continue_on_timeout: false
+          - action: rest_command.zendure_stop_met_alles
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - entity_id: input_boolean.dynamisch_recent_geladen
+            action: input_boolean.turn_on
+            alias: input_boolean.dynamisch_recent_geladen aanzetten
+          - action: logbook.log
+            data:
+              message: 💲 Dynamisch goedkoop laden voltooid  —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Dynamisch goedkoop laden (alleen wanneer Nordpool sensor in gebruik)
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: numeric_state
-            entity_id: sensor.p1_aansturing_api_v1
+            entity_id: sensor.p1_aansturing_vermogen
             above: 100
           - condition: template
             value_template: |
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
                states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
+            alias: Tot de minimaal ingestelde SOC
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: -30
@@ -166,6 +324,7 @@ actions:
               - condition: state
                 entity_id: sensor.zendure_2400_ac_modus
                 state: Ontladen
+            alias: Minstens 2 automatiseringen na opladen pas activeren
           - condition: or
             conditions:
               - condition: state
@@ -174,34 +333,56 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state: Alleen slim ontladen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Dynamisch NOM
         sequence:
           - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               outputLimit: >-
                 {% set factor = 0.75 %} {% set cap = 2400 %} {% set correctie =
-                -2 %} {% set p1 = states('sensor.p1_aansturing_api_v1') |
+                -2 %} {% set p1 = states('sensor.p1_aansturing_vermogen') |
                 float(0) %} {% set zendure =
                 states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0)
                 %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set
                 beperkt = [ [totaal, 0] | max, cap ] | min %} {{ beperkt | int
                 }}
             action: rest_command.zendure_x_ontladen
+          - action: logbook.log
+            data:
+              message: >
+                🔋 Ontladen starten — Vermogen ingesteld op {% set factor = 0.75
+                %} {% set cap = 2400 %} {% set correctie = -2 %} {% set
+                  p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set zendure =
+                  states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %} {% set
+                  totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [ [totaal, 0]
+                  | max, cap ] | min %} {{ beperkt | int }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Start met ontladen bij +100 watt (75% van de vraag)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: template
             value_template: |
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
                states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
+            alias: Tot de minimaal ingestelde SOC
           - condition: template
             value_template: >-
               {% set factor = 1.00 %} {% set cap = 2400 %} {% set correctie = -2
-              %} {% set p1 = states('sensor.p1_aansturing_api_v1') | float(0) %}
-              {% set zendure =
+              %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
+              %} {% set zendure =
               states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
               {% set totaal = (p1 - zendure - correctie) * factor %} {% set
               beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target =
               beperkt | int %} {% set huidig =
               states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') |
               int(0) %} {{ huidig != target }}
+            alias: >-
+              Nieuw in te stellen vermogen is anders dan huidig batterij
+              vermogen
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             below: 0
@@ -213,35 +394,65 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state: Alleen slim ontladen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Dynamisch NOM
         sequence:
           - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               outputLimit: >-
                 {% set factor = 1.00 %} {% set cap = 2400 %} {% set correctie =
-                -2 %} {% set p1 = states('sensor.p1_aansturing_api_v1') |
+                -2 %} {% set p1 = states('sensor.p1_aansturing_vermogen') |
                 float(0) %} {% set zendure =
                 states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0)
                 %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set
                 beperkt = [ [totaal, 0] | max, cap ] | min %} {{ beperkt | int
                 }}
             action: rest_command.zendure_x_ontladen_balanceren
+          - action: logbook.log
+            data:
+              message: >
+                ⚡ Ontladen balanceren — Vermogen ingesteld op {% set factor =
+                1.00 %} {% set cap = 2400 %} {% set correctie = -2 %} {% set p1
+                = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
+                zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') |
+                float(0) %} {% set totaal = (p1 - zendure - correctie) * factor
+                %} {% set beperkt = [ [totaal, 0] | max, cap ] | min %} {{
+                beperkt | int }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Tijdens ontladen balanceren naar 0 watt (100% van de vraag)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
           - condition: numeric_state
-            entity_id: sensor.p1_aansturing_api_v1
+            entity_id: sensor.p1_aansturing_vermogen
             below: -100
-          - condition: numeric_state
-            entity_id: sensor.zendure_2400_ac_laadpercentage
-            below: 100
+          - alias: Lager dan maximaal ingestelde SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0) < 
+                       states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: -30
             below: 30
+          - condition: template
+            value_template: >
+              {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
+              round(0) >=
+                 states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) }}
+            alias: SOC is gelijk of groter dan de minimale SOC
           - condition: not
             conditions:
               - condition: state
                 entity_id: sensor.zendure_2400_ac_modus
                 state: ontladen
                 for: "00:00:15"
+            alias: >-
+              Pas weer opladen als hij minstens 15 seconden aan het ontladen is
+              geweest
           - condition: or
             conditions:
               - condition: state
@@ -250,34 +461,64 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state: Alleen slim opladen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Dynamisch NOM
         sequence:
           - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               inputLimit: >-
                 {% set factor = 0.75 %} {% set cap = 2400 %} {% set
                 correctie_export = 40 %} {% set p1 =
-                states('sensor.p1_aansturing_api_v1') | float(0) %} {% set
+                states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
                 zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') |
                 float(0) %} {% set verschil = zendure - p1 - correctie_export %}
                 {% set beperkt = verschil * factor if verschil > 0 else 0 %} {%
                 set beperkt = beperkt if beperkt < cap else cap %} {{ beperkt |
                 int }}
             action: rest_command.zendure_x_laden
+          - action: logbook.log
+            data:
+              message: >
+                🔋 Opladen starten — Vermogen ingesteld op {% set factor = 0.75
+                %} {% set cap = 2400 %} {% set correctie_export = 40 %}
+                  {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
+                  zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+                  {% set verschil = zendure - p1 - correctie_export %} {% set beperkt = verschil
+                  * factor if verschil > 0 else 0 %} {% set beperkt = beperkt if beperkt < cap
+                  else cap %} {{ beperkt | int }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Start met opladen bij -100 watt (75% van aanbod)
       - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >
+              {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
+              round(0) >=
+                 states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) }}
+            alias: SOC is gelijk of groter dan de minimale SOC
           - condition: template
             value_template: >-
               {% set factor = 1.00 %} {% set cap = 2400 %} {% set
               correctie_export = 40 %} {% set p1 =
-              states('sensor.p1_aansturing_api_v1') | float(0) %} {% set zendure
-              = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0)
-              %} {% set verschil = (zendure - p1 - correctie_export) * factor %}
-              {% set beperkt = [ [verschil, 0] | max, cap ] | min %} {% set
-              target = beperkt | int %} {% set huidig =
+              states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
+              zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') |
+              float(0) %} {% set verschil = (zendure - p1 - correctie_export) *
+              factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %}
+              {% set target = beperkt | int %} {% set huidig =
               states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') | int(0)
               %} {{ huidig != target }}
-          - condition: numeric_state
-            entity_id: sensor.zendure_2400_ac_laadpercentage
-            below: 100
+            alias: >-
+              Nieuw in te stellen vermogen is anders dan huidig batterij
+              vermogen
+          - alias: Lager dan maximaal ingestelde SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0) < 
+                       states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: 0
@@ -287,6 +528,9 @@ actions:
                 entity_id: sensor.zendure_2400_ac_modus
                 state: ontladen
                 for: "00:00:15"
+            alias: >-
+              Pas weer opladen als hij minstens 15 seconden aan het ontladen is
+              geweest
           - condition: or
             conditions:
               - condition: state
@@ -295,45 +539,166 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state: Alleen slim opladen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Dynamisch NOM
         sequence:
           - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               inputLimit: >-
                 {% set factor = 1.00 %} {% set cap = 2400 %} {% set
                 correctie_export = 40 %} {% set p1 =
-                states('sensor.p1_aansturing_api_v1') | float(0) %} {% set
+                states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
                 zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') |
                 float(0) %} {% set verschil = zendure - p1 - correctie_export %}
                 {% set beperkt = verschil * factor if verschil > 0 else 0 %} {%
                 set beperkt = beperkt if beperkt < cap else cap %} {{ beperkt |
                 int }}
             action: rest_command.zendure_x_laden_balanceren
+          - action: logbook.log
+            data:
+              message: >
+                ⚡ Opladen balanceren — Vermogen ingesteld op {% set factor =
+                1.00 %} {% set cap = 2400 %} {% set correctie_export = 40 %}
+                  {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
+                  zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+                  {% set verschil = zendure - p1 - correctie_export %} {% set beperkt = verschil
+                  * factor if verschil > 0 else 0 %} {% set beperkt = beperkt if beperkt < cap
+                  else cap %} {{ beperkt | int }}
+                 watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Tijdens opladen balanceren naar -40 watt (100% van aanbod)
       - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - aansturing_trigger
+              - condition: trigger
+                id:
+                  - handmatig_trigger
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state: Handmatig
           - condition: numeric_state
             entity_id: input_number.zendure_2400_ac_handmatig_vermogen
             below: 0
+          - condition: template
+            value_template: >-
+              {{ states('input_number.zendure_2400_ac_handmatig_vermogen') | int
+              | abs !=
+                 states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') | int }}
         sequence:
           - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               outputLimit: >-
                 {{ states('input_number.zendure_2400_ac_handmatig_vermogen') |
                 int | abs }}
             action: rest_command.zendure_x_ontladen
+          - action: logbook.log
+            data:
+              message: >
+                ⚡ Handmatig ontladen — Vermogen ingesteld op {{
+                states('input_number.zendure_2400_ac_handmatig_vermogen') | int
+                | abs }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Handmatig ontladen
       - conditions:
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - aansturing_trigger
+              - condition: trigger
+                id:
+                  - handmatig_trigger
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state: Handmatig
           - condition: numeric_state
             entity_id: input_number.zendure_2400_ac_handmatig_vermogen
             above: -1
+          - condition: template
+            value_template: >-
+              {{ states('input_number.zendure_2400_ac_handmatig_vermogen') | int
+              | abs !=
+                 states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') | int }}
         sequence:
           - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               inputLimit: >-
                 {{ states('input_number.zendure_2400_ac_handmatig_vermogen') |
                 int | abs }}
             action: rest_command.zendure_x_laden
+          - action: logbook.log
+            data:
+              message: >
+                ⚡ Handmatig laden — Vermogen ingesteld op {{
+                states('input_number.zendure_2400_ac_handmatig_vermogen') | int
+                | abs }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
         alias: Handmatig laden
-mode: single
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: or
+            conditions:
+              - condition: template
+                value_template: |
+                  {{ (states('sensor.zendure_2400_ac_laadpercentage') | float) <
+                     states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
+              - condition: template
+                value_template: >
+                  {{ (states('sensor.zendure_2400_ac_laadpercentage') | float |
+                  round(0) ==
+                      states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0))
+                     and
+                     (states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') | float == 1200) }}
+            alias: SOC komt niet overeen met minimaal ingestelde SOC
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Standby
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Nul op de meter
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Alleen slim opladen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Alleen slim ontladen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state: Dynamisch NOM
+          - condition: sun
+            after: sunrise
+            after_offset: "02:00:00"
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              inputLimit: >
+                {% set soc = states('sensor.zendure_2400_ac_laadpercentage') |
+                float | round(0) %} {% set min_soc =
+                states('sensor.zendure_2400_ac_minimale_laadpercentage') | float
+                | round(0) %} {{ 1200 if soc < min_soc else 0 }}
+            action: rest_command.zendure_x_laden
+          - action: logbook.log
+            data:
+              message: >
+                ⚠️ Batterij SOC bescherming actief — Vermogen ingesteld op   {%
+                set soc = states('sensor.zendure_2400_ac_laadpercentage') |
+                float |
+                  round(0) %} {% set min_soc =
+                  states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) %}
+                  {{ 1200 if soc < min_soc else 0 }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Opladen naar minimale SOC (bescherming)
+mode: queued
+max: 2
