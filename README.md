@@ -39,7 +39,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 
 *Zelf toe te voegen entiteiten op een dashboard.
-![Preview](Images/Dashboard.png) 
+![Preview](Images/Dashboard-27102025.png) 
 
 | Categorie              | Entiteiten                              | State                                                        |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
