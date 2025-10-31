@@ -23,6 +23,21 @@ input_select:
       - Opladen met 2400 watt
       - Ontladen met 2400 watt
 
+binary_sensor:
+  - platform: template
+    sensors:
+      p1_nul_import_actief:
+        friendly_name: "P1 Nul Import Actief"
+        unique_id: p1_nul_import_actief
+        device_class: power
+        value_template: "{{ states('sensor.p1_aansturing_vermogen') | float < 1 }}"
+        icon_template: >
+          {% if states('sensor.p1_aansturing_vermogen') | float < 1 %}
+            mdi:leaf
+          {% else %}
+            mdi:flash
+          {% endif %}
+
 input_boolean:
   dynamisch_15_minuten:
     name: Dynamisch 15 Minuten
@@ -72,6 +87,7 @@ input_text:
 input_number:
   zendure_2400_ac_handmatig_vermogen:
     name: Zendure 2400 AC Handmatig Vermogen
+    icon: mdi:flash
     min: -2400
     max: 2400
     step: 1
@@ -120,6 +136,15 @@ input_number:
     mode: box
 
 sensor:
+  - platform: history_stats
+    name: "P1 Nul Import Duur (Vandaag)"
+    unique_id: p1_nul_import_duur_vandaag
+    entity_id: binary_sensor.p1_nul_import_actief
+    state: "on"
+    type: time
+    start: "{{ today_at() if now() < today_at('23:59') else now() }}"
+    end: "{{ now() }}"
+
   - platform: history_stats
     name: "Zendure 2400 AC Relais Schakelingen Opladen Vandaag"
     unique_id: zendure_2400_ac_relais_schakelingen_opladen_vandaag
@@ -174,7 +199,7 @@ sensor:
 
 template:
   - sensor:
-      - name: "Zendure 2400 AC Relais Schakelingen Totaal Vandaag"
+      - name: "Zendure 2400 AC Relais Schakelingen Totaal (Vandaag)"
         unique_id: Zendure_2400_AC_Relais_Schakelingen_Totaal_Vandaag
         icon: mdi:swap-vertical-bold
         state_class: total_increasing
@@ -1777,11 +1802,29 @@ rest:
 
       - name: "Zendure 2400 AC Modus"
         value_template: >
-          {% set states = {1: "Opladen", 2: "Ontladen"} %}
-          {% set packState = value_json['properties']['acMode'] | int %}
-          {{ states.get(packState, "Onbekend") }}
+          {% set ac_mode = value_json['properties']['acMode'] | int %}
+          {% set input_power = value_json['properties']['outputPackPower'] | int %}
+          {% set output_power = value_json['properties']['packInputPower'] | int %}
+
+          {% if ac_mode == 1 and input_power > 0 %}
+           Opladen
+          {% elif ac_mode == 2 and output_power > 0 %}
+           Ontladen
+          {% else %}
+           Standby
+          {% endif %}
         unique_id: Zendure_2400_AC_Modus
-        icon: mdi:battery-charging-wireless
+        icon: >
+          {% set ac_mode = value_json['properties']['acMode'] | int %}
+          {% set input_power = value_json['properties']['outputPackPower'] | int %}
+          {% set output_power = value_json['properties']['packInputPower'] | int %}
+          {% if ac_mode == 1 and input_power > 0 %}
+            mdi:battery-arrow-up
+          {% elif ac_mode == 2 and output_power > 0 %}
+            mdi:battery-arrow-down
+          {% else %}
+           mdi:battery
+          {% endif %}
 
       - name: "Zendure 2400 AC Error"
         value_template: >
