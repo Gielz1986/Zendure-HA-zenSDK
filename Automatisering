@@ -319,16 +319,22 @@ actions:
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: -30
             below: 75
-          - condition: or
+          - alias: Minstens 2 automatiseringen na opladen pas activeren
+            condition: or
             conditions:
               - condition: state
                 entity_id: sensor.zendure_2400_ac_modus
                 state: Opladen
-                for: "00:00:09"
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 9
               - condition: state
                 entity_id: sensor.zendure_2400_ac_modus
                 state: Ontladen
-            alias: Minstens 2 automatiseringen na opladen pas activeren
+              - condition: state
+                entity_id: sensor.zendure_2400_ac_modus
+                state: Standby
           - condition: or
             conditions:
               - condition: state
@@ -448,15 +454,6 @@ actions:
               round(0) >=
                  states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) }}
             alias: SOC is gelijk of groter dan de minimale SOC
-          - condition: not
-            conditions:
-              - condition: state
-                entity_id: sensor.zendure_2400_ac_modus
-                state: ontladen
-                for: "00:00:15"
-            alias: >-
-              Pas weer opladen als hij minstens 15 seconden aan het ontladen is
-              geweest
           - condition: or
             conditions:
               - condition: state
@@ -468,6 +465,23 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state: Dynamisch NOM
+          - alias: Minstens 2 automatiseringen na ontladen pas activeren
+            condition: or
+            conditions:
+              - condition: state
+                entity_id: sensor.zendure_2400_ac_modus
+                state: Ontladen
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 9
+                  milliseconds: 0
+              - condition: state
+                entity_id: sensor.zendure_2400_ac_modus
+                state: Opladen
+              - condition: state
+                entity_id: sensor.zendure_2400_ac_modus
+                state: Standby
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -526,15 +540,6 @@ actions:
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: 0
-          - condition: not
-            conditions:
-              - condition: state
-                entity_id: sensor.zendure_2400_ac_modus
-                state: ontladen
-                for: "00:00:15"
-            alias: >-
-              Pas weer opladen als hij minstens 15 seconden aan het ontladen is
-              geweest
           - condition: or
             conditions:
               - condition: state
@@ -587,7 +592,7 @@ actions:
             state: Handmatig
           - condition: numeric_state
             entity_id: input_number.zendure_2400_ac_handmatig_vermogen
-            below: 0
+            below: 1
           - condition: template
             value_template: >-
               {{ states('input_number.zendure_2400_ac_handmatig_vermogen') | int
