@@ -60,6 +60,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Minimale Laadpercentage                | 5-100%                                                       |
 |                        | Resterende Ontlaad Tijd                | uur - minuten                                                |
 |                        | Opslagmodus                            | Opslaan in RAM of Opslaan in Flash                           |
+|                        | P1 Nul Import Actief                   | Geeft aan dat er op dit moment geen import nodig is          |
+|                        | P1 Nul Import Duur (Vandaag)           | Hoeveel nul import uren heb je vandaag bereikt               |
 | Vermogen & Energie     | Ingesteld Oplaadvermogen               | 0-2400 watt                                                  |
 |                        | Ingesteld Ontlaadvermogen              | 0-2400 watt                                                  |
 |                        | Vermogen Aansturing                    | -2400-2400 watt                                              |
@@ -74,7 +76,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
 |                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh                                                |
 |                        | SOC Status                             | Goed of Kalibreren                                           |
-|                        | Relais Schakelingen Totaal Vandaag     | Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
+|                        | Relais Schakelingen Totaal (Vandaag)   | Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
 | Efficiëntie & RTE      | RTE Totaal                             | 0-100%                                                       |
 |                        | Efficiëntie Import                     | 0-100%                                                       |
 |                        | Efficiëntie Export                     | 0-100%                                                       |
