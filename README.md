@@ -17,7 +17,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 #### ℹ️ Benodigde hardware
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconde levert (- wattage voor export en + voor import)).
-- één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro (geen aangesloten zonnepanelen).
+- één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro en Plus (geen aangesloten zonnepanelen).
 
 ---
 
