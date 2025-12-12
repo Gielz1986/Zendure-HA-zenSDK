@@ -23,21 +23,6 @@ input_select:
       - Opladen met 2400 watt
       - Ontladen met 2400 watt
 
-binary_sensor:
-  - platform: template
-    sensors:
-      p1_nul_import_actief:
-        friendly_name: "P1 Nul Import Actief"
-        unique_id: p1_nul_import_actief
-        device_class: power
-        value_template: "{{ states('sensor.p1_aansturing_vermogen') | float < 1 }}"
-        icon_template: >
-          {% if states('sensor.p1_aansturing_vermogen') | float < 1 %}
-            mdi:leaf
-          {% else %}
-            mdi:flash
-          {% endif %}
-
 input_boolean:
   dynamisch_15_minuten:
     name: Dynamisch 15 Minuten
@@ -198,6 +183,18 @@ sensor:
     method: trapezoidal
 
 template:
+  - binary_sensor:
+      - name: "P1 Nul Import Actief"
+        unique_id: p1_nul_import_actief
+        device_class: power
+        state: "{{ states('sensor.p1_aansturing_vermogen') | float < 1 }}"
+        icon: >
+          {% if states('sensor.p1_aansturing_vermogen') | float < 1 %}
+            mdi:leaf
+          {% else %}
+            mdi:flash
+          {% endif %}
+
   - sensor:
       - name: "Zendure 2400 AC Relais Schakelingen Totaal (Vandaag)"
         unique_id: Zendure_2400_AC_Relais_Schakelingen_Totaal_Vandaag
