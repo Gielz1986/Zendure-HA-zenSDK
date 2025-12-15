@@ -3,6 +3,8 @@
 
 Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro en Plus (geen aangesloten zonnepanelen) zonder gebruik te maken van integraties maar werkt met **één automatisering**. Voor de gene die graag de batterij 100% lokaal in eigen beheer wilt zonder updates van derden en netjes in Home Assistant.
 
+Heb je meerdere batterijen dan kan dit in combinatie met https://github.com/gast777/Zendure-zenSDK-proxy waarbij Node-Red gebruikt word.
+
 Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje koffie ☕️ – ik codeer beter met cafeïne!
 
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
