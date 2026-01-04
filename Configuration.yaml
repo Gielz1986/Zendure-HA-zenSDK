@@ -70,6 +70,24 @@ input_text:
     mode: text
 
 input_number:
+  zendure_2400_ac_oplaadmarge:
+    name: Zendure 2400 AC Oplaadmarge
+    icon: mdi:flash
+    min: 0
+    max: 50
+    step: 1
+    mode: box
+    unit_of_measurement: "W"
+
+  zendure_2400_ac_ontlaadmarge:
+    name: Zendure 2400 AC Ontlaadmarge
+    icon: mdi:flash
+    min: 0
+    max: 50
+    step: 1
+    mode: box
+    unit_of_measurement: "W"
+
   zendure_2400_ac_handmatig_vermogen:
     name: Zendure 2400 AC Handmatig Vermogen
     icon: mdi:flash
@@ -1866,54 +1884,87 @@ rest_command:
   zendure_opslaan_in_ram:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"smartMode": 1 }}'
 
   zendure_snel_laden:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"acMode": 1, "inputLimit": 2400 }}'
 
   zendure_stop_met_laden:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"acMode": 1, "inputLimit": 0 }}'
 
   zendure_x_laden:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn": "{{sn}}","properties": {"acMode": 1, "inputLimit": {{inputLimit}} }}'
 
   zendure_x_laden_balanceren:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"inputLimit": {{inputLimit}} }}'
 
   zendure_x_ontladen:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": {{outputLimit}} }}'
 
   zendure_x_ontladen_balanceren:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"outputLimit": {{outputLimit}} }}'
 
   zendure_snel_ontladen:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": 2400 }}'
 
   zendure_stop_met_ontladen:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": 0 }}'
 
   zendure_stop_met_alles:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"outputLimit": 0, "inputLimit": 0 }}'
 
   zendure_standby:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
     method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"smartMode": 0, "outputLimit": 0, "inputLimit": 0 }}'
