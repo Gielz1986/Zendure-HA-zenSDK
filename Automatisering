@@ -175,8 +175,10 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                💤 Na 5 minuten inactiviteit in standby zetten (Opslagmodus
-                omzetten naar Flash) —
+                💤 Na {{
+                states('input_number.zendure_2400_ac_standby_vertraging') |
+                int(5) }}                 minuten inactiviteit in standby
+                zetten                 (Opslagmodus omzetten naar Flash) —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Na xx minuten inactiviteit in standby zetten
