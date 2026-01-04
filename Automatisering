@@ -159,9 +159,9 @@ actions:
             state:
               - Standby
             for:
-              hours: 0
-              minutes: 5
-              seconds: 0
+              minutes: >-
+                {{ states('input_number.zendure_2400_ac_standby_vertraging') |
+                int(5) }}
           - condition: not
             conditions:
               - condition: state
@@ -179,7 +179,7 @@ actions:
                 omzetten naar Flash) —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Na 5 minuten inactiviteit in standby zetten
+        alias: Na xx minuten inactiviteit in standby zetten
       - conditions:
           - condition: trigger
             id:
