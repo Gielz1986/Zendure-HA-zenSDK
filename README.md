@@ -47,7 +47,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
 | Configuratie           | Homewizard P1 IP-adres                 | bijv. 192.168.0.192                                          |
 |                        | Zendure 2400 AC IP-adres               | bijv. 192.168.0.172                                          |
-|                        | Afwijkende P1 Sensor                   | bijv. sensor.eigen_P1 (vul je hier je eigen sensor in dan is deze altijd leidend                                        |
+|                        | Afwijkende P1 Sensor                   | bijv. sensor.eigen_P1 waarbij + watt afname is en - watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
 |                        | Dynamisch Nordpool Sensor              | bijv. sensor.nordpool_kwh_nl_eur_3_09_0                      |
 |                        | Standby Vertraging                     | 5-30 minuten tot wanneer de omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt                      |
 | Aansturing             | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                                  |
