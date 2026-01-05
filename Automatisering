@@ -251,7 +251,9 @@ actions:
                 —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Dynamische dure/goedkope periode afgerond terug naar standby
+        alias: >-
+          Dynamische dure/goedkope periode afgerond terug naar standby (alleen
+          wanneer Nordpool sensor in gebruik)
       - conditions:
           - condition: trigger
             id:
