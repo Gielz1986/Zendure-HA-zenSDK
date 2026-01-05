@@ -18,7 +18,7 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
 Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA). Hiervoor heb ik een bijna plug-n-play Configuration.yaml gemaakt.
 #### ℹ️ Benodigde hardware
 
-- Homewizard P1 (of een andere P1/CT-meter die data per seconde levert (- wattage voor export en + voor import)).
+- Homewizard P1 (of een andere P1/CT-meter die data per seconden levert (+watt afname is en -watt teruglevering)).
 - één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro of Plus (geen aangesloten zonnepanelen).
 
 ---
@@ -47,12 +47,12 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
 | Configuratie           | Homewizard P1 IP-adres                 | bijv. 192.168.0.192                                          |
 |                        | Zendure 2400 AC IP-adres               | bijv. 192.168.0.172                                          |
-|                        | Afwijkende P1 Sensor                   | bijv. sensor.eigen_P1 waarbij + watt afname is en - watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
+|                        | Afwijkende P1 Sensor                   | bijv. sensor.eigen_P1 waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
 |                        | Dynamisch Nordpool Sensor              | bijv. sensor.nordpool_kwh_nl_eur_3_09_0                      |
 |                        | Standby Vertraging                     | 5-30 minuten tot wanneer de omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt                      |
-| Aansturing             | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                                  |
 |                        | Oplaadmarge                            | 0-50 watt minder meenemen tijdens opladen. Als je net wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS)                          |
 |                        | Ontlaadmarge                           | 0-50 watt extra meenemen tijdens ontladen. Als je net wat meer wilt ontladen                    |
+| Aansturing             | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                                  |
 |                        | Modus Selecteren                       | Zie **Modus uitleg bij ✅ Batterij mag aan de slag**        |
 |                        | P1 Aansturing Vermogen                 | Homewizard P1 of eigen P1 vermogen                           |
 | Informatie             | Aantal Batterijen                      | 1-6                                                          |
@@ -91,7 +91,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten                                        |
 |                        | Dynamisch Handmatige Periode           | bijv. **G11:00;D12:00;G15:00** of **Geen**                       |
 |                        | Dynamisch Handmatige Periode Morgen    | bijv. **G11:00;D12:00;G15:00** of **Geen**                         |
-|                        | Dynamisch Minimale Spread              | Gebruikt in modus Dynamisch NOM. Boven minimale spread laden |
+|                        | Dynamisch Minimale Spread              | Gebruikt in modus Dynamisch. Boven minimale spread laden |
 |                        | Dynamisch Spread Indicatie             | Berekening spread                                            |
 |                        | Dynamisch Spread Indicatie NOM         | Berekening spread NOM, duurste na eerste laadactie           |
 |                        | Dynamisch Spread Indicatie Morgen      | Berekening spread                                            |
@@ -102,7 +102,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch Duurste X Periode            | 1-96                                                         |
 |                        | Dynamisch Goedkoopste X Periode Morgen | 1-96                                                         |
 |                        | Dynamisch Duurste X Periode Morgen     | 1-96                                                         |
-|                        | Dynamisch Recent Geladen               | Gebruikt in modus Dynamisch NOM. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat                                                      |
+|                        | Dynamisch Recent Geladen               | Gebruikt in Dynamisch. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat                                                      |
 
 
 ## 2️⃣ Zendure zenSDK (Gielz) automatisering
