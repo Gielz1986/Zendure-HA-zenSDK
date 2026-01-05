@@ -153,7 +153,7 @@ Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_s
 Wanneer je ook het Dynamisch Nordpool gedeelte in gebruik gaat nemen moet je voor dat je deze in gebruik neemt bij `input_text.dynamisch_handmatige_periode` en
 `input_text.dynamisch_handmatige_periode_morgen` even **unknown** weghalen. Hierna zal het dynamisch gedeelte werken. Alles wat in de forecast (morgen) gezet word zal overgenomen worden om 00:00 via de automatisering en verschijnen in vandaag.
 
-Vervolgens kan de modus **Dynamisch NOM** gebruikt worden. Deze modus is ideaal in een periode met weinig zon maar wel met veel wind. Laad bijvoorbeeld in de winter de batterij een aantal uren goedkoop op iedere dag wanneer de spread meer dan 25% is.
+Vervolgens kunnen de modussen **Dynamisch NOM**, **Dynamisch NOM (Duur)** en **Dynamisch Handelen** gebruikt worden. Deze modussen zijn ideaal in een periode met weinig zon maar wel met veel wind. Laad bijvoorbeeld in de winter de batterij een aantal uren goedkoop op iedere dag wanneer de spread meer dan 25% is.
 
 ### #️⃣ Apexcharts
 Je kunt om het visueel aantrekkelijk te maken de Apexcharts `Nordpool_Apexcharts_Vandaag` en `Nordpool_Apexcharts_Morgen` gebruiken `(zie Github bestanden)`.
