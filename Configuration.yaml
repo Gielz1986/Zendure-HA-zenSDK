@@ -18,6 +18,8 @@ input_select:
       - Handmatig
       - Nul op de meter
       - Dynamisch NOM
+      - Dynamisch NOM (Duur)
+      - Dynamisch Handelen
       - Alleen slim ontladen
       - Alleen slim opladen
       - Opladen met 2400 watt
