@@ -43,7 +43,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 *Zelf toe te voegen entiteiten op een dashboard.
 ![Preview](Images/Dashboard-27102025.png) 
 
-| Categorie              | Entiteiten                              | State                                                        |
+| Categorie              | Entiteiten                              | Uitleg / Inhoud                                                        |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
 | Configuratie           | Homewizard P1 IP-adres                 | bijv. 192.168.0.192                                          |
 |                        | Zendure 2400 AC IP-adres               | bijv. 192.168.0.172                                          |
@@ -88,7 +88,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Efficiëntie Import (24u gemiddelde)    | 0-100%                                                       |
 |                        | Efficiëntie Export (24u gemiddelde)    | 0-100%                                                       |
 | Dynamische Aansturing  | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
-|                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten                                        |
+|                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten ipv 1 uur prijzen                                       |
 |                        | Dynamisch Handmatige Periode           | bijv. **G11:00;D12:00;G15:00** of **Geen**                       |
 |                        | Dynamisch Handmatige Periode Morgen    | bijv. **G11:00;D12:00;G15:00** of **Geen**                         |
 |                        | Dynamisch Minimale Spread              | Gebruikt in modus Dynamisch. Boven minimale spread laden |
