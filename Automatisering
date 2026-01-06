@@ -231,6 +231,13 @@ actions:
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
+          - alias: >-
+              sensor.dynamisch_spread_indicatie moet hoger of gelijk zijn aan
+              input_number.dynamisch_minimale_spread
+            condition: template
+            value_template: >-
+              {{ states('sensor.dynamisch_spread_indicatie') | float >=
+              states('input_number.dynamisch_minimale_spread') | float }}
           - condition: or
             conditions:
               - condition: state
@@ -348,25 +355,15 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: input_select.zendure_2400_ac_modus_selecteren
-                state:
-                  - Dynamisch NOM (Duur)
-              - condition: state
-                entity_id: input_select.zendure_2400_ac_modus_selecteren
-                state:
-                  - Dynamisch Handelen
-              - condition: state
-                entity_id: input_select.zendure_2400_ac_modus_selecteren
-                state: Dynamisch NOM
           - condition: template
             value_template: >-
               {{
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state: Dynamisch NOM
           - condition: state
             entity_id: sensor.dynamisch_goedkoopste_periode
             state: Ja
@@ -384,6 +381,89 @@ actions:
             condition: template
             value_template: >-
               {{ states('sensor.dynamisch_spread_indicatie_nom') | float >=
+              states('input_number.dynamisch_minimale_spread') | float }}
+        sequence:
+          - action: rest_command.zendure_opslaan_in_ram
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 5
+              milliseconds: 0
+          - action: rest_command.zendure_snel_laden
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - action: logbook.log
+            data:
+              message: 💲 Dynamisch NOM goedkoop laden gestart —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+          - wait_for_trigger:
+              - entity_id: sensor.dynamisch_goedkoopste_periode
+                to: Nee
+                trigger: state
+              - trigger: template
+                value_template: >
+                  {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
+                  ==
+                     states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
+                alias: Maximale ingestelde SOC bereikt
+              - trigger: state
+                entity_id:
+                  - input_select.zendure_2400_ac_modus_selecteren
+            continue_on_timeout: false
+          - action: rest_command.zendure_stop_met_alles
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - entity_id: input_boolean.dynamisch_recent_geladen
+            action: input_boolean.turn_on
+            alias: input_boolean.dynamisch_recent_geladen aanzetten
+          - action: logbook.log
+            data:
+              message: 💲 Dynamisch NOM goedkoop laden voltooid  —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: >-
+          Dynamisch NOM goedkoop laden (alleen wanneer Nordpool sensor in
+          gebruik)
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamisch_nordpool_sensor is gevuld
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch NOM (Duur)
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen
+          - condition: state
+            entity_id: sensor.dynamisch_goedkoopste_periode
+            state: Ja
+          - condition: state
+            entity_id: input_boolean.dynamisch_recent_geladen
+            state: "off"
+          - alias: SOC lager dan maximaal ingestelde SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0) < 
+                       states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
+          - alias: >-
+              sensor.dynamisch_spread_indicatie moet hoger of gelijk zijn aan
+              input_number.dynamisch_minimale_spread
+            condition: template
+            value_template: >-
+              {{ states('sensor.dynamisch_spread_indicatie') | float >=
               states('input_number.dynamisch_minimale_spread') | float }}
         sequence:
           - action: rest_command.zendure_opslaan_in_ram
@@ -432,16 +512,16 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: state
-            entity_id: input_select.zendure_2400_ac_modus_selecteren
-            state:
-              - Dynamisch Handelen
           - condition: template
             value_template: >-
               {{
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state:
+              - Dynamisch Handelen
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
@@ -452,11 +532,11 @@ actions:
             state:
               - Ja
           - alias: >-
-              sensor.dynamisch_spread_indicatie_nom moet hoger of gelijk zijn
-              aan input_number.dynamisch_minimale_spread
+              sensor.dynamisch_spread_indicatie moet hoger of gelijk zijn aan
+              input_number.dynamisch_minimale_spread
             condition: template
             value_template: >-
-              {{ states('sensor.dynamisch_spread_indicatie_nom') | float >=
+              {{ states('sensor.dynamisch_spread_indicatie') | float >=
               states('input_number.dynamisch_minimale_spread') | float }}
         sequence:
           - action: rest_command.zendure_opslaan_in_ram
