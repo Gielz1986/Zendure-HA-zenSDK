@@ -11,6 +11,30 @@ triggers:
       - input_select.zendure_2400_ac_modus_selecteren
     id: modus_trigger
     trigger: state
+  - trigger: state
+    entity_id:
+      - sensor.dynamisch_goedkoopste_periode
+    id: modus_dynamisch_goedkoop
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+    from:
+      - Ja
+    to:
+      - Nee
+  - trigger: state
+    entity_id:
+      - sensor.dynamisch_duurste_periode
+    id: modus_dynamisch_duur
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+    from:
+      - Ja
+    to:
+      - Nee
 conditions: []
 actions:
   - alias: Modus
@@ -199,29 +223,14 @@ actions:
       - conditions:
           - condition: trigger
             id:
-              - aansturing_trigger
+              - modus_dynamisch_goedkoop
+              - modus_dynamisch_duur
           - condition: template
             value_template: >-
               {{
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
-          - condition: state
-            entity_id: sensor.dynamisch_goedkoopste_periode
-            state:
-              - Nee
-            for:
-              hours: 0
-              minutes: 0
-              seconds: 10
-          - condition: state
-            entity_id: sensor.dynamisch_duurste_periode
-            state:
-              - Nee
-            for:
-              hours: 0
-              minutes: 0
-              seconds: 10
           - condition: or
             conditions:
               - condition: state
