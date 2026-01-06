@@ -433,11 +433,11 @@ actions:
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
-          - condition: template
+          - alias: Tot de minimaal ingestelde SOC
+            condition: template
             value_template: |
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
                states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
-            alias: Tot de minimaal ingestelde SOC
           - condition: state
             entity_id: sensor.dynamisch_duurste_periode
             state:
@@ -467,16 +467,16 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
           - wait_for_trigger:
+              - alias: Tot minimale SOC
+                trigger: template
+                value_template: |-
+                  {{ states('sensor.zendure_2400_ac_laadpercentage') | float <=
+                     states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
               - entity_id:
                   - sensor.dynamisch_duurste_periode
                 to:
                   - Nee
                 trigger: state
-              - alias: Tot de minimaal ingestelde SOC
-                trigger: template
-                value_template: |
-                  {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
-                   states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
               - trigger: state
                 entity_id:
                   - input_select.zendure_2400_ac_modus_selecteren
@@ -497,11 +497,11 @@ actions:
           - condition: numeric_state
             entity_id: sensor.p1_aansturing_vermogen
             above: 100
-          - condition: template
+          - alias: Tot de minimaal ingestelde SOC
+            condition: template
             value_template: |
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
                states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
-            alias: Tot de minimaal ingestelde SOC
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: -30
