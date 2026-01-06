@@ -102,8 +102,8 @@ input_number:
   zendure_2400_ac_handmatig_vermogen:
     name: Zendure 2400 AC Handmatig Vermogen
     icon: mdi:flash
-    min: -2400
-    max: 2400
+    min: -4800
+    max: 4800
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -1845,11 +1845,11 @@ rest:
           {% set input_power = value_json['properties']['outputPackPower'] | int %}
           {% set output_power = value_json['properties']['packInputPower'] | int %}
           {% if ac_mode == 1 and input_power > 0 %}
-            mdi:battery-arrow-up
+            mdi:battery-plus-variant
           {% elif ac_mode == 2 and output_power > 0 %}
-            mdi:battery-arrow-down
+            mdi:battery-minus-variant
           {% else %}
-           mdi:battery
+           mdi:battery-outline
           {% endif %}
 
       - name: "Zendure 2400 AC Error"
