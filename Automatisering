@@ -365,7 +365,7 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               outputLimit: >-
-                {% set factor = 0.75 %} {% set cap = 2400 %}
+                {% set factor = 0.75 %} {% set cap = 12000 %}
 
                 {% set correctie = -1 *
                 (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0))
@@ -384,7 +384,7 @@ actions:
             data:
               message: >
                 🔋 Ontladen starten — Vermogen ingesteld op {% set factor = 0.75
-                %} {% set cap = 2400 %}
+                %} {% set cap = 12000 %}
 
                   {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') |
                   float(0)) %}
@@ -408,9 +408,9 @@ actions:
             alias: Tot de minimaal ingestelde SOC
           - condition: template
             value_template: >-
-              {% set factor = 1.00 %} {% set cap = 2400 %} {% set correctie = -2
-              %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
-              %} {% set zendure =
+              {% set factor = 1.00 %} {% set cap = 12000 %} {% set correctie =
+              -2 %} {% set p1 = states('sensor.p1_aansturing_vermogen') |
+              float(0) %} {% set zendure =
               states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
               {% set totaal = (p1 - zendure - correctie) * factor %} {% set
               beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target =
@@ -469,7 +469,7 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               outputLimit: >-
-                {% set factor = 1.00 %} {% set cap = 2400 %}
+                {% set factor = 1.00 %} {% set cap = 12000 %}
 
                 {% set correctie = -1 *
                 (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0))
@@ -488,7 +488,7 @@ actions:
             data:
               message: >
                 ⚡ Ontladen balanceren — Vermogen ingesteld op {% set factor =
-                1.00 %} {% set cap = 2400 %}
+                1.00 %} {% set cap = 12000 %}
 
                   {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') |
                   float(0)) %}
@@ -559,7 +559,7 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               inputLimit: >-
-                {% set factor = 0.75 %} {% set cap = 2400 %} {% set
+                {% set factor = 0.75 %} {% set cap = 12000 %} {% set
                 correctie_export =
                 states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                 {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
@@ -575,7 +575,7 @@ actions:
               message: >
                 🔋 Opladen starten — Vermogen ingesteld op {% set factor = 0.75
                 %}
-                  {% set cap = 2400 %}
+                  {% set cap = 12000 %}
                   {% set correctie_export = states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                   {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %}
                   {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
@@ -598,7 +598,7 @@ actions:
             alias: SOC is gelijk of groter dan de minimale SOC
           - condition: template
             value_template: >-
-              {% set factor = 1.00 %} {% set cap = 2400 %} {% set
+              {% set factor = 1.00 %} {% set cap = 12000 %} {% set
               correctie_export = 40 %} {% set p1 =
               states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
               zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') |
@@ -637,7 +637,7 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               inputLimit: >-
-                {% set factor = 1.00 %} {% set cap = 2400 %} {% set
+                {% set factor = 1.00 %} {% set cap = 12000 %} {% set
                 correctie_export =
                 states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                 {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
@@ -653,7 +653,7 @@ actions:
               message: >
                 ⚡ Opladen balanceren — Vermogen ingesteld op {% set factor =
                 1.00 %}
-                  {% set cap = 2400 %}
+                  {% set cap = 12000 %}
                   {% set correctie_export = states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                   {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %}
                   {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
