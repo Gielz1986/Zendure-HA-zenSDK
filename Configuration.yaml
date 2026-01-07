@@ -162,8 +162,8 @@ sensor:
   - platform: history_stats
     name: "Zendure 2400 AC Relais Schakelingen Opladen Vandaag"
     unique_id: zendure_2400_ac_relais_schakelingen_opladen_vandaag
-    entity_id: sensor.zendure_2400_ac_modus
-    state: "Opladen"
+    entity_id: sensor.zendure_2400_ac_relais_stand
+    state: "Oplaadstand"
     type: count
     start: "{{ today_at() if now() < today_at('23:59') else now() }}"
     end: "{{ now() }}"
@@ -171,8 +171,8 @@ sensor:
   - platform: history_stats
     name: "Zendure 2400 AC Relais Schakelingen Ontladen Vandaag"
     unique_id: zendure_2400_ac_relais_schakelingen_ontladen_vandaag
-    entity_id: sensor.zendure_2400_ac_modus
-    state: "Ontladen"
+    entity_id: sensor.zendure_2400_ac_relais_stand
+    state: "Ontlaadstand"
     type: count
     start: "{{ today_at() if now() < today_at('23:59') else now() }}"
     end: "{{ now() }}"
@@ -1623,6 +1623,14 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC Relais Stand"
+        value_template: >
+          {% set states = {1: "Oplaadstand", 2: "Ontlaadstand"} %}
+          {% set packState = value_json['properties']['acMode'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_2400_AC_Relais_Stand
+        icon: mdi:swap-vertical-bold
+        
       - name: "Zendure 2400 AC Serienummer"
         unique_id: Zendure_2400_AC_Serienummer
         value_template: "{{ value_json.sn }}"
