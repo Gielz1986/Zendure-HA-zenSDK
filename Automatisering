@@ -166,15 +166,11 @@ actions:
             entity_id: sensor.zendure_2400_ac_opslagmodus
             state:
               - Opslaan in Flash
-            for:
-              hours: 0
-              minutes: 0
-              seconds: 30
           - condition: or
             conditions:
               - condition: numeric_state
                 entity_id: sensor.zendure_2400_ac_vermogen_aansturing
-                above: 0
+                above: 50
               - condition: numeric_state
                 entity_id: sensor.zendure_2400_ac_vermogen_aansturing
                 below: 0
