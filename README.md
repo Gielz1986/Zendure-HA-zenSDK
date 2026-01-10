@@ -60,16 +60,16 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | P1 Nul Import Duur (Vandaag)           | Hoeveel nul import uren heb je vandaag bereikt               |
 | Aansturing             | Modus Selecteren                       | Zie **Modus uitleg bij ✅ Batterij mag aan de slag**        |
 |                        | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                              |
-|                        | P1 Aansturing Vermogen                 | Homewizard P1 of eigen P1 vermogen                           |
+|                        | P1 Aansturing Vermogen                 | Homewizard P1 of afwijkende P1 sensor                        |
 |                        | Laadpercentage                         | 5-100%                                                       |
 |                        | Resterende Ontlaad Tijd                | uur - minuten (⚠️ Foutief door bug in API)                   |
 |                        | Modus                                  | Opladen, Ontladen of Standby                                 |
-|                        | Vermogen Aansturing                    | -2400-2400 watt (vermogen import en vermogen export          |
+|                        | Vermogen Aansturing                    | -2400-2400 watt (vermogen import en vermogen export)          |
 |                        | Vermogen Import                        | 0-2400 watt                                                  |
 |                        | Vermogen Export                        | 0-2400 watt                                                  |
 |                        | Ingesteld Ontlaadvermogen              | 0-2400 watt                                                  |
 |                        | Ingesteld Oplaadvermogen               | 0-2400 watt                                                  |
-| Import/Export          | RTE Totaal                             | 0-100% (⚠️ extern meten via HW KWH MID Meter is aan te raden)|
+| Import/Export          | RTE Totaal                             | 0-100% (⚠️ extern meten via HomeWizard kWh Meter is aan te raden)|
 |                        | Energie Import                         | KWH                                                          |
 |                        | Energie Export                         | KWH                                                          |
 | Efficiëntie DC/AC      | Vermogen Export (DC)                   | 0-2400 watt                                                  |
@@ -95,7 +95,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten ipv 1 uur prijzen                      |
 |                        | Dynamisch Handmatige Periode           | bijv. **G11:00;D12:00;G15:00** of **Geen**                   |
 |                        | Dynamisch Handmatige Periode Morgen    | bijv. **G11:00;D12:00;G15:00** of **Geen**                   |
-|                        | Dynamisch Minimale Spread              | Gebruikt in modus Dynamisch. Boven minimale spread laden     |
+|                        | Dynamisch Minimale Spread              | Gebruikt in modus **Dynamisch NOM**, **Dynamisch NOM (Duur)** em **Dynamisch Handelen**. Boven minimale spread laden     |
 |                        | Dynamisch Spread Indicatie             | Berekening spread                                            |
 |                        | Dynamisch Spread Indicatie NOM         | Berekening spread NOM, duurste na eerste laadactie           |
 |                        | Dynamisch Spread Indicatie Morgen      | Berekening spread                                            |
@@ -106,8 +106,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch Duurste X Periode            | 1-96                                                         |
 |                        | Dynamisch Goedkoopste X Periode Morgen | 1-96                                                         |
 |                        | Dynamisch Duurste X Periode Morgen     | 1-96                                                         |
-|                        | Dynamisch Recent Geladen               | Gebruikt in Dynamisch. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat   |
-| Geen categorie         | Serienummer                            | Serienummer Omvormer                                         |
+|                        | Dynamisch Recent Geladen               | Word automatisch aan en uit gezet. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat   |
+| Geen categorie         | Serienummer                            | Serienummer omvormer                                         |
 
 
 ## 2️⃣ Zendure zenSDK (Gielz) automatisering
