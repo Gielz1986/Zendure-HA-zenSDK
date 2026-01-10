@@ -133,7 +133,7 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 4. Kies hier je gewenste modus om de **Zendure zenSDK (Gielz) automatisering** te activeren.
 5. De batterij zal nu aan de slag gaan.
 
-![Preview](Images/Modus2.gif) 
+![Preview](Images/Modus2-10012026.gif) 
 
 | Modus                         | Werking                               | Doel                                | 
 | ----------------------------- | -------------------------------------- | -------------------------------------- | 
