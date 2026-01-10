@@ -43,7 +43,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 ![Preview](Images/Instellingen-100126.png) 
 
 
-*Zelf toe te voegen entiteiten op een dashboard.
+*Zelf toe te voegen entiteiten op een dashboard. (Graphite theme, Numberbox-card, Apexcharts-card)
 ![Preview](Images/Dashboard-10012026.png) 
 
 | Categorie              | Entiteiten                              | Uitleg / Inhoud                                                        |
