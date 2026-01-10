@@ -44,57 +44,58 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 
 *Zelf toe te voegen entiteiten op een dashboard.
-![Preview](Images/Dashboard-06012026.png) 
+![Preview](Images/Dashboard-10012026.png) 
 
 | Categorie              | Entiteiten                              | Uitleg / Inhoud                                                        |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
-| Configuratie           | Homewizard P1 IP-adres                 | bijv. 192.168.0.192                                          |
-|                        | Zendure 2400 AC IP-adres               | bijv. 192.168.0.172                                          |
+| Configuratie           | Zendure 2400 AC IP-adres               | bijv. 192.168.0.172                                        |
+|                        | Homewizard P1 IP-adres                 | bijv. 192.168.0.192                                          |
 |                        | Afwijkende P1 Sensor                   | bijv. sensor.eigen_P1 waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
 |                        | Dynamisch Nordpool Sensor              | bijv. sensor.nordpool_kwh_nl_eur_3_09_0                      |
 |                        | Standby Vertraging                     | 5-30 minuten tot wanneer de omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt                      |
 |                        | Oplaadmarge                            | 0-50 watt minder meenemen tijdens opladen. Als je net wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS)                          |
 |                        | Ontlaadmarge                           | 0-50 watt extra meenemen tijdens ontladen. Als je net wat meer wilt ontladen                    |
-| Aansturing             | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                                  |
-|                        | Modus Selecteren                       | Zie **Modus uitleg bij ✅ Batterij mag aan de slag**        |
-|                        | P1 Aansturing Vermogen                 | Homewizard P1 of eigen P1 vermogen                           |
-| Informatie             | Aantal Batterijen                      | 1-6                                                          |
-|                        | Serienummer                            | Serienummer Omvormer                                         |
-|                        | Batterijspanning                       | Voltage                                                      |
-|                        | Batterij 1-6 Temperatuur               | 0-100 °C                                                     |
-|                        | Omvormer Temperatuur                   | 0-100 °C                                                     |
-|                        | Laadpercentage                         | 5-100%                                                       |
-|                        | Maximale Laadpercentage                | 5-100%                                                       |
-|                        | Minimale Laadpercentage                | 5-100%                                                       |
-|                        | Resterende Ontlaad Tijd                | uur - minuten                                                |
-|                        | Opslagmodus                            | Opslaan in RAM of Opslaan in Flash                           |
+| P1                     | Homewizard P1 Vermogen                 | Vermogen van je Homewizard P1                                |
 |                        | P1 Nul Import Actief                   | Geeft aan dat er op dit moment geen import nodig is          |
 |                        | P1 Nul Import Duur (Vandaag)           | Hoeveel nul import uren heb je vandaag bereikt               |
-| Vermogen & Energie     | Ingesteld Oplaadvermogen               | 0-2400 watt                                                  |
-|                        | Ingesteld Ontlaadvermogen              | 0-2400 watt                                                  |
-|                        | Vermogen Aansturing                    | -2400-2400 watt                                              |
+| Aansturing             | Modus Selecteren                       | Zie **Modus uitleg bij ✅ Batterij mag aan de slag**        |
+|                        | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                              |
+|                        | P1 Aansturing Vermogen                 | Homewizard P1 of eigen P1 vermogen                           |
+|                        | Laadpercentage                         | 5-100%                                                       |
+|                        | Resterende Ontlaad Tijd                | uur - minuten (⚠️ Foutief door bug in API)                   |
+|                        | Modus                                  | Opladen, Ontladen of Standby                                 |
+|                        | Vermogen Aansturing                    | -2400-2400 watt (vermogen import en vermogen export          |
 |                        | Vermogen Import                        | 0-2400 watt                                                  |
 |                        | Vermogen Export                        | 0-2400 watt                                                  |
-|                        | Vermogen Import (DC)                   | 0-2400 watt                                                  |
-|                        | Vermogen Export (DC)                   | 0-2400 watt                                                  |
+|                        | Ingesteld Ontlaadvermogen              | 0-2400 watt                                                  |
+|                        | Ingesteld Oplaadvermogen               | 0-2400 watt                                                  |
+| Import/Export          | RTE Totaal                             | 0-100% (⚠️ extern meten via HW KWH MID Meter is aan te raden)|
 |                        | Energie Import                         | KWH                                                          |
 |                        | Energie Export                         | KWH                                                          |
-| Status & Foutmeldingen | Modus                                  | Opladen of Ontladen                                          |
-|                        | Error                                  | Geen meldingen of Zie Zendure APP                            |
-|                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
-|                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh                                                |
-|                        | SOC Status                             | Goed of Kalibreren                                           |
-|                        | Relais Schakelingen Totaal (Vandaag)   | Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
-| Efficiëntie & RTE      | RTE Totaal                             | 0-100%                                                       |
-|                        | Efficiëntie Import                     | 0-100%                                                       |
+| Efficiëntie DC/AC      | Vermogen Export (DC)                   | 0-2400 watt                                                  |
 |                        | Efficiëntie Export                     | 0-100%                                                       |
+|                        | Vermogen Import (DC)                   | 0-2400 watt                                                  |
+|                        | Efficiëntie Import                     | 0-100%                                                       |
 |                        | Efficiëntie Import (24u gemiddelde)    | 0-100%                                                       |
 |                        | Efficiëntie Export (24u gemiddelde)    | 0-100%                                                       |
-| Dynamische Aansturing  | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
-|                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten ipv 1 uur prijzen                                       |
-|                        | Dynamisch Handmatige Periode           | bijv. **G11:00;D12:00;G15:00** of **Geen**                       |
-|                        | Dynamisch Handmatige Periode Morgen    | bijv. **G11:00;D12:00;G15:00** of **Geen**                         |
-|                        | Dynamisch Minimale Spread              | Gebruikt in modus Dynamisch. Boven minimale spread laden |
+| Gezondheid             | Relais Stand                           | Oplaadstaand of Ontlaadstand                                 |
+|                        | Relais Schakelingen Totaal (Vandaag)   | Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
+|                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
+|                        | Aantal Batterijen                      | 1-6                                                          |
+|                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh                                                |
+|                        | Error                                  | Geen meldingen of Zie Zendure APP                            |
+|                        | SOC Status                             | Goed of Kalibreren                                           |
+|                        | Omvormer Temperatuur                   | 0-100 °C                                                     |
+|                        | Opslagmodus                            | Opslaan in RAM of Opslaan in Flash                           |
+|                        | Batterijspanning                       | Voltage                                                      |
+|                        | Minimale Laadpercentage                | 5-100%                                                       |
+|                        | Maximale Laadpercentage                | 5-100%                                                       |
+|                        | Batterij 1-6 Temperatuur               | 0-100 °C                                                     |
+| Dynamische             | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
+|                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten ipv 1 uur prijzen                      |
+|                        | Dynamisch Handmatige Periode           | bijv. **G11:00;D12:00;G15:00** of **Geen**                   |
+|                        | Dynamisch Handmatige Periode Morgen    | bijv. **G11:00;D12:00;G15:00** of **Geen**                   |
+|                        | Dynamisch Minimale Spread              | Gebruikt in modus Dynamisch. Boven minimale spread laden     |
 |                        | Dynamisch Spread Indicatie             | Berekening spread                                            |
 |                        | Dynamisch Spread Indicatie NOM         | Berekening spread NOM, duurste na eerste laadactie           |
 |                        | Dynamisch Spread Indicatie Morgen      | Berekening spread                                            |
@@ -105,7 +106,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch Duurste X Periode            | 1-96                                                         |
 |                        | Dynamisch Goedkoopste X Periode Morgen | 1-96                                                         |
 |                        | Dynamisch Duurste X Periode Morgen     | 1-96                                                         |
-|                        | Dynamisch Recent Geladen               | Gebruikt in Dynamisch. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat                                                      |
+|                        | Dynamisch Recent Geladen               | Gebruikt in Dynamisch. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat   |
+| Geen categorie         | Serienummer                            | Serienummer Omvormer                                         |
 
 
 ## 2️⃣ Zendure zenSDK (Gielz) automatisering
