@@ -91,7 +91,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Minimale Laadpercentage                | 5-100%                                                       |
 |                        | Maximale Laadpercentage                | 5-100%                                                       |
 |                        | Batterij 1-6 Temperatuur               | 0-100 °C                                                     |
-| Dynamische             | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
+| Dynamisch              | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
 |                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten ipv 1 uur prijzen                      |
 |                        | Dynamisch Handmatige Periode           | bijv. **G11:00;D12:00;G15:00** of **Geen**                   |
 |                        | Dynamisch Handmatige Periode Morgen    | bijv. **G11:00;D12:00;G15:00** of **Geen**                   |
