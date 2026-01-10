@@ -216,9 +216,9 @@ template:
       - name: "P1 Nul Import Actief"
         unique_id: p1_nul_import_actief
         device_class: power
-        state: "{{ states('sensor.p1_aansturing_vermogen') | float < 1 }}"
+        state: "{{ states('sensor.p1_aansturing_vermogen') | float(0) < 1 }}"
         icon: >
-          {% if states('sensor.p1_aansturing_vermogen') | float < 1 %}
+          {% if states('sensor.p1_aansturing_vermogen') | float(0) < 1 %}
             mdi:leaf
           {% else %}
             mdi:flash
@@ -1849,13 +1849,10 @@ rest:
           {% endif %}
         unique_id: Zendure_2400_AC_Modus
         icon: >
-          {% set ac_mode = value_json['properties']['acMode'] | int %}
-          {% set input_power = value_json['properties']['outputPackPower'] | int %}
-          {% set output_power = value_json['properties']['packInputPower'] | int %}
-          {% if ac_mode == 1 and input_power > 0 %}
-            mdi:battery-plus-variant
-          {% elif ac_mode == 2 and output_power > 0 %}
-            mdi:battery-minus-variant
+          {% if this.state == 'Opladen' %}
+           mdi:battery-plus-variant
+          {% elif this.state == 'Ontladen' %}
+           mdi:battery-minus-variant
           {% else %}
            mdi:battery-outline
           {% endif %}
