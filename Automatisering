@@ -35,6 +35,10 @@ triggers:
       - Ja
     to:
       - Nee
+  - trigger: state
+    entity_id:
+      - input_number.dynamisch_minimale_spread
+    id: modus_dynamisch_spread
 conditions: []
 actions:
   - alias: Modus Selecteren
@@ -330,6 +334,10 @@ actions:
                   - condition: state
                     entity_id: input_select.zendure_2400_ac_modus_selecteren
                     state: Alleen slim ontladen
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Dynamisch NOM
               - condition: and
                 conditions:
                   - condition: state
@@ -341,27 +349,13 @@ actions:
                     state:
                       - Dynamisch NOM (Duur)
                   - alias: >-
-                      sensor.dynamisch_spread_indicatie_nom moet hoger of gelijk
+                      sensor.dynamisch_spread_indicatie moet hoger of gelijk
                       zijn aan input_number.dynamisch_minimale_spread
                     condition: template
                     value_template: >-
                       {{ states('sensor.dynamisch_spread_indicatie') | float >=
                       states('input_number.dynamisch_minimale_spread') | float
                       }}
-              - condition: and
-                conditions:
-                  - condition: state
-                    entity_id: input_select.zendure_2400_ac_modus_selecteren
-                    state:
-                      - Dynamisch NOM
-                  - alias: >-
-                      sensor.dynamisch_spread_indicatie_nom moet hoger of gelijk
-                      zijn aan input_number.dynamisch_minimale_spread
-                    condition: template
-                    value_template: >-
-                      {{ states('sensor.dynamisch_spread_indicatie_nom') | float
-                      >= states('input_number.dynamisch_minimale_spread') |
-                      float }}
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -434,6 +428,10 @@ actions:
                   - condition: state
                     entity_id: input_select.zendure_2400_ac_modus_selecteren
                     state: Alleen slim ontladen
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Dynamisch NOM
               - condition: and
                 conditions:
                   - condition: state
@@ -445,27 +443,13 @@ actions:
                     state:
                       - Dynamisch NOM (Duur)
                   - alias: >-
-                      sensor.dynamisch_spread_indicatie_nom moet hoger of gelijk
+                      sensor.dynamisch_spread_indicatie moet hoger of gelijk
                       zijn aan input_number.dynamisch_minimale_spread
                     condition: template
                     value_template: >-
                       {{ states('sensor.dynamisch_spread_indicatie') | float >=
                       states('input_number.dynamisch_minimale_spread') | float
                       }}
-              - condition: and
-                conditions:
-                  - condition: state
-                    entity_id: input_select.zendure_2400_ac_modus_selecteren
-                    state:
-                      - Dynamisch NOM
-                  - alias: >-
-                      sensor.dynamisch_spread_indicatie_nom moet hoger of gelijk
-                      zijn aan input_number.dynamisch_minimale_spread
-                    condition: template
-                    value_template: >-
-                      {{ states('sensor.dynamisch_spread_indicatie_nom') | float
-                      >= states('input_number.dynamisch_minimale_spread') |
-                      float }}
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -798,19 +782,13 @@ actions:
             id:
               - modus_dynamisch_goedkoop
               - modus_dynamisch_duur
+              - modus_dynamisch_spread
           - condition: template
             value_template: >-
               {{
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
-          - alias: >-
-              sensor.dynamisch_spread_indicatie moet hoger of gelijk zijn aan
-              input_number.dynamisch_minimale_spread
-            condition: template
-            value_template: >-
-              {{ states('sensor.dynamisch_spread_indicatie') | float >=
-              states('input_number.dynamisch_minimale_spread') | float }}
           - condition: or
             conditions:
               - condition: state
