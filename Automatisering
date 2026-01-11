@@ -912,6 +912,12 @@ actions:
               - trigger: state
                 entity_id:
                   - input_select.zendure_2400_ac_modus_selecteren
+              - trigger: state
+                entity_id:
+                  - input_number.dynamisch_minimale_spread
+              - trigger: state
+                entity_id:
+                  - sensor.dynamisch_spread_indicatie_nom
             continue_on_timeout: false
           - action: rest_command.zendure_stop_met_alles
             data:
@@ -993,6 +999,12 @@ actions:
               - trigger: state
                 entity_id:
                   - input_select.zendure_2400_ac_modus_selecteren
+              - trigger: state
+                entity_id:
+                  - input_number.dynamisch_minimale_spread
+              - trigger: state
+                entity_id:
+                  - sensor.dynamisch_spread_indicatie
             continue_on_timeout: false
           - action: rest_command.zendure_stop_met_alles
             data:
