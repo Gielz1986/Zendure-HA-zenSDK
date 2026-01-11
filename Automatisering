@@ -1090,4 +1090,4 @@ actions:
               name: " "
         alias: Dynamisch duur ontladen
 mode: queued
-max: 4
+max: 6
