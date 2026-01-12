@@ -1,7 +1,7 @@
 #  Zendure - Home Assistant
 **Om in 2️⃣ stappen je batterij lokaal werkend te krijgen in Home Assistant**.
 
-Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro en Plus (geen aangesloten zonnepanelen) zonder gebruik te maken van integraties maar werkt met **één automatisering**. Voor de gene die graag de batterij 100% lokaal in eigen beheer wilt zonder updates van derden en netjes in Home Assistant. Inmiddels zijn er 10 uitgeprogrameerde modussen waar in de batterij kan staan waardoor er voor iedereen wel iets tussen zit. De Nul op de Meter modus is uiteraard de meest gebruikte variant.
+Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro en Plus (geen aangesloten zonnepanelen) zonder gebruik te maken van integraties maar werkt met **één automatisering**. Voor de gene die graag de batterij 100% lokaal in eigen beheer wilt zonder updates van derden en netjes in Home Assistant. Inmiddels zijn er **10 uitgeprogrameerde modussen** waar in de batterij kan staan waardoor er voor iedereen wel iets tussen zit. De Nul op de Meter modus is uiteraard de meest gebruikte variant.
 
 Heb je meerdere batterijen dan kan dit in combinatie met https://github.com/gast777/Zendure-zenSDK-proxy waarbij Node-RED gebruikt word.
 
