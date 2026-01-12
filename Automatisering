@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Versie 20260111-2
+description: Versie 20260112
 triggers:
   - seconds: /4
     id: aansturing_trigger
@@ -18,7 +18,7 @@ triggers:
     for:
       hours: 0
       minutes: 0
-      seconds: 10
+      seconds: 15
     from:
       - Ja
     to:
@@ -30,7 +30,7 @@ triggers:
     for:
       hours: 0
       minutes: 0
-      seconds: 10
+      seconds: 15
     from:
       - Ja
     to:
