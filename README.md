@@ -34,8 +34,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |-|-|
 | `input_text.zendure_2400_ac_ip_adres`      | In de Zendure app onder device Information |
 | `input_text.homewizard_p1_ip_adres`    | In de Homewizard app (lokale API aanzetten)  |
-| `input_text.afwijkende_p1_sensor` | **Optioneel** een afwijkende P1 sensor toevoegen. bijv. sensor.eigen_P1 waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |
-| `input_text.dynamisch_nordpool_sensor` | **Optioneel** de sensor van Nordpool (HACS) toevoegen |
+| `input_text.afwijkende_p1_sensor` | **Optioneel** een afwijkende P1 sensor toevoegen. bijv. **sensor.eigen_P1** waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |
+| `input_text.dynamisch_nordpool_sensor` | **Optioneel** de sensor van Nordpool (HACS) toevoegen. bijv. **sensor.nordpool_kwh_nl_eur_3_09_0**  |
 | `input_number.zendure_2400_ac_standby_vertraging` | **Optioneel** 5-30 minuten tot wanneer de omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt |
 | `input_number.zendure_2400_ac_oplaadmarge` | **Optioneel** 0-50 watt minder meenemen tijdens opladen. Als je net wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS) |
 | `input_number.zendure_2400_ac_ontlaadmarge` | **Optioneel** 0-50 watt extra meenemen tijdens ontladen. Als je net wat meer wilt ontladen |
