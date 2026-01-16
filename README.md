@@ -110,7 +110,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Dynamisch Goedkoopste X Periode Morgen | 1-96                                                         |
 |                        | Dynamisch Duurste X Periode Morgen     | 1-96                                                         |
 |                        | Dynamisch Recent Geladen               | Word automatisch aan en uit gezet. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat   |
-| Geen categorie         | Serienummer                            | Serienummer omvormer                                         |
+| Geen categorie         | Serienummer                            | Serienummer van de omvormer                                         |
+|                        | Batterij Serienummers                  | Serienummers van de batterijen om te gebruiken tijdens configuratie van `input_text.zendure_2400_ac_batterij_volgorde`                                     |
 
 
 ## 2️⃣ Zendure zenSDK (Gielz) automatisering
