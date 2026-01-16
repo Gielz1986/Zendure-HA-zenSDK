@@ -51,7 +51,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
 | Configuratie           | Zendure 2400 AC IP-adres               | bijvoorbeeld **192.168.0.172**                                       |
 |                        | Homewizard P1 IP-adres                 | bijvoorbeeld **192.168.0.192**                                       |
-|                        | Afwijkende P1 Sensor                   | bijvoorbeeld sensor.eigen_P1 waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
+|                        | Afwijkende P1 Sensor                   | bijvoorbeeld. `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
 |                        | Dynamisch Nordpool Sensor              | bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`                      |
 |                        | Batterij Volgorde                      | bijvoorbeeld **1;5;3;4;2** – hiermee bepaal je zelf de volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage gelijk lopen met die van de batterij(en) in de stapel.                  |
 |                        | Standby Vertraging                     | 5-30 minuten tot wanneer de omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt                      |
@@ -84,7 +84,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Relais Schakelingen Totaal (Vandaag)   | Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
 |                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
 |                        | Aantal Batterijen                      | 1-6                                                          |
-|                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh                                                |
+|                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh (hierbij word rekening gehouden in de berekening met `sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde` en `sensor.zendure_2400_ac_rte_totaal` wat zichtbaar is in de extra attributen.                                               |
 |                        | Error                                  | Geen meldingen of Zie Zendure APP                            |
 |                        | SOC Status                             | Goed of Kalibreren                                           |
 |                        | Omvormer Temperatuur                   | 0-100 °C                                                     |
