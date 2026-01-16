@@ -41,7 +41,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_number.zendure_2400_ac_oplaadmarge` | **Optioneel** – 0-50 watt minder meenemen tijdens opladen. Als je net wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS) |
 | `input_number.zendure_2400_ac_ontlaadmarge` | **Optioneel** – 0-50 watt extra meenemen tijdens ontladen. Als je net wat meer wilt ontladen |
 
-![Preview](Images/Instellingen-100126.png) 
+![Preview](Images/Instellingen-160126.png) 
 
 
 *Zelf toe te voegen entiteiten op een dashboard. (Graphite theme, Numberbox-card, Apexcharts-card)
