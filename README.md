@@ -41,7 +41,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_number.zendure_2400_ac_oplaadmarge` | **Optioneel** – 0-500 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS) |
 | `input_number.zendure_2400_ac_ontlaadmarge` | **Optioneel** – 0-500 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is |
 | `input_number.zendure_2400_ac_ontladen_starten_bij` | **Optioneel** – 100-500 watt – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge |
-| `input_number.zendure_2400_ac_opladen_starten_bij` | **Optioneel** – -100--500 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge |
+| `input_number.zendure_2400_ac_opladen_starten_bij` | **Optioneel** – -100--1000 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge |
 
 ![Preview](Images/Instellingen-170126.png) 
 
@@ -60,7 +60,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Oplaadmarge                            | 0-500 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS)                          |
 |                        | Ontlaadmarge                           | 0-500 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is                    |
 |                        | Ontladen starten bij                   | 100-500 watt – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge                          |
-|                        | Opladen starten bij                    | -100--500 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge                    |
+|                        | Opladen starten bij                    | -100--1000 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge                    |
 | P1                     | Homewizard P1 Vermogen                 | Vermogen van je Homewizard P1                                |
 |                        | P1 Nul Import Actief                   | Geeft aan dat er op dit moment geen import nodig is          |
 |                        | P1 Nul Import Duur (Vandaag)           | Hoeveel nul import uren heb je vandaag bereikt               |
