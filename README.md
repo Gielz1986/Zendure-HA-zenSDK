@@ -37,11 +37,13 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_text.afwijkende_p1_sensor` | **Optioneel** – bijvoorbeeld. `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |
 | `input_text.dynamisch_nordpool_sensor` | **Optioneel** – bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0` – je eigen sensor van Nordpool (HACS) toevoegen.  |
 | `input_text.zendure_2400_ac_batterij_volgorde` | **Optioneel** – bijvoorbeeld **1;5;3;4;2** – hiermee bepaal je zelf de volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|
-| `input_number.zendure_2400_ac_standby_vertraging` | **Optioneel** – 5-30 minuten tot wanneer de omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt |
-| `input_number.zendure_2400_ac_oplaadmarge` | **Optioneel** – 0-50 watt minder meenemen tijdens opladen. Als je net wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS) |
-| `input_number.zendure_2400_ac_ontlaadmarge` | **Optioneel** – 0-50 watt extra meenemen tijdens ontladen. Als je net wat meer wilt ontladen |
+| `input_number.zendure_2400_ac_standby_vertraging` | **Optioneel** – 5-30 minuten – Geef hier aan hoe snel omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt |
+| `input_number.zendure_2400_ac_oplaadmarge` | **Optioneel** – 0-500 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS) |
+| `input_number.zendure_2400_ac_ontlaadmarge` | **Optioneel** – 0-500 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is |
+| `input_number.zendure_2400_ac_ontladen_starten_bij` | **Optioneel** – 100-500 watt – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge |
+| `input_number.zendure_2400_ac_opladen_starten_bij` | **Optioneel** – -100--500 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge |
 
-![Preview](Images/Instellingen-160126.png) 
+![Preview](Images/Instellingen-170126.png) 
 
 
 *Zelf toe te voegen entiteiten op een dashboard. (Graphite theme, Numberbox-card, Apexcharts-card)
@@ -54,9 +56,11 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Afwijkende P1 Sensor                   | bijvoorbeeld. `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
 |                        | Dynamisch Nordpool Sensor              | bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`                      |
 |                        | Batterij Volgorde                      | bijvoorbeeld **1;5;3;4;2** – hiermee bepaal je zelf de volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage gelijk lopen met die van de batterij(en) in de stapel.                  |
-|                        | Standby Vertraging                     | 5-30 minuten tot wanneer de omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt                      |
-|                        | Oplaadmarge                            | 0-50 watt minder meenemen tijdens opladen. Als je net wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS)                          |
-|                        | Ontlaadmarge                           | 0-50 watt extra meenemen tijdens ontladen. Als je net wat meer wilt ontladen                    |
+|                        | Standby Vertraging                     | 5-30 minuten – Geef hier aan hoe snel omvormer 100% in standby gaat bij 0 activiteit. Voorkomt sluipverbruik van +/- 19 watt                      |
+|                        | Oplaadmarge                            | 0-500 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen (Zendure zelf hanteert hier 50 watt in HEMS)                         |
+|                        | Ontlaadmarge                           | 0-500 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is                    |
+|                        | Ontladen starten bij                   | 100-500 watt – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge                          |
+|                        | Opladen starten bij                    | -100--500 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge                    |
 | P1                     | Homewizard P1 Vermogen                 | Vermogen van je Homewizard P1                                |
 |                        | P1 Nul Import Actief                   | Geeft aan dat er op dit moment geen import nodig is          |
 |                        | P1 Nul Import Duur (Vandaag)           | Hoeveel nul import uren heb je vandaag bereikt               |
