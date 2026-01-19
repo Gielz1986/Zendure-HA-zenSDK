@@ -85,7 +85,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 |                        | Efficiëntie Import (24u gemiddelde)    | 0-100%                                                       |
 |                        | Efficiëntie Export (24u gemiddelde)    | 0-100%                                                       |
 | Gezondheid             | Relais Stand                           | Oplaadstaand of Ontlaadstand                                 |
-|                        | Relais Schakelingen Totaal (Vandaag)   | Hier worden alleen schakelingen geteld wanneer er vermogen op de relais komt. Beperk deze tot ±50 per dag. Bij bewolkte dagen ±100 per dag |
+|                        | Relais Schakelingen Totaal (Vandaag)   | Hier worden alleen schakelingen geteld wanneer er vermogen op de relais komt. De slijtage is lager dan gebruikelijk omdat het vermogen opbouwend is bij Zendure.  50-100 keer per dag is gebruikelijk bij een relais met direct 100% vermogen.  |
 |                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
 |                        | Aantal Batterijen                      | 1-6                                                          |
 |                        | Indicatie Beschikbare Energie          | 0 - 16,42 kwh (hierbij word rekening gehouden in de berekening met `sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde` en `sensor.zendure_2400_ac_rte_totaal` wat zichtbaar is in de extra attributen.                                               |
