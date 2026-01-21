@@ -67,6 +67,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | Aansturing             | Modus Selecteren                       | Zie **Modus uitleg bij ✅ Batterij mag aan de slag**        |
 |                        | Handmatig Vermogen                     | Gebruikt in modus **Handmatig**                              |
 |                        | P1 Aansturing Vermogen                 | Homewizard P1 of afwijkende P1 sensor                        |
+|                        | SOC-limiet Status                      | Normale werking, Laadlimiet bereikt, en Ontlaadlimiet bereikt |
 |                        | Laadpercentage                         | 5-100%                                                       |
 |                        | Resterende Ontlaad Tijd                | uur - minuten (⚠️ Foutief door bug in API)                   |
 |                        | Modus                                  | Opladen, Ontladen of Standby                                 |
