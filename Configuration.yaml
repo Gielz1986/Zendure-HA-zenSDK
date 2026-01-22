@@ -35,6 +35,12 @@ input_boolean:
     icon: mdi:battery-check
 
 input_text:
+  zendure_2400_ac_batterij_volgorde:
+    name: Zendure 2400 AC Batterij Volgorde
+    icon: mdi:flip-vertical
+    max: 11
+    mode: text
+
   zendure_2400_ac_ip_adres:
     name: Zendure 2400 AC IP-adres
     icon: mdi:ip
@@ -72,9 +78,27 @@ input_text:
     mode: text
 
 input_number:
+  zendure_2400_ac_ontladen_starten_bij:
+    name: Zendure 2400 AC Ontladen Starten Bij
+    icon: mdi:battery-minus-variant
+    min: 100
+    max: 500
+    step: 1
+    mode: box
+    unit_of_measurement: "W"
+
+  zendure_2400_ac_opladen_starten_bij:
+    name: Zendure 2400 AC Opladen Starten Bij
+    icon: mdi:battery-plus-variant
+    min: -1000
+    max: -100
+    step: 1
+    mode: box
+    unit_of_measurement: "W"
+
   zendure_2400_ac_standby_vertraging:
     name: Zendure 2400 AC Standby Vertraging
-    icon: mdi:clock-time-three-outline
+    icon: mdi:pause
     min: 5
     max: 30
     step: 1
@@ -83,18 +107,18 @@ input_number:
 
   zendure_2400_ac_oplaadmarge:
     name: Zendure 2400 AC Oplaadmarge
-    icon: mdi:flash
+    icon: mdi:arrow-expand-vertical
     min: 0
-    max: 50
+    max: 500
     step: 1
     mode: box
     unit_of_measurement: "W"
 
   zendure_2400_ac_ontlaadmarge:
     name: Zendure 2400 AC Ontlaadmarge
-    icon: mdi:flash
+    icon: mdi:arrow-expand-vertical
     min: 0
-    max: 50
+    max: 500
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -162,8 +186,8 @@ sensor:
   - platform: history_stats
     name: "Zendure 2400 AC Relais Schakelingen Opladen Vandaag"
     unique_id: zendure_2400_ac_relais_schakelingen_opladen_vandaag
-    entity_id: sensor.zendure_2400_ac_relais_stand
-    state: "Oplaadstand"
+    entity_id: sensor.zendure_2400_ac_modus
+    state: "Opladen"
     type: count
     start: "{{ today_at() if now() < today_at('23:59') else now() }}"
     end: "{{ now() }}"
@@ -171,8 +195,8 @@ sensor:
   - platform: history_stats
     name: "Zendure 2400 AC Relais Schakelingen Ontladen Vandaag"
     unique_id: zendure_2400_ac_relais_schakelingen_ontladen_vandaag
-    entity_id: sensor.zendure_2400_ac_relais_stand
-    state: "Ontlaadstand"
+    entity_id: sensor.zendure_2400_ac_modus
+    state: "Ontladen"
     type: count
     start: "{{ today_at() if now() < today_at('23:59') else now() }}"
     end: "{{ now() }}"
@@ -238,14 +262,15 @@ template:
       - name: "P1 Aansturing Vermogen"
         unique_id: P1_Aansturing_Vermogen
         unit_of_measurement: "W"
+        state_class: measurement
         device_class: power
         state: >
-          {% set afwijkend = states('input_text.afwijkende_p1_sensor') %}
-          {% if afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
-            {{ states(afwijkend) }}
-          {% else %}
-            {{ states('sensor.homewizard_p1_vermogen') }}
-          {% endif %}
+         {% set afwijkend = states('input_text.afwijkende_p1_sensor') %}
+         {% if afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
+         {{ states(afwijkend) | float(0) }}
+         {% else %}
+         {{ states('sensor.homewizard_p1_vermogen') | float(0) }}
+         {% endif %}
 
       - name: "Dynamisch Nordpool"
         unique_id: dynamisch_nordpool
@@ -1588,16 +1613,61 @@ template:
         state: >
           {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
           {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
+          {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
           {% set aantal_batterijen = states('sensor.zendure_2400_ac_aantal_batterijen') | float(1) %}
           {% set capaciteit_per_batterij = 2.88 %}
-          {% set totale_capaciteit = aantal_batterijen * capaciteit_per_batterij %}
-          {% set bruikbaar_percentage = laad - min_laad %}
 
-          {% if bruikbaar_percentage < 0 %}
+          {% set export_eff = states('sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde') | float(0) %}
+          {% set rte_totaal = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+
+          {% set effectief_laad = [laad, max_laad] | min %}
+          {% set rte_export_equivalent = (rte_totaal / 100) ** 0.5 * 100 %}
+
+          {% if export_eff < 70 %}
+            {% set effectieve_eff = rte_export_equivalent %}
+          {% else %}
+            {% set effectieve_eff = export_eff %}
+          {% endif %}
+
+          {% set effectieve_eff = [effectieve_eff, 100] | min / 100 %}
+          {% set totale_capaciteit = aantal_batterijen * capaciteit_per_batterij %}
+          {% set bruikbaar_percentage = effectief_laad - min_laad %}
+
+          {% if bruikbaar_percentage <= 0 %}
             0
           {% else %}
-            {{ (bruikbaar_percentage / 100 * totale_capaciteit) | round(2) }}
+            {{ (bruikbaar_percentage / 100 * totale_capaciteit * effectieve_eff) | round(2) }}
           {% endif %}
+
+        attributes:
+          bruikbaar_percentage: >
+            {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+            {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
+            {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
+            {{ ([laad, max_laad] | min - min_laad) | round(1) }} %
+
+          gebruikte_export_efficiëntie: >
+            {% set export_eff = states('sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde') | float(0) %}
+            {% set rte_totaal = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+            {% set rte_export_equivalent = (rte_totaal / 100) ** 0.5 * 100 %}
+            {% if export_eff < 70 %}
+              {{ rte_export_equivalent | round(1) }} %
+            {% else %}
+              {{ export_eff | round(1) }} %
+            {% endif %}
+
+          bron_export_efficiëntie: >
+            {% set export_eff = states('sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde') | float(0) %}
+            {% if export_eff < 70 %}
+              RTE totaal (√RTE × 100)
+            {% else %}
+              Export efficiëntie 24u gemiddelde
+            {% endif %}
+
+          berekening_beschikbare_energie: >
+            (bruikbaar laadpercentage × totale capaciteit × export efficiëntie)
+            =
+            ((laad% − minimum%) ÷ 100 × aantal batterijen × 2,88 kWh × efficiëntie)
         icon: mdi:lightning-bolt-circle
 
       - name: "Zendure 2400 AC RTE Totaal"
@@ -1623,17 +1693,165 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC SOC-limiet Status"
+        value_template: >
+          {% set states = {0: "Normale werking", 1: "Laadlimiet bereikt", 2: "Ontlaadlimiet bereikt", 3: "Laadlimiet bereikt (1/2)", 4: "Ontlaadlimiet bereikt (1/2)"} %}
+          {% set packState = value_json['properties']['socLimit'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: zendure_2400_ac_soc_limiet_status
+        icon: >
+         {% if this.state == 'Normale werking' %}
+          mdi:battery-medium
+         {% elif this.state == 'Laadlimiet bereikt' %}
+          mdi:battery-high
+         {% elif this.state == 'Ontlaadlimiet bereikt' %}
+          mdi:battery-low
+         {% elif this.state == 'Laadlimiet bereikt (1/2)' %}
+          mdi:battery-high
+         {% elif this.state == 'Ontlaadlimiet bereikt (1/2)' %}
+          mdi:battery-low
+         {% else %}
+          mdi:battery-outline
+         {% endif %}
+          
+      - name: "Zendure 2400 AC Batterij Serienummers"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% set ns = namespace(sn_list=[]) %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% for pack in packdata %}
+              {% set ns.sn_list = ns.sn_list + [ pack['sn'] ] %}
+            {% endfor %}
+          {% else %}
+            {% set volgorde = volgorde_raw.split(';') %}
+            {% for v in volgorde %}
+              {% set idx = (v | int) - 1 %}
+              {% if idx >= 0 and idx < packdata | length %}
+                {% set ns.sn_list = ns.sn_list + [ packdata[idx]['sn'] ] %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+          {{ ns.sn_list | join(';') }}
+        unique_id: Zendure_2400_AC_Batterij_Serienummers
+        icon: mdi:identifier
+
+      - name: "Zendure 2400 AC Batterij 1 Laadpercentage"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {{ packdata[0]['socLevel'] }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
+            {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
+          {% endif %}
+        unique_id: "Zendure_2400_AC_Batterij_1_Laadpercentage"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+
+      - name: "Zendure 2400 AC Batterij 2 Laadpercentage"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {{ packdata[1]['socLevel'] }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
+            {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
+          {% endif %}
+        unique_id: "Zendure_2400_AC_Batterij_2_Laadpercentage"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+
+      - name: "Zendure 2400 AC Batterij 3 Laadpercentage"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {{ packdata[2]['socLevel'] }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
+            {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
+          {% endif %}
+        unique_id: "Zendure_2400_AC_Batterij_3_Laadpercentage"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+
+      - name: "Zendure 2400 AC Batterij 4 Laadpercentage"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {{ packdata[3]['socLevel'] }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
+            {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
+          {% endif %}
+        unique_id: "Zendure_2400_AC_Batterij_4_Laadpercentage"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+
+      - name: "Zendure 2400 AC Batterij 5 Laadpercentage"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {{ packdata[4]['socLevel'] }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
+            {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
+          {% endif %}
+        unique_id: "Zendure_2400_AC_Batterij_5_Laadpercentage"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+
+      - name: "Zendure 2400 AC Batterij 6 Laadpercentage"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {{ packdata[5]['socLevel'] }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
+            {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
+          {% endif %}
+        unique_id: "Zendure_2400_AC_Batterij_6_Laadpercentage"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+
       - name: "Zendure 2400 AC Relais Stand"
+        unique_id: Zendure_2400_AC_Relais_Stand
         value_template: >
           {% set states = {1: "Oplaadstand", 2: "Ontlaadstand"} %}
           {% set packState = value_json['properties']['acMode'] | int %}
           {{ states.get(packState, "Onbekend") }}
-        unique_id: Zendure_2400_AC_Relais_Stand
         icon: mdi:swap-vertical-bold
         
       - name: "Zendure 2400 AC Serienummer"
         unique_id: Zendure_2400_AC_Serienummer
         value_template: "{{ value_json.sn }}"
+        icon: mdi:identifier
 
       - name: "Zendure 2400 AC Vermogen Import (DC)"
         unique_id: Zendure_2400_AC_Vermogen_Import_(DC)
@@ -1694,7 +1912,14 @@ rest:
 
       - name: "Zendure 2400 AC Batterij 1 Temperatuur"
         value_template: >
-          {% set maxTemp = value_json['packData'][0]['maxTemp'] | int %}
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% if volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set pack_index = 0 %}
+          {% else %}
+            {% set volgorde = volgorde_raw.split(';') %}
+            {% set pack_index = (volgorde[0] | int) - 1 %}
+          {% endif %}
+          {% set maxTemp = value_json['packData'][pack_index]['maxTemp'] | int %}
           {{ (maxTemp - 2731) / 10.0 }}
         unique_id: Zendure_2400_AC_Batterij_1_Temperatuur
         unit_of_measurement: "°C"
@@ -1704,7 +1929,14 @@ rest:
 
       - name: "Zendure 2400 AC Batterij 2 Temperatuur"
         value_template: >
-          {% set maxTemp = value_json['packData'][1]['maxTemp'] | int %}
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% if volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set pack_index = 1 %}
+          {% else %}
+            {% set volgorde = volgorde_raw.split(';') %}
+            {% set pack_index = (volgorde[1] | int) - 1 %}
+          {% endif %}
+          {% set maxTemp = value_json['packData'][pack_index]['maxTemp'] | int %}
           {{ (maxTemp - 2731) / 10.0 }}
         unique_id: Zendure_2400_AC_Batterij_2_Temperatuur
         unit_of_measurement: "°C"
@@ -1714,7 +1946,14 @@ rest:
 
       - name: "Zendure 2400 AC Batterij 3 Temperatuur"
         value_template: >
-          {% set maxTemp = value_json['packData'][2]['maxTemp'] | int %}
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% if volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set pack_index = 2 %}
+          {% else %}
+            {% set volgorde = volgorde_raw.split(';') %}
+            {% set pack_index = (volgorde[2] | int) - 1 %}
+          {% endif %}
+          {% set maxTemp = value_json['packData'][pack_index]['maxTemp'] | int %}
           {{ (maxTemp - 2731) / 10.0 }}
         unique_id: Zendure_2400_AC_Batterij_3_Temperatuur
         unit_of_measurement: "°C"
@@ -1724,7 +1963,14 @@ rest:
 
       - name: "Zendure 2400 AC Batterij 4 Temperatuur"
         value_template: >
-          {% set maxTemp = value_json['packData'][3]['maxTemp'] | int %}
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% if volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set pack_index = 3 %}
+          {% else %}
+            {% set volgorde = volgorde_raw.split(';') %}
+            {% set pack_index = (volgorde[3] | int) - 1 %}
+          {% endif %}
+          {% set maxTemp = value_json['packData'][pack_index]['maxTemp'] | int %}
           {{ (maxTemp - 2731) / 10.0 }}
         unique_id: Zendure_2400_AC_Batterij_4_Temperatuur
         unit_of_measurement: "°C"
@@ -1734,7 +1980,14 @@ rest:
 
       - name: "Zendure 2400 AC Batterij 5 Temperatuur"
         value_template: >
-          {% set maxTemp = value_json['packData'][4]['maxTemp'] | int %}
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% if volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set pack_index = 4 %}
+          {% else %}
+            {% set volgorde = volgorde_raw.split(';') %}
+            {% set pack_index = (volgorde[4] | int) - 1 %}
+          {% endif %}
+          {% set maxTemp = value_json['packData'][pack_index]['maxTemp'] | int %}
           {{ (maxTemp - 2731) / 10.0 }}
         unique_id: Zendure_2400_AC_Batterij_5_Temperatuur
         unit_of_measurement: "°C"
@@ -1744,7 +1997,14 @@ rest:
 
       - name: "Zendure 2400 AC Batterij 6 Temperatuur"
         value_template: >
-          {% set maxTemp = value_json['packData'][5]['maxTemp'] | int %}
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% if volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set pack_index = 5 %}
+          {% else %}
+            {% set volgorde = volgorde_raw.split(';') %}
+            {% set pack_index = (volgorde[5] | int) - 1 %}
+          {% endif %}
+          {% set maxTemp = value_json['packData'][pack_index]['maxTemp'] | int %}
           {{ (maxTemp - 2731) / 10.0 }}
         unique_id: Zendure_2400_AC_Batterij_6_Temperatuur
         unit_of_measurement: "°C"
