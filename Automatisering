@@ -264,11 +264,20 @@ actions:
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state:
                   - Dynamisch NOM (Duur)
-          - condition: sun
-            after: sunrise
-            after_offset: "02:00:00"
-            before: sunset
-            before_offset: "-02:00:00"
+          - condition: or
+            conditions:
+              - condition: sun
+                after: sunrise
+                after_offset: "02:00:00"
+                before: sunset
+                before_offset: "-02:00:00"
+              - alias: >-
+                  sensor.p1_aansturing_vermogen kleiner dan
+                  input_number.zendure_2400_ac_start_opladen_bij
+                condition: template
+                value_template: |
+                  {{ states('sensor.p1_aansturing_vermogen') | float(0)
+                     < states('input_number.zendure_2400_ac_opladen_starten_bij') | float(0) }}
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -296,9 +305,18 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: numeric_state
-            entity_id: sensor.p1_aansturing_vermogen
-            above: 100
+          - alias: >-
+              sensor.p1_aansturing_vermogen groter dan
+              input_number.zendure_2400_ac_start_ontladen_bij
+            condition: template
+            value_template: |
+              {{ states('sensor.p1_aansturing_vermogen') | float(0)
+                 > states('input_number.zendure_2400_ac_ontladen_starten_bij') | float(0) }}
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_limiet_status
+            state:
+              - Normale werking
+              - Laadlimiet bereikt
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
@@ -391,16 +409,21 @@ actions:
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Start met ontladen bij +100 watt (75% van de vraag)
+        alias: Start met ontladen bij +xxx watt (75% van de vraag)
       - conditions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: template
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_limiet_status
+            state:
+              - Normale werking
+              - Laadlimiet bereikt
+          - alias: Tot de minimaal ingestelde SOC
+            condition: template
             value_template: |
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
                states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
-            alias: Tot de minimaal ingestelde SOC
           - condition: template
             value_template: >-
               {% set factor = 1.00 %} {% set cap = 2400 %} {% set correctie = -2
@@ -485,14 +508,29 @@ actions:
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Tijdens ontladen balanceren naar -xx watt (100% van de vraag)
+        alias: Tijdens ontladen balanceren naar -xxx watt (100% van de vraag)
       - conditions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: numeric_state
-            entity_id: sensor.p1_aansturing_vermogen
-            below: -100
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_limiet_status
+            state:
+              - Normale werking
+              - Ontlaadlimiet bereikt
+          - condition: template
+            value_template: >
+              {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
+              round(0) >=
+                 states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) }}
+            alias: SOC is gelijk of groter dan de minimale SOC
+          - alias: >-
+              sensor.p1_aansturing_vermogen kleiner dan
+              input_number.zendure_2400_ac_start_opladen_bij
+            condition: template
+            value_template: |
+              {{ states('sensor.p1_aansturing_vermogen') | float(0)
+                 < states('input_number.zendure_2400_ac_opladen_starten_bij') | float(0) }}
           - alias: Lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -502,12 +540,6 @@ actions:
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: -30
             below: 30
-          - condition: template
-            value_template: >
-              {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
-              round(0) >=
-                 states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) }}
-            alias: SOC is gelijk of groter dan de minimale SOC
           - condition: or
             conditions:
               - condition: state
@@ -570,11 +602,16 @@ actions:
                   {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Start met opladen bij -100 watt (75% van aanbod)
+        alias: Start met opladen bij -xxx watt (75% van aanbod)
       - conditions:
           - condition: trigger
             id:
               - aansturing_trigger
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_limiet_status
+            state:
+              - Normale werking
+              - Ontlaadlimiet bereikt
           - condition: template
             value_template: >
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
@@ -651,7 +688,7 @@ actions:
                  watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Tijdens opladen balanceren naar -xx watt (100% van aanbod)
+        alias: Tijdens opladen balanceren naar -xxx watt (100% van aanbod)
   - alias: Handmatige Aansturing
     choose:
       - conditions:
@@ -872,6 +909,11 @@ actions:
           - condition: state
             entity_id: input_boolean.dynamisch_recent_geladen
             state: "off"
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_limiet_status
+            state:
+              - Normale werking
+              - Ontlaadlimiet bereikt
           - alias: SOC lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -959,6 +1001,11 @@ actions:
           - condition: state
             entity_id: input_boolean.dynamisch_recent_geladen
             state: "off"
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_limiet_status
+            state:
+              - Normale werking
+              - Ontlaadlimiet bereikt
           - alias: SOC lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -1034,6 +1081,11 @@ actions:
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state:
               - Dynamisch Handelen
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_limiet_status
+            state:
+              - Normale werking
+              - Laadlimiet bereikt
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
