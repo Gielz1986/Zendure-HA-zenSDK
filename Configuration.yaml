@@ -22,8 +22,8 @@ input_select:
       - Dynamisch Handelen
       - Alleen slim ontladen
       - Alleen slim opladen
-      - Opladen met 2400 watt
-      - Ontladen met 2400 watt
+      - Snel opladen
+      - Snel ontladen
 
 input_boolean:
   dynamisch_15_minuten:
@@ -78,6 +78,24 @@ input_text:
     mode: text
 
 input_number:
+  zendure_2400_ac_max_oplaadvermogen:
+    name: Zendure 2400 AC Max. Oplaadvermogen
+    icon: mdi:format-vertical-align-top
+    min: 800
+    max: 4800
+    step: 1
+    mode: box
+    unit_of_measurement: "W"
+
+  zendure_2400_ac_max_ontlaadvermogen:
+    name: Zendure 2400 AC Max. Ontlaadvermogen
+    icon: mdi:format-vertical-align-bottom
+    min: 800
+    max: 4800
+    step: 1
+    mode: box
+    unit_of_measurement: "W"
+
   zendure_2400_ac_ontladen_starten_bij:
     name: Zendure 2400 AC Ontladen Starten Bij
     icon: mdi:battery-minus-variant
@@ -2171,7 +2189,7 @@ rest_command:
     headers:
       Content-Type: application/json
       Content-Encoding: identity
-    payload: '{"sn":"{{sn}}","properties":{"acMode": 1, "inputLimit": 2400 }}'
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 1, "inputLimit": {{inputLimit}} }}'
 
   zendure_stop_met_laden:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
@@ -2219,7 +2237,7 @@ rest_command:
     headers:
       Content-Type: application/json
       Content-Encoding: identity
-    payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": 2400 }}'
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": {{outputLimit}} }}'
 
   zendure_stop_met_ontladen:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
@@ -2244,3 +2262,11 @@ rest_command:
       Content-Type: application/json
       Content-Encoding: identity
     payload: '{"sn":"{{sn}}","properties":{"smartMode": 0, "outputLimit": 0, "inputLimit": 0 }}'
+    
+  zendure_instelling:
+    url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
+    method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
+    payload: '{"sn":"{{sn}}","properties":{"{{instellingitem}}": {{instellinginhoud}} }}'
