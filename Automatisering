@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Versie 20260114
+description: Versie 20260124
 triggers:
   - seconds: /4
     id: aansturing_trigger
@@ -324,15 +324,24 @@ actions:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               instellingitem: chargeMaxLimit
               instellinginhoud: >-
-                {{ [states('input_number.zendure_2400_ac_max_oplaadvermogen') |
-                int, 2400] | min }}
+                {% set nodered =
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
+                %} {% if nodered > 2400 %}
+                  {{ (nodered / 2) | int }}
+                {% else %}
+                  {{ nodered }}
+                {% endif %}
             action: rest_command.zendure_instelling
           - action: logbook.log
             data:
-              message: >
-                ⚙️ Maximaal oplaadvermogen aangepast naar {{
-                states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
-                }} watt —
+              message: |
+                ⚙️ Maximaal oplaadvermogen aangepast naar
+                  {% set nodered = states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                  int %} {% if nodered > 2400 %}
+                    {{ (nodered / 2) | int }}
+                  {% else %}
+                    {{ nodered }}
+                  {% endif %} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Maximaal oplaadvermogen aanpassen
@@ -345,15 +354,25 @@ actions:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               instellingitem: inverseMaxPower
               instellinginhoud: >-
-                {{ [states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
-                int, 2400] | min }}
+                {% set nodered =
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
+                %} {% if nodered > 2400 %}
+                  {{ (nodered / 2) | int }}
+                {% else %}
+                  {{ nodered }}
+                {% endif %}
             action: rest_command.zendure_instelling
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximaal ontlaadvermogen aangepast naar {{
-                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
-                }} watt —
+                ⚙️ Maximaal ontlaadvermogen aangepast naar  {% set nodered =
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                  int %} {% if nodered > 2400 %}
+                    {{ (nodered / 2) | int }}
+                  {% else %}
+                    {{ nodered }}
+                  {% endif %}
+                 watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Maximaal ontlaadvermogen aanpassen
@@ -479,20 +498,13 @@ actions:
             value_template: |
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float >
                states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
-          - condition: template
-            value_template: >-
-              {% set factor = 1.00 %} {% set cap = 2400 %} {% set correctie = -2
-              %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
-              %} {% set zendure =
-              states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
-              {% set totaal = (p1 - zendure - correctie) * factor %} {% set
-              beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target =
-              beperkt | int %} {% set huidig =
-              states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') |
-              int(0) %} {{ huidig != target }}
-            alias: >-
+          - alias: >-
               Nieuw in te stellen vermogen is anders dan huidig batterij
               vermogen
+            condition: template
+            value_template: |-
+              {% set factor = 1.00 %} {% set cap =
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float(0) %} {% set correctie = -2 %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') | int(0) %} {{ huidig != target }}
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             below: 0
@@ -670,20 +682,13 @@ actions:
               round(0) >=
                  states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) }}
             alias: SOC is gelijk of groter dan de minimale SOC
-          - condition: template
-            value_template: >-
-              {% set factor = 1.00 %} {% set cap = 2400 %} {% set
-              correctie_export = 40 %} {% set p1 =
-              states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
-              zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') |
-              float(0) %} {% set verschil = (zendure - p1 - correctie_export) *
-              factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %}
-              {% set target = beperkt | int %} {% set huidig =
-              states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') | int(0)
-              %} {{ huidig != target }}
-            alias: >-
+          - alias: >-
               Nieuw in te stellen vermogen is anders dan huidig batterij
               vermogen
+            condition: template
+            value_template: |-
+              {% set factor = 1.00 %} {% set cap =
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') | float(0) %} {% set correctie_export = 40 %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %} {% set verschil = (zendure - p1 - correctie_export) * factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') | int(0) %} {{ huidig != target }}
           - alias: Lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
