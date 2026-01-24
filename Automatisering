@@ -5,7 +5,7 @@ triggers:
     id: aansturing_trigger
     trigger: time_pattern
   - at: "00:00:00"
-    id: middernacht_trigger
+    id: dynamisch_middernacht
     trigger: time
   - entity_id:
       - input_select.zendure_2400_ac_modus_selecteren
@@ -39,6 +39,14 @@ triggers:
     entity_id:
       - input_number.dynamisch_minimale_spread
     id: modus_dynamisch_spread
+  - trigger: state
+    entity_id:
+      - input_number.zendure_2400_ac_max_oplaadvermogen
+    id: systeem_instelling_maxoplaadvermogen
+  - trigger: state
+    entity_id:
+      - input_number.zendure_2400_ac_max_ontlaadvermogen
+    id: systeem_instelling_maxontlaadvermogen
 conditions: []
 actions:
   - alias: Modus Selecteren
@@ -143,23 +151,31 @@ actions:
             id: modus_trigger
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
-            state: Ontladen met 2400 watt
+            state:
+              - Snel ontladen
         sequence:
           - action: rest_command.zendure_snel_ontladen
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
-        alias: Ontladen met 2400 watt
+              outputLimit: >-
+                {{ states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                int }}
+        alias: Snel ontladen
       - conditions:
           - condition: trigger
             id: modus_trigger
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
-            state: Opladen met 2400 watt
+            state:
+              - Snel opladen
         sequence:
           - action: rest_command.zendure_snel_laden
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
-        alias: Opladen met 2400 watt
+              inputLimit: >-
+                {{ states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                int }}
+        alias: Snel opladen
   - alias: Systeem
     choose:
       - conditions:
@@ -299,6 +315,48 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Opladen naar minimale SOC (bescherming)
+      - conditions:
+          - condition: trigger
+            id:
+              - systeem_instelling_maxoplaadvermogen
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              instellingitem: chargeMaxLimit
+              instellinginhoud: >-
+                {{ [states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                int, 2400] | min }}
+            action: rest_command.zendure_instelling
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️ Maximaal oplaadvermogen aangepast naar {{
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
+                }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Maximaal oplaadvermogen aanpassen
+      - conditions:
+          - condition: trigger
+            id:
+              - systeem_instelling_maxontlaadvermogen
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              instellingitem: inverseMaxPower
+              instellinginhoud: >-
+                {{ [states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                int, 2400] | min }}
+            action: rest_command.zendure_instelling
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️ Maximaal ontlaadvermogen aangepast naar {{
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
+                }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Maximaal ontlaadvermogen aanpassen
   - alias: NOM Aansturing
     choose:
       - conditions:
@@ -378,32 +436,29 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               outputLimit: >-
-                {% set factor = 0.75 %} {% set cap = 2400 %}
-
-                {% set correctie = -1 *
+                {% set factor = 0.75 %}  {% set cap =
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                float(0) %} {% set correctie = -1 *
                 (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0))
-                %}
-
-                {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
-                %} {% set zendure =
+                %} {% set p1 = states('sensor.p1_aansturing_vermogen') |
+                float(0) %}  {% set zendure =
                 states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0)
                 %}
 
                 {% set totaal = (p1 - zendure - correctie) * factor %} {% set
-                beperkt = [ [totaal, 0] | max, cap ] | min %} {{ beperkt | int
-                }}
+                beperkt = [ [totaal, 0] | max, cap ] | min %}
+
+                {{ beperkt | int }}
             action: rest_command.zendure_x_ontladen
           - action: logbook.log
             data:
               message: >
                 🔋 Ontladen starten — Vermogen ingesteld op {% set factor = 0.75
-                %} {% set cap = 2400 %}
-
-                  {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') |
-                  float(0)) %}
-
-                  {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
-                  zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+                %} 
+                  {% set cap = states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float(0) %}
+                  {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0)) %}
+                  {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} 
+                  {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
 
                   {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
@@ -477,14 +532,12 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               outputLimit: >-
-                {% set factor = 1.00 %} {% set cap = 2400 %}
-
-                {% set correctie = -1 *
+                {% set factor = 1.00 %}  {% set cap =
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                float(0) %} {% set correctie = -1 *
                 (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0))
-                %}
-
-                {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
-                %} {% set zendure =
+                %} {% set p1 = states('sensor.p1_aansturing_vermogen') |
+                float(0) %}  {% set zendure =
                 states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0)
                 %}
 
@@ -496,13 +549,11 @@ actions:
             data:
               message: >
                 ⚡ Ontladen balanceren — Vermogen ingesteld op {% set factor =
-                1.00 %} {% set cap = 2400 %}
-
-                  {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') |
-                  float(0)) %}
-
-                  {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set
-                  zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+                1.00 %} 
+                  {% set cap = states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float(0) %}
+                  {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0)) %}
+                  {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} 
+                  {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
 
                   {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
@@ -576,8 +627,9 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               inputLimit: >-
-                {% set factor = 0.75 %} {% set cap = 2400 %} {% set
-                correctie_export =
+                {% set factor = 0.75 %} {% set cap =
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                float(0) %} {% set correctie_export =
                 states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                 {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
                 %} {% set zendure =
@@ -592,7 +644,7 @@ actions:
               message: >
                 🔋 Opladen starten — Vermogen ingesteld op {% set factor = 0.75
                 %}
-                  {% set cap = 2400 %}
+                  {% set cap = states('input_number.zendure_2400_ac_max_oplaadvermogen') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                   {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %}
                   {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
@@ -661,8 +713,9 @@ actions:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               inputLimit: >-
-                {% set factor = 1.00 %} {% set cap = 2400 %} {% set
-                correctie_export =
+                {% set factor = 1.00 %}{% set cap =
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                float(0) %} {% set correctie_export =
                 states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                 {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0)
                 %} {% set zendure =
@@ -677,15 +730,14 @@ actions:
               message: >
                 ⚡ Opladen balanceren — Vermogen ingesteld op {% set factor =
                 1.00 %}
-                  {% set cap = 2400 %}
+                  {% set cap = states('input_number.zendure_2400_ac_max_oplaadvermogen') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                   {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %}
                   {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
                   {% set verschil = zendure - p1 - correctie_export %}
                   {% set beperkt = verschil * factor if verschil > 0 else 0 %}
                   {% set beperkt = beperkt if beperkt < cap else cap %}
-                  {{ beperkt | int }}
-                 watt —
+                  {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Tijdens opladen balanceren naar -xxx watt (100% van aanbod)
@@ -774,7 +826,7 @@ actions:
       - conditions:
           - condition: trigger
             id:
-              - middernacht_trigger
+              - dynamisch_middernacht
           - condition: template
             value_template: >-
               {{
@@ -938,6 +990,9 @@ actions:
           - action: rest_command.zendure_snel_laden
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              inputLimit: >-
+                {{ states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                int }}
           - action: logbook.log
             data:
               message: 💲 Dynamisch NOM goedkoop laden gestart —
@@ -1030,6 +1085,9 @@ actions:
           - action: rest_command.zendure_snel_laden
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              inputLimit: >-
+                {{ states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                int }}
           - action: logbook.log
             data:
               message: 💲 Dynamisch goedkoop laden gestart —
@@ -1114,6 +1172,9 @@ actions:
           - action: rest_command.zendure_snel_ontladen
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              outputLimit: >-
+                {{ states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                int }}
           - action: logbook.log
             data:
               message: 💲 Dynamisch duur ontladen gestart —
