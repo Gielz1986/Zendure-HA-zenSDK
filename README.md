@@ -19,7 +19,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 #### ℹ️ Benodigde hardware
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconden levert (+watt afname is en -watt teruglevering)).
-- één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro of Plus (geen aangesloten zonnepanelen).
+- één Zendure Solarflow 2400 AC / Zendure Solarflow 800 Pro of Plus (geen aangesloten zonnepanelen). Of meerdere in combinatie met https://github.com/gast777/Zendure-zenSDK-proxy waarbij Node-RED
 
 ---
 
@@ -34,16 +34,16 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 | Configuratie (Essentieel)| Info|
 |-|-|
-| `input_text.zendure_2400_ac_ip_adres`      | In de Zendure app onder device Information |
-| `input_text.homewizard_p1_ip_adres`    | In de Homewizard app (lokale API aanzetten)  |
-| `input_number.zendure_2400_ac_max_ontlaadvermogen`    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
-| `input_number.zendure_2400_ac_max_oplaadvermogen`    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |
+| `input_text.zendure_2400_ac_ip_adres`      | **bijvoorbeeld 192.168.0.172** – In de Zendure app onder device Information |
+| `input_text.homewizard_p1_ip_adres`    | **bijvoorbeeld 192.168.0.192** – In de Homewizard app (lokale API aanzetten)  |
+| `input_number.zendure_2400_ac_max_ontlaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
+| `input_number.zendure_2400_ac_max_oplaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |
 
 ![Preview](Images/Instellingen-240126-2.png) 
 
 | Configuratie (Optioneel/extra)| Info|
 |-|-|
-| `input_text.afwijkende_p1_sensor` | **bijvoorbeeld. `sensor.eigen_P1`** – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |
+| `input_text.afwijkende_p1_sensor` | **bijvoorbeeld `sensor.eigen_P1`** – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |
 | `input_text.dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |
 | `input_text.zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|
 | `input_number.zendure_2400_ac_standby_vertraging` | **5-30 minuten** – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt |
@@ -56,13 +56,15 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 
 *Zelf toe te voegen entiteiten op een dashboard. (Graphite theme, Numberbox-card, Apexcharts-card)
-![Preview](Images/Dashboard-23012026.png) 
+![Preview](Images/Dashboard-24012026.png) 
 
 | Categorie              | Entiteiten                              | Uitleg / Inhoud                                                        |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
-| Configuratie           | Zendure 2400 AC IP-adres               | bijvoorbeeld **192.168.0.172**                                       |
-|                        | Homewizard P1 IP-adres                 | bijvoorbeeld **192.168.0.192**                                       |
-|                        | Afwijkende P1 Sensor                   | bijvoorbeeld. `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                        |
+| Configuratie (Essentieel)           | Zendure 2400 AC IP-adres               | bijvoorbeeld **192.168.0.172** – In de Zendure app onder device Information                                      |
+|                        | Homewizard P1 IP-adres                 | bijvoorbeeld **192.168.0.192** – In de Homewizard app (lokale API aanzetten)                                      |
+|                        | Max. Ontlaadvermogen    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
+|                        | Max. Oplaadvermogen    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |
+| Configuratie (Optioneel/extra)           | Afwijkende P1 Sensor               | bijvoorbeeld. `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                       |
 |                        | Dynamisch Nordpool Sensor              | bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`                      |
 |                        | Batterij Volgorde                      | bijvoorbeeld **1;5;3;4;2** – hiermee bepaal je zelf de volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage gelijk lopen met die van de batterij(en) in de stapel.                  |
 |                        | Standby Vertraging                     | 5-30 minuten – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt                      |
