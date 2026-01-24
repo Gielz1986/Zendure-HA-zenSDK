@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Versie 20260124
+description: Versie 20260124-2
 triggers:
   - seconds: /4
     id: aansturing_trigger
@@ -324,24 +324,15 @@ actions:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               instellingitem: chargeMaxLimit
               instellinginhoud: >-
-                {% set nodered =
-                states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
-                %} {% if nodered > 2400 %}
-                  {{ (nodered / 2) | int }}
-                {% else %}
-                  {{ nodered }}
-                {% endif %}
+                {{ states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                int }}
             action: rest_command.zendure_instelling
           - action: logbook.log
             data:
-              message: |
-                ⚙️ Maximaal oplaadvermogen aangepast naar
-                  {% set nodered = states('input_number.zendure_2400_ac_max_oplaadvermogen') |
-                  int %} {% if nodered > 2400 %}
-                    {{ (nodered / 2) | int }}
-                  {% else %}
-                    {{ nodered }}
-                  {% endif %} watt —
+              message: >
+                ⚙️ Maximaal oplaadvermogen aangepast naar {{
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
+                }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Maximaal oplaadvermogen aanpassen
@@ -354,25 +345,15 @@ actions:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
               instellingitem: inverseMaxPower
               instellinginhoud: >-
-                {% set nodered =
-                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
-                %} {% if nodered > 2400 %}
-                  {{ (nodered / 2) | int }}
-                {% else %}
-                  {{ nodered }}
-                {% endif %}
+                {{ states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                int }}
             action: rest_command.zendure_instelling
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximaal ontlaadvermogen aangepast naar  {% set nodered =
-                states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
-                  int %} {% if nodered > 2400 %}
-                    {{ (nodered / 2) | int }}
-                  {% else %}
-                    {{ nodered }}
-                  {% endif %}
-                 watt —
+                ⚙️ Maximaal ontlaadvermogen aangepast naar {{
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
+                }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Maximaal ontlaadvermogen aanpassen
