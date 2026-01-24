@@ -28,7 +28,9 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 1. Maak eerst een **backup** van je `configuration.yaml`.
 2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
 3. Herstart Home Assistant.
-5. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshot.
+5. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshots.
+
+![Preview](Images/Instellingen-240126-1.png) 
 
 | Configuratie (Essentieel)| Info|
 |-|-|
@@ -37,7 +39,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_number.zendure_2400_ac_max_ontlaadvermogen`    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
 | `input_number.zendure_2400_ac_max_oplaadvermogen`    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |
 
-<br>
+![Preview](Images/Instellingen-240126-2.png) 
 
 | Configuratie (Optioneel/extra)| Info|
 |-|-|
@@ -50,7 +52,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_number.zendure_2400_ac_ontladen_starten_bij` | **100-500 watt** – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge |
 | `input_number.zendure_2400_ac_opladen_starten_bij` | **-100--1000 watt** – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge |
 
-![Preview](Images/Instellingen-240126.png) 
+
 
 
 *Zelf toe te voegen entiteiten op een dashboard. (Graphite theme, Numberbox-card, Apexcharts-card)
