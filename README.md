@@ -33,7 +33,6 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 5. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshots.
 
 ![Preview](Images/Configuratie-25012026.png) 
-*Het bestand dashboard bevat deze configuratie.
 
 | Configuratie | Info en advies|  
 |-|-|
@@ -50,7 +49,9 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_text.dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |  
 | `input_text.zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|  
 
+*Het bestand `Dashboard` bevat het onderstaande dashboard.
 ![Preview](Images/Dashboard-24012026.png) 
+
 <details>
   <summary>ℹ️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
 
