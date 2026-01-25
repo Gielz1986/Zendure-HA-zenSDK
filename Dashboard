@@ -307,7 +307,6 @@ views:
               - entity: input_text.zendure_2400_ac_ip_adres
               - entity: input_text.homewizard_p1_ip_adres
               - entity: input_number.zendure_2400_ac_standby_vertraging
-                type: custom:numberbox-card
                 name: Standby Vertraging
           - type: heading
             icon: mdi:battery-minus-variant
@@ -320,7 +319,6 @@ views:
               - entity: input_number.zendure_2400_ac_ontladen_starten_bij
                 name: Ontladen Starten Bij
               - entity: input_number.zendure_2400_ac_ontlaadmarge
-                type: custom:numberbox-card
                 name: Ontlaadmarge
           - type: entities
             entities:
@@ -329,7 +327,6 @@ views:
               - entity: input_number.zendure_2400_ac_opladen_starten_bij
                 name: Opladen Starten Bij
               - entity: input_number.zendure_2400_ac_oplaadmarge
-                type: custom:numberbox-card
                 name: Oplaadmarge
           - type: heading
             icon: mdi:cog
