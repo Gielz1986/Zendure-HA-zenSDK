@@ -30,27 +30,23 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 3. Herstart Home Assistant.
 5. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshots.
 
-![Preview](Images/Instellingen-240126-1.png) 
+![Preview](Images/Configuratie-25012026.png) 
 
-| Configuratie (Essentieel)| Info|
-|-|-|
-| `input_text.zendure_2400_ac_ip_adres`      | **bijvoorbeeld 192.168.0.172** – In de Zendure app onder device Information |
-| `input_text.homewizard_p1_ip_adres`    | **bijvoorbeeld 192.168.0.192** – In de Homewizard app (lokale API aanzetten)  |
-| `input_number.zendure_2400_ac_max_ontlaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
-| `input_number.zendure_2400_ac_max_oplaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |
+| Configuratie (Essentieel)| Info| Advies |
+|-|-|-|
+| `input_text.zendure_2400_ac_ip_adres`      | **bijvoorbeeld 192.168.0.172** – In de Zendure app onder device Information |  |
+| `input_text.homewizard_p1_ip_adres`    | **bijvoorbeeld 192.168.0.192** – In de Homewizard app (lokale API aanzetten)  |  |
+| `input_number.zendure_2400_ac_standby_vertraging` | **5-30 minuten** – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt | **15** |
+| `input_number.zendure_2400_ac_max_ontlaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |  |
+| `input_number.zendure_2400_ac_opladen_starten_bij` | **-100--1000 watt** – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge | **100** |
+| `input_number.zendure_2400_ac_ontlaadmarge` | **0-500 watt** – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is | **5** |
+| `input_number.zendure_2400_ac_max_oplaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |  |
+| `input_number.zendure_2400_ac_opladen_starten_bij` | **-100--1000 watt** – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge | **-100** |
+| `input_number.zendure_2400_ac_oplaadmarge` | **0-500 watt** – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS) | **50** |
+| `input_text.afwijkende_p1_sensor` | **bijvoorbeeld `sensor.eigen_P1`** – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |  |
+| `input_text.dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |  |
+| `input_text.zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|  |
 
-![Preview](Images/Instellingen-240126-2.png) 
-
-| Configuratie (Optioneel/extra)| Info|
-|-|-|
-| `input_text.afwijkende_p1_sensor` | **bijvoorbeeld `sensor.eigen_P1`** – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |
-| `input_text.dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |
-| `input_text.zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|
-| `input_number.zendure_2400_ac_standby_vertraging` | **5-30 minuten** – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt |
-| `input_number.zendure_2400_ac_oplaadmarge` | **0-500 watt** – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS) |
-| `input_number.zendure_2400_ac_ontlaadmarge` | **0-500 watt** – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is |
-| `input_number.zendure_2400_ac_ontladen_starten_bij` | **100-500 watt** – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge |
-| `input_number.zendure_2400_ac_opladen_starten_bij` | **-100--1000 watt** – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge |
 
 
 
