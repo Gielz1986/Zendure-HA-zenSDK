@@ -32,9 +32,9 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 ![Preview](Images/Configuratie-25012026.png) 
 
-| Configuratie (Essentieel)| Info|  
+| Configuratie | Info en advies|  
 |-|-|
-| `input_text.zendure_2400_ac_ip_adres`      | **bijvoorbeeld 192.168.0.172** – In de Zendure app onder device Information |  
+| `input_text.zendure_2400_ac_ip_adres`       | **bijvoorbeeld 192.168.0.172** – In de Zendure app onder device Information |  
 | `input_text.homewizard_p1_ip_adres`    | **(Instellingsadvies: Gebruik een HW P1) bijvoorbeeld 192.168.0.192** – In de Homewizard app (lokale API aanzetten)  |  
 | `input_number.zendure_2400_ac_standby_vertraging` | **(Instellingsadvies: 15 minuten) 5-30 minuten** – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt | 
 | `input_number.zendure_2400_ac_max_ontlaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |  
