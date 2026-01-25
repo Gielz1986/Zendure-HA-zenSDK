@@ -5,6 +5,8 @@ Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Hom
 
 Heb je de smaak te pakken en meerdere batterijen staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy), waarbij Node-RED  alles keurig samen laat werken met deze automatisering.
 
+<br>
+
 Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje koffie ☕️ – ik codeer beter met cafeïne!
 
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
