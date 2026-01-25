@@ -2265,4 +2265,4 @@ rest_command:
     headers:
       Content-Type: application/json
       Content-Encoding: identity
-    payload: '{"sn":"{{sn}}","properties":{"{{instellingitem}}": {{instellinginhoud}} }}'
+    payload: '{"sn":"{{sn}}","properties":{"{{instellingitem}}": {{instellinginhoud}} }}' 
