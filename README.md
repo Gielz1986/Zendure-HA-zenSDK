@@ -49,14 +49,9 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_text.dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |  
 | `input_text.zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|  
 
-
-
-
-
-*Zelf toe te voegen entiteiten op een dashboard. (Graphite theme, Numberbox-card, Apexcharts-card)
 ![Preview](Images/Dashboard-24012026.png) 
 <details>
-  <summary>Klik hier om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
+  <summary>ℹ️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
 
 | Categorie              | Entiteiten                              | Uitleg / Inhoud                                                        |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
@@ -168,8 +163,8 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 | Dynamisch Handelen          | ⚠️ Let op: Alleen te gebruiken met Nordpool sensor. Vul als eerste in hoeveel uren je goedkoop zou willen laden per dag via `input_number.dynamisch_goedkoopste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Vervolgens vul je de overige duurste uren in via `input_number.dynamisch_duurste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Wanneer nu `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie` hoger is dan `input_number.dynamisch_minimale_spread`. Wanneer `sensor.dynamisch_goedkoopste_periode` erg lang op JA staat zal hij pas weer gaan laden wanneer de batterij ontladen is tot 90%. Wanneer `sensor.dynamisch_duurste_periode` op JA staat zal hij op maximaal vermogen gaan ontladen en de rest van de tijd staat de batterij in standby.                                 | Energie inkopen en verkopen |
 | Alleen slim ontladen   | Identiek aan **Nul op de meter** alleen zonder opladen.                                                |
 | Alleen slim opladen    | Identiek aan **Nul op de meter** alleen zonder ontladen.                                               |
-| Opladen met 2400 watt  | Snel opladen op maximaal vermogen.                                                                     |
-| Ontladen met 2400 watt | Snel ontladen op maximaal vermogen.                                                                    |
+| Snel opladen  | Snel opladen op maximaal vermogen wat ingesteld staat bij `input_number.zendure_2400_ac_max_oplaadvermogen`                                                                     |
+| Snel ontladen | Snel ontladen op maximaal vermogen wat ingesteld staat bij `input_number.zendure_2400_ac_max_ontlaadvermogen`                                                                    |
 
 #### ℹ️ Batterij Logboek
 Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_select.zendure_2400_ac_modus_selecteren`<br><br>
