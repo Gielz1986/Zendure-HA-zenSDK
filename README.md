@@ -33,6 +33,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 5. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshots.
 
 ![Preview](Images/Configuratie-25012026.png) 
+*Het bestand dashboard bevat deze configuratie.
 
 | Configuratie | Info en advies|  
 |-|-|
