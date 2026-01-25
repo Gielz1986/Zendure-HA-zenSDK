@@ -1713,7 +1713,7 @@ rest:
     sensor:
       - name: "Zendure 2400 AC SOC-limiet Status"
         value_template: >
-          {% set states = {0: "Normale werking", 1: "Laadlimiet bereikt", 2: "Ontlaadlimiet bereikt", 3: "Laadlimiet bereikt (1/2)", 4: "Ontlaadlimiet bereikt (1/2)"} %}
+          {% set states = {0: "Normale werking", 1: "Laadlimiet bereikt", 2: "Ontlaadlimiet bereikt"} %}
           {% set packState = value_json['properties']['socLimit'] | int %}
           {{ states.get(packState, "Onbekend") }}
         unique_id: zendure_2400_ac_soc_limiet_status
@@ -1723,10 +1723,6 @@ rest:
          {% elif this.state == 'Laadlimiet bereikt' %}
           mdi:battery-high
          {% elif this.state == 'Ontlaadlimiet bereikt' %}
-          mdi:battery-low
-         {% elif this.state == 'Laadlimiet bereikt (1/2)' %}
-          mdi:battery-high
-         {% elif this.state == 'Ontlaadlimiet bereikt (1/2)' %}
           mdi:battery-low
          {% else %}
           mdi:battery-outline
