@@ -50,7 +50,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 | `input_text.zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|  
 
 *Het bestand `Dashboard` bevat het onderstaande dashboard.
-![Preview](Images/Dashboard-24012026.png) 
+![Preview](Images/Dashboard-25012026.png) 
 
 <details>
   <summary>ℹ️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
