@@ -13,6 +13,11 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
   <img src="https://github.com/Gielz1986/Zendure-zenSDK-HA/blob/main/Images/bmc.png?raw=true" width="180" alt="Buy Me a Coffee">
 </a><br><br>
 
+[![releasebadge]][release]
+
+[release]: https://github.com/Gielz1986/Zendure-HA-zenSDK/releases
+[releasebadge]: https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge
+
 ## 1️⃣ Configuration.yaml
 
 > ⚠️ Let op: Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
