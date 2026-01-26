@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Versie 20260124-2
+description: Versie 20260126
 triggers:
   - seconds: /4
     id: aansturing_trigger
@@ -669,7 +669,7 @@ actions:
             condition: template
             value_template: |-
               {% set factor = 1.00 %} {% set cap =
-                states('input_number.zendure_2400_ac_max_oplaadvermogen') | float(0) %} {% set correctie_export = 40 %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %} {% set verschil = (zendure - p1 - correctie_export) * factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') | int(0) %} {{ huidig != target }}
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') | float(0) %} {% set correctie_export = states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %} {% set verschil = (zendure - p1 - correctie_export) * factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') | int(0) %} {{ huidig != target }}
           - alias: Lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
