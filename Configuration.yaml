@@ -127,7 +127,7 @@ input_number:
     name: Zendure 2400 AC Oplaadmarge
     icon: mdi:arrow-expand-vertical
     min: 0
-    max: 500
+    max: 250
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -136,7 +136,7 @@ input_number:
     name: Zendure 2400 AC Ontlaadmarge
     icon: mdi:arrow-expand-vertical
     min: 0
-    max: 500
+    max: 250
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -2265,4 +2265,4 @@ rest_command:
     headers:
       Content-Type: application/json
       Content-Encoding: identity
-    payload: '{"sn":"{{sn}}","properties":{"{{instellingitem}}": {{instellinginhoud}} }}' 
+    payload: '{"sn":"{{sn}}","properties":{"{{instellingitem}}": {{instellinginhoud}} }}'
