@@ -15,7 +15,6 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
 
 [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
 [![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
-[![Issues Closed](https://img.shields.io/github/issues-closed/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&color=success)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues?q=is%3Aissue+is%3Aclosed)
 [![Issue SLA](https://img.shields.io/badge/avg%20fix%20time-~7%20days-brightgreen?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
 [![Last Commit](https://img.shields.io/github/last-commit/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/commits/main)
 
