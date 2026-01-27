@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Versie 20260126
+description: Versie 20260127
 triggers:
   - seconds: /4
     id: aansturing_trigger
@@ -485,7 +485,7 @@ actions:
             condition: template
             value_template: |-
               {% set factor = 1.00 %} {% set cap =
-                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float(0) %} {% set correctie = -2 %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') | int(0) %} {{ huidig != target }}
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float(0) %} {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0)) %} {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %} {% set zendure = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') | int(0) %} {{ huidig != target }}
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             below: 0
