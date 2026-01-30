@@ -43,6 +43,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 2. Maak nu een **backup** van je `configuration.yaml`.
 3. Pas daarna je `configuration.yaml` door de onderstaande regel toe te voegen
 
+![Preview](Images/packages2.png) 
+
 ```
 homeassistant:
   packages: !include_dir_named packages
