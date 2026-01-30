@@ -51,7 +51,7 @@ homeassistant:
 ```
 
 5. Herstart Home Assistant
-6. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshots.
+6. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de `zendure_ha_zensdk_gielz1986.yaml` maar open de entiteiten zoals is te zien op de onderstaande screenshots.
 
 <br>
 
@@ -65,7 +65,7 @@ homeassistant:
 1. Maak eerst een **backup** van je `configuration.yaml`.
 2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
 3. Herstart Home Assistant.
-4. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshots.
+4. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de `configuration.yaml` maar open de entiteiten zoals is te zien op de onderstaande screenshots.
 
 <br>
 
