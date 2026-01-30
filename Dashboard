@@ -309,7 +309,7 @@ views:
               - entity: input_number.zendure_2400_ac_standby_vertraging
                 name: Standby Vertraging
           - type: heading
-            icon: mdi:battery-minus-variant
+            icon: mdi:battery
             heading: Batterij Configuratie (Ontladen/Opladen)
             heading_style: title
           - type: entities
@@ -338,6 +338,8 @@ views:
               - entity: input_text.dynamisch_nordpool_sensor
               - entity: input_text.zendure_2400_ac_batterij_volgorde
                 name: Batterij Volgorde
+              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
+                name: Advies Instellingen Overnemen
       - type: grid
         cards:
           - type: heading
@@ -396,6 +398,8 @@ views:
           - type: entities
             show_header_toggle: false
             entities:
+              - entity: sensor.zendure_2400_ac_configuratie_versie
+                name: Configuratie Versie
               - entity: sensor.zendure_2400_ac_relais_stand
                 name: Relais Stand
               - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
