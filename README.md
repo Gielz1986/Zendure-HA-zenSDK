@@ -34,10 +34,22 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 ### #️⃣ Configuratie en herstart
 
+<details>
+  <summary>🖱️ Klik hier 🖱️ voor configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
+
+1. WIP
+
+</details>
+
+<details>
+  <summary>🖱️ Klik hier 🖱️ voor klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
+
 1. Maak eerst een **backup** van je `configuration.yaml`.
 2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
 3. Herstart Home Assistant.
 5. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de configuration.yaml maar open de entiteiten zoals is te zien op de onderstaande screenshots.
+
+</details>
 
 ![Preview](Images/Configuratie-25012026.png) 
 
@@ -60,7 +72,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 ![Preview](Images/Dashboard-25012026.png) 
 
 <details>
-  <summary>ℹ️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
+  <summary>🖱️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
 
 | Categorie              | Entiteiten                              | Uitleg / Inhoud                                                        |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
