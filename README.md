@@ -20,11 +20,11 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
 
 
 
-## 1️⃣ Configuration.yaml
+## 1️⃣ Entiteiten beschikbaar maken
 
 > ⚠️ Let op: Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
 
-Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA). Hiervoor heb ik een bijna plug-n-play Configuration.yaml gemaakt.
+Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA). Hiervoor heb ik een  plug-n-play Configuration.yaml / package gemaakt.
 #### ℹ️ Benodigde hardware
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconden levert (+watt afname is en -watt teruglevering)).
@@ -71,7 +71,7 @@ homeassistant:
 
 </details>
 
-![Preview](Images/Configuratie-25012026.png) 
+![Preview](Images/Instellingen-30012026.png) 
 
 | Configuratie | Info en advies|  
 |-|-|
@@ -87,9 +87,11 @@ homeassistant:
 | `input_text.afwijkende_p1_sensor` | **bijvoorbeeld `sensor.eigen_P1`** – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)  |  
 | `input_text.dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |  
 | `input_text.zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.|  
+| `input_button.zendure_2400_ac_advies_instellingen_overnemen` | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen. |  
+
 
 *Het bestand `Dashboard` bevat het onderstaande dashboard.
-![Preview](Images/Dashboard-25012026.png) 
+![Preview](Images/Dashboard-30012026.png) 
 
 <details>
   <summary>🖱️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
@@ -102,12 +104,13 @@ homeassistant:
 |                        | Max. Oplaadvermogen                    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |
 |                        | Afwijkende P1 Sensor                   | bijvoorbeeld. `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend)                                       |
 |                        | Dynamisch Nordpool Sensor              | bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`                      |
-|                        | Batterij Volgorde                      | bijvoorbeeld **1;5;3;4;2** – hiermee bepaal je zelf de volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage gelijk lopen met die van de batterij(en) in de stapel.                  |
+|                        | Dynamisch Nordpool Sensor              | bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`                      |
 |                        | Standby Vertraging                     | 5-30 minuten – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt                      |
 |                        | Oplaadmarge                            | 0-250 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS)                          |
 |                        | Ontlaadmarge                           | 0-250 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is                    |
 |                        | Ontladen starten bij                   | 100-500 watt – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge                          |
 |                        | Opladen starten bij                    | -100--1000 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge                    |
+|                        | Advies Instellingen Overnemen          | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen.                 |
 | P1                     | Homewizard P1 Vermogen                 | Vermogen van je Homewizard P1                                |
 |                        | P1 Nul Import Actief                   | Geeft aan dat er op dit moment geen import nodig is          |
 |                        | P1 Nul Import Duur (Vandaag)           | Hoeveel nul import uren heb je vandaag bereikt               |
@@ -132,7 +135,8 @@ homeassistant:
 |                        | Efficiëntie Import                     | 0-100%                                                       |
 |                        | Efficiëntie Import (24u gemiddelde)    | 0-100%                                                       |
 |                        | Efficiëntie Export (24u gemiddelde)    | 0-100%                                                       |
-| Gezondheid             | Relais Stand                           | Oplaadstaand of Ontlaadstand                                 |
+| Gezondheid             | Configuratie Versie                    | Toont de versie van de entiteiten configuratie               |
+|                        | Relais Stand                           | Oplaadstaand of Ontlaadstand                                 |
 |                        | Relais Schakelingen Totaal (Vandaag)   | Hier worden alleen schakelingen geteld wanneer er vermogen op de relais komt. De slijtage is lager dan gebruikelijk omdat het vermogen opbouwend is bij Zendure.  50-100 keer per dag is gebruikelijk bij een relais met direct 100% vermogen.  |
 |                        | Signaalsterkte                         | Uitstekend, Goed, Zwak of Slecht                             |
 |                        | Aantal Batterijen                      | 1-6                                                          |
