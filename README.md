@@ -35,7 +35,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 ### #️⃣ Configuratie en herstart
 
 <details>
-  <summary>🖱️ Klik hier 🖱️ voor configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
+  <summary>🖱️ Klik hier 🖱️ voor de configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
 
 <br>
 
@@ -58,7 +58,7 @@ homeassistant:
 </details>
 
 <details>
-  <summary>🖱️ Klik hier 🖱️ voor klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
+  <summary>🖱️ Klik hier 🖱️ voor de klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
   
 <br>
   
