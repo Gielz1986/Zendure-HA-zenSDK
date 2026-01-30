@@ -41,7 +41,7 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 1. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages in de map packages van Home Assistant.
 2. Maak nu een **backup** van je `configuration.yaml`.
-3. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen
+3. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
 
 ```
 homeassistant:
@@ -50,7 +50,7 @@ homeassistant:
 
 ![Preview](Images/packages2.png) 
 
-5. Herstart Home Assistant
+5. Herstart Home Assistant.
 6. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de `zendure_ha_zensdk_gielz1986.yaml` maar open de entiteiten zoals is te zien op de onderstaande screenshots.
 
 <br>
