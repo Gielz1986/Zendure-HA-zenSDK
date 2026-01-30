@@ -43,12 +43,12 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 2. Maak nu een **backup** van je `configuration.yaml`.
 3. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen
 
-![Preview](Images/packages2.png) 
-
 ```
 homeassistant:
   packages: !include_dir_named packages
 ```
+
+![Preview](Images/packages2.png) 
 
 5. Herstart Home Assistant
 6. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de `zendure_ha_zensdk_gielz1986.yaml` maar open de entiteiten zoals is te zien op de onderstaande screenshots.
