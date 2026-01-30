@@ -25,6 +25,11 @@ input_select:
       - Snel opladen
       - Snel ontladen
 
+input_button:
+  zendure_2400_ac_advies_instellingen_overnemen:
+    name: Zendure 2400 AC Advies Instellingen Overnemen
+    icon: mdi:hand-pointer
+
 input_boolean:
   dynamisch_15_minuten:
     name: Dynamisch 15 Minuten
@@ -267,6 +272,11 @@ template:
           {% endif %}
 
   - sensor:
+      - name: "Zendure 2400 AC Configuratie Versie"
+        unique_id: Zendure_2400_AC_Configuratie_Versie
+        icon: mdi:one-up
+        state: "Maart 2026 (20260130)"
+
       - name: "Zendure 2400 AC Relais Schakelingen Totaal (Vandaag)"
         unique_id: Zendure_2400_AC_Relais_Schakelingen_Totaal_Vandaag
         icon: mdi:swap-vertical-bold
