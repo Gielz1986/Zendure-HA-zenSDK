@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie Maart 2026 (20260127)
+description: Configuratie Versie Maart 2026 (20260130)
 triggers:
   - seconds: /4
     id: aansturing_trigger
@@ -47,6 +47,10 @@ triggers:
     entity_id:
       - input_number.zendure_2400_ac_max_ontlaadvermogen
     id: systeem_instelling_maxontlaadvermogen
+  - trigger: state
+    entity_id:
+      - input_button.zendure_2400_ac_advies_instellingen_overnemen
+    id: systeem_instelling_adviesinstellingen
 conditions: []
 actions:
   - alias: Modus Selecteren
@@ -357,6 +361,63 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Maximaal ontlaadvermogen aanpassen
+      - conditions:
+          - condition: trigger
+            id:
+              - systeem_instelling_adviesinstellingen
+        sequence:
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_2400_ac_standby_vertraging
+            data:
+              value: 15
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️ Advies instellingen overnemen — Standby vertraging ingesteld
+                op 15 minuten — 
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_2400_ac_opladen_starten_bij
+            data:
+              value: -100
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_2400_ac_ontladen_starten_bij
+            data:
+              value: 100
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️ Advies instellingen overnemen — Ontladen starten bij 100 watt
+                verbruik en opladen starten bij -100 watt teruglevering — 
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_2400_ac_ontlaadmarge
+            data:
+              value: 5
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_2400_ac_oplaadmarge
+            data:
+              value: 50
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️ Advies instellingen overnemen — Oplaadmarge ingesteld op 50
+                watt en ontlaadmarge ingesteld op 5 watt — 
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Advies instellingen overnemen
   - alias: NOM Aansturing
     choose:
       - conditions:
