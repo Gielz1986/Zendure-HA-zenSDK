@@ -37,13 +37,17 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 <details>
   <summary>🖱️ Klik hier 🖱️ voor configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
 
-1. WIP
+1. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages in de map packages van Home Assistant.
+2. Maak nu een **backup** van je `configuration.yaml`.
+3. Pas daarna je `configuration.yaml` door de onderstaande regel toe te voegen
 
 </details>
 
 <details>
   <summary>🖱️ Klik hier 🖱️ voor klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
-
+  
+<br>
+  
 1. Maak eerst een **backup** van je `configuration.yaml`.
 2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
 3. Herstart Home Assistant.
