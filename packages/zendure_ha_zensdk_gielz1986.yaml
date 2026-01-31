@@ -264,7 +264,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "Maart 2026 (20260130)"
+        state: "Maart 2026 (20260131)"
 
       - name: "Zendure 2400 AC Relais Schakelingen Totaal (Vandaag)"
         unique_id: Zendure_2400_AC_Relais_Schakelingen_Totaal_Vandaag
@@ -1117,37 +1117,44 @@ template:
           {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
           {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
           {% set aantal_batterijen = states('sensor.zendure_2400_ac_aantal_batterijen') | float(1) %}
-          {% set capaciteit_per_batterij = 2.88 %}
-
+          {% set productserie = states('sensor.zendure_2400_ac_productserie') %}
+          {% if productserie == 'solarFlow2400AC' %}
+            {% set capaciteit_per_batterij = 2.88 %}
+          {% else %}
+            {% set capaciteit_per_batterij = 1.92 %}
+          {% endif %}
           {% set export_eff = states('sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde') | float(0) %}
           {% set rte_totaal = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
-
           {% set effectief_laad = [laad, max_laad] | min %}
           {% set rte_export_equivalent = (rte_totaal / 100) ** 0.5 * 100 %}
-
           {% if export_eff < 70 %}
             {% set effectieve_eff = rte_export_equivalent %}
           {% else %}
             {% set effectieve_eff = export_eff %}
           {% endif %}
-
           {% set effectieve_eff = [effectieve_eff, 100] | min / 100 %}
           {% set totale_capaciteit = aantal_batterijen * capaciteit_per_batterij %}
           {% set bruikbaar_percentage = effectief_laad - min_laad %}
-
           {% if bruikbaar_percentage <= 0 %}
             0
           {% else %}
             {{ (bruikbaar_percentage / 100 * totale_capaciteit * effectieve_eff) | round(2) }}
           {% endif %}
-
         attributes:
+          batterij_configuratie: >
+            {% set aantal_batterijen = states('sensor.zendure_2400_ac_aantal_batterijen') | int(1) %}
+            {% set productserie = states('sensor.zendure_2400_ac_productserie') %}
+            {% if productserie == 'solarFlow2400AC' %}
+              {% set capaciteit_per_batterij = 2.88 %}
+            {% else %}
+              {% set capaciteit_per_batterij = 1.92 %}
+            {% endif %}
+            {{ capaciteit_per_batterij }} x {{ aantal_batterijen }}
           bruikbaar_percentage: >
             {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
             {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
             {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
             {{ ([laad, max_laad] | min - min_laad) | round(1) }} %
-
           gebruikte_export_efficiëntie: >
             {% set export_eff = states('sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde') | float(0) %}
             {% set rte_totaal = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
@@ -1157,7 +1164,6 @@ template:
             {% else %}
               {{ export_eff | round(1) }} %
             {% endif %}
-
           bron_export_efficiëntie: >
             {% set export_eff = states('sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde') | float(0) %}
             {% if export_eff < 70 %}
@@ -1165,11 +1171,6 @@ template:
             {% else %}
               Export efficiëntie 24u gemiddelde
             {% endif %}
-
-          berekening_beschikbare_energie: >
-            (bruikbaar laadpercentage × totale capaciteit × export efficiëntie)
-            =
-            ((laad% − minimum%) ÷ 100 × aantal batterijen × 2,88 kWh × efficiëntie)
         icon: mdi:lightning-bolt-circle
 
       - name: "Zendure 2400 AC RTE Totaal"
@@ -1195,6 +1196,11 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC Productserie"
+        unique_id: Zendure_2400_AC_Productserie
+        value_template: "{{ value_json.product }}"
+        icon: mdi:identifier
+
       - name: "Zendure 2400 AC SOC-limiet Status"
         value_template: >
           {% set states = {0: "Normale werking", 1: "Laadlimiet bereikt", 2: "Ontlaadlimiet bereikt"} %}
