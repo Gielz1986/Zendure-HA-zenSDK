@@ -400,6 +400,8 @@ views:
             entities:
               - entity: sensor.zendure_2400_ac_configuratie_versie
                 name: Configuratie Versie
+              - entity: sensor.zendure_2400_ac_productserie
+                name: Productserie
               - entity: sensor.zendure_2400_ac_relais_stand
                 name: Relais Stand
               - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
@@ -430,33 +432,134 @@ views:
             icon: ''
             heading_style: title
             heading: Batterij(en)
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
-                name: Batterij 1 Temperatuur
-              - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
-                name: Batterij 2 Temperatuur
-              - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
-                name: Batterij 3 Temperatuur
-              - entity: sensor.zendure_2400_ac_batterij_4_temperatuur
-                name: Batterij 4 Temperatuur
-              - entity: sensor.zendure_2400_ac_batterij_5_temperatuur
-                name: Batterij 5 Temperatuur
-              - entity: sensor.zendure_2400_ac_batterij_6_temperatuur
-                name: Batterij 6 Temperatuur
-              - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
-                name: Batterij 1 Laadpercentage
-              - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
-                name: Batterij 2 Laadpercentage
-              - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
-                name: Batterij 3 Laadpercentage
-              - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
-                name: Batterij 4 Laadpercentage
-              - entity: sensor.zendure_2400_ac_batterij_5_laadpercentage
-                name: Batterij 5 Laadpercentage
-              - entity: sensor.zendure_2400_ac_batterij_6_laadpercentage
-                name: Batterij 6 Laadpercentage
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '1'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '2'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '3'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_4_temperatuur
+                    name: Batterij 4 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
+                    name: Batterij 4 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '4'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_4_temperatuur
+                    name: Batterij 4 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_5_temperatuur
+                    name: Batterij 5 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
+                    name: Batterij 4 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_5_laadpercentage
+                    name: Batterij 5 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '5'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_4_temperatuur
+                    name: Batterij 4 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_5_temperatuur
+                    name: Batterij 5 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_6_temperatuur
+                    name: Batterij 6 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
+                    name: Batterij 4 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_5_laadpercentage
+                    name: Batterij 5 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_6_laadpercentage
+                    name: Batterij 6 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '6'
       - type: grid
         cards:
           - type: heading
