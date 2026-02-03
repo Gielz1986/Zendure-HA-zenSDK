@@ -213,7 +213,7 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 
 #### ℹ️ Batterij Logboek
 Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_select.zendure_2400_ac_modus_selecteren`. Dit kun je doen door rechts naar **Activiteit** te gaan en daarna bij **Doel toevoegen** Zendure 2400 AC Modus Selecteren te kiezen.<br><br>
-![Preview](Images/Logboek.png) 
+![Preview](Images/Logboek-03022026.png) 
 
 <br><br>
 
