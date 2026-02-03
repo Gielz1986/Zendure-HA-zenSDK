@@ -212,7 +212,7 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 | Snel ontladen | Snel ontladen op maximaal vermogen wat ingesteld staat bij `input_number.zendure_2400_ac_max_ontlaadvermogen`                                                                    |
 
 #### ℹ️ Batterij Logboek
-Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_select.zendure_2400_ac_modus_selecteren`<br><br>
+Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_select.zendure_2400_ac_modus_selecteren`. Dit kun je doen door rechts naar **Activiteit** te gaan en daarna bij **Doel toevoegen** Zendure 2400 AC Modus Selecteren te kiezen.<br><br>
 ![Preview](Images/Logboek.png) 
 
 <br><br>
