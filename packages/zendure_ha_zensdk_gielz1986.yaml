@@ -264,7 +264,15 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "Maart 2026 (20260131)"
+        state: "Maart 2026 (20260207)"
+
+      - name: "P1 NOM Doel"
+        unique_id: P1_NOM_Doel
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        state: > 
+         {{ (states('sensor.p1_aansturing_vermogen') | float(0) + (states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) * -1)) | round(0) }}
 
       - name: "Zendure 2400 AC Relais Schakelingen Totaal (Vandaag)"
         unique_id: Zendure_2400_AC_Relais_Schakelingen_Totaal_Vandaag
