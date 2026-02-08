@@ -1679,6 +1679,12 @@ rest:
         unit_of_measurement: "W"
         device_class: power
 
+####### BEGIN - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - BEGIN #######
+
+
+
+####### EIND - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - EIND ####### 
+
 rest_command:
   zendure_opslaan_in_ram:
     url: http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/write
