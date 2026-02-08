@@ -1659,6 +1659,123 @@ rest:
         state_class: measurement
         device_class: power
 
+####### ZENDURE PROXY SENSOREN ####### 
+      - name: "Zendure 1 Laadpercentage"
+        value_template: "{{ value_json['properties']['electricLevel_1'] }}"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+        unique_id: Zendure_proxy_Laadpercentage_1
+
+      - name: "Zendure 2 Laadpercentage"
+        value_template: "{{ value_json['properties']['electricLevel_2'] }}"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+        unique_id: Zendure_proxy_Laadpercentage_2
+
+      - name: "Vermogensopdracht"
+        value_template: "{{ value_json['properties']['latestPowerCmd'] | int }}"
+        unique_id: Zendure_proxy_latest_power_command
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Vermogensopdracht Zendure 1"
+        value_template: "{{ value_json['properties']['latestPowerCmd_1'] | int }}"
+        unique_id: Zendure_proxy_latest_power_command_1
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Vermogensopdracht Zendure 2"
+        value_template: "{{ value_json['properties']['latestPowerCmd_2'] | int }}"
+        unique_id: Zendure_proxy_latest_power_command_2
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure 1 Kalibratie bezig"
+        value_template: >
+          {% set states = {0: "Nee", 1: "Kalibreren"} %}
+          {% set packState = value_json['properties']['socStatus_1'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_proxy_SOC_Status_1
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure 2 Kalibratie bezig"
+        value_template: >
+          {% set states = {0: "Nee", 1: "Kalibreren"} %}
+          {% set packState = value_json['properties']['socStatus_2'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_proxy_SOC_Status_2
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure 1 Opslagmodus"
+        value_template: >
+          {% set states = {1: "Opslaan in RAM", 0: "Opslaan in Flash"} %}
+          {% set packState = value_json['properties']['smartMode_1'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_proxy_Opslagmodus_1
+        icon: mdi:floppy
+
+      - name: "Zendure 2 Opslagmodus"
+        value_template: >
+          {% set states = {1: "Opslaan in RAM", 0: "Opslaan in Flash"} %}
+          {% set packState = value_json['properties']['smartMode_2'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_proxy_Opslagmodus_2
+        icon: mdi:floppy
+
+      - name: "Zendure Actief Device"
+        value_template: >
+          {% set active_device = value_json['properties']['activeDevice'] | int %}
+          {% if active_device == 0 %}
+           Beide
+          {% elif active_device == 1 %}
+           Zendure 1
+          {% elif active_device == 2 %}
+           Zendure 2
+          {% endif %}
+        unique_id: Zendure_proxy_active_device
+        icon: mdi:battery
+
+      - name: "Zendure 1 SOC-limiet Status"
+        value_template: >
+          {% set states = {0: "Normale werking", 1: "Laadlimiet bereikt", 2: "Ontlaadlimiet bereikt"} %}
+          {% set packState = value_json['properties']['socLimit_1'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_proxy_soc_limiet_status_1
+        icon: >
+         {% if this.state == 'Normale werking' %}
+          mdi:battery-medium
+         {% elif this.state == 'Laadlimiet bereikt' %}
+          mdi:battery-high
+         {% elif this.state == 'Ontlaadlimiet bereikt' %}
+          mdi:battery-low
+         {% else %}
+          mdi:battery-outline
+         {% endif %}
+
+      - name: "Zendure 2 SOC-limiet Status"
+        value_template: >
+          {% set states = {0: "Normale werking", 1: "Laadlimiet bereikt", 2: "Ontlaadlimiet bereikt"} %}
+          {% set packState = value_json['properties']['socLimit_2'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_proxy_soc_limiet_status_2
+        icon: >
+         {% if this.state == 'Normale werking' %}
+          mdi:battery-medium
+         {% elif this.state == 'Laadlimiet bereikt' %}
+          mdi:battery-high
+         {% elif this.state == 'Ontlaadlimiet bereikt' %}
+          mdi:battery-low
+         {% else %}
+          mdi:battery-outline
+         {% endif %}
+
+####### EINDE ZENDURE PROXY SENSOREN #######   
+
   - resource_template: "http://{{ states('input_text.homewizard_p1_ip_adres') }}/api/v1/data"
     scan_interval: 1
     sensor:
