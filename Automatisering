@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie Maart 2026 (20260130)
+description: Configuratie Versie Maart 2026 (20260208)
 triggers:
   - seconds: /4
     id: aansturing_trigger
@@ -78,6 +78,12 @@ actions:
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state: Handmatig
         sequence:
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_2400_ac_handmatig_vermogen
+            data:
+              value: 0
           - action: rest_command.zendure_stop_met_alles
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
