@@ -20,6 +20,7 @@ input_select:
       - Dynamisch NOM
       - Dynamisch NOM (Duur)
       - Dynamisch Handelen
+      - Dynamisch Handelen + NOM
       - Alleen slim ontladen
       - Alleen slim opladen
       - Snel opladen
@@ -37,6 +38,14 @@ input_boolean:
 
   dynamisch_recent_geladen:
     name: Dynamisch Recent Geladen
+    icon: mdi:battery-check
+
+  dynamisch_laden_loopt:
+    name: Dynamisch Laden Loopt
+    icon: mdi:battery-check
+
+  dynamisch_ontladen_loopt:
+    name: Dynamisch Ontladen Loopt
     icon: mdi:battery-check
 
 input_text:
@@ -275,7 +284,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "Maart 2026 (20260214)"
+        state: "April 2026 (20260214)"
 
       - name: "P1 NOM Doel"
         unique_id: P1_NOM_Doel
@@ -437,6 +446,34 @@ template:
               {% endif %}
             {% else %}
               []
+            {% endif %}
+          max_tomorrow: >-
+            {% set data = state_attr('sensor.dynamisch_nordpool','raw_tomorrow') %}
+            {% if data %}
+            {{ data | map(attribute='value') | max | round(5) }}
+            {% else %}
+              0
+            {% endif %}
+          min_tomorrow: >-
+            {% set data = state_attr('sensor.dynamisch_nordpool','raw_today') %}
+            {% if data %}
+            {{ data | map(attribute='value') | min | round(5) }}
+            {% else %}
+              0
+            {% endif %}
+          max_today: >-
+            {% set data = state_attr('sensor.dynamisch_nordpool','raw_today') %}
+            {% if data %}
+            {{ data | map(attribute='value') | max | round(5) }}
+            {% else %}
+              0
+            {% endif %}
+          min_today: >-
+            {% set data = state_attr('sensor.dynamisch_nordpool','raw_today') %}
+            {% if data %}
+            {{ data | map(attribute='value') | min | round(5) }}
+            {% else %}
+              0
             {% endif %}
 
       - name: "Dynamisch Spread Indicatie"
