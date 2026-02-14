@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie Maart 2026 (20260208)
+description: Configuratie Versie Maart 2026 (20260214)
 triggers:
   - seconds: /4
     id: aansturing_trigger
