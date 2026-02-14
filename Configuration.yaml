@@ -1670,6 +1670,12 @@ rest:
         state_class: measurement
         device_class: power
 
+####### BEGIN - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - BEGIN #######
+
+
+
+####### EIND - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - EIND ####### 
+
   - resource_template: "http://{{ states('input_text.homewizard_p1_ip_adres') }}/api/v1/data"
     scan_interval: 1
     sensor:
@@ -1678,12 +1684,6 @@ rest:
         unique_id: Homewizard_P1_Vermogen
         unit_of_measurement: "W"
         device_class: power
-
-####### BEGIN - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - BEGIN #######
-
-
-
-####### EIND - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - EIND ####### 
 
 rest_command:
   zendure_opslaan_in_ram:
