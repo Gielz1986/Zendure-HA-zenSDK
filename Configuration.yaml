@@ -1294,7 +1294,7 @@ rest:
               {% endif %}
             {% endfor %}
           {% endif %}
-          {{ ns.sn_list | join(';') }}
+          {{ ns.sn_list | join('\n') }}
         unique_id: Zendure_2400_AC_Batterij_Serienummers
         icon: mdi:identifier
 
