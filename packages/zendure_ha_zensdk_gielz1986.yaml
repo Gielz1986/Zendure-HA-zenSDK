@@ -1,14 +1,3 @@
-# Laad standaard set van integraties. Niet verwijderen.
-default_config:
-
-# Laad frontend thema's uit de themes-map
-frontend:
-  themes: !include_dir_merge_named themes
-
-automation: !include automations.yaml
-script: !include scripts.yaml
-scene: !include scenes.yaml
-
 input_select:
   zendure_2400_ac_modus_selecteren:
     name: Zendure 2400 AC Modus Selecteren
@@ -275,7 +264,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "Maart 2026 (20260214)"
+        state: "Maart 2026 (20260207)"
 
       - name: "P1 NOM Doel"
         unique_id: P1_NOM_Doel

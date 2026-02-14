@@ -1,0 +1,606 @@
+views:
+  - type: sections
+    max_columns: 6
+    title: Zendure
+    path: zendure
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Dynamisch Vandaag
+            heading_style: title
+          - type: custom:apexcharts-card
+            stacked: true
+            experimental:
+              color_threshold: true
+            graph_span: 24h
+            apex_config:
+              plotOptions:
+                bar:
+                  columnWidth: 90%
+              tooltip:
+                enabledOnSeries:
+                  - 0
+                followCursor: true
+                shared: true
+                intersect: false
+                enabled: true
+                x:
+                  format: HH:mm
+                  show: false
+              grid:
+                show: true
+                borderColor: '#332f2c'
+                strokeDashArray: 0
+              chart:
+                height: 200px
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 2
+                  min: 0
+                  max: 1
+                  tickAmount: 5
+                  forceNiceScale: false
+                  labels:
+                    style:
+                      colors: '#7b7c83'
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: '#616269'
+              legend:
+                show: false
+            span:
+              start: day
+            series:
+              - entity: sensor.dynamisch_nordpool
+                yaxis_id: Prijs
+                type: column
+                color: '#ebebeb'
+                float_precision: 3
+                color_threshold:
+                  - value: 0
+                    color: '#186ddc'
+                  - value: 0.155
+                    color: '#04822e'
+                  - value: 0.2
+                    color: '#12A141'
+                  - value: 0.25
+                    color: '#79B92C'
+                  - value: 0.3
+                    color: '#C4D81D'
+                  - value: 0.35
+                    color: '#F3DC0C'
+                  - value: 0.4
+                    color: '#EFA51E'
+                  - value: 0.45
+                    color: '#E76821'
+                  - value: 0.5
+                    color: '#DC182F'
+                name: Vandaag
+                show:
+                  in_header: false
+                  legend_value: false
+                  extremas: true
+                data_generator: |
+                  return entity.attributes.raw_today.map((start, index) => {
+                    return [new Date(start["start"]).getTime(), entity.attributes.raw_today[index]["value"]];
+                  });
+              - entity: sensor.dynamisch_goedkoopste_periode
+                color: green
+                curve: stepline
+                opacity: 0.2
+                type: column
+                name: Goedkoop
+                data_generator: |
+                  const data = entity.attributes["raw_today"];
+                  if (!data) return [];
+
+                  return data.map(item => {
+                    const tijd = new Date(item.start).getTime();
+                    const waarde = item.goedkoop === "ja" ? 1 : 0;
+                    return [tijd, waarde];
+                  });
+              - entity: sensor.dynamisch_goedkoopste_periode
+                color: red
+                curve: stepline
+                opacity: 0.2
+                type: column
+                name: Duur
+                data_generator: |
+                  const data = entity.attributes["raw_today"];
+                  if (!data) return [];
+
+                  return data.map(item => {
+                    const tijd = new Date(item.start).getTime();
+                    const waarde = item.duur === "ja" ? 1 : 0;
+                    return [tijd, waarde];
+                  });
+          - type: entities
+            entities:
+              - entity: sensor.dynamisch_spread_indicatie
+                name: Spread Indicatie
+              - entity: sensor.dynamisch_spread_indicatie_nom
+                name: Spread Indicatie NOM
+              - entity: input_number.dynamisch_goedkoopste_x_periode
+                type: custom:numberbox-card
+                name: Goedkoopste X Periode
+              - entity: input_number.dynamisch_duurste_x_periode
+                type: custom:numberbox-card
+                name: Duurste X Periode
+              - entity: input_text.dynamisch_handmatige_periode
+                name: Handmatige Periode
+          - type: heading
+            icon: ''
+            heading: Dynamisch Configuratie
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.dynamisch_nordpool
+                name: Nordpool
+              - entity: sensor.dynamisch_goedkoopste_periode
+                name: Goedkoopste periode
+              - entity: sensor.dynamisch_duurste_periode
+                name: Duurste periode
+              - entity: input_boolean.dynamisch_15_minuten
+                name: 15 Minuten Tarieven Actief
+              - entity: input_number.dynamisch_minimale_spread
+                name: Minimale Vereiste Spread
+            grid_options:
+              columns: 12
+              rows: auto
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Dynamisch Morgen
+            heading_style: title
+          - type: horizontal-stack
+            cards:
+              - type: custom:apexcharts-card
+                stacked: true
+                experimental:
+                  color_threshold: true
+                graph_span: 24h
+                apex_config:
+                  noData:
+                    text: Vanaf 14:00 zijn de prijzen van morgen bekend.
+                  plotOptions:
+                    bar:
+                      columnWidth: 90%
+                  tooltip:
+                    enabledOnSeries:
+                      - 0
+                    followCursor: true
+                    shared: true
+                    intersect: false
+                    enabled: true
+                    x:
+                      format: HH:mm
+                      show: false
+                  grid:
+                    show: true
+                    borderColor: '#332f2c'
+                    strokeDashArray: 0
+                  chart:
+                    height: 200px
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 2
+                      min: 0
+                      max: 1
+                      tickAmount: 5
+                      forceNiceScale: false
+                      labels:
+                        style:
+                          colors: '#7b7c83'
+                  xaxis:
+                    labels:
+                      show: false
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: '#616269'
+                  legend:
+                    show: false
+                span:
+                  start: day
+                  offset: +1d
+                series:
+                  - entity: sensor.dynamisch_nordpool
+                    yaxis_id: Prijs
+                    type: column
+                    color: '#ebebeb'
+                    float_precision: 3
+                    color_threshold:
+                      - value: 0
+                        color: '#186ddc'
+                      - value: 0.155
+                        color: '#04822e'
+                      - value: 0.2
+                        color: '#12A141'
+                      - value: 0.25
+                        color: '#79B92C'
+                      - value: 0.3
+                        color: '#C4D81D'
+                      - value: 0.35
+                        color: '#F3DC0C'
+                      - value: 0.4
+                        color: '#EFA51E'
+                      - value: 0.45
+                        color: '#E76821'
+                      - value: 0.5
+                        color: '#DC182F'
+                    name: Morgen
+                    show:
+                      in_header: false
+                      legend_value: false
+                      extremas: true
+                    data_generator: >
+                      return entity.attributes.raw_tomorrow.map((start, index)
+                      => {
+                        return [new Date(start["start"]).getTime(), entity.attributes.raw_tomorrow[index]["value"]];
+                      });
+                  - entity: sensor.dynamisch_goedkoopste_periode
+                    yaxis_id: Goedkoop
+                    color: green
+                    curve: stepline
+                    opacity: 0.2
+                    type: column
+                    name: Goedkoop
+                    data_generator: |
+                      const data = entity.attributes["raw_tomorrow"];
+                      if (!data) return [];
+
+                      return data.map(item => {
+                        const tijd = new Date(item.start).getTime();
+                        const waarde = item.goedkoop === "ja" ? 1 : 0;
+                        return [tijd, waarde];
+                      });
+                  - entity: sensor.dynamisch_goedkoopste_periode
+                    yaxis_id: Goedkoop
+                    color: red
+                    curve: stepline
+                    opacity: 0.2
+                    type: column
+                    name: Duur
+                    data_generator: |
+                      const data = entity.attributes["raw_tomorrow"];
+                      if (!data) return [];
+
+                      return data.map(item => {
+                        const tijd = new Date(item.start).getTime();
+                        const waarde = item.duur === "ja" ? 1 : 0;
+                        return [tijd, waarde];
+                      });
+            grid_options:
+              columns: 12
+              rows: auto
+          - type: entities
+            entities:
+              - entity: sensor.dynamisch_spread_indicatie_morgen
+                name: Spread Indicatie Morgen
+              - entity: sensor.dynamisch_spread_indicatie_nom_morgen
+                name: Spread Indicatie NOM Morgen
+              - entity: input_number.dynamisch_goedkoopste_x_periode_morgen
+                type: custom:numberbox-card
+                name: Goedkoopste X Periode Morgen
+              - entity: input_number.dynamisch_duurste_x_periode_morgen
+                type: custom:numberbox-card
+                name: Duurste X Periode Morgen
+              - entity: input_text.dynamisch_handmatige_periode_morgen
+                name: Handmatige Periode Morgen
+      - type: grid
+        cards:
+          - type: heading
+            icon: mdi:cog
+            heading: Batterij Configuratie (Essentieel)
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: input_text.zendure_2400_ac_ip_adres
+              - entity: input_text.homewizard_p1_ip_adres
+              - entity: input_number.zendure_2400_ac_standby_vertraging
+                name: Standby Vertraging
+          - type: heading
+            icon: mdi:battery
+            heading: Batterij Configuratie (Ontladen/Opladen)
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: input_number.zendure_2400_ac_max_ontlaadvermogen
+                name: Max. Ontlaadvermogen
+              - entity: input_number.zendure_2400_ac_ontladen_starten_bij
+                name: Ontladen Starten Bij
+              - entity: input_number.zendure_2400_ac_ontlaadmarge
+                name: Ontlaadmarge
+          - type: entities
+            entities:
+              - entity: input_number.zendure_2400_ac_max_oplaadvermogen
+                name: Max. Oplaadvermogen
+              - entity: input_number.zendure_2400_ac_opladen_starten_bij
+                name: Opladen Starten Bij
+              - entity: input_number.zendure_2400_ac_oplaadmarge
+                name: Oplaadmarge
+          - type: heading
+            icon: mdi:cog
+            heading: Batterij Configuratie (Optioneel/Extra)
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: input_text.afwijkende_p1_sensor
+              - entity: input_text.dynamisch_nordpool_sensor
+              - entity: input_text.zendure_2400_ac_batterij_volgorde
+                name: Batterij Volgorde
+              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
+                name: Advies Instellingen Overnemen
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Aansturing
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: input_select.zendure_2400_ac_modus_selecteren
+                name: Modus Selecteren
+              - entity: input_number.zendure_2400_ac_handmatig_vermogen
+                name: Handmatig Vermogen
+              - entity: sensor.p1_aansturing_vermogen
+              - entity: sensor.zendure_2400_ac_soc_limiet_status
+                name: SOC-limiet Status
+              - entity: sensor.zendure_2400_ac_laadpercentage
+                name: Laadpercentage
+              - entity: sensor.zendure_2400_ac_modus
+                name: Modus
+                secondary_info: last-changed
+              - entity: sensor.zendure_2400_ac_resterende_ontlaad_tijd
+                name: Resterende Ontlaad Tijd
+              - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                name: Vermogen Aansturing
+                secondary_info: none
+              - entity: sensor.zendure_2400_ac_ingesteld_ontlaadvermogen
+                name: Ingesteld Ontlaadvermogen
+                icon: ''
+              - entity: sensor.zendure_2400_ac_ingesteld_oplaadvermogen
+                name: Ingesteld Oplaadvermogen
+          - type: heading
+            icon: ''
+            heading: Logboek
+            heading_style: title
+          - chart_type: bar
+            period: 5minute
+            type: statistics-graph
+            entities:
+              - sensor.p1_aansturing_vermogen
+            stat_types:
+              - mean
+            days_to_show: 0.04
+            hide_legend: true
+          - type: logbook
+            target:
+              entity_id:
+                - input_select.zendure_2400_ac_modus_selecteren
+            hours_to_show: 1
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Gezondheid
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.zendure_2400_ac_configuratie_versie
+                name: Configuratie Versie
+              - entity: sensor.zendure_2400_ac_productserie
+                name: Productserie
+              - entity: sensor.zendure_2400_ac_relais_stand
+                name: Relais Stand
+              - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
+                name: Relais Schakelingen Totaal (Vandaag)
+                secondary_info: last-changed
+              - entity: sensor.zendure_2400_ac_signaalsterkte
+                name: Signaalsterkte
+              - entity: sensor.zendure_2400_ac_aantal_batterijen
+                name: Aantal Batterijen
+              - entity: sensor.zendure_2400_ac_indicatie_beschikbare_energie
+                name: Indicatie Beschikbare Energie
+              - entity: sensor.zendure_2400_ac_error
+                name: Error
+              - entity: sensor.zendure_2400_ac_soc_status
+                name: SOC Status
+              - entity: sensor.zendure_2400_ac_omvormer_temperatuur
+                name: Omvormer Temperatuur
+              - entity: sensor.zendure_2400_ac_opslagmodus
+                name: Opslagmodus
+                secondary_info: last-changed
+              - entity: sensor.zendure_2400_ac_batterijspanning
+                name: Batterijspanning
+              - entity: sensor.zendure_2400_ac_minimale_laadpercentage
+                name: Minimale Laadpercentage
+              - entity: sensor.zendure_2400_ac_maximale_laadpercentage
+                name: Maximale Laadpercentage
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Batterij(en)
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '1'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '2'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '3'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_4_temperatuur
+                    name: Batterij 4 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
+                    name: Batterij 4 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '4'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_4_temperatuur
+                    name: Batterij 4 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_5_temperatuur
+                    name: Batterij 5 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
+                    name: Batterij 4 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_5_laadpercentage
+                    name: Batterij 5 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '5'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_2400_ac_batterij_1_temperatuur
+                    name: Batterij 1 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_2_temperatuur
+                    name: Batterij 2 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_3_temperatuur
+                    name: Batterij 3 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_4_temperatuur
+                    name: Batterij 4 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_5_temperatuur
+                    name: Batterij 5 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_6_temperatuur
+                    name: Batterij 6 Temperatuur
+                  - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
+                    name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
+                    name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
+                    name: Batterij 3 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
+                    name: Batterij 4 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_5_laadpercentage
+                    name: Batterij 5 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_6_laadpercentage
+                    name: Batterij 6 Laadpercentage
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    state: '6'
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: P1
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.homewizard_p1_vermogen
+              - entity: binary_sensor.p1_nul_import_actief
+                name: Nul Import Actief
+              - entity: sensor.p1_nul_import_duur_vandaag
+                name: Nul Import Duur (Vandaag)
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Import/Export
+          - type: entities
+            entities:
+              - entity: sensor.zendure_2400_ac_rte_totaal
+                name: RTE Totaal
+              - entity: sensor.zendure_2400_ac_energie_import
+                name: Energie Import
+              - entity: sensor.zendure_2400_ac_energie_export
+                name: Energie Export
+          - type: heading
+            icon: ''
+            heading: Efficiëntie DC/AC
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: sensor.zendure_2400_ac_vermogen_export_dc
+                name: Vermogen Export DC
+              - entity: sensor.zendure_2400_ac_efficientie_export
+                name: Efficientie Export
+              - entity: sensor.zendure_2400_ac_vermogen_import_dc
+                name: Vermogen Import DC
+              - entity: sensor.zendure_2400_ac_efficientie_import
+                name: Efficientie Import
+              - entity: sensor.zendure_2400_ac_efficientie_import_24u_gemiddelde
+                name: Efficientie Import (24u gemiddelde)
+              - entity: sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde
+                name: Efficientie Export (24u gemiddelde)
+    cards: []
