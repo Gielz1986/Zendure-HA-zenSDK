@@ -1662,7 +1662,6 @@ rest:
 ####### BEGIN - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - BEGIN #######
 
 
-
 ####### EIND - Plaats hier je Node-RED sensoren tussen van https://github.com/gast777/Zendure-zenSDK-proxy - EIND ####### 
 
   - resource_template: "http://{{ states('input_text.homewizard_p1_ip_adres') }}/api/v1/data"
