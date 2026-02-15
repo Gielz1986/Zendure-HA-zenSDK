@@ -151,8 +151,8 @@ homeassistant:
 |                        | Batterij 1-6 Laadpercentage            | 5-100%                                                       |
 | Dynamisch              | Dynamisch Nordpool                     | Nordpool prijzen in 15min en 1uur                            |
 |                        | Dynamisch 15 Minuten                   | Prijzen in 15 minuten ipv 1 uur prijzen                      |
-|                        | Dynamisch Handmatige Periode           | bijvoorbeeld **G11:00;D12:00;G15:00** of **Geen**                   |
-|                        | Dynamisch Handmatige Periode Morgen    | bijvoorbeeld **G11:00;D12:00;G15:00** of **Geen**                   |
+|                        | Dynamisch Handmatige Periode           | bijvoorbeeld **G11:00;D12:00;G15:00** of **G11:00-13:00**                   |
+|                        | Dynamisch Handmatige Periode Morgen    | bijvoorbeeld **G11:00;D12:00;G15:00** of **G11:00-13:00**                   |
 |                        | Dynamisch Minimale Spread              | Gebruikt in modus **Dynamisch NOM**, **Dynamisch NOM (Duur)** em **Dynamisch Handelen**. Boven minimale spread laden     |
 |                        | Dynamisch Spread Indicatie             | Berekening spread                                            |
 |                        | Dynamisch Spread Indicatie NOM         | Berekening spread NOM, duurste na eerste laadactie           |
@@ -160,10 +160,10 @@ homeassistant:
 |                        | Dynamisch Spread Indicatie NOM Morgen  | Berekening spread NOM, duurste na eerste laadactie           |
 |                        | Dynamisch Goedkoopste Periode          | Ja of Nee                                                    |
 |                        | Dynamisch Duurste Periode              | Ja of Nee                                                    |
-|                        | Dynamisch Goedkoopste X Periode        | 1-96                                                         |
-|                        | Dynamisch Duurste X Periode            | 1-96                                                         |
-|                        | Dynamisch Goedkoopste X Periode Morgen | 1-96                                                         |
-|                        | Dynamisch Duurste X Periode Morgen     | 1-96                                                         |
+|                        | Dynamisch Goedkoopste X Periode        | 0-96                                                         |
+|                        | Dynamisch Duurste X Periode            | 0-96                                                         |
+|                        | Dynamisch Goedkoopste X Periode Morgen | 0-96                                                         |
+|                        | Dynamisch Duurste X Periode Morgen     | 0-96                                                         |
 |                        | Dynamisch Recent Geladen               | Word automatisch aan en uit gezet. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat   |
 |                        | Dynamisch Ontladen Loopt               | Word automatisch aan en uit gezet. Noodzakelijk voor de aansturing maar kan ook gebruikt worden om te zien wanneer het heeft gelopen   |
 |                        | Dynamisch Laden Loopt                  | Word automatisch aan en uit gezet. Noodzakelijk voor de aansturing maar kan ook gebruikt worden om te zien wanneer het heeft gelopen   |
