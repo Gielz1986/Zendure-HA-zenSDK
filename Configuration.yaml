@@ -48,6 +48,10 @@ input_boolean:
     name: Dynamisch Ontladen Loopt
     icon: mdi:battery-check
 
+  dynamisch_tonen_op_dashboard:
+    name: Dynamisch Tonen Op Dashboard
+    icon: mdi:battery-check
+
 input_text:
   zendure_2400_ac_batterij_volgorde:
     name: Zendure 2400 AC Batterij Volgorde
@@ -1256,6 +1260,20 @@ rest:
         unique_id: Zendure_2400_AC_Productserie
         value_template: "{{ value_json.product }}"
         icon: mdi:identifier
+
+      - name: "Zendure 2400 AC Omvormer Max. Oplaadvermogen"
+        value_template: "{{ value_json['properties']['chargeMaxLimit'] }}"
+        unique_id: zendure_2400_ac_omvormer_max_oplaadvermogen
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure 2400 AC Omvormer Max. Ontlaadvermogen"
+        value_template: "{{ value_json['properties']['inverseMaxPower'] }}"
+        unique_id: zendure_2400_ac_omvormer_max_ontlaadvermogen
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
 
       - name: "Zendure 2400 AC SOC-limiet Status"
         value_template: >
