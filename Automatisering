@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie April 2026 (20260214)
+description: Configuratie Versie April 2026 (20260215)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -336,9 +336,25 @@ actions:
               name: " "
         alias: Opladen naar minimale SOC (bescherming)
       - conditions:
-          - condition: trigger
-            id:
-              - systeem_instelling_maxoplaadvermogen
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_maxoplaadvermogen
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      states('sensor.zendure_2400_ac_omvormer_max_oplaadvermogen')
+                      | float !=
+                      states('input_number.zendure_2400_ac_max_oplaadvermogen')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -357,9 +373,25 @@ actions:
               name: " "
         alias: Maximaal oplaadvermogen aanpassen
       - conditions:
-          - condition: trigger
-            id:
-              - systeem_instelling_maxontlaadvermogen
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_maxontlaadvermogen
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      states('sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen')
+                      | float !=
+                      states('input_number.zendure_2400_ac_max_ontlaadvermogen')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
