@@ -1,3 +1,8 @@
+[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
+[![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+[![Issue SLA](https://img.shields.io/badge/avg%20fix%20time-~7%20days-brightgreen?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/commits/main)
+
 #  Zendure Home Assistant
 **Om in 2️⃣ stappen je batterij lokaal werkend te krijgen in Home Assistant**.
 
@@ -12,12 +17,6 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
   <img src="https://github.com/Gielz1986/Zendure-zenSDK-HA/blob/main/Images/bmc.png?raw=true" width="180" alt="Buy Me a Coffee">
 </a><br><br>
-
-[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
-[![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
-[![Issue SLA](https://img.shields.io/badge/avg%20fix%20time-~7%20days-brightgreen?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
-[![Last Commit](https://img.shields.io/github/last-commit/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/commits/main)
-
 
 
 ## 1️⃣ Entiteiten beschikbaar maken
