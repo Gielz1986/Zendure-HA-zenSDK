@@ -50,7 +50,7 @@ homeassistant:
 ![Preview](Images/packages2.png) 
 
 5. Herstart Home Assistant.
-6. Optioneel kun je nu het dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
+6. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
 <br>
 
@@ -64,7 +64,7 @@ homeassistant:
 1. Maak eerst een **backup** van je `configuration.yaml`.
 2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
 3. Herstart Home Assistant.
-4. Optioneel kun je nu het dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
+4. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
 <br>
 
@@ -89,7 +89,7 @@ homeassistant:
 | `input_button.zendure_2400_ac_advies_instellingen_overnemen` | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen. |  
 
 
-*Het bestand `Dashboard` bevat het onderstaande dashboard.
+*Het bestand `Dashboard` bevat het onderstaande plug-n-play dashboard.
 ![Preview](Images/Dashboard-17022026.png) 
 
 <details>
@@ -191,13 +191,15 @@ De motor van alles. Deze zal slim opladen en slim ontladen en samen dansen tot �
 ## ✅ Batterij mag aan de slag
 Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 
-1. Voeg de entiteit **Zendure 2400 AC Modus Selecteren** toe aan je dashboard.
-2. Voeg eventueel andere entiteiten toe die je via de `configuration.yaml` hebt aangemaakt.
+1. Open het plug-n-play dashboard of voeg de entiteit **Zendure 2400 AC Modus Selecteren** toe aan je eigen dashboard.
 3. De modus zal op **Standby** staan.
 4. Kies hier je gewenste modus om de **Zendure zenSDK (Gielz) automatisering** te activeren.
 5. De batterij zal nu aan de slag gaan.
 
-![Preview](Images/Modus2-10012026.gif) 
+![Preview](Images/Modus-16022026.gif) 
+
+<details>
+  <summary>🖱️ Klik hier 🖱️ voor een uitleg wat iedere modus doet.</summary>
 
 | Modus                         | Werking                               | Doel                                | 
 | ----------------------------- | -------------------------------------- | -------------------------------------- | 
@@ -213,14 +215,12 @@ Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
 | Snel opladen  | Snel opladen op maximaal vermogen wat ingesteld staat bij `input_number.zendure_2400_ac_max_oplaadvermogen`                                                                     |
 | Snel ontladen | Snel ontladen op maximaal vermogen wat ingesteld staat bij `input_number.zendure_2400_ac_max_ontlaadvermogen`                                                                    |
 
-#### ℹ️ Batterij Logboek
-Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_select.zendure_2400_ac_modus_selecteren`. Dit kun je doen door rechts naar **Activiteit** te gaan en daarna bij **Doel toevoegen** Zendure 2400 AC Modus Selecteren te kiezen.<br><br>
-![Preview](Images/Logboek-03022026.png) 
+</details>
 
 <br><br>
 
 ## 🔃 (Optioneel) Plug-N-Play Dashboard
-Vanaf nu is het ook mogelijk om direct een volledig dashboard in gebruik te nemen.
+Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
 
 1. Maak een nieuw leeg dashboard aan.
 2. Open het nieuwe dashboard.
