@@ -176,7 +176,7 @@ homeassistant:
 <br>
 
 ## 2️⃣ Zendure zenSDK (Gielz) automatisering
-De motor van alles. Deze zal slim opladen en slim ontladen en samen dansen tot één geheel. Heb je bij het bovenstaande geen namen aangepast dan is het een kwestie van een nieuwe automatisering aanmaken.
+De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwerkt. Kies uit 11 verschillende modi om hem precies zo te laten werken als jij wilt. Heb je bij het bovenstaande geen namen aangepast dan is het een kwestie van deze nieuwe automatisering aanmaken.
 
 1. Maak een nieuwe automatisering aan.
 2. Klik rechtsboven op **Bewerken in YAML**.
@@ -190,7 +190,7 @@ De motor van alles. Deze zal slim opladen en slim ontladen en samen dansen tot �
 <br><br>
 
 ## ✅ Batterij mag aan de slag
-Het is dan eindelijk zo ver de batterij mag eens laten zien wat hij kan.
+Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan alleen een dure decoratie met kabels.
 
 1. Open het plug-n-play dashboard of voeg de entiteit **Zendure 2400 AC Modus Selecteren** toe aan je eigen dashboard.
 3. De modus zal op **Standby** staan.
