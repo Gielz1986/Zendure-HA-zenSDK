@@ -277,7 +277,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "April 2026 (20260215)"
+        state: "April 2026 (20260216)"
 
       - name: "P1 NOM Doel"
         unique_id: P1_NOM_Doel
@@ -1075,24 +1075,24 @@ template:
               []
             {% endif %}
           duurste_na_eerste_goedkope: >
-            {% set prijzen = state_attr('sensor.dynamisch_nordpool', 'raw_today') %}
-            {% set aantal_goedkoop = states('input_number.dynamisch_goedkoopste_x_periode') | int %}
-            {% set aantal_duur = states('input_number.dynamisch_duurste_x_periode') | int %}
-            {% if prijzen is iterable %}
-              {% set prijzen_sorted = prijzen | sort(attribute='value') %}
-              {% if aantal_duur > 0 %}
-                {% set dure_starttijden = prijzen_sorted[-aantal_duur:] | map(attribute='start') | list %}
-              {% else %}
-                {% set dure_starttijden = [] %}
-              {% endif %}
-              {% set eerste_goedkoop = prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | map('as_datetime') | sort | first %}
+            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode','raw_today') %}
+            {% if prijzen %}
+              {% set eerste_goedkoop = prijzen
+                | selectattr('goedkoop','eq','ja')
+                | map(attribute='start')
+                | map('as_datetime')
+                | sort
+                | first %}
               [
-              {% for uur in prijzen if uur.start in dure_starttijden and (uur.start | as_datetime > eerste_goedkoop) %}
+              {% for uur in prijzen
+                if uur.duur == 'ja'
+                and (uur.start | as_datetime > eerste_goedkoop)
+              %}
                 {
                   "start": "{{ uur.start }}",
                   "end": "{{ uur.end }}",
                   "value": {{ uur.value }},
-                  "goedkoop": "{{ 'ja' if uur.start in prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | list else 'nee' }}",
+                  "goedkoop": "{{ uur.goedkoop }}",
                   "duur": "ja"
                 }{% if not loop.last %},{% endif %}
               {% endfor %}
@@ -1101,24 +1101,25 @@ template:
               []
             {% endif %}
           duurste_na_eerste_goedkope_morgen: >
-            {% set prijzen = state_attr('sensor.dynamisch_nordpool', 'raw_tomorrow') %}
-            {% set aantal_goedkoop = states('input_number.dynamisch_goedkoopste_x_periode_morgen') | int %}
-            {% set aantal_duur = states('input_number.dynamisch_duurste_x_periode_morgen') | int %}
-            {% if prijzen is iterable %}
-              {% set prijzen_sorted = prijzen | sort(attribute='value') %}
-              {% if aantal_duur > 0 %}
-                {% set dure_starttijden = prijzen_sorted[-aantal_duur:] | map(attribute='start') | list %}
-              {% else %}
-                {% set dure_starttijden = [] %}
-              {% endif %}
-              {% set eerste_goedkoop = prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | map('as_datetime') | sort | first %}
+            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode','raw_tomorrow') %}
+
+            {% if prijzen %}
+              {% set eerste_goedkoop = prijzen
+                | selectattr('goedkoop','eq','ja')
+                | map(attribute='start')
+                | map('as_datetime')
+                | sort
+                | first %}
               [
-              {% for uur in prijzen if uur.start in dure_starttijden and (uur.start | as_datetime > eerste_goedkoop) %}
+              {% for uur in prijzen
+                if uur.duur == 'ja'
+                and (uur.start | as_datetime > eerste_goedkoop)
+              %}
                 {
                   "start": "{{ uur.start }}",
                   "end": "{{ uur.end }}",
                   "value": {{ uur.value }},
-                  "goedkoop": "{{ 'ja' if uur.start in prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | list else 'nee' }}",
+                  "goedkoop": "{{ uur.goedkoop }}",
                   "duur": "ja"
                 }{% if not loop.last %},{% endif %}
               {% endfor %}
