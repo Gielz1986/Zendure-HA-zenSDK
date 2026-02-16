@@ -219,6 +219,17 @@ Wil je zien wat de batterij exact doet kijk dan eens in het logboek van `input_s
 
 <br><br>
 
+## 🔃 (Optioneel) Plug-N-Play Dashboard
+Vanaf nu is het ook mogelijk om direct een volledig dashboard in gebruik te nemen.
+
+1. Maak een nieuw leeg dashboard aan.
+2. Open het nieuwe dashboard.
+3. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
+4. Plak de YAML-code `(zie dashboard bestand)`.
+5. Sla op en het dashboard is volledig bruikbaar
+
+<br><br>
+
 ## 🔃 (Optioneel) Nordpool
 Wanneer je ook het Dynamisch Nordpool gedeelte in gebruik gaat nemen moet je voor dat je deze in gebruik neemt bij `input_text.dynamisch_handmatige_periode` en
 `input_text.dynamisch_handmatige_periode_morgen` even **unknown** weghalen. Hierna zal het dynamisch gedeelte werken. Alles wat in de forecast (morgen) gezet word zal overgenomen worden om 00:00 via de automatisering en verschijnen in vandaag.
