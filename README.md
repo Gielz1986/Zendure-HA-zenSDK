@@ -228,6 +228,8 @@ Vanaf nu is het ook mogelijk om direct een volledig dashboard in gebruik te neme
 4. Plak de YAML-code `(zie dashboard bestand)`.
 5. Sla op en het dashboard is volledig bruikbaar
 
+![Preview](Images/Dashboard.gif) 
+
 <br><br>
 
 ## 🔃 (Optioneel) Nordpool
