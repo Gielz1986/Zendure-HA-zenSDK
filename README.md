@@ -50,7 +50,7 @@ homeassistant:
 ![Preview](Images/packages2.png) 
 
 5. Herstart Home Assistant.
-6. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de `zendure_ha_zensdk_gielz1986.yaml` maar open de entiteiten zoals is te zien op de onderstaande screenshots.
+6. Optioneel kun je nu het dashboard aanmaken [Klik hier voor uitleg](https://github.com/Gielz1986/Zendure-HA-zenSDK/tree/Gielz1986-April-2026-Update#-optioneel-plug-n-play-dashboard). of Vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
 <br>
 
