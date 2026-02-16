@@ -238,3 +238,5 @@ Wanneer je ook het Dynamisch Nordpool gedeelte in gebruik gaat nemen moet je voo
 `input_text.dynamisch_handmatige_periode_morgen` even **unknown** weghalen. Hierna zal het dynamisch gedeelte werken. Alles wat in de forecast (morgen) gezet word zal overgenomen worden om 00:00 via de automatisering en verschijnen in vandaag.
 
 Vervolgens kunnen de modussen **Dynamisch NOM**, **Dynamisch NOM (Duur)** **Dynamisch Handelen + NOM** en **Dynamisch Handelen** gebruikt worden. Deze modussen zijn ideaal in een periode met weinig zon maar wel met veel wind. Laad bijvoorbeeld in de winter de batterij een aantal uren goedkoop op iedere dag wanneer de spread meer dan 25% is.
+
+![Preview](Images/Nordpool.png) 
