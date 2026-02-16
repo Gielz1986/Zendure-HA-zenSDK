@@ -50,7 +50,7 @@ homeassistant:
 ![Preview](Images/packages2.png) 
 
 5. Herstart Home Assistant.
-6. Optioneel kun je nu het dashboard aanmaken [Klik hier voor uitleg](https://github.com/Gielz1986/Zendure-HA-zenSDK/tree/Gielz1986-April-2026-Update#-optioneel-plug-n-play-dashboard). of Vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
+6. Optioneel kun je nu het dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). of Vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
 <br>
 
@@ -64,7 +64,7 @@ homeassistant:
 1. Maak eerst een **backup** van je `configuration.yaml`.
 2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
 3. Herstart Home Assistant.
-4. Vul nu bij de onderstaande entiteiten de juiste gegevens in en herstart Home Assistant nogmaals. Dit is niet in de `configuration.yaml` maar open de entiteiten zoals is te zien op de onderstaande screenshots.
+4. Optioneel kun je nu het dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). of Vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
 <br>
 
