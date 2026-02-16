@@ -227,9 +227,9 @@ Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in geb
 2. Open het nieuwe dashboard.
 3. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
 4. Plak de YAML-code `(zie dashboard bestand)`.
-5. Sla op en het dashboard is volledig bruikbaar
+5. Sla op en het dashboard is volledig bruikbaar.
 
-![Preview](Images/Dashboard.gif) 
+![Preview](Images/Plug-N-Play-Dashboard.gif) 
 
 <br><br>
 
