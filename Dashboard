@@ -7,45 +7,559 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
-            heading: Dynamisch Vandaag
+            icon: mdi:battery
             heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_vermogen_aansturing
+                color: teal
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_laadpercentage
+                color: teal
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
+                icon: mdi:swap-vertical-bold
+                color: teal
+                tap_action:
+                  action: more-info
+            heading: Batterij
+          - type: entities
+            entities:
+              - entity: input_select.zendure_2400_ac_modus_selecteren
+                secondary_info: none
+            show_header_toggle: false
+            state_color: false
+          - type: entities
+            entities:
+              - entity: input_number.zendure_2400_ac_handmatig_vermogen
+                name: Vermogen
+                secondary_info: last-changed
+            visibility:
+              - condition: state
+                entity: input_select.zendure_2400_ac_modus_selecteren
+                state: Handmatig
+          - type: vertical-stack
+            cards:
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                cache: true
+                update_interval: 15min
+                stacked: true
+                header:
+                  show: true
+                  show_states: true
+                  title: ''
+                graph_span: 24h
+                span:
+                  start: day
+                series:
+                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                    name: Batterij
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    transform: return -x;
+                    stroke_width: 2
+                    opacity: 0.2
+                    extend_to: now
+                    color: '#01a180'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                  - entity: sensor.p1_nom_doel
+                    name: P1 (NOM Doel)
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    stroke_width: 0
+                    opacity: 0.6
+                    extend_to: now
+                    color: '#595a5f'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                apex_config:
+                  tooltip:
+                    x:
+                      format: HH:mm
+                      show: false
+                  xaxis:
+                    labels:
+                      show: false
+                      style:
+                        colors: grey
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: '#616269'
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 0
+                      labels:
+                        style:
+                          colors: '#7b7c83'
+                  grid:
+                    strokeDashArray: 0
+                    borderColor: rgb(52,52,52)
+                    show: true
+                  chart:
+                    height: 300px
+                    toolbar:
+                      show: true
+                      tools:
+                        download: false
+                        selection: false
+                        zoom: true
+                        zoomin: false
+                        zoomout: false
+                        pan: false
+                    zoom:
+                      enabled: true
+                      allowMouseWheelZoom: true
+                      autoScaleYaxis: true
+                  legend:
+                    show: true
+                    floating: true
+                    horizontalAlign: left
+                    offsetX: 0
+                    offsetY: 17
+                    formatter: |
+                      EVAL:function(seriesName, opts) {
+                        // filter series die niet in de legenda moeten
+                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
+                        return seriesName;
+                      }
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                cache: false
+                stacked: true
+                update_interval: 5sec
+                header:
+                  show: true
+                  show_states: true
+                  title: ''
+                graph_span: 10min
+                series:
+                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                    name: Batterij
+                    group_by:
+                      func: avg
+                      duration: 5sec
+                    type: area
+                    transform: return -x;
+                    stroke_width: 2
+                    opacity: 0.2
+                    extend_to: now
+                    color: '#01a180'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                  - entity: sensor.p1_nom_doel
+                    name: P1 (NOM Doel)
+                    group_by:
+                      func: avg
+                      duration: 5sec
+                    type: area
+                    stroke_width: 0
+                    opacity: 0.6
+                    extend_to: now
+                    color: '#595a5f'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                  - entity: input_number.zendure_2400_ac_ontladen_starten_bij
+                    name: Start ontladen
+                    type: line
+                    stroke_width: 1
+                    color: '#e4e4e7'
+                    opacity: 0.5
+                    stroke_dash: 2
+                    curve: stepline
+                    extend_to: now
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      hidden_by_default: true
+                      in_header: false
+                  - entity: input_number.zendure_2400_ac_opladen_starten_bij
+                    name: Start opladen
+                    type: line
+                    stroke_width: 1
+                    color: '#e4e4e7'
+                    opacity: 0.5
+                    stroke_dash: 2
+                    curve: stepline
+                    extend_to: now
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      hidden_by_default: true
+                      in_header: false
+                apex_config:
+                  toolbar:
+                    show: true
+                    tools:
+                      download: true
+                      selection: true
+                      zoom: true
+                      zoomin: true
+                      zoomout: true
+                      pan: true
+                  tooltip:
+                    x:
+                      format: HH:mm:ss
+                      show: false
+                  xaxis:
+                    labels:
+                      show: false
+                      style:
+                        colors: grey
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: '#616269'
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 0
+                      labels:
+                        style:
+                          colors: '#7b7c83'
+                  grid:
+                    strokeDashArray: 0
+                    borderColor: rgb(52,52,52)
+                    show: true
+                  chart:
+                    height: 150px
+                  legend:
+                    show: true
+                    floating: true
+                    horizontalAlign: left
+                    offsetX: 0
+                    offsetY: 17
+                    formatter: |
+                      EVAL:function(seriesName, opts) {
+                        // filter series die niet in de legenda moeten
+                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
+                        return seriesName;
+                      }
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+            visibility:
+              - condition: state
+                entity: input_select.zendure_2400_ac_modus_selecteren
+                state_not: Handmatig
+          - type: vertical-stack
+            cards:
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                cache: true
+                update_interval: 15min
+                stacked: true
+                header:
+                  show: true
+                  show_states: true
+                  title: ''
+                graph_span: 24h
+                span:
+                  start: day
+                series:
+                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                    name: Batterij
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    transform: return -x;
+                    stroke_width: 2
+                    opacity: 0.2
+                    extend_to: now
+                    color: '#01a180'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                  - entity: sensor.p1_nom_doel
+                    name: P1 (NOM Doel)
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    stroke_width: 0
+                    opacity: 0.6
+                    extend_to: now
+                    color: '#595a5f'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                apex_config:
+                  tooltip:
+                    x:
+                      format: HH:mm
+                      show: false
+                  xaxis:
+                    labels:
+                      show: false
+                      style:
+                        colors: grey
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: '#616269'
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 0
+                      labels:
+                        style:
+                          colors: '#7b7c83'
+                  grid:
+                    strokeDashArray: 0
+                    borderColor: rgb(52,52,52)
+                    show: true
+                  chart:
+                    height: 204px
+                    toolbar:
+                      show: true
+                      tools:
+                        download: false
+                        selection: false
+                        zoom: true
+                        zoomin: false
+                        zoomout: false
+                        pan: false
+                    zoom:
+                      enabled: true
+                      allowMouseWheelZoom: true
+                      autoScaleYaxis: true
+                  legend:
+                    show: true
+                    floating: true
+                    horizontalAlign: left
+                    offsetX: 0
+                    offsetY: 17
+                    formatter: |
+                      EVAL:function(seriesName, opts) {
+                        // filter series die niet in de legenda moeten
+                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
+                        return seriesName;
+                      }
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                cache: false
+                stacked: true
+                update_interval: 5sec
+                header:
+                  show: true
+                  show_states: true
+                  title: ''
+                graph_span: 10min
+                series:
+                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                    name: Batterij
+                    group_by:
+                      func: avg
+                      duration: 5sec
+                    type: area
+                    transform: return -x;
+                    stroke_width: 2
+                    opacity: 0.2
+                    extend_to: now
+                    color: '#01a180'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                  - entity: sensor.p1_nom_doel
+                    name: P1 (NOM Doel)
+                    group_by:
+                      func: avg
+                      duration: 5sec
+                    type: area
+                    stroke_width: 0
+                    opacity: 0.6
+                    extend_to: now
+                    color: '#595a5f'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_header: false
+                      in_legend: false
+                  - entity: input_number.zendure_2400_ac_ontladen_starten_bij
+                    name: Start ontladen
+                    type: line
+                    stroke_width: 1
+                    color: '#e4e4e7'
+                    opacity: 0.5
+                    stroke_dash: 2
+                    curve: stepline
+                    extend_to: now
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      hidden_by_default: true
+                      in_header: false
+                  - entity: input_number.zendure_2400_ac_opladen_starten_bij
+                    name: Start opladen
+                    type: line
+                    stroke_width: 1
+                    color: '#e4e4e7'
+                    opacity: 0.5
+                    stroke_dash: 2
+                    curve: stepline
+                    extend_to: now
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      hidden_by_default: true
+                      in_header: false
+                apex_config:
+                  toolbar:
+                    show: true
+                    tools:
+                      download: true
+                      selection: true
+                      zoom: true
+                      zoomin: true
+                      zoomout: true
+                      pan: true
+                  tooltip:
+                    x:
+                      format: HH:mm:ss
+                      show: false
+                  xaxis:
+                    labels:
+                      show: false
+                      style:
+                        colors: grey
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: '#616269'
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 0
+                      labels:
+                        style:
+                          colors: '#7b7c83'
+                  grid:
+                    strokeDashArray: 0
+                    borderColor: rgb(52,52,52)
+                    show: true
+                  chart:
+                    height: 150px
+                  legend:
+                    show: true
+                    floating: true
+                    horizontalAlign: left
+                    offsetX: 0
+                    offsetY: 17
+                    formatter: |
+                      EVAL:function(seriesName, opts) {
+                        // filter series die niet in de legenda moeten
+                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
+                        return seriesName;
+                      }
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+            visibility:
+              - condition: state
+                entity: input_select.zendure_2400_ac_modus_selecteren
+                state: Handmatig
+          - type: heading
+            icon: ''
+            heading: Nul import
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.p1_nul_import_duur_vandaag
+                color: white
+                icon: mdi:leaf
+                tap_action:
+                  action: more-info
+                name: Vandaag
+                state_content:
+                  - name
+                  - state
           - type: custom:apexcharts-card
-            stacked: true
-            experimental:
-              color_threshold: true
-            graph_span: 24h
+            header:
+              show: true
+              title: ''
+            graph_span: 2month
+            span:
+              start: month
+              offset: '-1month'
+            cache: false
             apex_config:
-              plotOptions:
-                bar:
-                  columnWidth: 90%
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  max: 24
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: '#7b7c83'
               tooltip:
-                enabledOnSeries:
-                  - 0
-                followCursor: true
-                shared: true
-                intersect: false
-                enabled: true
                 x:
-                  format: HH:mm
+                  format: d/MM
                   show: false
               grid:
                 show: true
                 borderColor: '#332f2c'
                 strokeDashArray: 0
               chart:
-                height: 200px
-              yaxis:
-                - title:
-                    text: ''
-                  decimalsInFloat: 2
-                  min: 0
-                  max: 1
-                  tickAmount: 5
-                  forceNiceScale: false
-                  labels:
-                    style:
-                      colors: '#7b7c83'
+                height: 150px
+              legend:
+                show: false
               xaxis:
                 labels:
                   show: false
@@ -53,123 +567,211 @@ views:
                   show: false
                 axisBorder:
                   color: '#616269'
-              legend:
-                show: false
-            span:
-              start: day
             series:
-              - entity: sensor.dynamisch_nordpool
-                yaxis_id: Prijs
+              - entity: sensor.p1_nul_import_duur_vandaag
+                name: Nul import uren
+                statistics:
+                  period: day
+                  type: max
+                  align: start
                 type: column
-                color: '#ebebeb'
-                float_precision: 3
-                color_threshold:
-                  - value: 0
-                    color: '#186ddc'
-                  - value: 0.155
-                    color: '#04822e'
-                  - value: 0.2
-                    color: '#12A141'
-                  - value: 0.25
-                    color: '#79B92C'
-                  - value: 0.3
-                    color: '#C4D81D'
-                  - value: 0.35
-                    color: '#F3DC0C'
-                  - value: 0.4
-                    color: '#EFA51E'
-                  - value: 0.45
-                    color: '#E76821'
-                  - value: 0.5
-                    color: '#DC182F'
-                name: Vandaag
+                color: '#e4e4e7'
                 show:
                   in_header: false
-                  legend_value: false
                   extremas: true
-                data_generator: |
-                  return entity.attributes.raw_today.map((start, index) => {
-                    return [new Date(start["start"]).getTime(), entity.attributes.raw_today[index]["value"]];
-                  });
-              - entity: sensor.dynamisch_goedkoopste_periode
-                color: green
-                curve: stepline
-                opacity: 0.2
-                type: column
-                name: Goedkoop
-                data_generator: |
-                  const data = entity.attributes["raw_today"];
-                  if (!data) return [];
-
-                  return data.map(item => {
-                    const tijd = new Date(item.start).getTime();
-                    const waarde = item.goedkoop === "ja" ? 1 : 0;
-                    return [tijd, waarde];
-                  });
-              - entity: sensor.dynamisch_goedkoopste_periode
-                color: red
-                curve: stepline
-                opacity: 0.2
-                type: column
-                name: Duur
-                data_generator: |
-                  const data = entity.attributes["raw_today"];
-                  if (!data) return [];
-
-                  return data.map(item => {
-                    const tijd = new Date(item.start).getTime();
-                    const waarde = item.duur === "ja" ? 1 : 0;
-                    return [tijd, waarde];
-                  });
-          - type: entities
-            entities:
-              - entity: sensor.dynamisch_spread_indicatie
-                name: Spread Indicatie
-              - entity: sensor.dynamisch_spread_indicatie_nom
-                name: Spread Indicatie NOM
-              - entity: input_number.dynamisch_goedkoopste_x_periode
-                type: custom:numberbox-card
-                name: Goedkoopste X Periode
-              - entity: input_number.dynamisch_duurste_x_periode
-                type: custom:numberbox-card
-                name: Duurste X Periode
-              - entity: input_text.dynamisch_handmatige_periode
-                name: Handmatige Periode
-          - type: heading
-            icon: ''
-            heading: Dynamisch Configuratie
-            heading_style: title
-          - type: entities
-            entities:
-              - entity: sensor.dynamisch_nordpool
-                name: Nordpool
-              - entity: sensor.dynamisch_goedkoopste_periode
-                name: Goedkoopste periode
-              - entity: sensor.dynamisch_duurste_periode
-                name: Duurste periode
-              - entity: input_boolean.dynamisch_15_minuten
-                name: 15 Minuten Tarieven Actief
-              - entity: input_number.dynamisch_minimale_spread
-                name: Minimale Vereiste Spread
-            grid_options:
-              columns: 12
-              rows: auto
       - type: grid
         cards:
           - type: heading
             icon: ''
-            heading: Dynamisch Morgen
             heading_style: title
+            heading: Aansturing
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.p1_aansturing_vermogen
+                name: P1
+                state_content:
+                  - name
+                  - state
+                color: teal
+                icon: mdi:transmission-tower
+                tap_action:
+                  action: more-info
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.zendure_2400_ac_soc_limiet_status
+                name: SOC-limiet Status
+              - entity: sensor.zendure_2400_ac_indicatie_beschikbare_energie
+                name: Indicatie Beschikbare Energie
+                secondary_info: last-changed
+              - entity: sensor.zendure_2400_ac_resterende_ontlaad_tijd
+                name: Resterende Ontlaad Tijd
+              - entity: sensor.zendure_2400_ac_modus
+                name: Modus
+              - entity: sensor.zendure_2400_ac_ingesteld_ontlaadvermogen
+                name: Ingesteld Ontlaadvermogen
+                icon: ''
+              - entity: sensor.zendure_2400_ac_ingesteld_oplaadvermogen
+                name: Ingesteld Oplaadvermogen
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Import/Export
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_rte_totaal
+                name: RTE
+                state_content:
+                  - name
+                  - state
+                color: teal
+                icon: mdi:percent
+                tap_action:
+                  action: more-info
+          - type: entities
+            entities:
+              - entity: sensor.zendure_2400_ac_energie_import
+                name: Energie Import
+              - entity: sensor.zendure_2400_ac_energie_export
+                name: Energie Export
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: ''
+            graph_span: 12month
+            span:
+              start: month
+              offset: '-11month'
+            cache: false
+            apex_config:
+              yaxis:
+                - decimalsInFloat: 0
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: '#7b7c83'
+              tooltip:
+                x:
+                  format: MM-yyyy
+                  show: false
+              grid:
+                show: true
+                borderColor: '#332f2c'
+                strokeDashArray: 0
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: '#616269'
+            series:
+              - entity: sensor.zendure_2400_ac_energie_import
+                name: Opgeladen
+                statistics:
+                  period: month
+                  type: change
+                  align: start
+                type: column
+                color: '#01a180'
+                show:
+                  in_header: false
+              - entity: sensor.zendure_2400_ac_energie_export
+                name: Ontladen
+                statistics:
+                  period: month
+                  type: change
+                  align: start
+                type: column
+                color: '#b3e3d9'
+                show:
+                  in_header: false
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Dynamisch Vandaag
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.dynamisch_nordpool
+                color: white
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.dynamisch_goedkoopste_periode
+                icon: mdi:arrow-down-bold
+                color: green
+                tap_action:
+                  action: more-info
+                visibility:
+                  - condition: state
+                    entity: sensor.dynamisch_goedkoopste_periode
+                    state: Ja
+                name: Goedkoop
+                state_content: name
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.dynamisch_duurste_periode
+                color: red
+                icon: mdi:arrow-up-bold
+                tap_action:
+                  action: more-info
+                visibility:
+                  - condition: state
+                    entity: sensor.dynamisch_duurste_periode
+                    state: Ja
+                name: Duur
+                state_content: name
+            visibility:
+              - condition: state
+                entity: input_boolean.dynamisch_tonen_op_dashboard
+                state: 'on'
           - type: horizontal-stack
             cards:
               - type: custom:apexcharts-card
-                stacked: true
+                update_interval: 1sec
                 experimental:
                   color_threshold: true
                 graph_span: 24h
                 apex_config:
-                  noData:
-                    text: Vanaf 14:00 zijn de prijzen van morgen bekend.
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+                  annotations:
+                    xaxis:
+                      - x: EVAL:Date.now()-(30*60*1000)
+                        borderColor: '#e4e4e7'
+                        strokeDashArray: 2
+                        label:
+                          orientation: horizontal
+                          offsetX: -15
+                          offsetY: 12
+                          borderWidth: 2
+                          borderColor: '#23242b'
+                          text: nu
+                          style:
+                            color: '#000'
+                            padding:
+                              bottom: 2
+                              top: -1
+                              left: 4
+                              right: 4
                   plotOptions:
                     bar:
                       columnWidth: 90%
@@ -188,14 +790,333 @@ views:
                     borderColor: '#332f2c'
                     strokeDashArray: 0
                   chart:
-                    height: 200px
+                    height: 150px
+                    stacked: true
+                    stackOnlyBar: true
                   yaxis:
                     - title:
                         text: ''
                       decimalsInFloat: 2
                       min: 0
-                      max: 1
-                      tickAmount: 5
+                      max: 0.8
+                      tickAmount: 4
+                      forceNiceScale: false
+                      labels:
+                        style:
+                          colors: '#7b7c83'
+                  xaxis:
+                    labels:
+                      show: false
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: '#616269'
+                  legend:
+                    show: false
+                span:
+                  start: day
+                series:
+                  - entity: sensor.dynamisch_nordpool
+                    yaxis_id: Prijs
+                    type: column
+                    color: '#ebebeb'
+                    float_precision: 3
+                    color_threshold:
+                      - value: 0
+                        color: '#186ddc'
+                      - value: 0.155
+                        color: '#04822e'
+                      - value: 0.2
+                        color: '#12A141'
+                      - value: 0.25
+                        color: '#79B92C'
+                      - value: 0.3
+                        color: '#C4D81D'
+                      - value: 0.35
+                        color: '#F3DC0C'
+                      - value: 0.4
+                        color: '#EFA51E'
+                      - value: 0.45
+                        color: '#E76821'
+                      - value: 0.5
+                        color: '#DC182F'
+                    name: Vandaag
+                    show:
+                      in_header: false
+                      legend_value: false
+                      extremas: false
+                    data_generator: |
+                      return entity.attributes.raw_today.map((start, index) => {
+                        return [new Date(start["start"]).getTime(), entity.attributes.raw_today[index]["value"]];
+                      });
+                  - entity: sensor.dynamisch_nordpool
+                    yaxis_id: Prijs
+                    type: column
+                    color: '#ebebeb'
+                    opacity: 0
+                    float_precision: 3
+                    name: Vandaag
+                    show:
+                      in_header: false
+                      legend_value: false
+                      extremas: true
+                    data_generator: |
+                      return entity.attributes.raw_today.map((start, index) => {
+                        return [new Date(start["start"]).getTime(), entity.attributes.raw_today[index]["value"]];
+                      });
+                  - entity: sensor.dynamisch_goedkoopste_periode
+                    color: green
+                    curve: stepline
+                    opacity: 0.2
+                    type: column
+                    name: Goedkoop
+                    data_generator: |
+                      const data = entity.attributes["raw_today"];
+                      if (!data) return [];
+
+                      return data.map(item => {
+                        const tijd = new Date(item.start).getTime();
+                        const waarde = item.goedkoop === "ja" ? 1 : 0;
+                        return [tijd, waarde];
+                      });
+                  - entity: sensor.dynamisch_goedkoopste_periode
+                    color: red
+                    curve: stepline
+                    opacity: 0.2
+                    type: column
+                    name: Duur
+                    data_generator: |
+                      const data = entity.attributes["raw_today"];
+                      if (!data) return [];
+
+                      return data.map(item => {
+                        const tijd = new Date(item.start).getTime();
+                        const waarde = item.duur === "ja" ? 1 : 0;
+                        return [tijd, waarde];
+                      });
+            visibility:
+              - condition: state
+                entity: input_boolean.dynamisch_15_minuten
+                state: 'off'
+          - type: horizontal-stack
+            cards:
+              - type: custom:apexcharts-card
+                update_interval: 1sec
+                experimental:
+                  color_threshold: true
+                graph_span: 24h
+                apex_config:
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+                  annotations:
+                    xaxis:
+                      - x: EVAL:Date.now()-(5*60*1000)
+                        borderColor: '#e4e4e7'
+                        strokeDashArray: 2
+                        label:
+                          orientation: horizontal
+                          offsetX: -15
+                          offsetY: 12
+                          borderWidth: 2
+                          borderColor: '#23242b'
+                          text: nu
+                          style:
+                            color: '#000'
+                            padding:
+                              bottom: 2
+                              top: -1
+                              left: 4
+                              right: 4
+                  plotOptions:
+                    bar:
+                      columnWidth: 90%
+                  tooltip:
+                    enabledOnSeries:
+                      - 0
+                    followCursor: true
+                    shared: true
+                    intersect: false
+                    enabled: true
+                    x:
+                      format: HH:mm
+                      show: false
+                  grid:
+                    show: true
+                    borderColor: '#332f2c'
+                    strokeDashArray: 0
+                  chart:
+                    height: 150px
+                    stacked: true
+                    stackOnlyBar: true
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 2
+                      min: 0
+                      max: 0.8
+                      tickAmount: 4
+                      forceNiceScale: false
+                      labels:
+                        style:
+                          colors: '#7b7c83'
+                  xaxis:
+                    labels:
+                      show: false
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: '#616269'
+                  legend:
+                    show: false
+                span:
+                  start: day
+                series:
+                  - entity: sensor.dynamisch_nordpool
+                    yaxis_id: Prijs
+                    type: column
+                    color: '#ebebeb'
+                    float_precision: 3
+                    color_threshold:
+                      - value: 0
+                        color: '#186ddc'
+                      - value: 0.155
+                        color: '#04822e'
+                      - value: 0.2
+                        color: '#12A141'
+                      - value: 0.25
+                        color: '#79B92C'
+                      - value: 0.3
+                        color: '#C4D81D'
+                      - value: 0.35
+                        color: '#F3DC0C'
+                      - value: 0.4
+                        color: '#EFA51E'
+                      - value: 0.45
+                        color: '#E76821'
+                      - value: 0.5
+                        color: '#DC182F'
+                    name: Vandaag
+                    show:
+                      in_header: false
+                      legend_value: false
+                      extremas: false
+                    data_generator: |
+                      return entity.attributes.raw_today.map((start, index) => {
+                        return [new Date(start["start"]).getTime(), entity.attributes.raw_today[index]["value"]];
+                      });
+                  - entity: sensor.dynamisch_nordpool
+                    yaxis_id: Prijs
+                    type: column
+                    color: '#ebebeb'
+                    opacity: 0
+                    float_precision: 3
+                    name: Vandaag
+                    show:
+                      in_header: false
+                      legend_value: false
+                      extremas: true
+                    data_generator: |
+                      return entity.attributes.raw_today.map((start, index) => {
+                        return [new Date(start["start"]).getTime(), entity.attributes.raw_today[index]["value"]];
+                      });
+                  - entity: sensor.dynamisch_goedkoopste_periode
+                    color: green
+                    curve: stepline
+                    opacity: 0.2
+                    type: column
+                    name: Goedkoop
+                    data_generator: |
+                      const data = entity.attributes["raw_today"];
+                      if (!data) return [];
+
+                      return data.map(item => {
+                        const tijd = new Date(item.start).getTime();
+                        const waarde = item.goedkoop === "ja" ? 1 : 0;
+                        return [tijd, waarde];
+                      });
+                  - entity: sensor.dynamisch_goedkoopste_periode
+                    color: red
+                    curve: stepline
+                    opacity: 0.2
+                    type: column
+                    name: Duur
+                    data_generator: |
+                      const data = entity.attributes["raw_today"];
+                      if (!data) return [];
+
+                      return data.map(item => {
+                        const tijd = new Date(item.start).getTime();
+                        const waarde = item.duur === "ja" ? 1 : 0;
+                        return [tijd, waarde];
+                      });
+            visibility:
+              - condition: state
+                entity: input_boolean.dynamisch_15_minuten
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: sensor.dynamisch_spread_indicatie
+                name: Spread Indicatie
+              - entity: sensor.dynamisch_spread_indicatie_nom
+                name: Spread Indicatie NOM
+              - entity: input_number.dynamisch_goedkoopste_x_periode
+                name: Goedkoopste X Periode
+              - entity: input_number.dynamisch_duurste_x_periode
+                name: Duurste X Periode
+              - entity: input_text.dynamisch_handmatige_periode
+                name: Handmatige Periode
+          - type: heading
+            icon: ''
+            heading: Dynamisch Morgen
+            heading_style: title
+            visibility:
+              - condition: time
+                after: '13:30:00'
+                before: '24:00:00'
+              - condition: state
+                entity: input_boolean.dynamisch_tonen_op_dashboard
+                state: 'on'
+          - type: horizontal-stack
+            cards:
+              - type: custom:apexcharts-card
+                experimental:
+                  color_threshold: true
+                graph_span: 24h
+                apex_config:
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+                  plotOptions:
+                    bar:
+                      columnWidth: 90%
+                  tooltip:
+                    enabledOnSeries:
+                      - 0
+                    followCursor: true
+                    shared: true
+                    intersect: false
+                    enabled: true
+                    x:
+                      format: HH:mm
+                      show: false
+                  grid:
+                    show: true
+                    borderColor: '#332f2c'
+                    strokeDashArray: 0
+                  chart:
+                    height: 150px
+                    stacked: true
+                    stackOnlyBar: true
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 2
+                      min: 0
+                      max: 0.8
+                      tickAmount: 4
                       forceNiceScale: false
                       labels:
                         style:
@@ -241,6 +1162,22 @@ views:
                     show:
                       in_header: false
                       legend_value: false
+                      extremas: false
+                    data_generator: >
+                      return entity.attributes.raw_tomorrow.map((start, index)
+                      => {
+                        return [new Date(start["start"]).getTime(), entity.attributes.raw_tomorrow[index]["value"]];
+                      });
+                  - entity: sensor.dynamisch_nordpool
+                    yaxis_id: Prijs
+                    type: column
+                    color: '#ebebeb'
+                    opacity: 0
+                    float_precision: 3
+                    name: Morgen
+                    show:
+                      in_header: false
+                      legend_value: false
                       extremas: true
                     data_generator: >
                       return entity.attributes.raw_tomorrow.map((start, index)
@@ -248,7 +1185,6 @@ views:
                         return [new Date(start["start"]).getTime(), entity.attributes.raw_tomorrow[index]["value"]];
                       });
                   - entity: sensor.dynamisch_goedkoopste_periode
-                    yaxis_id: Goedkoop
                     color: green
                     curve: stepline
                     opacity: 0.2
@@ -264,7 +1200,6 @@ views:
                         return [tijd, waarde];
                       });
                   - entity: sensor.dynamisch_goedkoopste_periode
-                    yaxis_id: Goedkoop
                     color: red
                     curve: stepline
                     opacity: 0.2
@@ -279,9 +1214,10 @@ views:
                         const waarde = item.duur === "ja" ? 1 : 0;
                         return [tijd, waarde];
                       });
-            grid_options:
-              columns: 12
-              rows: auto
+                visibility:
+                  - condition: time
+                    after: '13:30:00'
+                    before: '24:00:00'
           - type: entities
             entities:
               - entity: sensor.dynamisch_spread_indicatie_morgen
@@ -289,136 +1225,51 @@ views:
               - entity: sensor.dynamisch_spread_indicatie_nom_morgen
                 name: Spread Indicatie NOM Morgen
               - entity: input_number.dynamisch_goedkoopste_x_periode_morgen
-                type: custom:numberbox-card
                 name: Goedkoopste X Periode Morgen
               - entity: input_number.dynamisch_duurste_x_periode_morgen
-                type: custom:numberbox-card
                 name: Duurste X Periode Morgen
               - entity: input_text.dynamisch_handmatige_periode_morgen
                 name: Handmatige Periode Morgen
-      - type: grid
-        cards:
-          - type: heading
-            icon: mdi:cog
-            heading: Batterij Configuratie (Essentieel)
-            heading_style: title
-          - type: entities
-            entities:
-              - entity: input_text.zendure_2400_ac_ip_adres
-              - entity: input_text.homewizard_p1_ip_adres
-              - entity: input_number.zendure_2400_ac_standby_vertraging
-                name: Standby Vertraging
-          - type: heading
-            icon: mdi:battery
-            heading: Batterij Configuratie (Ontladen/Opladen)
-            heading_style: title
-          - type: entities
-            entities:
-              - entity: input_number.zendure_2400_ac_max_ontlaadvermogen
-                name: Max. Ontlaadvermogen
-              - entity: input_number.zendure_2400_ac_ontladen_starten_bij
-                name: Ontladen Starten Bij
-              - entity: input_number.zendure_2400_ac_ontlaadmarge
-                name: Ontlaadmarge
-          - type: entities
-            entities:
-              - entity: input_number.zendure_2400_ac_max_oplaadvermogen
-                name: Max. Oplaadvermogen
-              - entity: input_number.zendure_2400_ac_opladen_starten_bij
-                name: Opladen Starten Bij
-              - entity: input_number.zendure_2400_ac_oplaadmarge
-                name: Oplaadmarge
-          - type: heading
-            icon: mdi:cog
-            heading: Batterij Configuratie (Optioneel/Extra)
-            heading_style: title
-          - type: entities
-            entities:
-              - entity: input_text.afwijkende_p1_sensor
-              - entity: input_text.dynamisch_nordpool_sensor
-              - entity: input_text.zendure_2400_ac_batterij_volgorde
-                name: Batterij Volgorde
-              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
-                name: Advies Instellingen Overnemen
+            visibility:
+              - condition: time
+                after: '13:30:00'
+                before: '24:00:00'
+        visibility:
+          - condition: state
+            entity: input_boolean.dynamisch_tonen_op_dashboard
+            state: 'on'
+    cards: []
+    icon: mdi:battery
+    dense_section_placement: false
+  - type: sections
+    max_columns: 4
+    icon: mdi:battery-heart-variant
+    path: gezondheid
+    title: Gezondheid
+    sections:
       - type: grid
         cards:
           - type: heading
             icon: ''
             heading_style: title
-            heading: Aansturing
+            heading: Globaal
           - type: entities
             show_header_toggle: false
             entities:
-              - entity: input_select.zendure_2400_ac_modus_selecteren
-                name: Modus Selecteren
-              - entity: input_number.zendure_2400_ac_handmatig_vermogen
-                name: Handmatig Vermogen
-              - entity: sensor.p1_aansturing_vermogen
-              - entity: sensor.zendure_2400_ac_soc_limiet_status
-                name: SOC-limiet Status
-              - entity: sensor.zendure_2400_ac_laadpercentage
-                name: Laadpercentage
-              - entity: sensor.zendure_2400_ac_modus
-                name: Modus
-                secondary_info: last-changed
-              - entity: sensor.zendure_2400_ac_resterende_ontlaad_tijd
-                name: Resterende Ontlaad Tijd
-              - entity: sensor.zendure_2400_ac_vermogen_aansturing
-                name: Vermogen Aansturing
-                secondary_info: none
-              - entity: sensor.zendure_2400_ac_ingesteld_ontlaadvermogen
-                name: Ingesteld Ontlaadvermogen
-                icon: ''
-              - entity: sensor.zendure_2400_ac_ingesteld_oplaadvermogen
-                name: Ingesteld Oplaadvermogen
-          - type: heading
-            icon: ''
-            heading: Logboek
-            heading_style: title
-          - chart_type: bar
-            period: 5minute
-            type: statistics-graph
-            entities:
-              - sensor.p1_aansturing_vermogen
-            stat_types:
-              - mean
-            days_to_show: 0.04
-            hide_legend: true
-          - type: logbook
-            target:
-              entity_id:
-                - input_select.zendure_2400_ac_modus_selecteren
-            hours_to_show: 1
-      - type: grid
-        cards:
-          - type: heading
-            icon: ''
-            heading_style: title
-            heading: Gezondheid
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - entity: sensor.zendure_2400_ac_configuratie_versie
-                name: Configuratie Versie
-              - entity: sensor.zendure_2400_ac_productserie
-                name: Productserie
-              - entity: sensor.zendure_2400_ac_relais_stand
-                name: Relais Stand
-              - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
-                name: Relais Schakelingen Totaal (Vandaag)
-                secondary_info: last-changed
-              - entity: sensor.zendure_2400_ac_signaalsterkte
-                name: Signaalsterkte
               - entity: sensor.zendure_2400_ac_aantal_batterijen
                 name: Aantal Batterijen
-              - entity: sensor.zendure_2400_ac_indicatie_beschikbare_energie
-                name: Indicatie Beschikbare Energie
+              - entity: sensor.zendure_2400_ac_signaalsterkte
+                name: Signaalsterkte
               - entity: sensor.zendure_2400_ac_error
                 name: Error
               - entity: sensor.zendure_2400_ac_soc_status
                 name: SOC Status
               - entity: sensor.zendure_2400_ac_omvormer_temperatuur
                 name: Omvormer Temperatuur
+              - entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
+                name: Omvormer Max. Oplaadvermogen
+              - entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
+                name: Omvormer Max. Ontlaadvermogen
               - entity: sensor.zendure_2400_ac_opslagmodus
                 name: Opslagmodus
                 secondary_info: last-changed
@@ -428,10 +1279,12 @@ views:
                 name: Minimale Laadpercentage
               - entity: sensor.zendure_2400_ac_maximale_laadpercentage
                 name: Maximale Laadpercentage
+      - type: grid
+        cards:
           - type: heading
             icon: ''
+            heading: Per Batterij
             heading_style: title
-            heading: Batterij(en)
           - type: horizontal-stack
             cards:
               - type: entities
@@ -564,43 +1417,271 @@ views:
         cards:
           - type: heading
             icon: ''
-            heading: P1
+            heading: Efficiëntie Import (Indicatief)
             heading_style: title
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: ''
+            graph_span: 1day
+            span:
+              start: day
+            stacked: true
+            cache: false
+            apex_config:
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  max: 100
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: '#7b7c83'
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              grid:
+                show: true
+                borderColor: '#332f2c'
+                strokeDashArray: 0
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: '#616269'
+            series:
+              - entity: sensor.zendure_2400_ac_efficientie_import
+                name: Import gemiddeld (efficiëntie)
+                stroke_width: 2
+                opacity: 0.2
+                extend_to: now
+                group_by:
+                  func: avg
+                  duration: 5min
+                type: area
+                color: '#e4e4e7'
+                show:
+                  in_header: false
+                  extremas: max
+              - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                name: Import gemiddeld
+                group_by:
+                  func: avg
+                  duration: 5min
+                type: area
+                stroke_width: 0
+                opacity: 0
+                extend_to: now
+                transform: return Math.max(0, x);
+                color: '#01a180'
+                show:
+                  in_header: false
           - type: entities
             entities:
-              - entity: sensor.homewizard_p1_vermogen
-              - entity: binary_sensor.p1_nul_import_actief
-                name: Nul Import Actief
-              - entity: sensor.p1_nul_import_duur_vandaag
-                name: Nul Import Duur (Vandaag)
-          - type: heading
-            icon: ''
-            heading_style: title
-            heading: Import/Export
-          - type: entities
-            entities:
-              - entity: sensor.zendure_2400_ac_rte_totaal
-                name: RTE Totaal
-              - entity: sensor.zendure_2400_ac_energie_import
-                name: Energie Import
-              - entity: sensor.zendure_2400_ac_energie_export
-                name: Energie Export
-          - type: heading
-            icon: ''
-            heading: Efficiëntie DC/AC
-            heading_style: title
-          - type: entities
-            entities:
-              - entity: sensor.zendure_2400_ac_vermogen_export_dc
-                name: Vermogen Export DC
-              - entity: sensor.zendure_2400_ac_efficientie_export
-                name: Efficientie Export
               - entity: sensor.zendure_2400_ac_vermogen_import_dc
                 name: Vermogen Import DC
               - entity: sensor.zendure_2400_ac_efficientie_import
                 name: Efficientie Import
               - entity: sensor.zendure_2400_ac_efficientie_import_24u_gemiddelde
                 name: Efficientie Import (24u gemiddelde)
+          - type: heading
+            icon: ''
+            heading: Efficiëntie Export (Indicatief)
+            heading_style: title
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: ''
+            graph_span: 1day
+            span:
+              start: day
+            stacked: true
+            cache: false
+            apex_config:
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  max: 100
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: '#7b7c83'
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              grid:
+                show: true
+                borderColor: '#332f2c'
+                strokeDashArray: 0
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: '#616269'
+            series:
+              - entity: sensor.zendure_2400_ac_efficientie_export
+                name: Export gemiddeld (efficiëntie)
+                stroke_width: 2
+                opacity: 0.2
+                extend_to: now
+                group_by:
+                  func: avg
+                  duration: 5min
+                type: area
+                color: '#e4e4e7'
+                show:
+                  in_header: false
+                  extremas: max
+              - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                name: Export gemiddeld
+                group_by:
+                  func: avg
+                  duration: 5min
+                type: area
+                stroke_width: 0
+                opacity: 0
+                extend_to: now
+                transform: return Math.max(0, -x);
+                color: '#01a180'
+                show:
+                  in_header: false
+          - type: entities
+            entities:
+              - entity: sensor.zendure_2400_ac_vermogen_export_dc
+                name: Vermogen Export DC
+              - entity: sensor.zendure_2400_ac_efficientie_export
+                name: Efficientie Export
               - entity: sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde
                 name: Efficientie Export (24u gemiddelde)
+  - type: sections
+    max_columns: 4
+    title: Configuratie
+    path: configuratie
+    icon: mdi:cog
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Configuratie (Basis)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_configuratie_versie
+                color: teal
+                tap_action:
+                  action: more-info
+          - type: entities
+            entities:
+              - entity: input_text.zendure_2400_ac_ip_adres
+              - entity: input_text.homewizard_p1_ip_adres
+              - entity: input_number.zendure_2400_ac_standby_vertraging
+                name: Standby Vertraging
+          - type: heading
+            icon: ''
+            heading: Configuratie (Opladen)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
+                icon: mdi:api
+                color: teal
+                tap_action:
+                  action: more-info
+          - type: entities
+            entities:
+              - entity: input_number.zendure_2400_ac_max_oplaadvermogen
+                name: Max. Oplaadvermogen
+              - entity: input_number.zendure_2400_ac_opladen_starten_bij
+                name: Opladen Starten Bij
+              - entity: input_number.zendure_2400_ac_oplaadmarge
+                name: Oplaadmarge
+          - type: heading
+            icon: ''
+            heading: Configuratie (Ontladen)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
+                color: teal
+                icon: mdi:api
+                tap_action:
+                  action: more-info
+          - type: entities
+            entities:
+              - entity: input_number.zendure_2400_ac_max_ontlaadvermogen
+                name: Max. Ontlaadvermogen
+              - entity: input_number.zendure_2400_ac_ontladen_starten_bij
+                name: Ontladen Starten Bij
+              - entity: input_number.zendure_2400_ac_ontlaadmarge
+                name: Ontlaadmarge
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Configuratie (Optioneel)
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: input_text.afwijkende_p1_sensor
+              - entity: input_text.zendure_2400_ac_batterij_volgorde
+                name: Batterij Volgorde
+              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
+                name: Advies Instellingen Overnemen
+          - type: heading
+            icon: ''
+            heading: Configuratie (Dynamisch)
+            heading_style: title
+          - type: entities
+            entities:
+              - entity: input_text.dynamisch_nordpool_sensor
+              - entity: input_number.dynamisch_minimale_spread
+                name: Minimale Spread
+              - entity: input_boolean.dynamisch_15_minuten
+                name: 15 Minuten Tarieven Actief
+              - entity: input_boolean.dynamisch_tonen_op_dashboard
+      - type: grid
+        cards:
+          - type: heading
+            heading: Logboek (afgelopen 4 uur)
+            heading_style: title
+            badges:
+              - type: button
+                icon: mdi:information
+                tap_action:
+                  action: navigate
+                  navigation_path: /logbook
+                color: teal
+                text: Meer
+          - type: logbook
+            target:
+              entity_id:
+                - input_select.zendure_2400_ac_modus_selecteren
+            grid_options:
+              columns: 12
+              rows: 15
+            hours_to_show: 4
     cards: []
+    dense_section_placement: false
