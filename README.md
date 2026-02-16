@@ -70,7 +70,7 @@ homeassistant:
 
 </details>
 
-![Preview](Images/Instellingen-30012026.png) 
+![Preview](Images/Instellingen-160226.png) 
 
 | Configuratie | Info en advies|  
 |-|-|
