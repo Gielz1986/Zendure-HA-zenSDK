@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie April 2026 (20260216)
+description: Configuratie Versie April 2026 (20260217)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -237,6 +237,10 @@ actions:
               minutes: >-
                 {{ states('input_number.zendure_2400_ac_standby_vertraging') |
                 int(5) }}
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_status
+            state:
+              - Goed
         sequence:
           - action: rest_command.zendure_standby
             data:
