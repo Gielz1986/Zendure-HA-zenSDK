@@ -277,7 +277,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "April 2026 (20260216)"
+        state: "April 2026 (20260219)"
 
       - name: "P1 NOM Doel"
         unique_id: P1_NOM_Doel
@@ -469,6 +469,7 @@ template:
               0
             {% endif %}
 
+  - sensor:
       - name: "Dynamisch Spread Indicatie"
         unique_id: dynamisch_spread_indicatie
         icon: mdi:percent-box
@@ -550,6 +551,14 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
+          verschil_waarde: >
+            {% set g = state_attr('sensor.dynamisch_spread_indicatie','gemiddelde_goedkoop') %}
+            {% set d = state_attr('sensor.dynamisch_spread_indicatie','gemiddelde_duur') %}
+            {% if g != 'n.v.t.' and d != 'n.v.t.' %}
+             €{{ ('%.4f' % (d[1:] | float - g[1:] | float)) }}
+            {% else %}
+             n.v.t.
+            {% endif %}
 
       - name: "Dynamisch Spread Indicatie NOM"
         unique_id: dynamisch_spread_indicatie_NOM
@@ -618,6 +627,14 @@ template:
               €{{ ('%.4f' % (duur | map(attribute='value') | sum / duur | count)) }}
             {% else %}
               n.v.t.
+            {% endif %}
+          verschil_waarde: >
+            {% set g = state_attr('sensor.dynamisch_spread_indicatie_nom','gemiddelde_goedkoop') %}
+            {% set d = state_attr('sensor.dynamisch_spread_indicatie_nom','gemiddelde_duur') %}
+            {% if g != 'n.v.t.' and d != 'n.v.t.' %}
+             €{{ ('%.4f' % (d[1:] | float - g[1:] | float)) }}
+            {% else %}
+             n.v.t.
             {% endif %}
 
       - name: "Dynamisch Spread Indicatie Morgen"
@@ -701,6 +718,14 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
+          verschil_waarde: >
+            {% set g = state_attr('sensor.dynamisch_spread_indicatie_morgen','gemiddelde_goedkoop') %}
+            {% set d = state_attr('sensor.dynamisch_spread_indicatie_morgen','gemiddelde_duur') %}
+            {% if g != 'n.v.t.' and d != 'n.v.t.' %}
+             €{{ ('%.4f' % (d[1:] | float - g[1:] | float)) }}
+            {% else %}
+             n.v.t.
+            {% endif %}
 
       - name: "Dynamisch Spread Indicatie NOM Morgen"
         unique_id: dynamisch_spread_indicatie_nom_morgen
@@ -769,6 +794,14 @@ template:
               €{{ ('%.4f' % (duur | map(attribute='value') | sum / duur | count)) }}
             {% else %}
               n.v.t.
+            {% endif %}
+          verschil_waarde: >
+            {% set g = state_attr('sensor.dynamisch_spread_indicatie_nom_morgen','gemiddelde_goedkoop') %}
+            {% set d = state_attr('sensor.dynamisch_spread_indicatie_nom_morgen','gemiddelde_duur') %}
+            {% if g != 'n.v.t.' and d != 'n.v.t.' %}
+             €{{ ('%.4f' % (d[1:] | float - g[1:] | float)) }}
+            {% else %}
+             n.v.t.
             {% endif %}
 
       - name: "Dynamisch Duurste Periode"
