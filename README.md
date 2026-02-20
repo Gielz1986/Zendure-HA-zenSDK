@@ -109,7 +109,7 @@ homeassistant:
 |                        | Oplaadmarge                            | 0-250 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS)                          |
 |                        | Ontlaadmarge                           | 0-250 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is                    |
 |                        | Ontladen starten bij                   | 100-500 watt – hier geef geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge                          |
-|                        | Opladen starten bij                    | -100--1000 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge                    |
+|                        | Opladen starten bij                    | -100--1000 watt – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge                    |
 |                        | Advies Instellingen Overnemen          | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen.                 |
 | P1                     | Homewizard P1 Vermogen                 | Vermogen van je Homewizard P1                                |
 |                        | P1 Nul Import Actief                   | Geeft aan dat er op dit moment geen import nodig is          |
