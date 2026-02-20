@@ -288,7 +288,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "April 2026 (20260219)"
+        state: "April 2026 (20260220)"
 
       - name: "P1 NOM Doel"
         unique_id: P1_NOM_Doel
