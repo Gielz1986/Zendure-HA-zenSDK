@@ -239,4 +239,4 @@ Wanneer je ook het Dynamisch Nordpool gedeelte in gebruik gaat nemen moet je voo
 
 Vervolgens kunnen de modussen **Dynamisch NOM**, **Dynamisch NOM (Duur)** **Dynamisch Handelen + NOM** en **Dynamisch Handelen** gebruikt worden. Deze modussen zijn ideaal in een periode met weinig zon maar wel met veel wind. Laad bijvoorbeeld in de winter de batterij een aantal uren goedkoop op iedere dag wanneer de spread meer dan 25% is.
 
-![Preview](Images/Nordpool.png) 
+![Preview](Images/Nordpool-20022026.png) 
