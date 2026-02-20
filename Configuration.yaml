@@ -1626,8 +1626,8 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen Aansturing"
         value_template: >
-          {% set opladen = value_json['properties']['outputPackPower'] | int %}
-          {% set ontladen = - (value_json['properties']['packInputPower'] | int) %}
+          {% set opladen = value_json['properties']['gridInputPower'] | int %}
+          {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
           {% if opladen != 0 %}
             {{ opladen }}
           {% else %}
@@ -1709,8 +1709,8 @@ rest:
       - name: "Zendure 2400 AC Modus"
         value_template: >
           {% set ac_mode = value_json['properties']['acMode'] | int %}
-          {% set input_power = value_json['properties']['outputPackPower'] | int %}
-          {% set output_power = value_json['properties']['packInputPower'] | int %}
+          {% set input_power = value_json['properties']['gridInputPower'] | int %}
+          {% set output_power = value_json['properties']['outputHomePower'] | int %}
 
           {% if ac_mode == 1 and input_power > 0 %}
            Opladen
