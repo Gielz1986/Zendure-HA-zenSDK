@@ -91,7 +91,7 @@ homeassistant:
 
 
 *Het bestand `Dashboard` bevat het onderstaande plug-n-play dashboard.
-![Preview](Images/Dashboard-17022026.png) 
+![Preview](Images/Dashboard-20022026.png) 
 
 <details>
   <summary>🖱️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
