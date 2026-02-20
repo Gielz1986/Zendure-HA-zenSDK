@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie April 2026 (20260217)
+description: Configuratie Versie April 2026 (20260220)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -553,19 +553,29 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: state
-            entity_id: input_boolean.dynamisch_laden_loopt
-            state:
-              - "on"
-            for:
-              hours: 0
-              minutes: 0
-              seconds: 15
           - condition: template
             value_template: >-
               {{ states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') |
               float != states('input_number.zendure_2400_ac_max_oplaadvermogen')
               | float }}
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "on"
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Snel opladen
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 10
         sequence:
           - action: rest_command.zendure_snel_laden
             data:
@@ -576,30 +586,40 @@ actions:
           - action: logbook.log
             data:
               message: >
-                💲 Dynamisch oplaadvermogen gecorrigeerd naar {{
+                ⚙️ Huidig oplaadvermogen gecorrigeerd naar {{
                 states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Dynamisch oplaadvermogen corrigeren tijdens oplaadcyclus
+        alias: Huidig oplaadvermogen corrigeren
       - conditions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: state
-            entity_id: input_boolean.dynamisch_ontladen_loopt
-            state:
-              - "on"
-            for:
-              hours: 0
-              minutes: 0
-              seconds: 15
           - condition: template
             value_template: >-
               {{ states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') |
               float !=
               states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float
               }}
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "on"
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Snel ontladen
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 10
         sequence:
           - action: rest_command.zendure_snel_ontladen
             data:
@@ -610,12 +630,12 @@ actions:
           - action: logbook.log
             data:
               message: >
-                💲 Dynamisch ontlaadvermogen gecorrigeerd naar {{
+                ⚙️ Huidig ontlaadvermogen gecorrigeerd naar {{
                 states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
-        alias: Dynamisch ontlaadvermogen corrigeren tijdens ontlaadcyclus
+        alias: Huidig ontlaadvermogen corrigeren
   - alias: NOM Aansturing
     choose:
       - conditions:
@@ -642,7 +662,7 @@ actions:
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: -30
-            below: 75
+            below: 30
           - alias: Minstens 2 automatiseringen na opladen pas activeren
             condition: or
             conditions:
