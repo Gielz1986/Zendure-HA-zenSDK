@@ -39,11 +39,11 @@ input_boolean:
 
   dynamisch_tonen_op_dashboard:
     name: Dynamisch Tonen Op Dashboard
-    icon: mdi:battery-check
+    icon: mdi:cash
 
   help_tonen_op_dashboard:
     name: Help Tonen Op Dashboard
-    icon: mdi:battery-check
+    icon: mdi:information-outline
 
 input_text:
   zendure_2400_ac_batterij_volgorde:
@@ -264,6 +264,20 @@ sensor:
     round: 2
     method: trapezoidal
 
+  - platform: rest
+    name: "GitHub Zendure-HA-zenSDK (Gielz1986)"
+    unique_id: github_zendure_ha_zensdk_gielz1986
+    resource: "https://api.github.com/repos/Gielz1986/Zendure-HA-zenSDK/releases/latest"
+    headers:
+      User-Agent: "HomeAssistant"
+    scan_interval: 3600
+    json_attributes:
+      - tag_name
+      - name
+      - published_at
+      - body
+    value_template: "OK"
+
 template:
   - binary_sensor:
       - name: "P1 Nul Import Actief"
@@ -282,6 +296,33 @@ template:
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
         state: "April 2026 (20260222)"
+
+      - name: "Zendure-HA-Zensdk Github Releasecheck"
+        unique_id: zendure_ha_zensdk_github_releasecheck
+        state: >
+          {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie') | regex_findall('\\((\\d{8})\\)') | first %}
+          {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name') | regex_replace('v','') %}
+          {% if config_date and github_date %}
+            {% if config_date > github_date %}
+              Versie recenter dan GitHub
+            {% elif config_date < github_date %}
+              Nieuwere release op GitHub
+            {% else %}
+              Up-to-date
+            {% endif %}
+          {% else %}
+            Onbekend
+          {% endif %}
+        icon: >
+         {% if this.state == 'Up-to-date' %}
+          mdi:emoticon-happy-outline
+         {% elif this.state == 'Nieuwere release op GitHub' %}
+          mdi:emoticon-sad-outline
+         {% elif this.state == 'Versie recenter dan GitHub' %}
+          mdi:test-tube
+         {% else %}
+          mdi:emoticon-sad-outline
+         {% endif %}
 
       - name: "P1 NOM Doel"
         unique_id: P1_NOM_Doel
