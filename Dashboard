@@ -1753,45 +1753,22 @@ views:
             icon: ''
             heading: GitHub
             heading_style: title
-            badges:
-              - type: entity
-                show_state: true
-                show_icon: true
-                entity: sensor.zendure_2400_ac_configuratie_versie
-                color: '#01a180'
-                tap_action:
-                  action: more-info
-                name: In gebruik
-                state_content:
-                  - name
-                  - state
+            badges: []
           - type: entities
             entities:
+              - entity: sensor.zendure_2400_ac_configuratie_versie
+                name: Versie
               - entity: sensor.zendure_ha_zensdk_github_releasecheck
                 name: Releasecheck
           - type: markdown
             content: >
-              [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
-
-
-              [![Last
-              Commit](https://img.shields.io/github/last-commit/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/commits/main)
-
-
+              &nbsp;&nbsp;[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases) 
               [![Open
               Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
             grid_options:
-              columns: 7
+              columns: 12
               rows: auto
-          - type: markdown
-            content: >-
-              <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK"
-              target="_blank">
-                <ha-qr-code data="https://github.com/Gielz1986/Zendure-HA-zenSDK" width="120"></ha-qr-code>
-              </a>
-            grid_options:
-              columns: 5
-              rows: auto
+            text_only: true
       - type: grid
         cards:
           - type: heading
