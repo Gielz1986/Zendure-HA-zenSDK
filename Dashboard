@@ -1102,7 +1102,7 @@ views:
                 name: Maximale Laadpercentage
           - type: heading
             icon: ''
-            heading: Omvormer temperatuur
+            heading: Omvormer Temperatuur
             heading_style: title
             badges:
               - type: entity
