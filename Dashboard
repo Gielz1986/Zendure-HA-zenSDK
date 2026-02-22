@@ -1180,7 +1180,7 @@ views:
               annotations:
                 yaxis:
                   - 'y': 60
-                    borderColor: '#c53b2c'
+                    borderColor: '#01a180'
                     strokeDashArray: 2
               yaxis:
                 - decimalsInFloat: 0
