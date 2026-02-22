@@ -1599,6 +1599,11 @@ views:
               geen actieve taak heeft, gaat hij na de ingestelde periode
               volledig in standby. Het verbruik bedraagt dan ongeveer 0,2 kWh
               per dag.
+
+
+              Wil je niet te veel gedoe neem dan in eerste instantie de advies
+              instellingen voor het gedrag in één keer over. Pas het daarna na
+              eigen smaak aan.
             text_only: true
             visibility:
               - condition: state
@@ -1610,6 +1615,8 @@ views:
               - entity: input_text.homewizard_p1_ip_adres
               - entity: input_number.zendure_2400_ac_standby_vertraging
                 name: Standby Vertraging
+              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
+                name: Advies Instellingen Overnemen
           - type: heading
             icon: ''
             heading: Configuratie (Opladen)
@@ -1707,13 +1714,26 @@ views:
               - entity: input_text.afwijkende_p1_sensor
               - entity: input_text.zendure_2400_ac_batterij_volgorde
                 name: Batterij Volgorde
-              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
-                name: Advies Instellingen Overnemen
           - type: heading
             icon: ''
             heading: Configuratie (Dynamisch)
             heading_style: title
             badges: []
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Heb je een
+              dynamisch contract dan kun je hier de Nordpool HACS sensor
+              invullen en aangeven wat de minimale spread moet zijn om gebruik
+              te maken van het laden en ontladen op lage en hoge tarieven.
+
+
+              Heb je een 15 minuten contract vink dit dan aan zodat de grafieken
+              en de prijzen goed gezet worden.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_text.dynamisch_nordpool_sensor
@@ -1731,7 +1751,7 @@ views:
               - entity: input_boolean.dynamisch_tonen_op_dashboard
           - type: heading
             icon: ''
-            heading: Github
+            heading: GitHub
             heading_style: title
             badges:
               - type: entity
@@ -1745,6 +1765,10 @@ views:
                 state_content:
                   - name
                   - state
+          - type: entities
+            entities:
+              - entity: sensor.zendure_ha_zensdk_github_releasecheck
+                name: Releasecheck
           - type: markdown
             content: >
               [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
