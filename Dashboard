@@ -14,14 +14,14 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_vermogen_aansturing
-                color: teal
                 tap_action:
                   action: more-info
+                color: '#01a180'
               - type: entity
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_laadpercentage
-                color: teal
+                color: '#01a180'
                 tap_action:
                   action: more-info
               - type: entity
@@ -29,7 +29,7 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
                 icon: mdi:swap-vertical-bold
-                color: teal
+                color: '#01a180'
                 tap_action:
                   action: more-info
             heading: Batterij
@@ -522,7 +522,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.p1_nul_import_duur_vandaag
-                color: white
+                color: '#01a180'
                 icon: mdi:leaf
                 tap_action:
                   action: more-info
@@ -600,7 +600,7 @@ views:
                 state_content:
                   - name
                   - state
-                color: teal
+                color: '#01a180'
                 icon: mdi:transmission-tower
                 tap_action:
                   action: more-info
@@ -635,7 +635,7 @@ views:
                 state_content:
                   - name
                   - state
-                color: teal
+                color: '#01a180'
                 icon: mdi:percent
                 tap_action:
                   action: more-info
@@ -713,7 +713,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.dynamisch_nordpool
-                color: white
+                color: '#01a180'
                 tap_action:
                   action: more-info
               - type: entity
@@ -721,7 +721,7 @@ views:
                 show_icon: true
                 entity: sensor.dynamisch_goedkoopste_periode
                 icon: mdi:arrow-down-bold
-                color: green
+                color: '#01a180'
                 tap_action:
                   action: more-info
                 visibility:
@@ -734,7 +734,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.dynamisch_duurste_periode
-                color: red
+                color: '#c53b2c'
                 icon: mdi:arrow-up-bold
                 tap_action:
                   action: more-info
@@ -1074,8 +1074,6 @@ views:
                 name: Error
               - entity: sensor.zendure_2400_ac_soc_status
                 name: SOC Status
-              - entity: sensor.zendure_2400_ac_omvormer_temperatuur
-                name: Omvormer Temperatuur
               - entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
                 name: Omvormer Max. Oplaadvermogen
               - entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
@@ -1093,6 +1091,18 @@ views:
             icon: ''
             heading: Relais Schakelingen
             heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
+                color: '#01a180'
+                name: Vandaag
+                state_content:
+                  - name
+                  - state
+                tap_action:
+                  action: more-info
           - type: custom:apexcharts-card
             header:
               show: true
@@ -1137,7 +1147,7 @@ views:
                   color: '#616269'
             series:
               - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
-                name: Nul import
+                name: Relais Schakelingen
                 statistics:
                   period: day
                   type: change
@@ -1147,10 +1157,72 @@ views:
                 show:
                   in_header: false
                   extremas: max
-          - type: entities
-            entities:
-              - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
-                name: Relais Schakelingen Vandaag
+          - type: heading
+            icon: ''
+            heading: Omvormer temperatuur
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_omvormer_temperatuur
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: ''
+            graph_span: 7day
+            stacked: true
+            cache: false
+            apex_config:
+              annotations:
+                yaxis:
+                  - 'y': 60
+                    borderColor: '#c53b2c'
+                    strokeDashArray: 2
+              yaxis:
+                - decimalsInFloat: 0
+                  max: 100
+                  labels:
+                    show: true
+                    style:
+                      colors: '#7b7c83'
+              tooltip:
+                x:
+                  format: dd-MM (HH:mm)
+                  show: false
+              grid:
+                show: true
+                borderColor: '#332f2c'
+                strokeDashArray: 0
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: '#616269'
+            series:
+              - entity: sensor.zendure_2400_ac_omvormer_temperatuur
+                name: Omvormer Temperatuur
+                stroke_width: 2
+                opacity: 0.2
+                curve: smooth
+                extend_to: now
+                statistics:
+                  period: hour
+                  type: max
+                  align: start
+                type: area
+                color: '#e4e4e7'
+                show:
+                  in_header: false
       - type: grid
         cards:
           - type: heading
@@ -1458,7 +1530,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_configuratie_versie
-                color: teal
+                color: '#01a180'
                 tap_action:
                   action: more-info
           - type: entities
@@ -1477,7 +1549,7 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
                 icon: mdi:api
-                color: teal
+                color: '#01a180'
                 tap_action:
                   action: more-info
           - type: entities
@@ -1497,7 +1569,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
-                color: teal
+                color: '#01a180'
                 icon: mdi:api
                 tap_action:
                   action: more-info
@@ -1546,7 +1618,7 @@ views:
                 tap_action:
                   action: navigate
                   navigation_path: /logbook
-                color: teal
+                color: '#01a180'
                 text: Meer
           - type: logbook
             target:
