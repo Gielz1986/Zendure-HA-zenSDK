@@ -532,11 +532,12 @@ views:
                   - state
           - type: markdown
             content: >-
-              Hier zie je het aantal nul-importuren per dag van deze maand en de
-              vorige maand. Dit overzicht laat zien hoe goed je dagen zijn
-              verlopen met betrekking tot het niet importeren van stroom. Elke
-              seconde dat het P1-vermogen op 0 of lager staat, wordt meegeteld
-              in het totaal.
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je het
+              aantal nul-importuren per dag van deze maand en de vorige maand.
+              Dit overzicht laat zien hoe goed je dagen zijn verlopen met
+              betrekking tot het niet importeren van stroom. Elke seconde dat
+              het P1-vermogen op 0 of lager staat, wordt meegeteld in het
+              totaal.
             text_only: true
             visibility:
               - condition: state
@@ -1113,9 +1114,10 @@ views:
                   action: more-info
           - type: markdown
             content: >-
-              De temperatuur van de omvormer over de afgelopen 7 dagen. De
-              groene lijn geeft de grens aan waarop de omvormer zijn vermogen
-              begint terug te schroeven. Dit gebeurt vanaf 60 °C.
+              <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
+              de omvormer over de afgelopen 7 dagen. De groene lijn geeft de
+              grens aan waarop de omvormer zijn vermogen begint terug te
+              schroeven. Dit gebeurt vanaf 60 °C.
             text_only: true
             visibility:
               - condition: state
@@ -1193,10 +1195,11 @@ views:
                   action: more-info
           - type: markdown
             content: >-
-              Het aantal relaisschakelingen per dag van deze maand en de vorige
-              maand. De groene lijn geeft de grens aan waarop het aantal
-              schakelingen als verhoogd wordt beschouwd. Alles onder de 100
-              schakelingen per dag is normaal op een deels bewolkte dag.
+              <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
+              relaisschakelingen per dag van deze maand en de vorige maand. De
+              groene lijn geeft de grens aan waarop het aantal schakelingen als
+              verhoogd wordt beschouwd. Alles onder de 100 schakelingen per dag
+              is normaal op een deels bewolkte dag.
             text_only: true
             visibility:
               - condition: state
@@ -1399,10 +1402,11 @@ views:
             badges: []
           - type: markdown
             content: >-
-              Hier zie je de efficiëntie van het laden van vandaag. De meting
-              vergelijkt het vermogen aan de DC-zijde met het vermogen aan de
-              AC-zijde. Gebruik deze waarde als indicatie om te beoordelen hoe
-              efficiënt er wordt geladen.
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je de
+              efficiëntie van het laden van vandaag. De meting vergelijkt het
+              vermogen aan de DC-zijde met het vermogen aan de AC-zijde. Gebruik
+              deze waarde als indicatie om te beoordelen hoe efficiënt er wordt
+              geladen.
             text_only: true
             visibility:
               - condition: state
@@ -1487,10 +1491,11 @@ views:
             heading_style: title
           - type: markdown
             content: >-
-              Hier zie je de efficiëntie van het ontladen van vandaag. De meting
-              vergelijkt het vermogen aan de DC-zijde met het vermogen aan de
-              AC-zijde. Gebruik deze waarde als indicatie om te beoordelen hoe
-              efficiënt er wordt ontladen.
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je de
+              efficiëntie van het ontladen van vandaag. De meting vergelijkt het
+              vermogen aan de DC-zijde met het vermogen aan de AC-zijde. Gebruik
+              deze waarde als indicatie om te beoordelen hoe efficiënt er wordt
+              ontladen.
             text_only: true
             visibility:
               - condition: state
@@ -1581,14 +1586,24 @@ views:
             icon: ''
             heading: Configuratie (Basis)
             heading_style: title
-            badges:
-              - type: entity
-                show_state: true
-                show_icon: true
-                entity: sensor.zendure_2400_ac_configuratie_versie
-                color: '#01a180'
-                tap_action:
-                  action: more-info
+            badges: []
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Vul hier het
+              IP-adres van je Zendure en van je HomeWizard P1 (lokale API moet
+              aanstaan) in. Gebruik je een afwijkende P1-sensor, dan kun je deze
+              instellen via **input_text.afwijkende_p1_sensor**.
+
+
+              Hier stel je ook de **standby vertraging** in. Wanneer de Zendure
+              geen actieve taak heeft, gaat hij na de ingestelde periode
+              volledig in standby. Het verbruik bedraagt dan ongeveer 0,2 kWh
+              per dag.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_text.zendure_2400_ac_ip_adres
@@ -1608,6 +1623,18 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
+              maximaal oplaadvermogen van je Zendure in en maak de keuze wanneer
+              jij wilt dat hij tijdens de **Nul op de meter** modus gaat starten
+              met opladen en hoeveel marge hij moet houden tussen terugleveren
+              en nul op de meter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_number.zendure_2400_ac_max_oplaadvermogen
@@ -1629,6 +1656,18 @@ views:
                 icon: mdi:api
                 tap_action:
                   action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
+              maximaal ontlaadvermogen van je Zendure in en maak de keuze
+              wanneer jij wilt dat hij tijdens de **Nul op de meter** modus gaat
+              starten met ontladen en hoeveel extra hij moet ontladen dan nul op
+              de meter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_number.zendure_2400_ac_max_ontlaadvermogen
@@ -1643,6 +1682,26 @@ views:
             icon: ''
             heading: Configuratie (Optioneel)
             heading_style: title
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Maak je geen
+              gebruik van een Homewizard P1 maar heb je wel een P1/CT sensor
+              waarbij -watt teruglevering is en +watt import per seconden is vul
+              deze dan hier in.
+
+
+              Ook kun je hier een afwijkende batterij volgorde instellen.
+              Hiermee bepaal je zelf een afwijkende volgorde van de batterijen.
+              De juiste volgorde bepaal je mede aan de hand van
+              **sensor.zendure_2400_ac_batterij_serienummers** en de sticker op
+              de batterij(en). Op deze manier zullen de batterijtemperaturen en
+              het laadpercentage de juiste volgorde hanteren zoals die van de
+              batterij(en) in de stapel.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_text.afwijkende_p1_sensor
@@ -1670,6 +1729,45 @@ views:
             entities:
               - entity: input_boolean.help_tonen_op_dashboard
               - entity: input_boolean.dynamisch_tonen_op_dashboard
+          - type: heading
+            icon: ''
+            heading: Github
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_configuratie_versie
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+                name: In gebruik
+                state_content:
+                  - name
+                  - state
+          - type: markdown
+            content: >
+              [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
+
+
+              [![Last
+              Commit](https://img.shields.io/github/last-commit/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/commits/main)
+
+
+              [![Open
+              Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+            grid_options:
+              columns: 7
+              rows: auto
+          - type: markdown
+            content: >-
+              <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK"
+              target="_blank">
+                <ha-qr-code data="https://github.com/Gielz1986/Zendure-HA-zenSDK" width="120"></ha-qr-code>
+              </a>
+            grid_options:
+              columns: 5
+              rows: auto
       - type: grid
         cards:
           - type: heading
