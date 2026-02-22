@@ -530,6 +530,18 @@ views:
                 state_content:
                   - name
                   - state
+          - type: markdown
+            content: >-
+              Hier zie je het aantal nul-importuren per dag van deze maand en de
+              vorige maand. Dit overzicht laat zien hoe goed je dagen zijn
+              verlopen met betrekking tot het niet importeren van stroom. Elke
+              seconde dat het P1-vermogen op 0 of lager staat, wordt meegeteld
+              in het totaal.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -1089,76 +1101,6 @@ views:
                 name: Maximale Laadpercentage
           - type: heading
             icon: ''
-            heading: Relais Schakelingen
-            heading_style: title
-            badges:
-              - type: entity
-                show_state: true
-                show_icon: true
-                entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
-                color: '#01a180'
-                name: Vandaag
-                state_content:
-                  - name
-                  - state
-                tap_action:
-                  action: more-info
-          - type: custom:apexcharts-card
-            header:
-              show: true
-              title: ''
-            graph_span: 2month
-            span:
-              start: month
-              offset: '-1month'
-            cache: false
-            apex_config:
-              annotations:
-                yaxis:
-                  - 'y': 100
-                    borderColor: '#01a180'
-                    strokeDashArray: 2
-              yaxis:
-                - decimalsInFloat: 0
-                  min: 0
-                  tickAmount: 4
-                  labels:
-                    show: true
-                    style:
-                      colors: '#7b7c83'
-              tooltip:
-                x:
-                  format: d/MM
-                  show: false
-              grid:
-                show: true
-                borderColor: '#332f2c'
-                strokeDashArray: 0
-              chart:
-                height: 140px
-              legend:
-                show: false
-              xaxis:
-                labels:
-                  show: false
-                axisTicks:
-                  show: false
-                axisBorder:
-                  color: '#616269'
-            series:
-              - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
-                name: Relais Schakelingen
-                statistics:
-                  period: day
-                  type: change
-                  align: start
-                type: column
-                color: '#e0e0e3'
-                show:
-                  in_header: false
-                  extremas: max
-          - type: heading
-            icon: ''
             heading: Omvormer temperatuur
             heading_style: title
             badges:
@@ -1169,6 +1111,16 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: more-info
+          - type: markdown
+            content: >-
+              De temperatuur van de omvormer over de afgelopen 7 dagen. De
+              groene lijn geeft de grens aan waarop de omvormer zijn vermogen
+              begint terug te schroeven. Dit gebeurt vanaf 60 °C.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: custom:apexcharts-card
             header:
               show: true
@@ -1223,6 +1175,87 @@ views:
                 color: '#e4e4e7'
                 show:
                   in_header: false
+          - type: heading
+            icon: ''
+            heading: Relais Schakelingen
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
+                color: '#01a180'
+                name: Vandaag
+                state_content:
+                  - name
+                  - state
+                tap_action:
+                  action: more-info
+          - type: markdown
+            content: >-
+              Het aantal relaisschakelingen per dag van deze maand en de vorige
+              maand. De groene lijn geeft de grens aan waarop het aantal
+              schakelingen als verhoogd wordt beschouwd. Alles onder de 100
+              schakelingen per dag is normaal op een deels bewolkte dag.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: ''
+            graph_span: 2month
+            span:
+              start: month
+              offset: '-1month'
+            cache: false
+            apex_config:
+              annotations:
+                yaxis:
+                  - 'y': 100
+                    borderColor: '#01a180'
+                    strokeDashArray: 2
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: '#7b7c83'
+              tooltip:
+                x:
+                  format: d/MM
+                  show: false
+              grid:
+                show: true
+                borderColor: '#332f2c'
+                strokeDashArray: 0
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: '#616269'
+            series:
+              - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
+                name: Relais Schakelingen
+                statistics:
+                  period: day
+                  type: change
+                  align: start
+                type: column
+                color: '#e0e0e3'
+                show:
+                  in_header: false
+                  extremas: max
       - type: grid
         cards:
           - type: heading
@@ -1363,6 +1396,18 @@ views:
             icon: ''
             heading: Efficiëntie Import (Indicatief)
             heading_style: title
+            badges: []
+          - type: markdown
+            content: >-
+              Hier zie je de efficiëntie van het laden van vandaag. De meting
+              vergelijkt het vermogen aan de DC-zijde met het vermogen aan de
+              AC-zijde. Gebruik deze waarde als indicatie om te beoordelen hoe
+              efficiënt er wordt geladen.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: custom:apexcharts-card
             header:
               show: true
@@ -1440,6 +1485,17 @@ views:
             icon: ''
             heading: Efficiëntie Export (Indicatief)
             heading_style: title
+          - type: markdown
+            content: >-
+              Hier zie je de efficiëntie van het ontladen van vandaag. De meting
+              vergelijkt het vermogen aan de DC-zijde met het vermogen aan de
+              AC-zijde. Gebruik deze waarde als indicatie om te beoordelen hoe
+              efficiënt er wordt ontladen.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: custom:apexcharts-card
             header:
               show: true
@@ -1606,6 +1662,13 @@ views:
                 name: Minimale Spread
               - entity: input_boolean.dynamisch_15_minuten
                 name: 15 Minuten Tarieven Actief
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Configuratie (Dashboard)
+          - type: entities
+            entities:
+              - entity: input_boolean.help_tonen_op_dashboard
               - entity: input_boolean.dynamisch_tonen_op_dashboard
       - type: grid
         cards:
