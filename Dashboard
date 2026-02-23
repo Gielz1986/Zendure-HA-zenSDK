@@ -1753,7 +1753,14 @@ views:
             icon: ''
             heading: GitHub
             heading_style: title
-            badges: []
+            badges:
+              - type: button
+                icon: mdi:information
+                text: Toon laatste releasenotes
+                color: '#01a180'
+                tap_action:
+                  action: navigate
+                  navigation_path: /dashboard-zendure/releasenotes
           - type: entities
             entities:
               - entity: sensor.zendure_2400_ac_configuratie_versie
@@ -1792,3 +1799,21 @@ views:
             hours_to_show: 4
     cards: []
     dense_section_placement: false
+  - type: sections
+    max_columns: 4
+    subview: true
+    path: releasenotes
+    title: Releasenotes
+    icon: mdi:github
+    sections:
+      - type: grid
+        cards:
+          - type: markdown
+            content: >
+              {{ state_attr('sensor.github_zendure_ha_zensdk_gielz1986',
+              'body')}}"
+            text_only: true
+            grid_options:
+              columns: 21
+              rows: auto
+        column_span: 2
