@@ -1,6 +1,6 @@
 views:
   - type: sections
-    max_columns: 3
+    max_columns: 4
     title: Zendure
     path: zendure
     sections:
@@ -1751,7 +1751,7 @@ views:
               - entity: input_boolean.dynamisch_tonen_op_dashboard
           - type: heading
             icon: ''
-            heading: GitHub
+            heading: Versiebeheer
             heading_style: title
             badges:
               - type: button
@@ -1764,7 +1764,7 @@ views:
           - type: entities
             entities:
               - entity: sensor.zendure_2400_ac_configuratie_versie
-                name: Versie
+                name: Versie in gebruik
               - entity: sensor.zendure_ha_zensdk_github_releasecheck
                 name: Releasecheck
           - type: markdown
