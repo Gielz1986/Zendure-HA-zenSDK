@@ -233,11 +233,12 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 ## 🔃 (Optioneel) Plug-N-Play Dashboard
 Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
 
-1. Maak een nieuw leeg dashboard aan.
-2. Open het nieuwe dashboard.
-3. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
-4. Plak de YAML-code `(zie dashboard bestand)`.
-5. Sla op en het dashboard is volledig bruikbaar.
+1. Voor dit dashboard is Apexcharts vereist; https://github.com/RomRider/apexcharts-card.
+2. Maak een nieuw leeg dashboard aan.
+3. Open het nieuwe dashboard.
+4. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
+5. Plak de YAML-code `(zie dashboard bestand)`.
+6. Sla op en het dashboard is volledig bruikbaar.
 
 ![Preview](Images/Plug-N-Play-Dashboard.gif) 
 
