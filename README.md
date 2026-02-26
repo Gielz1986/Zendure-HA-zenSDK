@@ -95,7 +95,7 @@ homeassistant:
 | `dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |  
 
 
-![Preview](Images/Dashboard-20022026.png) 
+![Preview](Images/Dashboard-26022026.png) 
 
 <details>
   <summary>🖱️ <strong>Klik hier</strong> 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
