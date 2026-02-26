@@ -37,7 +37,8 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 <details>
   <summary>🖱️ Klik hier 🖱️ voor de configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
 
-<br>
+
+---
 
 1. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van Github in de map packages van Home Assistant.
 2. Maak nu een **backup** van je `configuration.yaml`.
@@ -53,21 +54,22 @@ homeassistant:
 5. Herstart Home Assistant.
 6. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
-<br>
+---
+
 
 </details>
 
 <details>
   <summary>🖱️ Klik hier 🖱️ voor de klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
   
-<br>
+---
   
 1. Maak eerst een **backup** van je `configuration.yaml`.
 2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
 3. Herstart Home Assistant.
 4. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
-<br>
+---
 
 </details>
 
