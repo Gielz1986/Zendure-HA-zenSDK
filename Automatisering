@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie April 2026 (20260222)
+description: Configuratie Versie April 2026 (20260226)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -436,7 +436,7 @@ actions:
             target:
               entity_id: input_number.zendure_2400_ac_opladen_starten_bij
             data:
-              value: -100
+              value: -300
           - action: input_number.set_value
             metadata: {}
             target:
@@ -447,7 +447,7 @@ actions:
             data:
               message: >-
                 ⚙️ Advies instellingen overnemen — Ontladen starten bij 100 watt
-                verbruik en opladen starten bij -100 watt teruglevering — 
+                verbruik en opladen starten bij -300 watt teruglevering — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
           - action: input_number.set_value
