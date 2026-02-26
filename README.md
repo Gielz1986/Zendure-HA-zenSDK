@@ -6,9 +6,9 @@
 #  Zendure Home Assistant
 **Om in 2️⃣ stappen je batterij lokaal werkend te krijgen in Home Assistant**.
 
-Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 AC, 2400 AC+ en 2400 AC Pro / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 Pro en Plus (geen aangesloten zonnepanelen) zonder gebruik te maken van integraties maar werkt met **één automatisering**. Voor de gene die graag de batterij 100% lokaal in eigen beheer wilt zonder updates van derden en netjes in Home Assistant. Inmiddels zijn er **11 voorgeprogrammeerde modussen** waarin de batterij kan leven, werken en shinen ✨ Voor elke smaak wat wils — van rustig sparen tot agressief knallen ⚡ De absolute publieksfavoriet? Natuurlijk de **Nul op de Meter-modus.** Want wie wil er nou niet elke maand die energierekening high-fiven? 😎
+Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus) **(zonder aangesloten zonnepanelen)** zonder gebruik te maken van integraties maar werkt met **één automatisering**. Voor de gene die graag de batterij 100% lokaal in eigen beheer wilt zonder updates van derden en netjes in Home Assistant. Inmiddels zijn er **11 voorgeprogrammeerde modussen** waarin de batterij kan leven, werken en shinen ✨ Voor elke smaak wat wils — van rustig sparen tot agressief knallen ⚡ De absolute publieksfavoriet? Natuurlijk de **Nul op de Meter-modus.** Want wie wil er nou niet elke maand die energierekening high-fiven? 😎
 
-Heb je de smaak te pakken en meerdere batterijen staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy), waarbij Node-RED  alles keurig samen laat werken met deze automatisering.
+Heb je de smaak te pakken en meerdere batterijen staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
 
 <br>
 
@@ -21,13 +21,10 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
 
 ## 1️⃣ Entiteiten beschikbaar maken
 
-> ⚠️ Let op: Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-
-Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA). Hiervoor heb ik een  plug-n-play Configuration.yaml / package gemaakt.
 #### ℹ️ Benodigde hardware
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconden levert waarbij +watt afname is en -watt teruglevering).
-- één Zendure Solarflow 2400 AC, 2400 AC+ of 2400 AC Pro / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 Pro of Plus **(zonder aangesloten zonnepanelen)**.
+- één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus) **(zonder aangesloten zonnepanelen)**.
 - Of twee dezelfde devices in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
 ---
@@ -40,9 +37,10 @@ Daarna gaan wij alles aanmaken voor de RESTful integratie (zit standaard in HA).
 
 ---
 
-1. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van Github in de map packages van Home Assistant.
-2. Maak nu een **backup** van je `configuration.yaml`.
-3. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
+1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
+2. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van Github in de map packages van Home Assistant.
+3. Maak nu een **backup** van je `configuration.yaml`.
+4. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
 
 ```
 homeassistant:
@@ -63,11 +61,12 @@ homeassistant:
   <summary>🖱️ Klik hier 🖱️ voor de klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
   
 ---
-  
-1. Maak eerst een **backup** van je `configuration.yaml`.
-2. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
-3. Herstart Home Assistant.
-4. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
+
+1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
+2. Maak eerst een **backup** van je `configuration.yaml`.
+3. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
+4. Herstart Home Assistant.
+5. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
 ---
 
