@@ -82,7 +82,7 @@ homeassistant:
 | `zendure_2400_ac_advies_instellingen_overnemen` | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen. | 
 | **Configuratie (Opladen)** |**Informatie**|  
 | `zendure_2400_ac_max_oplaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |  
-| `zendure_2400_ac_opladen_starten_bij` | **(Instellingsadvies: -100 watt) -100--1000 watt** – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge  | 
+| `zendure_2400_ac_opladen_starten_bij` | **(Instellingsadvies: -300 watt) -100--1000 watt** – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge  | 
 | `zendure_2400_ac_oplaadmarge` | **(Instellingsadvies: 50 watt) 0-250 watt** – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS)  | 
 | **Configuratie (Ontladen)** |**Informatie**|  
 | `zendure_2400_ac_max_ontlaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |  
