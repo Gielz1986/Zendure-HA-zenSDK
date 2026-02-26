@@ -45,7 +45,8 @@ homeassistant:
   packages: !include_dir_named packages
 ```
 
-![Preview](Images/packages2.png) 
+| ![Preview](Images/packages2.png) |
+|-----------------------------------|
 
 5. Herstart Home Assistant.
 6. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
