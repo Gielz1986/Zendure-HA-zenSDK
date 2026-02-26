@@ -39,35 +39,32 @@ views:
               states('input_select.zendure_2400_ac_modus_selecteren') %}
 
               {% if modus == 'Standby' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Zet volledig in standby en
-              **Opslagmodus** zal naar **Opslaan in Flash** gaan. Hierdoor is
-              het ook 0 watt op een KWH MID Meter.   
+              alert-type="info">Helptekst</ha-alert> Zet de batterij volledig in
+              standby en **Opslagmodus** zal naar **Opslaan in Flash** gaan.
+              Hierdoor is het ook 0 watt op een KWH MID Meter.   
 
 
-              Doel: 100% standby, de batterij gebruikt nog 0,2 kWh per dag.
+              100% standby, de batterij gebruikt nog 0,2 kWh per dag.
 
               {% elif modus == 'Handmatig' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> Via **Handmatig Vermogen**
               kun je zelf aangeven wat de batterij doet. -watt voor ontladen en
               +watt voor opladen.   
 
-
-              Doel: Voor als je zelf aan de knoppen wilt draaien.
-
               {% elif modus == 'Nul op de meter' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> Constant nul op de meter
               behouden (-xx watt bij opladen en -xx watt bij ontladen). Je kunt
               het opladen finetunen via **Oplaadmarge ⚙️** waarbij je aangeeft
-              hoeveel buffer/marge hij moet behouden tot 0 watt. Het ontladen
-              kun je finetunen via **Ontlaadmarge ⚙️** waarbij je aangeeft
-              hoeveel extra watt hij moet ontladen boven op nul op de meter.
-              Beide zijn handig om vaste kleine schommelingen in je huisverbruik
-              standaard te compenseren.
+              hoeveel buffer/marge de batterij moet behouden tot 0 watt. Het
+              ontladen kun je finetunen via **Ontlaadmarge ⚙️** waarbij je
+              aangeeft hoeveel extra watt de batterij moet ontladen boven op nul
+              op de meter. Beide zijn handig om vaste kleine schommelingen in je
+              huisverbruik standaard te compenseren.
 
 
-              Ook kun je zelf instellen wanneer hij start met opladen via
-              **Opladen Starten Bij ⚙️** en wanneer hij start met ontladen via
-              **Ontladen starten bij ⚙️** 
+              Ook kun je zelf instellen wanneer de batterij start met opladen
+              via **Opladen Starten Bij ⚙️** en wanneer hij start met ontladen
+              via **Ontladen starten bij ⚙️** 
 
               {% elif modus == 'Dynamisch NOM' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
@@ -80,10 +77,10 @@ views:
               Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
               Periodes** op JA staat zal er opgeladen worden indien **Spread**
               hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
-              Periodes** erg lang op JA staat zal hij pas weer gaan laden
-              wanneer de batterij ontladen is tot 90%. Hij zal na laden constant
-              nul op de meter behouden (-xx watt bij opladen en -xx watt bij
-              ontladen).
+              Periodes** erg lang op JA staat zal de batterij pas weer gaan
+              laden wanneer de batterij ontladen is tot 90%. De batterij zal na
+              laden constant nul op de meter behouden (-xx watt bij opladen en
+              -xx watt bij ontladen).
 
               {% elif modus == 'Dynamisch NOM (Duur)' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
@@ -98,9 +95,10 @@ views:
               hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
               Periodes** erg lang op JA staat zal hij pas weer gaan laden
               wanneer de batterij ontladen is tot 90%. Mocht er nog ruimte zijn
-              om meer op te laden zal hij dit bij teruglevering gaan doen.
-              Wanneer **Goedkoopste Periodes** op JA staat zal hij NOM gaan
-              ontladen en de rest van de tijd staat de batterij in standby.
+              om meer op te laden zal de batterij dit bij teruglevering gaan
+              doen. Wanneer **Goedkoopste Periodes** op JA staat zal de batterij
+              alleen slim gaan ontladen en de rest van de tijd staat de batterij
+              in standby.
 
               {% elif modus == 'Dynamisch Handelen' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
@@ -113,10 +111,10 @@ views:
               Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
               Periodes** op JA staat zal er opgeladen worden indien **Spread**
               hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
-              Periodes** erg lang op JA staat zal hij pas weer gaan laden
-              wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
-              Periodes** op JA staat zal hij op maximaal vermogen gaan ontladen
-              en de rest van de tijd staat de batterij in standby.
+              Periodes** erg lang op JA staat zal de batterij pas weer gaan
+              laden wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
+              Periodes** op JA staat zal de batterij op maximaal vermogen gaan
+              ontladen en de rest van de tijd staat de batterij in standby.
 
               {% elif modus == 'Dynamisch Handelen + NOM' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
@@ -129,10 +127,10 @@ views:
               Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
               Periodes** op JA staat zal er opgeladen worden indien **Spread**
               hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
-              Periodes** erg lang op JA staat zal hij pas weer gaan laden
-              wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
-              Periodes** op JA staat zal hij op maximaal vermogen gaan ontladen
-              en de rest van de tijd **Nul op de meter**.
+              Periodes** erg lang op JA staat zal de batterij pas weer gaan
+              laden wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
+              Periodes** op JA staat zal de batterij op maximaal vermogen gaan
+              ontladen en de rest van de tijd **Nul op de meter**.
 
               {% elif modus == 'Alleen slim ontladen' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> Identiek aan **Nul op de
