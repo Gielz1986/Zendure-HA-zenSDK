@@ -10,8 +10,6 @@ Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Hom
 
 Heb je de smaak te pakken en meerdere batterijen staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
 
-<br>
-
 Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje koffie ☕️ – ik codeer beter met cafeïne!
 
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
@@ -32,7 +30,7 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
 ### #️⃣ Configuratie en herstart
 
 <details>
-  <summary>🖱️ Klik hier 🖱️ voor de configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
+  <summary>🖱️ <strong>Klik hier</strong> 🖱️ voor de configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
 
 
 ---
@@ -58,7 +56,7 @@ homeassistant:
 </details>
 
 <details>
-  <summary>🖱️ Klik hier 🖱️ voor de klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
+  <summary>🖱️ <strong>Klik hier</strong> 🖱️ voor de klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
   
 ---
 
@@ -99,7 +97,7 @@ homeassistant:
 ![Preview](Images/Dashboard-20022026.png) 
 
 <details>
-  <summary>🖱️ Klik hier 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
+  <summary>🖱️ <strong>Klik hier</strong> 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
 
 | Categorie              | Entiteiten                              | Uitleg / Inhoud                                                        |
 | ---------------------- | -------------------------------------- | ------------------------------------------------------------ |
@@ -205,7 +203,7 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 ![Preview](Images/Modus-16022026.gif) 
 
 <details>
-  <summary>🖱️ Klik hier 🖱️ voor een uitleg wat iedere modus doet.</summary>
+  <summary>🖱️ <strong>Klik hier</strong> 🖱️ voor een uitleg wat iedere modus doet.</summary>
 
 | Modus                         | Werking                               | Doel                                | 
 | ----------------------------- | -------------------------------------- | -------------------------------------- | 
