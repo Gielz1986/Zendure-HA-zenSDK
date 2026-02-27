@@ -148,7 +148,7 @@ views:
               alert-type="info">Helptekst</ha-alert> Snel ontladen op maximaal
               vermogen wat ingesteld staat bij **Max. Ontlaadvermogen ⚙️**.
 
-              {% else %} <ha-alert alert-type="warning">Helptekst/ha-alert>
+              {% else %} <ha-alert alert-type="warning">Helptekst</ha-alert>
               Selecteer een modus om uitleg te zien. {% endif %}
             text_only: true
             visibility:
@@ -1957,7 +1957,7 @@ views:
           - type: markdown
             content: >
               {{ state_attr('sensor.github_zendure_ha_zensdk_gielz1986',
-              'body')}}"
+              'body')}}
             text_only: true
             grid_options:
               columns: 24
