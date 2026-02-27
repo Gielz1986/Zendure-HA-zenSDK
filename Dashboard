@@ -684,6 +684,8 @@ views:
               yaxis:
                 - decimalsInFloat: 0
                   tickAmount: 4
+                  min: 0
+                  max: 24
                   labels:
                     show: true
                     style:
