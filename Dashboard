@@ -692,6 +692,13 @@ views:
                 x:
                   format: d/MM
                   show: false
+                'y':
+                  formatter: |
+                    EVAL:function(value) {
+                      const h = Math.floor(value);
+                      const m = Math.round((value - h) * 60);
+                      return h + "u " + m + "m";
+                    }
               grid:
                 show: true
                 borderColor: '#332f2c'
@@ -722,7 +729,6 @@ views:
                 color: '#e0e0e3'
                 show:
                   in_header: false
-                  extremas: max
                   in_legend: false
       - type: grid
         cards:
