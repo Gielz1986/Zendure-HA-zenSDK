@@ -1322,12 +1322,17 @@ views:
               groene lijn geeft de grens aan waarop het aantal schakelingen als
               verhoogd wordt beschouwd. Alles onder de 100 schakelingen per dag
               is normaal op een deels bewolkte dag.
+
+
+              Door de interpretatie van de data kan de relais­schakeling een
+              afwijking van 1 à 2 per dag hebben.
             text_only: true
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
                 state: 'on'
           - type: custom:apexcharts-card
+            stacked: true
             header:
               show: true
               title: ''
@@ -1370,17 +1375,28 @@ views:
                 axisBorder:
                   color: '#616269'
             series:
-              - entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
-                name: Relais Schakelingen
+              - entity: sensor.zendure_2400_ac_relais_schakelingen_opladen_vandaag
+                name: Relais Schakelingen Opladen
                 statistics:
                   period: day
-                  type: change
-                  align: start
+                  type: max
+                  align: middle
                 type: column
                 color: '#e0e0e3'
                 show:
                   in_header: false
-                  extremas: max
+                  extremas: false
+              - entity: sensor.zendure_2400_ac_relais_schakelingen_ontladen_vandaag
+                name: Relais Schakelingen Ontladen
+                statistics:
+                  period: day
+                  type: max
+                  align: middle
+                type: column
+                color: '#e0e0e3'
+                show:
+                  in_header: false
+                  extremas: false
       - type: grid
         cards:
           - type: heading
