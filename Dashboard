@@ -660,6 +660,10 @@ views:
               betrekking tot het niet importeren van stroom. Elke seconde dat
               het P1-vermogen op 0 of lager staat, wordt meegeteld in het
               totaal.
+
+
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
             text_only: true
             visibility:
               - condition: state
@@ -1240,6 +1244,10 @@ views:
               de omvormer over de afgelopen 7 dagen. De groene lijn geeft de
               grens aan waarop de omvormer zijn vermogen begint terug te
               schroeven. Dit gebeurt vanaf 60 °C.
+
+
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
             text_only: true
             visibility:
               - condition: state
@@ -1260,7 +1268,7 @@ views:
                     strokeDashArray: 2
               yaxis:
                 - decimalsInFloat: 0
-                  max: 100
+                  max: 80
                   labels:
                     show: true
                     style:
@@ -1324,8 +1332,8 @@ views:
               is normaal op een deels bewolkte dag.
 
 
-              Door de interpretatie van de data kan de relais­schakeling een
-              afwijking van 1 à 2 per dag hebben.
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
             text_only: true
             visibility:
               - condition: state
@@ -1349,8 +1357,6 @@ views:
                     strokeDashArray: 2
               yaxis:
                 - decimalsInFloat: 0
-                  min: 0
-                  tickAmount: 4
                   labels:
                     show: true
                     style:
@@ -1377,6 +1383,7 @@ views:
             series:
               - entity: sensor.zendure_2400_ac_relais_schakelingen_opladen_vandaag
                 name: Relais Schakelingen Opladen
+                transform: 'return x > 0 ? x - 1 : 0;'
                 statistics:
                   period: day
                   type: max
