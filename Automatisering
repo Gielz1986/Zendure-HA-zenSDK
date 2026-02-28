@@ -1,7 +1,7 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie Maart 2026 (20260214)
+description: Configuratie Versie April 2026 (20260228)
 triggers:
-  - seconds: /4
+  - seconds: /5
     id: aansturing_trigger
     trigger: time_pattern
   - at: "00:00:00"
@@ -237,6 +237,10 @@ actions:
               minutes: >-
                 {{ states('input_number.zendure_2400_ac_standby_vertraging') |
                 int(5) }}
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_soc_status
+            state:
+              - Goed
         sequence:
           - action: rest_command.zendure_standby
             data:
@@ -304,6 +308,16 @@ actions:
                 value_template: |
                   {{ states('sensor.p1_aansturing_vermogen') | float(0)
                      < states('input_number.zendure_2400_ac_opladen_starten_bij') | float(0) }}
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "off"
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -326,9 +340,25 @@ actions:
               name: " "
         alias: Opladen naar minimale SOC (bescherming)
       - conditions:
-          - condition: trigger
-            id:
-              - systeem_instelling_maxoplaadvermogen
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_maxoplaadvermogen
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      states('sensor.zendure_2400_ac_omvormer_max_oplaadvermogen')
+                      | float !=
+                      states('input_number.zendure_2400_ac_max_oplaadvermogen')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -347,9 +377,25 @@ actions:
               name: " "
         alias: Maximaal oplaadvermogen aanpassen
       - conditions:
-          - condition: trigger
-            id:
-              - systeem_instelling_maxontlaadvermogen
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_maxontlaadvermogen
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      states('sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen')
+                      | float !=
+                      states('input_number.zendure_2400_ac_max_ontlaadvermogen')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -390,7 +436,7 @@ actions:
             target:
               entity_id: input_number.zendure_2400_ac_opladen_starten_bij
             data:
-              value: -100
+              value: -300
           - action: input_number.set_value
             metadata: {}
             target:
@@ -401,7 +447,7 @@ actions:
             data:
               message: >-
                 ⚙️ Advies instellingen overnemen — Ontladen starten bij 100 watt
-                verbruik en opladen starten bij -100 watt teruglevering — 
+                verbruik en opladen starten bij -300 watt teruglevering — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
           - action: input_number.set_value
@@ -424,6 +470,172 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Advies instellingen overnemen
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: or
+            conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Alleen slim ontladen
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Alleen slim opladen
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Handmatig
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Nul op de meter
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Snel ontladen
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Snel opladen
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Standby
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id: sensor.dynamisch_goedkoopste_periode
+                    state:
+                      - Nee
+                    for:
+                      hours: 0
+                      minutes: 0
+                      seconds: 10
+                  - condition: state
+                    entity_id: sensor.dynamisch_duurste_periode
+                    state:
+                      - Nee
+                    for:
+                      hours: 0
+                      minutes: 0
+                      seconds: 10
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "on"
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "on"
+        sequence:
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamisch_laden_loopt
+                - input_boolean.dynamisch_ontladen_loopt
+            data: {}
+          - action: logbook.log
+            data:
+              message: >-
+                ⚠️ Dynamisch laden/ontladen loopt status is foutief.
+                Gecorrigeerd naar status uit —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Dynamisch laden / ontladen controle
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{ states('sensor.zendure_2400_ac_ingesteld_oplaadvermogen') |
+              float != states('input_number.zendure_2400_ac_max_oplaadvermogen')
+              | float }}
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "on"
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Snel opladen
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 10
+        sequence:
+          - action: rest_command.zendure_snel_laden
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              inputLimit: >-
+                {{ states('input_number.zendure_2400_ac_max_oplaadvermogen') |
+                int }}
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️ Huidig oplaadvermogen gecorrigeerd naar {{
+                states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
+                }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Huidig oplaadvermogen corrigeren
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{ states('sensor.zendure_2400_ac_ingesteld_ontlaadvermogen') |
+              float !=
+              states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float
+              }}
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "on"
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Snel ontladen
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 10
+        sequence:
+          - action: rest_command.zendure_snel_ontladen
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              outputLimit: >-
+                {{ states('input_number.zendure_2400_ac_max_ontlaadvermogen') |
+                int }}
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️ Huidig ontlaadvermogen gecorrigeerd naar {{
+                states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
+                }} watt —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Huidig ontlaadvermogen corrigeren
   - alias: NOM Aansturing
     choose:
       - conditions:
@@ -450,7 +662,7 @@ actions:
           - condition: numeric_state
             entity_id: sensor.zendure_2400_ac_vermogen_aansturing
             above: -30
-            below: 75
+            below: 30
           - alias: Minstens 2 automatiseringen na opladen pas activeren
             condition: or
             conditions:
@@ -481,6 +693,10 @@ actions:
                     entity_id: input_select.zendure_2400_ac_modus_selecteren
                     state:
                       - Dynamisch NOM
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Dynamisch Handelen + NOM
               - condition: and
                 conditions:
                   - condition: state
@@ -499,6 +715,16 @@ actions:
                       {{ states('sensor.dynamisch_spread_indicatie') | float >=
                       states('input_number.dynamisch_minimale_spread') | float
                       }}
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "off"
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -570,6 +796,10 @@ actions:
                     entity_id: input_select.zendure_2400_ac_modus_selecteren
                     state:
                       - Dynamisch NOM
+                  - condition: state
+                    entity_id: input_select.zendure_2400_ac_modus_selecteren
+                    state:
+                      - Dynamisch Handelen + NOM
               - condition: and
                 conditions:
                   - condition: state
@@ -588,6 +818,16 @@ actions:
                       {{ states('sensor.dynamisch_spread_indicatie') | float >=
                       states('input_number.dynamisch_minimale_spread') | float
                       }}
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "off"
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -666,6 +906,10 @@ actions:
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state:
                   - Dynamisch NOM (Duur)
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen + NOM
           - alias: Minstens 2 automatiseringen na ontladen pas activeren
             condition: or
             conditions:
@@ -683,6 +927,16 @@ actions:
               - condition: state
                 entity_id: sensor.zendure_2400_ac_modus
                 state: Standby
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "off"
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -762,6 +1016,20 @@ actions:
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state:
                   - Dynamisch NOM (Duur)
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen + NOM
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "off"
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -933,6 +1201,16 @@ actions:
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamisch_laden_loopt
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamisch_ontladen_loopt
+                state:
+                  - "off"
           - condition: or
             conditions:
               - condition: state
@@ -1031,7 +1309,16 @@ actions:
             value_template: >-
               {{ states('sensor.dynamisch_spread_indicatie_nom') | float >=
               states('input_number.dynamisch_minimale_spread') | float }}
+          - condition: state
+            entity_id: input_boolean.dynamisch_laden_loopt
+            state:
+              - "off"
         sequence:
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id:
+                - input_boolean.dynamisch_laden_loopt
           - action: rest_command.zendure_opslaan_in_ram
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -1077,6 +1364,11 @@ actions:
           - entity_id: input_boolean.dynamisch_recent_geladen
             action: input_boolean.turn_on
             alias: input_boolean.dynamisch_recent_geladen aanzetten
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamisch_laden_loopt
+            data: {}
           - action: logbook.log
             data:
               message: 💲 Dynamisch NOM goedkoop laden voltooid  —
@@ -1103,6 +1395,10 @@ actions:
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state:
                   - Dynamisch Handelen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen + NOM
           - condition: state
             entity_id: sensor.dynamisch_goedkoopste_periode
             state: Ja
@@ -1126,7 +1422,16 @@ actions:
             value_template: >-
               {{ states('sensor.dynamisch_spread_indicatie') | float >=
               states('input_number.dynamisch_minimale_spread') | float }}
+          - condition: state
+            entity_id: input_boolean.dynamisch_laden_loopt
+            state:
+              - "off"
         sequence:
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id:
+                - input_boolean.dynamisch_laden_loopt
           - action: rest_command.zendure_opslaan_in_ram
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -1169,9 +1474,15 @@ actions:
           - action: rest_command.zendure_stop_met_alles
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
-          - entity_id: input_boolean.dynamisch_recent_geladen
-            action: input_boolean.turn_on
-            alias: input_boolean.dynamisch_recent_geladen aanzetten
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id: input_boolean.dynamisch_recent_geladen
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamisch_laden_loopt
+            data: {}
           - action: logbook.log
             data:
               message: 💲 Dynamisch goedkoop laden voltooid  —
@@ -1188,10 +1499,16 @@ actions:
               states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamisch_nordpool_sensor is gevuld
-          - condition: state
-            entity_id: input_select.zendure_2400_ac_modus_selecteren
-            state:
-              - Dynamisch Handelen
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen + NOM
           - condition: state
             entity_id: sensor.zendure_2400_ac_soc_limiet_status
             state:
@@ -1213,7 +1530,16 @@ actions:
             value_template: >-
               {{ states('sensor.dynamisch_spread_indicatie') | float >=
               states('input_number.dynamisch_minimale_spread') | float }}
+          - condition: state
+            entity_id: input_boolean.dynamisch_ontladen_loopt
+            state:
+              - "off"
         sequence:
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id:
+                - input_boolean.dynamisch_ontladen_loopt
           - action: rest_command.zendure_opslaan_in_ram
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -1247,15 +1573,25 @@ actions:
               - trigger: state
                 entity_id:
                   - input_select.zendure_2400_ac_modus_selecteren
+              - trigger: state
+                entity_id:
+                  - input_number.dynamisch_minimale_spread
+              - trigger: state
+                entity_id:
+                  - sensor.dynamisch_spread_indicatie
             continue_on_timeout: false
           - action: rest_command.zendure_stop_met_alles
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamisch_ontladen_loopt
+            data: {}
           - action: logbook.log
             data:
               message: 💲 Dynamisch duur ontladen voltooid  —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Dynamisch duur ontladen
-mode: queued
-max: 8
+mode: parallel
