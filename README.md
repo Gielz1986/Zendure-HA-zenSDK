@@ -36,7 +36,7 @@ Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje ko
 ---
 
 1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-2. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van Github in de map packages van Home Assistant.
+2. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van Github in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
 3. Maak nu een **backup** van je `configuration.yaml`.
 4. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
 
