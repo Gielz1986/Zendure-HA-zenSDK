@@ -464,7 +464,7 @@ views:
                   show: true
                   show_states: true
                   title: ''
-                graph_span: 10min
+                graph_span: 5min
                 series:
                   - entity: sensor.zendure_2400_ac_vermogen_aansturing
                     name: Batterij
