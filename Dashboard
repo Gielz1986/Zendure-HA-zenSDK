@@ -202,35 +202,35 @@ views:
                     float_precision: 0
                     color_threshold:
                       - value: -2000
-                        opacity: 0.4
+                        opacity: 0.5
                       - value: -1750
-                        opacity: 0.35
+                        opacity: 0.45
                       - value: -1500
-                        opacity: 0.3
+                        opacity: 0.4
                       - value: -1250
-                        opacity: 0.25
+                        opacity: 0.35
                       - value: -1000
-                        opacity: 0.2
+                        opacity: 0.3
                       - value: -750
-                        opacity: 0.15
+                        opacity: 0.25
                       - value: -500
-                        opacity: 0.1
+                        opacity: 0.15
                       - value: 0
                         opacity: 0.1
                       - value: 500
-                        opacity: 0.1
-                      - value: 750
                         opacity: 0.15
-                      - value: 1000
-                        opacity: 0.2
-                      - value: 1250
+                      - value: 750
                         opacity: 0.25
-                      - value: 1500
+                      - value: 1000
                         opacity: 0.3
-                      - value: 1750
+                      - value: 1250
                         opacity: 0.35
-                      - value: 2000
+                      - value: 1500
                         opacity: 0.4
+                      - value: 1750
+                        opacity: 0.45
+                      - value: 2000
+                        opacity: 0.5
                     yaxis_id: energy
                     show:
                       in_header: false
@@ -343,35 +343,35 @@ views:
                     float_precision: 0
                     color_threshold:
                       - value: -2000
-                        opacity: 0.4
+                        opacity: 0.5
                       - value: -1750
-                        opacity: 0.35
+                        opacity: 0.45
                       - value: -1500
-                        opacity: 0.3
+                        opacity: 0.4
                       - value: -1250
-                        opacity: 0.25
+                        opacity: 0.35
                       - value: -1000
-                        opacity: 0.2
+                        opacity: 0.3
                       - value: -750
-                        opacity: 0.15
+                        opacity: 0.25
                       - value: -500
-                        opacity: 0.1
+                        opacity: 0.15
                       - value: 0
                         opacity: 0.1
                       - value: 500
-                        opacity: 0.1
-                      - value: 750
                         opacity: 0.15
-                      - value: 1000
-                        opacity: 0.2
-                      - value: 1250
+                      - value: 750
                         opacity: 0.25
-                      - value: 1500
+                      - value: 1000
                         opacity: 0.3
-                      - value: 1750
+                      - value: 1250
                         opacity: 0.35
-                      - value: 2000
+                      - value: 1500
                         opacity: 0.4
+                      - value: 1750
+                        opacity: 0.45
+                      - value: 2000
+                        opacity: 0.5
                     show:
                       in_header: false
                       in_legend: true
@@ -481,35 +481,35 @@ views:
                     float_precision: 0
                     color_threshold:
                       - value: -2000
-                        opacity: 0.4
+                        opacity: 0.5
                       - value: -1750
-                        opacity: 0.35
+                        opacity: 0.45
                       - value: -1500
-                        opacity: 0.3
+                        opacity: 0.4
                       - value: -1250
-                        opacity: 0.25
+                        opacity: 0.35
                       - value: -1000
-                        opacity: 0.2
+                        opacity: 0.3
                       - value: -750
-                        opacity: 0.15
+                        opacity: 0.25
                       - value: -500
-                        opacity: 0.1
+                        opacity: 0.15
                       - value: 0
                         opacity: 0.1
                       - value: 500
-                        opacity: 0.1
-                      - value: 750
                         opacity: 0.15
-                      - value: 1000
-                        opacity: 0.2
-                      - value: 1250
+                      - value: 750
                         opacity: 0.25
-                      - value: 1500
+                      - value: 1000
                         opacity: 0.3
-                      - value: 1750
+                      - value: 1250
                         opacity: 0.35
-                      - value: 2000
+                      - value: 1500
                         opacity: 0.4
+                      - value: 1750
+                        opacity: 0.45
+                      - value: 2000
+                        opacity: 0.5
                     yaxis_id: energy
                     show:
                       in_header: false
