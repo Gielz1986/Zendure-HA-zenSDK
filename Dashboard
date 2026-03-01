@@ -201,16 +201,28 @@ views:
                     color: '#01a180'
                     float_precision: 0
                     color_threshold:
+                      - value: -2000
+                        opacity: 0.4
+                      - value: -1500
+                        opacity: 0.35
+                      - value: -1000
+                        opacity: 0.3
+                      - value: -500
+                        opacity: 0.25
                       - value: 0
                         opacity: 0.2
+                      - value: 500
+                        opacity: 0.25
+                      - value: 1000
+                        opacity: 0.3
+                      - value: 1500
+                        opacity: 0.35
                       - value: 2000
-                        opacity: 0.7
-                      - value: -2000
-                        opacity: 0.7
+                        opacity: 0.4
                     yaxis_id: energy
                     show:
                       in_header: false
-                      in_legend: false
+                      in_legend: true
                   - entity: sensor.p1_nom_doel
                     name: P1 (NOM Doel)
                     statistics:
@@ -271,155 +283,12 @@ views:
                     show: true
                     floating: true
                     horizontalAlign: left
-                    offsetX: 0
+                    offsetX: 25
                     offsetY: 17
                     formatter: |
                       EVAL:function(seriesName, opts) {
                         // filter series die niet in de legenda moeten
-                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
-                        return seriesName;
-                      }
-                  markers:
-                    size: 0
-                    hover:
-                      size: 0
-              - type: custom:apexcharts-card
-                experimental:
-                  hidden_by_default: true
-                  color_threshold: true
-                cache: false
-                stacked: true
-                update_interval: 5sec
-                header:
-                  show: true
-                  show_states: true
-                  title: ''
-                graph_span: 10min
-                series:
-                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
-                    name: Batterij
-                    group_by:
-                      func: avg
-                      duration: 5sec
-                    type: area
-                    transform: return -x;
-                    stroke_width: 2
-                    opacity: 0.2
-                    extend_to: now
-                    color: '#01a180'
-                    float_precision: 0
-                    color_threshold:
-                      - value: -2000
-                        opacity: 0.8
-                      - value: -1500
-                        opacity: 0.65
-                      - value: -1000
-                        opacity: 0.5
-                      - value: -500
-                        opacity: 0.35
-                      - value: 0
-                        opacity: 0.2
-                      - value: 500
-                        opacity: 0.35
-                      - value: 1000
-                        opacity: 0.5
-                      - value: 1500
-                        opacity: 0.65
-                      - value: 2000
-                        opacity: 0.8
-                    yaxis_id: energy
-                    show:
-                      in_header: false
-                      in_legend: false
-                  - entity: sensor.p1_nom_doel
-                    name: P1 (NOM Doel)
-                    group_by:
-                      func: avg
-                      duration: 5sec
-                    type: area
-                    stroke_width: 0
-                    opacity: 0.4
-                    extend_to: now
-                    color: '#595a5f'
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      in_header: false
-                      in_legend: false
-                  - entity: input_number.zendure_2400_ac_ontladen_starten_bij
-                    name: Start ontladen
-                    type: line
-                    stroke_width: 1
-                    color: '#e4e4e7'
-                    opacity: 0.5
-                    stroke_dash: 2
-                    curve: stepline
-                    extend_to: now
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      hidden_by_default: true
-                      in_header: false
-                  - entity: input_number.zendure_2400_ac_opladen_starten_bij
-                    name: Start opladen
-                    type: line
-                    stroke_width: 1
-                    color: '#e4e4e7'
-                    opacity: 0.5
-                    stroke_dash: 2
-                    curve: stepline
-                    extend_to: now
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      hidden_by_default: true
-                      in_header: false
-                apex_config:
-                  toolbar:
-                    show: true
-                    tools:
-                      download: true
-                      selection: true
-                      zoom: true
-                      zoomin: true
-                      zoomout: true
-                      pan: true
-                  tooltip:
-                    x:
-                      format: HH:mm:ss
-                      show: false
-                  xaxis:
-                    labels:
-                      show: false
-                      style:
-                        colors: grey
-                    axisTicks:
-                      show: false
-                    axisBorder:
-                      color: '#616269'
-                  yaxis:
-                    - title:
-                        text: ''
-                      decimalsInFloat: 0
-                      labels:
-                        style:
-                          colors: '#7b7c83'
-                  grid:
-                    strokeDashArray: 0
-                    borderColor: rgb(52,52,52)
-                    show: true
-                  chart:
-                    height: 150px
-                  legend:
-                    show: true
-                    floating: true
-                    horizontalAlign: left
-                    offsetX: 0
-                    offsetY: 17
-                    formatter: |
-                      EVAL:function(seriesName, opts) {
-                        // filter series die niet in de legenda moeten
-                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
+                        if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
                         return seriesName;
                       }
                   markers:
@@ -461,16 +330,27 @@ views:
                     color: '#01a180'
                     float_precision: 0
                     color_threshold:
+                      - value: -2000
+                        opacity: 0.4
+                      - value: -1500
+                        opacity: 0.35
+                      - value: -1000
+                        opacity: 0.3
+                      - value: -500
+                        opacity: 0.25
                       - value: 0
                         opacity: 0.2
+                      - value: 500
+                        opacity: 0.25
+                      - value: 1000
+                        opacity: 0.3
+                      - value: 1500
+                        opacity: 0.35
                       - value: 2000
-                        opacity: 0.7
-                      - value: -2000
-                        opacity: 0.7
-                    yaxis_id: energy
+                        opacity: 0.4
                     show:
                       in_header: false
-                      in_legend: false
+                      in_legend: true
                   - entity: sensor.p1_nom_doel
                     name: P1 (NOM Doel)
                     statistics:
@@ -531,18 +411,24 @@ views:
                     show: true
                     floating: true
                     horizontalAlign: left
-                    offsetX: 0
+                    offsetX: 25
                     offsetY: 17
                     formatter: |
                       EVAL:function(seriesName, opts) {
                         // filter series die niet in de legenda moeten
-                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
+                        if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
                         return seriesName;
                       }
                   markers:
                     size: 0
                     hover:
                       size: 0
+            visibility:
+              - condition: state
+                entity: input_select.zendure_2400_ac_modus_selecteren
+                state: Handmatig
+          - type: vertical-stack
+            cards:
               - type: custom:apexcharts-card
                 experimental:
                   hidden_by_default: true
@@ -570,27 +456,27 @@ views:
                     float_precision: 0
                     color_threshold:
                       - value: -2000
-                        opacity: 0.8
+                        opacity: 0.4
                       - value: -1500
-                        opacity: 0.65
-                      - value: -1000
-                        opacity: 0.5
-                      - value: -500
                         opacity: 0.35
+                      - value: -1000
+                        opacity: 0.3
+                      - value: -500
+                        opacity: 0.25
                       - value: 0
                         opacity: 0.2
                       - value: 500
-                        opacity: 0.35
+                        opacity: 0.25
                       - value: 1000
-                        opacity: 0.5
+                        opacity: 0.3
                       - value: 1500
-                        opacity: 0.65
+                        opacity: 0.35
                       - value: 2000
-                        opacity: 0.8
+                        opacity: 0.4
                     yaxis_id: energy
                     show:
                       in_header: false
-                      in_legend: false
+                      in_legend: true
                   - entity: sensor.p1_nom_doel
                     name: P1 (NOM Doel)
                     group_by:
@@ -674,22 +560,18 @@ views:
                     show: true
                     floating: true
                     horizontalAlign: left
-                    offsetX: 0
+                    offsetX: 25
                     offsetY: 17
                     formatter: |
                       EVAL:function(seriesName, opts) {
                         // filter series die niet in de legenda moeten
-                        if(seriesName === "Batterij" || seriesName === "P1 (NOM Doel)") return "";
+                        if(seriesName === "Leeg" || seriesName === "P1 (NOM Doel)") return "";
                         return seriesName;
                       }
                   markers:
                     size: 0
                     hover:
                       size: 0
-            visibility:
-              - condition: state
-                entity: input_select.zendure_2400_ac_modus_selecteren
-                state: Handmatig
           - type: heading
             icon: ''
             heading: Nul import
