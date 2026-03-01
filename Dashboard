@@ -472,7 +472,8 @@ views:
                       func: avg
                       duration: 5sec
                     type: area
-                    transform: return -x;
+                    invert: true
+                    offset: '-5s'
                     stroke_width: 2
                     opacity: 0.2
                     extend_to: now
@@ -513,8 +514,10 @@ views:
                     show:
                       in_header: false
                       in_legend: true
+                      offset_in_name: false
                   - entity: sensor.p1_nom_doel
                     name: P1 (NOM Doel)
+                    offset: '-5s'
                     group_by:
                       func: avg
                       duration: 5sec
@@ -601,7 +604,7 @@ views:
                     formatter: |
                       EVAL:function(seriesName, opts) {
                         // filter series die niet in de legenda moeten
-                        if(seriesName === "Leeg" || seriesName === "P1 (NOM Doel)") return "";
+                        if(seriesName === "Leeg" || seriesName === "P1 (NOM Doel) (-5s)") return "";
                         return seriesName;
                       }
                   markers:
