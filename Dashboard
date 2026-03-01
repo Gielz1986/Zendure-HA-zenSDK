@@ -203,19 +203,31 @@ views:
                     color_threshold:
                       - value: -2000
                         opacity: 0.4
-                      - value: -1500
+                      - value: -1750
                         opacity: 0.35
+                      - value: -1500
+                        opacity: 0.3
+                      - value: -1250
+                        opacity: 0.25
                       - value: -1000
-                        opacity: 0.3
-                      - value: -500
-                        opacity: 0.25
-                      - value: 0
                         opacity: 0.2
+                      - value: -750
+                        opacity: 0.15
+                      - value: -500
+                        opacity: 0.1
+                      - value: 0
+                        opacity: 0.1
                       - value: 500
-                        opacity: 0.25
+                        opacity: 0.1
+                      - value: 750
+                        opacity: 0.15
                       - value: 1000
-                        opacity: 0.3
+                        opacity: 0.2
+                      - value: 1250
+                        opacity: 0.25
                       - value: 1500
+                        opacity: 0.3
+                      - value: 1750
                         opacity: 0.35
                       - value: 2000
                         opacity: 0.4
@@ -332,19 +344,31 @@ views:
                     color_threshold:
                       - value: -2000
                         opacity: 0.4
-                      - value: -1500
+                      - value: -1750
                         opacity: 0.35
+                      - value: -1500
+                        opacity: 0.3
+                      - value: -1250
+                        opacity: 0.25
                       - value: -1000
-                        opacity: 0.3
-                      - value: -500
-                        opacity: 0.25
-                      - value: 0
                         opacity: 0.2
+                      - value: -750
+                        opacity: 0.15
+                      - value: -500
+                        opacity: 0.1
+                      - value: 0
+                        opacity: 0.1
                       - value: 500
-                        opacity: 0.25
+                        opacity: 0.1
+                      - value: 750
+                        opacity: 0.15
                       - value: 1000
-                        opacity: 0.3
+                        opacity: 0.2
+                      - value: 1250
+                        opacity: 0.25
                       - value: 1500
+                        opacity: 0.3
+                      - value: 1750
                         opacity: 0.35
                       - value: 2000
                         opacity: 0.4
@@ -457,19 +481,31 @@ views:
                     color_threshold:
                       - value: -2000
                         opacity: 0.4
-                      - value: -1500
+                      - value: -1750
                         opacity: 0.35
+                      - value: -1500
+                        opacity: 0.3
+                      - value: -1250
+                        opacity: 0.25
                       - value: -1000
-                        opacity: 0.3
-                      - value: -500
-                        opacity: 0.25
-                      - value: 0
                         opacity: 0.2
+                      - value: -750
+                        opacity: 0.15
+                      - value: -500
+                        opacity: 0.1
+                      - value: 0
+                        opacity: 0.1
                       - value: 500
-                        opacity: 0.25
+                        opacity: 0.1
+                      - value: 750
+                        opacity: 0.15
                       - value: 1000
-                        opacity: 0.3
+                        opacity: 0.2
+                      - value: 1250
+                        opacity: 0.25
                       - value: 1500
+                        opacity: 0.3
+                      - value: 1750
                         opacity: 0.35
                       - value: 2000
                         opacity: 0.4
