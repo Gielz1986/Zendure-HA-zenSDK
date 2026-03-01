@@ -200,6 +200,13 @@ views:
                     extend_to: now
                     color: '#01a180'
                     float_precision: 0
+                    color_threshold:
+                      - value: 0
+                        opacity: 0.2
+                      - value: 2000
+                        opacity: 0.7
+                      - value: -2000
+                        opacity: 0.7
                     yaxis_id: energy
                     show:
                       in_header: false
@@ -212,7 +219,7 @@ views:
                       align: start
                     type: area
                     stroke_width: 0
-                    opacity: 0.6
+                    opacity: 0.4
                     extend_to: now
                     color: '#595a5f'
                     float_precision: 0
@@ -279,6 +286,7 @@ views:
               - type: custom:apexcharts-card
                 experimental:
                   hidden_by_default: true
+                  color_threshold: true
                 cache: false
                 stacked: true
                 update_interval: 5sec
@@ -300,6 +308,25 @@ views:
                     extend_to: now
                     color: '#01a180'
                     float_precision: 0
+                    color_threshold:
+                      - value: -2000
+                        opacity: 0.8
+                      - value: -1500
+                        opacity: 0.65
+                      - value: -1000
+                        opacity: 0.5
+                      - value: -500
+                        opacity: 0.35
+                      - value: 0
+                        opacity: 0.2
+                      - value: 500
+                        opacity: 0.35
+                      - value: 1000
+                        opacity: 0.5
+                      - value: 1500
+                        opacity: 0.65
+                      - value: 2000
+                        opacity: 0.8
                     yaxis_id: energy
                     show:
                       in_header: false
@@ -311,7 +338,7 @@ views:
                       duration: 5sec
                     type: area
                     stroke_width: 0
-                    opacity: 0.6
+                    opacity: 0.4
                     extend_to: now
                     color: '#595a5f'
                     float_precision: 0
@@ -408,6 +435,7 @@ views:
               - type: custom:apexcharts-card
                 experimental:
                   hidden_by_default: true
+                  color_threshold: true
                 cache: true
                 update_interval: 15min
                 stacked: true
@@ -432,6 +460,13 @@ views:
                     extend_to: now
                     color: '#01a180'
                     float_precision: 0
+                    color_threshold:
+                      - value: 0
+                        opacity: 0.2
+                      - value: 2000
+                        opacity: 0.7
+                      - value: -2000
+                        opacity: 0.7
                     yaxis_id: energy
                     show:
                       in_header: false
@@ -444,7 +479,7 @@ views:
                       align: start
                     type: area
                     stroke_width: 0
-                    opacity: 0.6
+                    opacity: 0.4
                     extend_to: now
                     color: '#595a5f'
                     float_precision: 0
@@ -480,14 +515,14 @@ views:
                   chart:
                     height: 204px
                     toolbar:
+                      autoSelected: pan
                       show: true
                       tools:
                         download: false
-                        selection: false
                         zoom: true
                         zoomin: false
                         zoomout: false
-                        pan: false
+                        pan: true
                     zoom:
                       enabled: true
                       allowMouseWheelZoom: true
@@ -511,6 +546,7 @@ views:
               - type: custom:apexcharts-card
                 experimental:
                   hidden_by_default: true
+                  color_threshold: true
                 cache: false
                 stacked: true
                 update_interval: 5sec
@@ -532,6 +568,25 @@ views:
                     extend_to: now
                     color: '#01a180'
                     float_precision: 0
+                    color_threshold:
+                      - value: -2000
+                        opacity: 0.8
+                      - value: -1500
+                        opacity: 0.65
+                      - value: -1000
+                        opacity: 0.5
+                      - value: -500
+                        opacity: 0.35
+                      - value: 0
+                        opacity: 0.2
+                      - value: 500
+                        opacity: 0.35
+                      - value: 1000
+                        opacity: 0.5
+                      - value: 1500
+                        opacity: 0.65
+                      - value: 2000
+                        opacity: 0.8
                     yaxis_id: energy
                     show:
                       in_header: false
@@ -543,7 +598,7 @@ views:
                       duration: 5sec
                     type: area
                     stroke_width: 0
-                    opacity: 0.6
+                    opacity: 0.4
                     extend_to: now
                     color: '#595a5f'
                     float_precision: 0
@@ -706,7 +761,7 @@ views:
                 borderColor: '#332f2c'
                 strokeDashArray: 0
               chart:
-                height: 140px
+                height: 150px
               legend:
                 show: false
                 floating: true
@@ -748,7 +803,7 @@ views:
                   - name
                   - state
                 color: '#01a180'
-                icon: mdi:transmission-tower
+                icon: mdi:home
                 tap_action:
                   action: more-info
           - type: entities
@@ -818,7 +873,7 @@ views:
                 borderColor: '#332f2c'
                 strokeDashArray: 0
               chart:
-                height: 140px
+                height: 150px
               legend:
                 show: false
               xaxis:
@@ -926,15 +981,13 @@ views:
                     borderColor: '#332f2c'
                     strokeDashArray: 0
                   chart:
-                    height: 140px
+                    height: 150px
                     stacked: true
                     stackOnlyBar: true
                   yaxis:
                     - title:
                         text: ''
                       decimalsInFloat: 2
-                      min: 0
-                      tickAmount: 4
                       forceNiceScale: true
                       labels:
                         style:
@@ -1075,15 +1128,13 @@ views:
                     borderColor: '#332f2c'
                     strokeDashArray: 0
                   chart:
-                    height: 140px
+                    height: 150px
                     stacked: true
                     stackOnlyBar: true
                   yaxis:
                     - title:
                         text: ''
                       decimalsInFloat: 2
-                      min: 0
-                      tickAmount: 4
                       forceNiceScale: true
                       labels:
                         style:
@@ -1262,6 +1313,9 @@ views:
                 entity: input_boolean.help_tonen_op_dashboard
                 state: 'on'
           - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
             header:
               show: true
               title: ''
@@ -1315,6 +1369,17 @@ views:
                 color: '#e4e4e7'
                 show:
                   in_header: false
+                color_threshold:
+                  - value: 0
+                    opacity: 0.2
+                  - value: 30
+                    opacity: 0.35
+                  - value: 40
+                    opacity: 0.5
+                  - value: 50
+                    opacity: 0.65
+                  - value: 60
+                    opacity: 0.8
           - type: heading
             icon: ''
             heading: Relais Schakelingen
@@ -1566,6 +1631,9 @@ views:
                 entity: input_boolean.help_tonen_op_dashboard
                 state: 'on'
           - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
             header:
               show: true
               title: ''
@@ -1617,6 +1685,17 @@ views:
                 show:
                   in_header: false
                   extremas: max
+                color_threshold:
+                  - value: 0
+                    opacity: 0.2
+                  - value: 60
+                    opacity: 0.35
+                  - value: 70
+                    opacity: 0.5
+                  - value: 80
+                    opacity: 0.65
+                  - value: 90
+                    opacity: 0.8
               - entity: sensor.zendure_2400_ac_vermogen_aansturing
                 name: Import (gemiddeld)
                 group_by:
@@ -1655,6 +1734,9 @@ views:
                 entity: input_boolean.help_tonen_op_dashboard
                 state: 'on'
           - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
             header:
               show: true
               title: ''
@@ -1706,6 +1788,17 @@ views:
                 show:
                   in_header: false
                   extremas: max
+                color_threshold:
+                  - value: 0
+                    opacity: 0.2
+                  - value: 60
+                    opacity: 0.35
+                  - value: 70
+                    opacity: 0.5
+                  - value: 80
+                    opacity: 0.65
+                  - value: 90
+                    opacity: 0.8
               - entity: sensor.zendure_2400_ac_vermogen_aansturing
                 name: Export (gemiddeld)
                 group_by:
