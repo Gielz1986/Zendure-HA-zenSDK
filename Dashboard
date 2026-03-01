@@ -1570,14 +1570,14 @@ views:
                 color_threshold:
                   - value: 0
                     opacity: 0.2
+                  - value: 20
+                    opacity: 0.3
+                  - value: 40
+                    opacity: 0.4
                   - value: 60
-                    opacity: 0.35
-                  - value: 70
                     opacity: 0.5
                   - value: 80
-                    opacity: 0.65
-                  - value: 90
-                    opacity: 0.8
+                    opacity: 0.6
               - entity: sensor.zendure_2400_ac_vermogen_aansturing
                 name: Import (gemiddeld)
                 group_by:
@@ -1673,14 +1673,14 @@ views:
                 color_threshold:
                   - value: 0
                     opacity: 0.2
+                  - value: 20
+                    opacity: 0.3
+                  - value: 40
+                    opacity: 0.4
                   - value: 60
-                    opacity: 0.35
-                  - value: 70
                     opacity: 0.5
                   - value: 80
-                    opacity: 0.65
-                  - value: 90
-                    opacity: 0.8
+                    opacity: 0.6
               - entity: sensor.zendure_2400_ac_vermogen_aansturing
                 name: Export (gemiddeld)
                 group_by:
