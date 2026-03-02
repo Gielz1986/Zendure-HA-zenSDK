@@ -315,9 +315,9 @@ template:
           {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name') | regex_replace('v','') %}
           {% if config_date and github_date %}
             {% if config_date > github_date %}
-              Versie recenter dan GitHub
+              Pre-release actief
             {% elif config_date < github_date %}
-              Nieuwere release op GitHub
+              Nieuwe release op GitHub
             {% else %}
               Up-to-date
             {% endif %}
@@ -327,9 +327,9 @@ template:
         icon: >
          {% if this.state == 'Up-to-date' %}
           mdi:emoticon-happy-outline
-         {% elif this.state == 'Nieuwere release op GitHub' %}
+         {% elif this.state == 'Nieuwe release op GitHub' %}
           mdi:emoticon-sad-outline
-         {% elif this.state == 'Versie recenter dan GitHub' %}
+         {% elif this.state == 'Pre-release actief' %}
           mdi:test-tube
          {% else %}
           mdi:emoticon-sad-outline
@@ -1216,44 +1216,36 @@ template:
         unique_id: Zendure_2400_AC_Indicatie_Beschikbare_Energie
         unit_of_measurement: "kWh"
         device_class: energy
+        icon: mdi:lightning-bolt-circle
         state: >
           {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
           {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
           {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
-          {% set aantal_batterijen = states('sensor.zendure_2400_ac_aantal_batterijen') | float(1) %}
-          {% set productserie = states('sensor.zendure_2400_ac_productserie') %}
-          {% if productserie == 'solarFlow2400AC' %}
-            {% set capaciteit_per_batterij = 2.88 %}
-          {% else %}
-            {% set capaciteit_per_batterij = 1.92 %}
-          {% endif %}
+          {% set totale_capaciteit = states('sensor.zendure_2400_ac_totale_capaciteit') | float(0) %}
+
           {% set export_eff = states('sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde') | float(0) %}
           {% set rte_totaal = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+
           {% set effectief_laad = [laad, max_laad] | min %}
           {% set rte_export_equivalent = (rte_totaal / 100) ** 0.5 * 100 %}
+
           {% if export_eff < 70 %}
             {% set effectieve_eff = rte_export_equivalent %}
           {% else %}
             {% set effectieve_eff = export_eff %}
           {% endif %}
+
           {% set effectieve_eff = [effectieve_eff, 100] | min / 100 %}
-          {% set totale_capaciteit = aantal_batterijen * capaciteit_per_batterij %}
           {% set bruikbaar_percentage = effectief_laad - min_laad %}
+
           {% if bruikbaar_percentage <= 0 %}
             0
           {% else %}
             {{ (bruikbaar_percentage / 100 * totale_capaciteit * effectieve_eff) | round(2) }}
           {% endif %}
         attributes:
-          batterij_configuratie: >
-            {% set aantal_batterijen = states('sensor.zendure_2400_ac_aantal_batterijen') | int(1) %}
-            {% set productserie = states('sensor.zendure_2400_ac_productserie') %}
-            {% if productserie == 'solarFlow2400AC' %}
-              {% set capaciteit_per_batterij = 2.88 %}
-            {% else %}
-              {% set capaciteit_per_batterij = 1.92 %}
-            {% endif %}
-            {{ capaciteit_per_batterij }} x {{ aantal_batterijen }}
+          totale_capaciteit_kwh: >
+            {{ states('sensor.zendure_2400_ac_totale_capaciteit') }}
           bruikbaar_percentage: >
             {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
             {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
@@ -1275,7 +1267,6 @@ template:
             {% else %}
               Export efficiëntie 24u gemiddelde
             {% endif %}
-        icon: mdi:lightning-bolt-circle
 
       - name: "Zendure 2400 AC RTE Totaal"
         unique_id: Zendure_2400_AC_RTE_Totaal
@@ -1304,6 +1295,33 @@ rest:
         unique_id: Zendure_2400_AC_Productserie
         value_template: "{{ value_json.product }}"
         icon: mdi:identifier
+
+      - name: "Zendure 2400 AC Totale Capaciteit"
+        unique_id: Zendure_2400_AC_Totale_Capaciteit
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: measurement
+        icon: mdi:flip-vertical
+        value_template: >
+          {% set mapping = {
+            5: 2.88,
+            300: 1.92,
+            350: 2.88,
+            500: 2.40
+          } %}
+          {% set packs = value_json.packData %}
+          {% if packs %}
+            {% set ns = namespace(total=0) %}
+            {% for pack in packs %}
+              {% set type = pack.packType | int %}
+              {% if type in mapping %}
+                {% set ns.total = ns.total + mapping[type] %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.total | round(2) }}
+          {% else %}
+            0
+          {% endif %}
 
       - name: "Zendure 2400 AC Omvormer Max. Oplaadvermogen"
         value_template: "{{ value_json['properties']['chargeMaxLimit'] }}"
@@ -1651,7 +1669,7 @@ rest:
       - name: "Zendure 2400 AC Aantal Batterijen"
         value_template: "{{ value_json['properties']['packNum'] }}"
         unique_id: Zendure_2400_AC_Aantal_Batterijen
-        icon: mdi:battery
+        icon: mdi:flip-vertical
 
       - name: "Zendure 2400 AC Opslagmodus"
         value_template: >
