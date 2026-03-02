@@ -464,7 +464,7 @@ views:
                   show: true
                   show_states: true
                   title: ''
-                graph_span: 5min
+                graph_span: 10min
                 series:
                   - entity: sensor.zendure_2400_ac_vermogen_aansturing
                     name: Batterij
@@ -1170,6 +1170,7 @@ views:
     cards: []
     icon: mdi:battery
     dense_section_placement: false
+    theme: Graphite
   - type: sections
     max_columns: 3
     icon: mdi:battery-heart-variant
@@ -1187,6 +1188,8 @@ views:
             entities:
               - entity: sensor.zendure_2400_ac_aantal_batterijen
                 name: Aantal Batterijen
+              - entity: sensor.zendure_2400_ac_totale_capaciteit
+                name: Totale Capaciteit
               - entity: sensor.zendure_2400_ac_signaalsterkte
                 name: Signaalsterkte
               - entity: sensor.zendure_2400_ac_error
@@ -1937,8 +1940,10 @@ views:
                 name: Releasecheck
           - type: markdown
             content: >
+
               &nbsp;&nbsp;[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases) 
-              [![Open
+
+              &nbsp;&nbsp;[![Open
               Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
             grid_options:
               columns: 12
