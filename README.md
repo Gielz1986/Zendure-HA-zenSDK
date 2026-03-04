@@ -109,7 +109,7 @@ homeassistant:
 | Uitleg per entiteit | | 
 | --------------------------------------- | ---------------------------------------------------------------------- |  
 | **Tabblad 1** | **Informatie**|  
-| Modus Selecteren                        | Zie **Modus uitleg bij ✅ Batterij mag aan de slag** |
+| Modus Selecteren&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                        | Zie **Modus uitleg bij ✅ Batterij mag aan de slag** |
 | Handmatig Vermogen                      | Gebruikt in modus **Handmatig** |
 | Vermogen Aansturing                     | -2400-2400 watt (vermogen import en vermogen export) |
 | Laadpercentage                          | 5-100% |
