@@ -312,7 +312,7 @@ template:
       - name: "Zendure-HA-Zensdk Github Releasecheck"
         unique_id: zendure_ha_zensdk_github_releasecheck
         state: >
-          {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie') | regex_findall('\\((\\d{8})\\)') | first %}
+          {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie') | regex_findall('\(v?(\d{8})\)') | first %}
           {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name') | regex_replace('v','') %}
           {% if config_date and github_date %}
             {% if config_date > github_date %}
