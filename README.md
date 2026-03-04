@@ -107,34 +107,7 @@ homeassistant:
   <summary>🖱️ <strong>Klik hier</strong> 🖱️ om alle entiteiten te zien die beschikbaar zijn inclusief uitleg.</summary>
 
 | Uitleg per entiteit | | 
-| --------------------------------------- | ---------------------------------------------------------------------- |
-| **Configuratie (Basis)** | **Informatie**|  
-| Zendure 2400 AC IP-adres                | bijvoorbeeld **192.168.0.172** – In de Zendure app onder device Information |
-| Homewizard P1 IP-adres                  | bijvoorbeeld **192.168.0.192** – In de Homewizard app (lokale API aanzetten) |
-| Standby Vertraging                      | 5-30 minuten – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt |
-| Advies Instellingen Overnemen           | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen. |
-| **Configuratie (Opladen)** | **Informatie**|  
-| Max. Oplaadvermogen                     | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
-| Opladen starten bij                     | -100--1000 watt – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge |
-| Oplaadmarge                             | 0-250 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS) |
-| **Configuratie (Ontladen)** | **Informatie**|  
-| Max. Ontlaadvermogen                    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
-| Ontladen starten bij                    | 100-500 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge |
-| Ontlaadmarge                            | 0-250 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is |
-| **Configuratie (Optioneel)** | **Informatie**|  
-| Afwijkende P1 Sensor                    | bijvoorbeeld `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend) |
-| Batterij Volgorde | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.| 
-| **Configuratie (Dynamisch** | **Informatie**|  
-| Dynamisch Nordpool Sensor               | bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0` |
-| Dynamisch Minimale Spread               | Gebruikt in modus **Dynamisch NOM**, **Dynamisch NOM (Duur)** en **Dynamisch Handelen**. Boven minimale spread laden |
-| Dynamisch 15 Minuten                    | Prijzen in 15 minuten ipv 1 uur prijzen |
-| **Configuratie (Dashboard** | **Informatie**|  
-| Help Tonen Op Dashboard | Vink dit aan om de helpteksten te tonen bij de meest relevante onderdelen.  |  
-| Dynamisch Tonen op Dashboard | Vink dit aan om de dynamische sturing te tonen op het dashboard.  |  
-| **Versiebeheer** | **Informatie**|  
-| Configuratie Versie                     | Toont de versie van de entiteiten configuratie | 
-| GitHub Zendure-HA-zenSDK (Gielz1986) | Laatste release op GitHub  |  
-| Releasecheck | Up-to-date, Nieuwe release op GitHub of Pre-release actief  |  
+| --------------------------------------- | ---------------------------------------------------------------------- |  
 | **Tabblad 1** | **Informatie**|  
 | Modus Selecteren                        | Zie **Modus uitleg bij ✅ Batterij mag aan de slag** |
 | Handmatig Vermogen                      | Gebruikt in modus **Handmatig** |
@@ -153,6 +126,20 @@ homeassistant:
 | RTE Totaal                              | 0-100% (⚠️ extern meten via HomeWizard kWh Meter is aan te raden) |
 | Energie Import                          | KWH |
 | Energie Export                          | KWH |
+| **Tabblad 1 - Dynamisch** | **Informatie**|  
+| Dynamisch Nordpool                      | Nordpool prijzen in 15min en 1uur |
+| Dynamisch Handmatige Periode            | bijvoorbeeld **G11:00;D12:00;G15:00** of **G11:00-13:00** |
+| Dynamisch Handmatige Periode Morgen     | bijvoorbeeld **G11:00;D12:00;G15:00** of **G11:00-13:00** |
+| Dynamisch Spread Indicatie              | Berekening spread |
+| Dynamisch Spread Indicatie NOM          | Berekening spread NOM, duurste na eerste laadactie |
+| Dynamisch Spread Indicatie Morgen       | Berekening spread |
+| Dynamisch Spread Indicatie NOM Morgen   | Berekening spread NOM, duurste na eerste laadactie |
+| Dynamisch Goedkoopste Periode           | Ja of Nee |
+| Dynamisch Duurste Periode               | Ja of Nee |
+| Dynamisch Goedkoopste X Periode         | 0-96 |
+| Dynamisch Duurste X Periode             | 0-96 |
+| Dynamisch Goedkoopste X Periode Morgen  | 0-96 |
+| Dynamisch Duurste X Periode Morgen      | 0-96 |
 | **Tabblad 2** | **Informatie**|  
 | Aantal Batterijen                       | 1-6 |
 | Totale Capaciteit                  | 1,92 - 17,28 kWh |
@@ -175,20 +162,33 @@ homeassistant:
 | Vermogen Export (DC)                    | 0-2400 watt |
 | Efficiëntie Export                      | 0-100% |
 | Efficiëntie Export (24u gemiddelde)     | 0-100% |
-| **Tabblad 1 - Dynamisch** | **Informatie**|  
-| Dynamisch Nordpool                      | Nordpool prijzen in 15min en 1uur |
-| Dynamisch Handmatige Periode            | bijvoorbeeld **G11:00;D12:00;G15:00** of **G11:00-13:00** |
-| Dynamisch Handmatige Periode Morgen     | bijvoorbeeld **G11:00;D12:00;G15:00** of **G11:00-13:00** |
-| Dynamisch Spread Indicatie              | Berekening spread |
-| Dynamisch Spread Indicatie NOM          | Berekening spread NOM, duurste na eerste laadactie |
-| Dynamisch Spread Indicatie Morgen       | Berekening spread |
-| Dynamisch Spread Indicatie NOM Morgen   | Berekening spread NOM, duurste na eerste laadactie |
-| Dynamisch Goedkoopste Periode           | Ja of Nee |
-| Dynamisch Duurste Periode               | Ja of Nee |
-| Dynamisch Goedkoopste X Periode         | 0-96 |
-| Dynamisch Duurste X Periode             | 0-96 |
-| Dynamisch Goedkoopste X Periode Morgen  | 0-96 |
-| Dynamisch Duurste X Periode Morgen      | 0-96 |
+| **Tabblad 3 - Configuratie (Basis)** | **Informatie**|  
+| Zendure 2400 AC IP-adres                | bijvoorbeeld **192.168.0.172** – In de Zendure app onder device Information |
+| Homewizard P1 IP-adres                  | bijvoorbeeld **192.168.0.192** – In de Homewizard app (lokale API aanzetten) |
+| Standby Vertraging                      | 5-30 minuten – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt |
+| Advies Instellingen Overnemen           | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen. |
+| **Tabblad 3 - Configuratie (Opladen)** | **Informatie**|  
+| Max. Oplaadvermogen                     | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
+| Opladen starten bij                     | -100--1000 watt – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge |
+| Oplaadmarge                             | 0-250 watt – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS) |
+| **Tabblad 3 - Configuratie (Ontladen)** | **Informatie**|  
+| Max. Ontlaadvermogen                    | 800-2400 watt – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |
+| Ontladen starten bij                    | 100-500 watt – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 + de extra ontlaadmarge |
+| Ontlaadmarge                            | 0-250 watt – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is |
+| **Tabblad 3 - Configuratie (Optioneel)** | **Informatie**|  
+| Afwijkende P1 Sensor                    | bijvoorbeeld `sensor.eigen_P1` – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend) |
+| Batterij Volgorde | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.| 
+| **Tabblad 3 - Configuratie (Dynamisch** | **Informatie**|  
+| Dynamisch Nordpool Sensor               | bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0` |
+| Dynamisch Minimale Spread               | Gebruikt in modus **Dynamisch NOM**, **Dynamisch NOM (Duur)** en **Dynamisch Handelen**. Boven minimale spread laden |
+| Dynamisch 15 Minuten                    | Prijzen in 15 minuten ipv 1 uur prijzen |
+| **Tabblad 3 - Configuratie (Dashboard** | **Informatie**|  
+| Help Tonen Op Dashboard | Vink dit aan om de helpteksten te tonen bij de meest relevante onderdelen.  |  
+| Dynamisch Tonen op Dashboard | Vink dit aan om de dynamische sturing te tonen op het dashboard.  |  
+| **Versiebeheer** | **Informatie**|  
+| Configuratie Versie                     | Toont de versie van de entiteiten configuratie | 
+| GitHub Zendure-HA-zenSDK (Gielz1986) | Laatste release op GitHub  |  
+| Releasecheck | Up-to-date, Nieuwe release op GitHub of Pre-release actief  |
 | **Niet op dashboard aanwezig** | **Informatie**|  
 | Dynamisch Recent Geladen                | Word automatisch aan en uit gezet. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat |
 | Dynamisch Ontladen Loopt                | Word automatisch aan en uit gezet. Noodzakelijk voor de aansturing maar kan ook gebruikt worden om te zien wanneer het heeft gelopen |
