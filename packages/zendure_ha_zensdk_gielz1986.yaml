@@ -276,7 +276,8 @@ sensor:
       - name
       - published_at
       - body
-    value_template: "OK"
+    value_template: "{{ value_json.tag_name }}"
+    icon: mdi:github
 
 template:
   - binary_sensor:
@@ -295,7 +296,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "April 2026 (20260302)"
+        state: "April 2026 (v20260304)"
 
       - name: "Zendure-HA-Zensdk Github Releasecheck"
         unique_id: zendure_ha_zensdk_github_releasecheck
