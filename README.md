@@ -133,8 +133,8 @@ homeassistant:
 | Dynamisch Tonen op Dashboard | Vink dit aan om de dynamische sturing te tonen op het dashboard.  |  
 | **Versiebeheer** | **Informatie**|  
 | Configuratie Versie                     | Toont de versie van de entiteiten configuratie | 
-| Versie Op GitHub | WIP  |  
-| Releasecheck | WIP  |  
+| GitHub Zendure-HA-zenSDK (Gielz1986) | Laatste release op GitHub  |  
+| Releasecheck | Up-to-date, Nieuwe release op GitHub of Pre-release actief  |  
 | **Tabblad 1** | **Informatie**|  
 | Modus Selecteren                        | Zie **Modus uitleg bij ✅ Batterij mag aan de slag** |
 | Handmatig Vermogen                      | Gebruikt in modus **Handmatig** |
@@ -189,7 +189,7 @@ homeassistant:
 | Dynamisch Duurste X Periode             | 0-96 |
 | Dynamisch Goedkoopste X Periode Morgen  | 0-96 |
 | Dynamisch Duurste X Periode Morgen      | 0-96 |
-| **Niet Op Dashboard Aanwezig** | **Informatie**|  
+| **Niet op dashboard aanwezig** | **Informatie**|  
 | Dynamisch Recent Geladen                | Word automatisch aan en uit gezet. Om te voorkomen dat er laadgedrag van 99>100>99>100 SOC ontstaat |
 | Dynamisch Ontladen Loopt                | Word automatisch aan en uit gezet. Noodzakelijk voor de aansturing maar kan ook gebruikt worden om te zien wanneer het heeft gelopen |
 | Dynamisch Laden Loopt                   | Word automatisch aan en uit gezet. Noodzakelijk voor de aansturing maar kan ook gebruikt worden om te zien wanneer het heeft gelopen |
