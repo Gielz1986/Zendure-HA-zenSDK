@@ -593,6 +593,8 @@ views:
                     strokeDashArray: 0
                     borderColor: rgb(52,52,52)
                     show: true
+                    padding:
+                      top: -10
                   chart:
                     height: 150px
                   legend:
@@ -681,6 +683,8 @@ views:
                 show: true
                 borderColor: '#332f2c'
                 strokeDashArray: 0
+                padding:
+                  top: -10
               chart:
                 height: 150px
               legend:
@@ -793,6 +797,8 @@ views:
                 show: true
                 borderColor: '#332f2c'
                 strokeDashArray: 0
+                padding:
+                  top: -10
               chart:
                 height: 150px
               legend:
@@ -901,6 +907,8 @@ views:
                     show: true
                     borderColor: '#332f2c'
                     strokeDashArray: 0
+                    padding:
+                      top: -10
                   chart:
                     height: 150px
                     stacked: true
@@ -1048,6 +1056,8 @@ views:
                     show: true
                     borderColor: '#332f2c'
                     strokeDashArray: 0
+                    padding:
+                      top: -10
                   chart:
                     height: 150px
                     stacked: true
@@ -1267,6 +1277,8 @@ views:
                 show: true
                 borderColor: '#332f2c'
                 strokeDashArray: 0
+                padding:
+                  top: -10
               chart:
                 height: 150px
               legend:
@@ -1366,6 +1378,8 @@ views:
                 show: true
                 borderColor: '#332f2c'
                 strokeDashArray: 0
+                padding:
+                  top: -10
               chart:
                 height: 150px
               legend:
@@ -1585,6 +1599,8 @@ views:
                 show: true
                 borderColor: '#332f2c'
                 strokeDashArray: 0
+                padding:
+                  top: -10
               chart:
                 height: 150px
               legend:
@@ -1691,6 +1707,8 @@ views:
                 show: true
                 borderColor: '#332f2c'
                 strokeDashArray: 0
+                padding:
+                  top: -10
               chart:
                 height: 150px
               legend:
@@ -1942,13 +1960,12 @@ views:
             entities:
               - entity: sensor.zendure_2400_ac_configuratie_versie
                 name: Versie in gebruik
+              - entity: sensor.github_zendure_ha_zensdk_gielz1986
+                name: Versie op GitHub
               - entity: sensor.zendure_ha_zensdk_github_releasecheck
                 name: Releasecheck
           - type: markdown
             content: >
-
-              &nbsp;&nbsp;[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases) 
-
               &nbsp;&nbsp;[![Open
               Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
             grid_options:
