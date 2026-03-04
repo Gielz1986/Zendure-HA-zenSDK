@@ -307,13 +307,15 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "April 2026 (v20260304)"
+        state: "(April 2026) v20260304"
 
       - name: "Zendure-HA-Zensdk Github Releasecheck"
         unique_id: zendure_ha_zensdk_github_releasecheck
         state: >
-          {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie') | regex_findall('\(v?(\d{8})\)') | first %}
-          {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name') | regex_replace('v','') %}
+          {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie')
+             | regex_findall('v(\d{8})') | first %}
+          {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name')
+             | regex_replace('v','') %}
           {% if config_date and github_date %}
             {% if config_date > github_date %}
               Pre-release actief
@@ -326,15 +328,22 @@ template:
             Onbekend
           {% endif %}
         icon: >
-         {% if this.state == 'Up-to-date' %}
-          mdi:emoticon-happy-outline
-         {% elif this.state == 'Nieuwe release op GitHub' %}
-          mdi:emoticon-sad-outline
-         {% elif this.state == 'Pre-release actief' %}
-          mdi:test-tube
-         {% else %}
-          mdi:emoticon-sad-outline
-         {% endif %}
+          {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie')
+             | regex_findall('v(\d{8})') | first %}
+          {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name')
+             | regex_replace('v','') %}
+
+          {% if config_date and github_date %}
+            {% if config_date > github_date %}
+              mdi:test-tube
+            {% elif config_date < github_date %}
+              mdi:emoticon-sad-outline
+            {% else %}
+              mdi:emoticon-happy-outline
+            {% endif %}
+          {% else %}
+            mdi:help-circle-outline
+          {% endif %}
 
       - name: "P1 NOM Doel"
         unique_id: P1_NOM_Doel
