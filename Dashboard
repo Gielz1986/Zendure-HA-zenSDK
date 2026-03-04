@@ -1180,7 +1180,6 @@ views:
     cards: []
     icon: mdi:battery
     dense_section_placement: false
-    theme: Graphite
   - type: sections
     max_columns: 3
     icon: mdi:battery-heart-variant
