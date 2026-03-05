@@ -4,13 +4,18 @@
 [![Last Commit](https://img.shields.io/github/last-commit/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/commits/main)
 
 #  Zendure Home Assistant
-**Om in 2️⃣ stappen je batterij lokaal werkend te krijgen in Home Assistant**.
+**Om in slechts 2️⃣ simpele stappen je batterij volledig lokaal werkend te krijgen in Home Assistant.**
 
-Gebaseerd op de [zenSDK RESTful API](https://github.com/Zendure/zenSDK) voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus) **(zonder aangesloten zonnepanelen)** zonder gebruik te maken van integraties maar werkt met **één automatisering**. Voor de gene die graag de batterij 100% lokaal in eigen beheer wilt zonder updates van derden en netjes in Home Assistant. Inmiddels zijn er **11 voorgeprogrammeerde modussen** waarin de batterij kan leven, werken en shinen ✨ Voor elke smaak wat wils — van rustig sparen tot agressief knallen ⚡ De absolute publieksfavoriet? Natuurlijk de **Nul op de Meter-modus.** Want wie wil er nou niet elke maand die energierekening high-fiven? 😎
+Gebaseerd op de krachtige zenSDK RESTful API voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus) (zonder aangesloten zonnepanelen) — volledig **zonder externe integraties**. Alles draait via **één slimme automatisering**.
+
+Perfect voor iedereen die zijn batterij **100% lokaal, maximaal stabiel en volledig onder eigen controle** wil draaien in Home Assistant — zonder afhankelijkheid van updates van derden.
+
+Inmiddels zijn er **11 voorgeprogrammeerde modussen** waarin de batterij kan leven, werken en shinen ✨
+Voor elke smaak wat wils — van rustig energie sparen tot agressief vermogen knallen ⚡
 
 Heb je de smaak te pakken en meerdere batterijen staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
 
-Vind je dit project leuk en wil je mij steunen? Trakteer mij dan op een kopje koffie ☕️ – ik codeer beter met cafeïne!
+Vind je dit project nuttig en wil je de ontwikkeling supporten? Trakteer mij op een kopje koffie ☕️
 
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
   <img src="https://github.com/Gielz1986/Zendure-zenSDK-HA/blob/main/Images/bmc.png?raw=true" width="150" alt="Buy Me a Coffee">
