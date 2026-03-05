@@ -76,7 +76,7 @@ homeassistant:
 
 </details>
 
-![Preview](Images/Instellingen-260226.png) 
+![Preview](Images/Instellingen-050326.png) 
 
 | Uitleg per configuratie item | |  
 |-|-|
