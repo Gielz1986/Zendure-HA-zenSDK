@@ -107,8 +107,8 @@ homeassistant:
 
 
 
-![Preview](Images/Dashboard-26022026.png) 
-[Ga naar uitleg over alle entiteiten](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten)
+![Preview](Images/Dashboard-26022026.png) <br>
+[Ga naar de uitleg over alle entiteiten](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten)
 
 
 <br>
@@ -135,26 +135,8 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 4. Kies hier je gewenste modus om de **Zendure zenSDK (Gielz) automatisering** te activeren.
 5. De batterij zal nu aan de slag gaan.
 
-![Preview](Images/Modus-16022026.gif) 
-
-<details>
-  <summary>🖱️ <strong>Klik hier</strong> 🖱️ voor een uitleg wat iedere modus doet.</summary>
-
-| Modus                         | Werking                               | Doel                                | 
-| ----------------------------- | -------------------------------------- | -------------------------------------- | 
-| Standby                | Zet volledig in standby en `sensor.zendure_2400_ac_opslagmodus` zal naar **Opslaan in Flash** gaan. Hierdoor is het ook 0 watt op een KWH MID Meter.                                       | 100% standby, de batterij gebruikt nog 0,2 kwh per dag.|
-| Handmatig              | Via `input_number.zendure_2400_ac_handmatig_vermogen` kun je zelf aangeven wat de batterij doet. -watt voor ontladen en +watt voor opladen.       | Voor als je zelf aan de knoppen wilt draaien. |
-| Nul op de meter        | Constant 0 op de meter behouden (-xx watt bij opladen en -xx watt bij ontladen). Je kunt het opladen finetunen via `input_number.zendure_2400_ac_oplaadmarge` waarbij je aangeeft hoeveel buffer/marge hij moet behouden tot 0 watt. Het ontladen kun je finetunen via `input_number.zendure_2400_ac_ontlaadmarge` waarbij je aangeeft hoeveel extra watt hij moet ontladen boven op 0 op de meter. Beide zijn handig om vaste kleine schommelingen in je huisverbruik standaard te compenseren.              | Zo min mogelijk energie importeren en exporteren |
-| Dynamisch NOM          | ⚠️ Let op: Alleen te gebruiken met Nordpool sensor. Vul als eerste in hoeveel uren je goedkoop zou willen laden per dag via `input_number.dynamisch_goedkoopste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Vervolgens vul je de overige duurste uren in via `input_number.dynamisch_duurste_x_periode_morgen` dit is bijvoorbeeld 21 uur. Wanneer nu `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie_nom` hoger is dan `input_number.dynamisch_minimale_spread`. Wanneer `sensor.dynamisch_goedkoopste_periode` erg lang op JA staat zal hij pas weer gaan laden wanneer de batterij ontladen is tot 90%. Hij zal na laden constant 0 op de meter behouden (-xx watt bij opladen en -xx watt bij ontladen) en elke dag het dynamisch laden uitvoeren.                                        | Alle goedkope energie uitspreiden over de dag |
-| Dynamisch NOM (Duur)          | ⚠️ Let op: Alleen te gebruiken met Nordpool sensor. Vul als eerste in hoeveel uren je goedkoop zou willen laden per dag via `input_number.dynamisch_goedkoopste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Vervolgens vul je de overige duurste uren in via `input_number.dynamisch_duurste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Wanneer nu `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie` hoger is dan `input_number.dynamisch_minimale_spread`. Wanneer `sensor.dynamisch_goedkoopste_periode` erg lang op JA staat zal hij pas weer gaan laden wanneer de batterij ontladen is tot 90%. Mocht er nog ruimte zijn om meer op te laden zal hij dit bij teruglevering gaan doen. Wanneer `sensor.dynamisch_duurste_periode` op JA staat zal hij NOM gaan ontladen en de rest van de tijd staat de batterij in standby.                                  | Alle goedkope energie specifiek gebruiken op de duurste uren |
-| Dynamisch Handelen          | ⚠️ Let op: Alleen te gebruiken met Nordpool sensor. Vul als eerste in hoeveel uren je goedkoop zou willen laden per dag via `input_number.dynamisch_goedkoopste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Vervolgens vul je de overige duurste uren in via `input_number.dynamisch_duurste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Wanneer nu `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie` hoger is dan `input_number.dynamisch_minimale_spread`. Wanneer `sensor.dynamisch_goedkoopste_periode` erg lang op JA staat zal hij pas weer gaan laden wanneer de batterij ontladen is tot 90%. Wanneer `sensor.dynamisch_duurste_periode` op JA staat zal hij op maximaal vermogen gaan ontladen en de rest van de tijd staat de batterij in standby.                                 | Energie inkopen en verkopen |
-| Dynamisch Handelen + NOM          | ⚠️ Let op: Alleen te gebruiken met Nordpool sensor. Vul als eerste in hoeveel uren je goedkoop zou willen laden per dag via `input_number.dynamisch_goedkoopste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Vervolgens vul je de overige duurste uren in via `input_number.dynamisch_duurste_x_periode_morgen` dit is bijvoorbeeld 3 uur. Wanneer nu `sensor.dynamisch_goedkoopste_periode` op JA staat zal er opgeladen worden indien `sensor.dynamisch_spread_indicatie` hoger is dan `input_number.dynamisch_minimale_spread`. Wanneer `sensor.dynamisch_goedkoopste_periode` erg lang op JA staat zal hij pas weer gaan laden wanneer de batterij ontladen is tot 90%. Wanneer `sensor.dynamisch_duurste_periode` op JA staat zal hij op maximaal vermogen gaan ontladen en de rest van de tijd Nul op de meter.                                | Energie inkopen en verkopen + NOM |
-| Alleen slim ontladen   | Identiek aan **Nul op de meter** alleen zonder opladen.                                                |
-| Alleen slim opladen    | Identiek aan **Nul op de meter** alleen zonder ontladen.                                               |
-| Snel opladen  | Snel opladen op maximaal vermogen wat ingesteld staat bij `input_number.zendure_2400_ac_max_oplaadvermogen`                                                                     |
-| Snel ontladen | Snel ontladen op maximaal vermogen wat ingesteld staat bij `input_number.zendure_2400_ac_max_ontlaadvermogen`                                                                    |
-
-</details>
+![Preview](Images/Modus-16022026.gif) <br>
+[Ga naar de uitleg over alle verschillende modussen](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen)
 
 <br><br>
 
