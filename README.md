@@ -77,6 +77,7 @@ homeassistant:
 </details>
 
 ![Preview](Images/Instellingen-050326.png) 
+*plug-n-play dashboard
 
 | Uitleg per configuratie item | |  
 |-|-|
