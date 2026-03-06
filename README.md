@@ -10,8 +10,8 @@ Gebaseerd op de krachtige zenSDK RESTful API voor Home Assistant. Deze setup maa
 
 Perfect voor iedereen die zijn batterij **100% lokaal, maximaal stabiel en volledig onder eigen controle** wil draaien in Home Assistant — zonder afhankelijkheid van updates van derden.
 
-Inmiddels zijn er **11 voorgeprogrammeerde modussen** waarin de batterij kan leven, werken en shinen ✨
-Voor elke smaak wat wils — van rustig energie sparen tot agressief vermogen knallen ⚡
+Inmiddels zijn er **11 voorgeprogrammeerde modussen** waarin de batterij kan leven, werken en shinen.
+Voor elke smaak wat wils — van heerlijk NOMen op basis van de grote vuurbal tot energieboer spelen met dynamisch handelen voor een paar stuivers.
 
 Heb je de smaak te pakken en meerdere batterijen staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
 
