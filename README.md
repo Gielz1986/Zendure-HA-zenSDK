@@ -15,7 +15,8 @@ Voor elke smaak wat wils — van heerlijk NOMen op basis van de grote vuurbal to
 
 Heb je de smaak te pakken en meerdere batterijen staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
 
-Vind je dit project nuttig en wil je de ontwikkeling supporten? Trakteer mij op een kopje koffie ☕️ en volg deze repo ⭐.
+Vind je dit project nuttig en wil je de ontwikkeling supporten? <br>
+Trakteer mij op een kopje koffie ☕️ en volg deze repo ⭐.
 
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
   <img src="https://github.com/Gielz1986/Zendure-zenSDK-HA/blob/main/Images/bmc.png?raw=true" width="150" alt="Buy Me a Coffee">
