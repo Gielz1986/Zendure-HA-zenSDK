@@ -307,7 +307,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "(April 2026) v20260305"
+        state: "(April 2026) v20260306"
 
       - name: "Zendure-HA-Zensdk Github Releasecheck"
         unique_id: zendure_ha_zensdk_github_releasecheck
@@ -1306,6 +1306,7 @@ rest:
         value_template: >
           {% set mapping = {
             5: 2.88,
+            70: 1.92,
             300: 1.92,
             350: 2.88,
             500: 2.40
