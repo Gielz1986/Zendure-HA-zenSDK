@@ -6,7 +6,7 @@
 #  Zendure Home Assistant
 **Om in slechts 2️⃣ simpele stappen je batterij volledig lokaal werkend te krijgen in Home Assistant.**
 
-Gebaseerd op de krachtige zenSDK RESTful API voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus) (zonder aangesloten zonnepanelen) — volledig **zonder externe integraties**. Alles draait via **één slimme automatisering**.
+Gebaseerd op de krachtige zenSDK RESTful API voor Home Assistant. Deze setup maakt lokaal verbinding met één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus) — volledig **zonder externe integraties**. Alles draait via **één slimme automatisering**.
 
 Perfect voor iedereen die zijn batterij **100% lokaal, maximaal stabiel en volledig onder eigen controle** wil draaien in Home Assistant — zonder afhankelijkheid van updates van derden.
 
@@ -27,7 +27,7 @@ Vind je dit project nuttig en wil je de ontwikkeling supporten? Trakteer mij op 
 #### ℹ️ Benodigde hardware
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconden levert waarbij +watt afname is en -watt teruglevering).
-- één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus) **(zonder aangesloten zonnepanelen)**.
+- één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus).
 - Of twee dezelfde devices in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
 ---
