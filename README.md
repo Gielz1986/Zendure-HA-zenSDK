@@ -27,7 +27,7 @@ Vind je dit project nuttig en wil je de ontwikkeling supporten? Trakteer mij op 
 #### ℹ️ Benodigde hardware
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconden levert waarbij +watt afname is en -watt teruglevering).
-- één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus).
+- één Solarflow 2400 (AC, AC+ of AC Pro) / Solarflow 1600 AC+ / Solarflow 800 (Pro of Plus).
 - Of twee dezelfde devices in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
 ---
