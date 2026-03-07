@@ -1955,6 +1955,17 @@ views:
                 tap_action:
                   action: navigate
                   navigation_path: /dashboard-zendure/releasenotes
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier kun je zien
+              welke package versie je gebruikt en wat de nieuwste versie is op
+              GitHub. Ook zie je meteen hoeveel issues er openstaan en kun je
+              hier op doorklikken naar GitHub.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: sensor.zendure_2400_ac_configuratie_versie
@@ -1966,7 +1977,7 @@ views:
           - type: markdown
             content: >
               &nbsp;&nbsp;[![Open
-              Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+              Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Openstaande%20Problemen&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
             grid_options:
               columns: 12
               rows: auto
