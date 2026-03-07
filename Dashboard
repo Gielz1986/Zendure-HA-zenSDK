@@ -1625,7 +1625,6 @@ views:
                 color: '#e4e4e7'
                 show:
                   in_header: false
-                  extremas: max
                 color_threshold:
                   - value: 0
                     opacity: 0.2
@@ -1733,7 +1732,6 @@ views:
                 color: '#e4e4e7'
                 show:
                   in_header: false
-                  extremas: max
                 color_threshold:
                   - value: 0
                     opacity: 0.2
@@ -1959,7 +1957,7 @@ views:
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Hier kun je zien
               welke package versie je gebruikt en wat de nieuwste versie is op
-              GitHub. Ook zie je meteen hoeveel issues er openstaan en kun je
+              GitHub. Ook zie je meteen hoeveel problemen er openstaan en kun je
               hier op doorklikken naar GitHub.
             text_only: true
             visibility:
