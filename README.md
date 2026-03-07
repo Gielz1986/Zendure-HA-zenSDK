@@ -23,7 +23,7 @@ Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconden levert (+watt afname / -watt teruglevering).
 - één Solarflow 2400 (AC, AC+ of AC Pro) / Solarflow 1600 AC+ / Solarflow 800 (Pro of Plus).
-- Of twee dezelfde devices in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
+- Of twee dezelfde omvormers in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
 ---
 
