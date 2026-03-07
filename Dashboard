@@ -615,7 +615,7 @@ views:
                       size: 0
           - type: heading
             icon: ''
-            heading: Nul import
+            heading: Nul Import
             heading_style: title
             badges:
               - type: entity
@@ -752,7 +752,7 @@ views:
           - type: heading
             icon: ''
             heading_style: title
-            heading: Import/Export
+            heading: Import | Export
             badges:
               - type: entity
                 show_state: true
@@ -769,9 +769,9 @@ views:
           - type: entities
             entities:
               - entity: sensor.zendure_2400_ac_energie_import
-                name: Opgeladen
+                name: Import
               - entity: sensor.zendure_2400_ac_energie_export
-                name: Ontladen
+                name: Export
           - type: custom:apexcharts-card
             header:
               show: true
@@ -812,7 +812,7 @@ views:
                   color: '#616269'
             series:
               - entity: sensor.zendure_2400_ac_energie_import
-                name: Opgeladen
+                name: Import
                 statistics:
                   period: month
                   type: change
@@ -822,7 +822,7 @@ views:
                 show:
                   in_header: false
               - entity: sensor.zendure_2400_ac_energie_export
-                name: Ontladen
+                name: Export
                 statistics:
                   period: month
                   type: change
