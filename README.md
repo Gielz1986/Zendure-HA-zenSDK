@@ -102,7 +102,7 @@ homeassistant:
 
 
 
-![Preview](Images/Dashboard-26022026.png) <br>
+![Preview](Images/Dashboard-070326.png) <br>
 [Ga naar de uitleg over alle entiteiten](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten)
 
 
