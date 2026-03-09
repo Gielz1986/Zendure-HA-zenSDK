@@ -9,7 +9,7 @@ Gebaseerd op de zenSDK RESTful API voor Home Assistant. Deze package maakt lokaa
 
 Heb je de smaak te pakken en meerdere omvormers staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
 
-Vind je dit project nuttig en wil je de ontwikkeling supporten? <br>
+Vind je dit project nuttig en wil je verdere ontwikkeling supporten? <br>
 Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐.
 
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
