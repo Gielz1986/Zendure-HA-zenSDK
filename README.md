@@ -36,7 +36,7 @@ Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐
 ---
 
 1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-2. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van Github in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
+2. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van GitHub in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
 3. Maak nu een **backup** van je `configuration.yaml`.
 4. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
 
@@ -63,7 +63,7 @@ homeassistant:
 
 1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
 2. Maak eerst een **backup** van je `configuration.yaml`.
-3. Pas daarna je `configuration.yaml` aan door gebruik te maken van de Github `configuration.yaml`.
+3. Pas daarna je `configuration.yaml` aan door gebruik te maken van de GitHub `configuration.yaml`.
 4. Herstart Home Assistant.
 5. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
