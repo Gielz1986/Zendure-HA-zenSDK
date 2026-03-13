@@ -4,7 +4,11 @@
 [![Issue SLA](https://img.shields.io/badge/Gemiddelde%20Oplostijd-~7%20Dagen-brightgreen?style=for-the-badge&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
 
 ![Preview](Images/Dashboard-120326.png) <br>
-[Ga naar de uitleg over alle entiteiten](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten)
+<sub>
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten">
+Ga naar de uitleg over alle entiteiten en het dashboard
+</a>
+</sub>
 
 <br>
 
@@ -130,7 +134,11 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 5. De batterij zal nu aan de slag gaan.
 
 ![Preview](Images/Modus-16022026.gif) <br>
-[Ga naar de uitleg over alle verschillende modussen](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen)
+<sub>
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen">
+Ga naar de uitleg over alle verschillende modussen
+</a>
+</sub>
 
 <br><br>
 
