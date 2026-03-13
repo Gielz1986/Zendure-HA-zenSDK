@@ -146,8 +146,8 @@ Ga naar de uitleg over alle verschillende modussen
 Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
 
 1. Voor dit dashboard is [Apexcharts HACS](https://github.com/RomRider/apexcharts-card) vereist. En (optioneel) [Graphite HACS](https://github.com/TilmanGriesel/graphite).
-2. Maak een nieuw leeg dashboard aan via links onderin ⚙️ en dan **Dashboards** te kiezen.
-3. Kies vervolgens **Dashboard toevoegen** en kies voor **leeg nieuw dashboard**.
+2. Maak een nieuw leeg dashboard aan via links onderin op ⚙️ te klikken en gan dan naar **Dashboards** .
+3. Klik vervolgens op **Dashboard toevoegen** en kies voor **leeg nieuw dashboard**.
 4. Open het nieuwe dashboard.
 5. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
 6. Plak de YAML-code `(zie dashboard bestand)`.
