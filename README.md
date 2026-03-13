@@ -146,12 +146,13 @@ Ga naar de uitleg over alle verschillende modussen
 Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
 
 1. Voor dit dashboard is [Apexcharts HACS](https://github.com/RomRider/apexcharts-card) vereist. En (optioneel) [Graphite HACS](https://github.com/TilmanGriesel/graphite).
-2. Maak een nieuw leeg dashboard aan.
-3. Open het nieuwe dashboard.
-4. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
-5. Plak de YAML-code `(zie dashboard bestand)`.
-6. Sla op en het dashboard is volledig bruikbaar.
-7. [Ga naar WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
+2. Maak een nieuw leeg dashboard aan via links onderin ⚙️ en dan **Dashboards** te kiezen.
+3. Kies vervolgens **Dashboard toevoegen** en kies voor **leeg nieuw dashboard**.
+4. Open het nieuwe dashboard.
+5. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
+6. Plak de YAML-code `(zie dashboard bestand)`.
+7. Sla op en het dashboard is volledig bruikbaar.
+8. [Ga naar WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
 
 ![Preview](Images/Plug-N-Play-Dashboard.gif) 
 
