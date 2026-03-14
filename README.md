@@ -3,7 +3,7 @@
 [![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Problemen&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
 [![Issue SLA](https://img.shields.io/badge/Gemiddelde%20Oplostijd-~7%20Dagen-brightgreen?style=for-the-badge&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
 
-![Preview](Images/Dashboard-120326.png) <br>
+![Preview](Images/Dashboard-140326.png) <br>
 <sub>
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten">
 Ga naar de uitleg over alle entiteiten en het dashboard
