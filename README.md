@@ -91,7 +91,7 @@ homeassistant:
 | `zendure_2400_ac_ip_adres`       | **bijvoorbeeld 192.168.0.172** – In de Zendure app onder device Information |  
 | `homewizard_p1_ip_adres`    | **(Instellingsadvies: Gebruik een HW P1) bijvoorbeeld 192.168.0.192** – In de Homewizard app (lokale API aanzetten)  |  
 | `zendure_2400_ac_standby_vertraging` | **(Instellingsadvies: 15 minuten) 5-30 minuten** – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt | 
-| `zendure_2400_ac_advies_instellingen_overnemen` | Zodra de batterij draait kun je met deze knop het instellingsadvies overnemen. | 
+| `zendure_2400_ac_advies_instellingen_overnemen` | Zodra de batterij draait kun je met deze knop de onderstaande instellingsadviezen direct overnemen. | 
 | **Configuratie (Opladen)** |**Informatie**|  
 | `zendure_2400_ac_max_oplaadvermogen`    | **800-2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |  
 | `zendure_2400_ac_opladen_starten_bij` | **(Instellingsadvies: -300 watt) -100--1000 watt** – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge  | 
