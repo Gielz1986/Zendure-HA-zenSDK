@@ -81,7 +81,9 @@ homeassistant:
 </details>
 
 ![Preview](Images/Instellingen-070326.png) 
-*plug-n-play dashboard
+<sub>*plug-n-play dashboard</sub>
+
+<br>
 
 | Uitleg per configuratie item | |  
 |-|-|
@@ -123,7 +125,7 @@ De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwe
 
 ![Preview](Images/Automation2.gif) 
 
-<br><br>
+<br>
 
 ## ✅ Batterij mag aan de slag
 Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan alleen een dure decoratie met kabels.
@@ -140,7 +142,7 @@ Ga naar de uitleg over alle verschillende modussen
 </a>
 </sub>
 
-<br><br>
+<br>
 
 ## 🔃 (Optioneel) Plug-N-Play Dashboard
 Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
