@@ -102,7 +102,7 @@ homeassistant:
 | `afwijkende_p1_sensor` | **bijvoorbeeld `sensor.eigen_P1`** – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend). [Ga naar WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/2-%E2%80%90-Afwijkende-P1-CT-meters-(API's)) voor afwijkende P1/CT API's. |  
 | `zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.| 
 | **Configuratie (Dynamisch)** |**Informatie**|  
-| `dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen.  |  
+| `dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen. Wanneer je het Dynamisch Nordpool gedeelte in gebruik gaat nemen moet je voor dat je deze in gebruik neemt bij `dynamisch_handmatige_periode` en `dynamisch_handmatige_periode_morgen` even **unknown** weghalen. Hierna zal het dynamisch gedeelte werken. Alles wat in de forecast (morgen) gezet word zal overgenomen worden om 00:00 via de automatisering en verschijnen in vandaag. |  
 | `dynamisch_minimale_spread` | **bijvoorbeeld 25%** - Hiermee geef je aan vanaf hoeveel spread de batterij dynamisch gaat laden en opladen op hoog vermogen.  |  
 | `dynamisch_15_minuten` | Vink dit aan wanneer je gebruik wilt maken van 15 minuten periodes  |  
 | **Configuratie (Dashboard)** |**Informatie**|  
@@ -155,13 +155,3 @@ Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in geb
 8. [Ga naar WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
 
 ![Preview](Images/Plug-N-Play-Dashboard.gif) 
-
-<br><br>
-
-## 🔃 (Optioneel) Nordpool
-Wanneer je ook het Dynamisch Nordpool gedeelte in gebruik gaat nemen moet je voor dat je deze in gebruik neemt bij `dynamisch_handmatige_periode` en
-`dynamisch_handmatige_periode_morgen` even **unknown** weghalen. Hierna zal het dynamisch gedeelte werken. Alles wat in de forecast (morgen) gezet word zal overgenomen worden om 00:00 via de automatisering en verschijnen in vandaag.
-
-Vervolgens kunnen de modussen **Dynamisch NOM**, **Dynamisch NOM (Duur)** **Dynamisch Handelen + NOM** en **Dynamisch Handelen** gebruikt worden. Deze modussen zijn ideaal in een periode met weinig zon maar wel met veel wind. Laad bijvoorbeeld in de winter de batterij een aantal uren goedkoop op iedere dag wanneer de spread meer dan 25% is.
-
-![Preview](Images/Nordpool-20022026.png) 
