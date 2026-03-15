@@ -2103,15 +2103,8 @@ views:
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Hier stel je in of
-              je grafiek kleuren voor een licht of donker dashboard zijn via
-              **Thema dashboard⚙️**. Heb je een Home Assistant wat automatisch
-              omschakelt als het donker is dan kun je deze opnemen in je eigen
-              automatisering.
-
-
-              Ook is het mogelijk om de Dynamische informatie te verbergen of te
-              tonen op het eerste tabblad via **Dynamisch Tonen Op
-              Dashboard⚙️**.
+              je de Dynamische informatie wilt verbergen of tonen op het eerste
+              tabblad via **Dynamisch Tonen Op Dashboard⚙️**.
             text_only: true
             visibility:
               - condition: state
@@ -2119,7 +2112,6 @@ views:
                 state: 'on'
           - type: entities
             entities:
-              - entity: input_select.thema_dashboard
               - entity: input_boolean.help_tonen_op_dashboard
               - entity: input_boolean.dynamisch_tonen_op_dashboard
           - type: heading
