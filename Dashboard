@@ -54,7 +54,7 @@ views:
               {% elif modus == 'Nul op de meter' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> Constant nul op de meter
               behouden (-xx watt bij opladen en -xx watt bij ontladen). Je kunt
-              het opladen finetunen via **Oplaadmarge ⚙️** waarbij je aangeeft
+              het opladen finetunen via **Oplaadmarge⚙️** waarbij je aangeeft
               hoeveel buffer/marge de batterij moet behouden tot 0 watt. Het
               ontladen kun je finetunen via **Ontlaadmarge ⚙️** waarbij je
               aangeeft hoeveel extra watt de batterij moet ontladen boven op nul
@@ -63,12 +63,12 @@ views:
 
 
               Ook kun je zelf instellen wanneer de batterij start met opladen
-              via **Opladen Starten Bij ⚙️** en wanneer hij start met ontladen
+              via **Opladen Starten Bij⚙️** en wanneer hij start met ontladen
               via **Ontladen starten bij ⚙️** 
 
               {% elif modus == 'Dynamisch NOM' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
-              gebruiken met Nordpool sensor ⚙️. 
+              gebruiken met Nordpool sensor⚙️. 
 
 
               Vul als eerste in hoeveel uren je goedkoop zou willen laden per
@@ -84,7 +84,7 @@ views:
 
               {% elif modus == 'Dynamisch NOM (Duur)' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
-              gebruiken met Nordpool sensor ⚙️. 
+              gebruiken met Nordpool sensor⚙️. 
 
 
               Vul als eerste in hoeveel uren je goedkoop zou willen laden per
@@ -102,7 +102,7 @@ views:
 
               {% elif modus == 'Dynamisch Handelen' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
-              gebruiken met Nordpool sensor ⚙️. 
+              gebruiken met Nordpool sensor⚙️. 
 
 
               Vul als eerste in hoeveel uren je goedkoop zou willen laden per
@@ -142,11 +142,11 @@ views:
 
               {% elif modus == 'Snel opladen' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> Snel opladen op maximaal
-              vermogen wat ingesteld staat bij **Max. Oplaadvermogen ⚙️**.
+              vermogen wat ingesteld staat bij **Max. Oplaadvermogen⚙️**.
 
               {% elif modus == 'Snel ontladen' %} <ha-alert
               alert-type="info">Helptekst</ha-alert> Snel ontladen op maximaal
-              vermogen wat ingesteld staat bij **Max. Ontlaadvermogen ⚙️**.
+              vermogen wat ingesteld staat bij **Max. Ontlaadvermogen⚙️**.
 
               {% else %} <ha-alert alert-type="warning">Helptekst</ha-alert>
               Selecteer een modus om uitleg te zien. {% endif %}
@@ -170,449 +170,450 @@ views:
               - condition: state
                 entity: input_select.zendure_2400_ac_modus_selecteren
                 state: Handmatig
-          - type: vertical-stack
-            cards:
-              - type: custom:apexcharts-card
-                experimental:
-                  hidden_by_default: true
-                  color_threshold: true
-                cache: true
-                update_interval: 15min
-                stacked: true
-                header:
-                  show: true
-                  show_states: true
-                  title: ''
-                graph_span: 24h
-                span:
-                  start: day
-                series:
-                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
-                    name: Batterij
-                    statistics:
-                      period: 5minute
-                      type: mean
-                      align: start
-                    type: area
-                    transform: return -x;
-                    stroke_width: 2
-                    opacity: 0.2
-                    extend_to: now
-                    color: '#01a180'
-                    float_precision: 0
-                    color_threshold:
-                      - value: -2000
-                        opacity: 0.5
-                      - value: -1750
-                        opacity: 0.45
-                      - value: -1500
-                        opacity: 0.4
-                      - value: -1250
-                        opacity: 0.35
-                      - value: -1000
-                        opacity: 0.3
-                      - value: -750
-                        opacity: 0.25
-                      - value: -500
-                        opacity: 0.15
-                      - value: 0
-                        opacity: 0.1
-                      - value: 500
-                        opacity: 0.15
-                      - value: 750
-                        opacity: 0.25
-                      - value: 1000
-                        opacity: 0.3
-                      - value: 1250
-                        opacity: 0.35
-                      - value: 1500
-                        opacity: 0.4
-                      - value: 1750
-                        opacity: 0.45
-                      - value: 2000
-                        opacity: 0.5
-                    yaxis_id: energy
-                    show:
-                      in_header: false
-                      in_legend: true
-                  - entity: sensor.p1_nom_doel
-                    name: P1 (NOM Doel)
-                    statistics:
-                      period: 5minute
-                      type: mean
-                      align: start
-                    type: area
-                    stroke_width: 0
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            cache: true
+            update_interval: 15min
+            stacked: true
+            header:
+              show: true
+              show_states: true
+              title: ''
+            graph_span: 24h
+            span:
+              start: day
+            series:
+              - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                name: Batterij
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                transform: return -x;
+                stroke_width: 2
+                opacity: 0.35
+                extend_to: now
+                color: '#01a180'
+                float_precision: 0
+                color_threshold:
+                  - value: -2000
+                    opacity: 0.5
+                  - value: -1750
+                    opacity: 0.45
+                  - value: -1500
                     opacity: 0.4
-                    extend_to: now
-                    color: '#595a5f'
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      in_header: false
-                      in_legend: false
-                apex_config:
-                  tooltip:
-                    x:
-                      format: HH:mm
-                      show: false
-                  xaxis:
-                    labels:
-                      show: false
-                      style:
-                        colors: grey
-                    axisTicks:
-                      show: false
-                    axisBorder:
-                      color: '#616269'
-                  yaxis:
-                    - title:
-                        text: ''
-                      decimalsInFloat: 0
-                      labels:
-                        style:
-                          colors: '#7b7c83'
-                  grid:
-                    strokeDashArray: 0
-                    borderColor: rgb(52,52,52)
-                    show: true
-                  chart:
-                    height: 300px
-                    toolbar:
-                      autoSelected: pan
-                      show: true
-                      tools:
-                        download: false
-                        zoom: true
-                        zoomin: false
-                        zoomout: false
-                        pan: true
-                    zoom:
-                      enabled: true
-                      allowMouseWheelZoom: true
-                      autoScaleYaxis: true
-                  legend:
-                    show: true
-                    floating: true
-                    horizontalAlign: left
-                    offsetX: 25
-                    offsetY: 17
-                    formatter: |
-                      EVAL:function(seriesName, opts) {
-                        // filter series die niet in de legenda moeten
-                        if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
-                        return seriesName;
-                      }
-                  markers:
-                    size: 0
-                    hover:
-                      size: 0
+                  - value: -1250
+                    opacity: 0.35
+                  - value: -1000
+                    opacity: 0.3
+                  - value: -750
+                    opacity: 0.25
+                  - value: -500
+                    opacity: 0.15
+                  - value: 0
+                    opacity: 0.1
+                  - value: 500
+                    opacity: 0.15
+                  - value: 750
+                    opacity: 0.25
+                  - value: 1000
+                    opacity: 0.3
+                  - value: 1250
+                    opacity: 0.35
+                  - value: 1500
+                    opacity: 0.4
+                  - value: 1750
+                    opacity: 0.45
+                  - value: 2000
+                    opacity: 0.5
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: true
+              - entity: sensor.p1_nom_doel
+                name: P1 (NOM Doel)
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                stroke_width: 0
+                opacity: 0.2
+                extend_to: now
+                color: '#c0c0c2'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: false
+            apex_config:
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              xaxis:
+                labels:
+                  show: false
+                  style:
+                    colors: grey
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 0
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              grid:
+                strokeDashArray: 0
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                show: true
+              chart:
+                height: 300px
+                toolbar:
+                  autoSelected: pan
+                  show: true
+                  tools:
+                    download: false
+                    zoom: true
+                    zoomin: false
+                    zoomout: false
+                    pan: true
+                zoom:
+                  enabled: true
+                  allowMouseWheelZoom: true
+                  autoScaleYaxis: true
+              legend:
+                show: true
+                floating: true
+                horizontalAlign: left
+                offsetX: 25
+                offsetY: 17
+                formatter: |
+                  EVAL:function(seriesName, opts) {
+                    // filter series die niet in de legenda moeten
+                    if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
+                    return seriesName;
+                  }
+              markers:
+                size: 0
+                hover:
+                  size: 0
             visibility:
               - condition: state
                 entity: input_select.zendure_2400_ac_modus_selecteren
                 state_not: Handmatig
-          - type: vertical-stack
-            cards:
-              - type: custom:apexcharts-card
-                experimental:
-                  hidden_by_default: true
-                  color_threshold: true
-                cache: true
-                update_interval: 15min
-                stacked: true
-                header:
-                  show: true
-                  show_states: true
-                  title: ''
-                graph_span: 24h
-                span:
-                  start: day
-                series:
-                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
-                    name: Batterij
-                    statistics:
-                      period: 5minute
-                      type: mean
-                      align: start
-                    type: area
-                    transform: return -x;
-                    stroke_width: 2
-                    opacity: 0.2
-                    extend_to: now
-                    color: '#01a180'
-                    float_precision: 0
-                    color_threshold:
-                      - value: -2000
-                        opacity: 0.5
-                      - value: -1750
-                        opacity: 0.45
-                      - value: -1500
-                        opacity: 0.4
-                      - value: -1250
-                        opacity: 0.35
-                      - value: -1000
-                        opacity: 0.3
-                      - value: -750
-                        opacity: 0.25
-                      - value: -500
-                        opacity: 0.15
-                      - value: 0
-                        opacity: 0.1
-                      - value: 500
-                        opacity: 0.15
-                      - value: 750
-                        opacity: 0.25
-                      - value: 1000
-                        opacity: 0.3
-                      - value: 1250
-                        opacity: 0.35
-                      - value: 1500
-                        opacity: 0.4
-                      - value: 1750
-                        opacity: 0.45
-                      - value: 2000
-                        opacity: 0.5
-                    show:
-                      in_header: false
-                      in_legend: true
-                  - entity: sensor.p1_nom_doel
-                    name: P1 (NOM Doel)
-                    statistics:
-                      period: 5minute
-                      type: mean
-                      align: start
-                    type: area
-                    stroke_width: 0
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            cache: true
+            update_interval: 15min
+            stacked: true
+            header:
+              show: true
+              show_states: true
+              title: ''
+            graph_span: 24h
+            span:
+              start: day
+            series:
+              - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                name: Batterij
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                transform: return -x;
+                stroke_width: 2
+                opacity: 0.35
+                extend_to: now
+                color: '#01a180'
+                float_precision: 0
+                color_threshold:
+                  - value: -2000
+                    opacity: 0.5
+                  - value: -1750
+                    opacity: 0.45
+                  - value: -1500
                     opacity: 0.4
-                    extend_to: now
-                    color: '#595a5f'
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      in_header: false
-                      in_legend: false
-                apex_config:
-                  tooltip:
-                    x:
-                      format: HH:mm
-                      show: false
-                  xaxis:
-                    labels:
-                      show: false
-                      style:
-                        colors: grey
-                    axisTicks:
-                      show: false
-                    axisBorder:
-                      color: '#616269'
-                  yaxis:
-                    - title:
-                        text: ''
-                      decimalsInFloat: 0
-                      labels:
-                        style:
-                          colors: '#7b7c83'
-                  grid:
-                    strokeDashArray: 0
-                    borderColor: rgb(52,52,52)
-                    show: true
-                  chart:
-                    height: 204px
-                    toolbar:
-                      autoSelected: pan
-                      show: true
-                      tools:
-                        download: false
-                        zoom: true
-                        zoomin: false
-                        zoomout: false
-                        pan: true
-                    zoom:
-                      enabled: true
-                      allowMouseWheelZoom: true
-                      autoScaleYaxis: true
-                  legend:
-                    show: true
-                    floating: true
-                    horizontalAlign: left
-                    offsetX: 25
-                    offsetY: 17
-                    formatter: |
-                      EVAL:function(seriesName, opts) {
-                        // filter series die niet in de legenda moeten
-                        if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
-                        return seriesName;
-                      }
-                  markers:
-                    size: 0
-                    hover:
-                      size: 0
+                  - value: -1250
+                    opacity: 0.35
+                  - value: -1000
+                    opacity: 0.3
+                  - value: -750
+                    opacity: 0.25
+                  - value: -500
+                    opacity: 0.15
+                  - value: 0
+                    opacity: 0.1
+                  - value: 500
+                    opacity: 0.15
+                  - value: 750
+                    opacity: 0.25
+                  - value: 1000
+                    opacity: 0.3
+                  - value: 1250
+                    opacity: 0.35
+                  - value: 1500
+                    opacity: 0.4
+                  - value: 1750
+                    opacity: 0.45
+                  - value: 2000
+                    opacity: 0.5
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: true
+              - entity: sensor.p1_nom_doel
+                name: P1 (NOM Doel)
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                stroke_width: 0
+                opacity: 0.3
+                extend_to: now
+                color: '#c0c0c2'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: false
+            apex_config:
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              xaxis:
+                labels:
+                  show: false
+                  style:
+                    colors: grey
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 0
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              grid:
+                strokeDashArray: 0
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                show: true
+              chart:
+                height: 204px
+                toolbar:
+                  autoSelected: pan
+                  show: true
+                  tools:
+                    download: false
+                    zoom: true
+                    zoomin: false
+                    zoomout: false
+                    pan: true
+                zoom:
+                  enabled: true
+                  allowMouseWheelZoom: true
+                  autoScaleYaxis: true
+              legend:
+                show: true
+                floating: true
+                horizontalAlign: left
+                offsetX: 25
+                offsetY: 17
+                formatter: |
+                  EVAL:function(seriesName, opts) {
+                    // filter series die niet in de legenda moeten
+                    if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
+                    return seriesName;
+                  }
+              markers:
+                size: 0
+                hover:
+                  size: 0
             visibility:
               - condition: state
                 entity: input_select.zendure_2400_ac_modus_selecteren
                 state: Handmatig
-          - type: vertical-stack
-            cards:
-              - type: custom:apexcharts-card
-                experimental:
-                  hidden_by_default: true
-                  color_threshold: true
-                cache: false
-                stacked: true
-                update_interval: 5sec
-                header:
-                  show: true
-                  show_states: true
-                  title: ''
-                graph_span: 10min
-                series:
-                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
-                    name: Batterij
-                    group_by:
-                      func: avg
-                      duration: 5sec
-                    type: area
-                    invert: true
-                    offset: '-5s'
-                    stroke_width: 2
-                    opacity: 0.2
-                    extend_to: now
-                    color: '#01a180'
-                    float_precision: 0
-                    color_threshold:
-                      - value: -2000
-                        opacity: 0.5
-                      - value: -1750
-                        opacity: 0.45
-                      - value: -1500
-                        opacity: 0.4
-                      - value: -1250
-                        opacity: 0.35
-                      - value: -1000
-                        opacity: 0.3
-                      - value: -750
-                        opacity: 0.25
-                      - value: -500
-                        opacity: 0.15
-                      - value: 0
-                        opacity: 0.1
-                      - value: 500
-                        opacity: 0.15
-                      - value: 750
-                        opacity: 0.25
-                      - value: 1000
-                        opacity: 0.3
-                      - value: 1250
-                        opacity: 0.35
-                      - value: 1500
-                        opacity: 0.4
-                      - value: 1750
-                        opacity: 0.45
-                      - value: 2000
-                        opacity: 0.5
-                    yaxis_id: energy
-                    show:
-                      in_header: false
-                      in_legend: true
-                      offset_in_name: false
-                  - entity: sensor.p1_nom_doel
-                    name: P1 (NOM Doel)
-                    offset: '-5s'
-                    group_by:
-                      func: avg
-                      duration: 5sec
-                    type: area
-                    stroke_width: 0
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            cache: false
+            stacked: true
+            update_interval: 5sec
+            header:
+              show: true
+              show_states: true
+              title: ''
+            graph_span: 10min
+            series:
+              - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                name: Batterij
+                group_by:
+                  func: avg
+                  duration: 5sec
+                type: area
+                invert: true
+                offset: '-5s'
+                stroke_width: 2
+                opacity: 0.35
+                extend_to: now
+                color: '#01a180'
+                float_precision: 0
+                color_threshold:
+                  - value: -2000
+                    opacity: 0.5
+                  - value: -1750
+                    opacity: 0.45
+                  - value: -1500
                     opacity: 0.4
-                    extend_to: now
-                    color: '#595a5f'
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      in_header: false
-                      in_legend: false
-                  - entity: input_number.zendure_2400_ac_ontladen_starten_bij
-                    name: Start ontladen
-                    type: line
-                    stroke_width: 1
-                    color: '#e4e4e7'
+                  - value: -1250
+                    opacity: 0.35
+                  - value: -1000
+                    opacity: 0.3
+                  - value: -750
+                    opacity: 0.25
+                  - value: -500
+                    opacity: 0.15
+                  - value: 0
+                    opacity: 0.1
+                  - value: 500
+                    opacity: 0.15
+                  - value: 750
+                    opacity: 0.25
+                  - value: 1000
+                    opacity: 0.3
+                  - value: 1250
+                    opacity: 0.35
+                  - value: 1500
+                    opacity: 0.4
+                  - value: 1750
+                    opacity: 0.45
+                  - value: 2000
                     opacity: 0.5
-                    stroke_dash: 2
-                    curve: stepline
-                    extend_to: now
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      hidden_by_default: true
-                      in_header: false
-                  - entity: input_number.zendure_2400_ac_opladen_starten_bij
-                    name: Start opladen
-                    type: line
-                    stroke_width: 1
-                    color: '#e4e4e7'
-                    opacity: 0.5
-                    stroke_dash: 2
-                    curve: stepline
-                    extend_to: now
-                    float_precision: 0
-                    yaxis_id: energy
-                    show:
-                      hidden_by_default: true
-                      in_header: false
-                apex_config:
-                  toolbar:
-                    show: true
-                    tools:
-                      download: true
-                      selection: true
-                      zoom: true
-                      zoomin: true
-                      zoomout: true
-                      pan: true
-                  tooltip:
-                    x:
-                      format: HH:mm:ss
-                      show: false
-                  xaxis:
-                    labels:
-                      show: false
-                      style:
-                        colors: grey
-                    axisTicks:
-                      show: false
-                    axisBorder:
-                      color: '#616269'
-                  yaxis:
-                    - title:
-                        text: ''
-                      decimalsInFloat: 0
-                      labels:
-                        style:
-                          colors: '#7b7c83'
-                  grid:
-                    strokeDashArray: 0
-                    borderColor: rgb(52,52,52)
-                    show: true
-                    padding:
-                      top: -10
-                  chart:
-                    height: 150px
-                  legend:
-                    show: true
-                    floating: true
-                    horizontalAlign: left
-                    offsetX: 25
-                    offsetY: 17
-                    formatter: |
-                      EVAL:function(seriesName, opts) {
-                        // filter series die niet in de legenda moeten
-                        if(seriesName === "Leeg" || seriesName === "P1 (NOM Doel) (-5s)") return "";
-                        return seriesName;
-                      }
-                  markers:
-                    size: 0
-                    hover:
-                      size: 0
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: true
+                  offset_in_name: false
+              - entity: sensor.p1_nom_doel
+                name: P1 (NOM Doel)
+                offset: '-5s'
+                group_by:
+                  func: avg
+                  duration: 5sec
+                type: area
+                stroke_width: 0
+                opacity: 0.3
+                extend_to: now
+                color: '#c0c0c2'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: false
+              - entity: input_number.zendure_2400_ac_ontladen_starten_bij
+                name: Start ontladen
+                type: line
+                stroke_width: 2
+                color: var(--accent-color)
+                opacity: 1
+                stroke_dash: 2
+                curve: stepline
+                extend_to: now
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  hidden_by_default: true
+                  in_header: false
+              - entity: input_number.zendure_2400_ac_opladen_starten_bij
+                name: Start opladen
+                type: line
+                stroke_width: 2
+                color: var(--accent-color)
+                opacity: 1
+                stroke_dash: 2
+                curve: stepline
+                extend_to: now
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  hidden_by_default: true
+                  in_header: false
+            apex_config:
+              toolbar:
+                show: true
+                tools:
+                  download: true
+                  selection: true
+                  zoom: true
+                  zoomin: true
+                  zoomout: true
+                  pan: true
+              tooltip:
+                x:
+                  format: HH:mm:ss
+                  show: false
+              xaxis:
+                labels:
+                  show: false
+                  style:
+                    colors: grey
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 0
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              grid:
+                strokeDashArray: 0
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                show: true
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: true
+                floating: true
+                horizontalAlign: left
+                offsetX: 25
+                offsetY: 17
+                formatter: |
+                  EVAL:function(seriesName, opts) {
+                    // filter series die niet in de legenda moeten
+                    if(seriesName === "Leeg" || seriesName === "P1 (NOM Doel) (-5s)") return "";
+                    return seriesName;
+                  }
+              markers:
+                size: 0
+                hover:
+                  size: 0
           - type: heading
             icon: ''
             heading: Nul Import
@@ -667,7 +668,9 @@ views:
                   labels:
                     show: true
                     style:
-                      colors: '#7b7c83'
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
               tooltip:
                 x:
                   format: d/MM
@@ -681,10 +684,12 @@ views:
                     }
               grid:
                 show: true
-                borderColor: '#332f2c'
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
                 strokeDashArray: 0
                 padding:
                   top: -10
+                row:
+                  opacity: 0.5
               chart:
                 height: 150px
               legend:
@@ -699,7 +704,7 @@ views:
                 axisTicks:
                   show: false
                 axisBorder:
-                  color: '#616269'
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
             series:
               - entity: sensor.p1_nul_import_duur_vandaag
                 name: Nul import
@@ -708,7 +713,7 @@ views:
                   type: max
                   align: start
                 type: column
-                color: '#e0e0e3'
+                color: '#01a180'
                 show:
                   in_header: false
                   in_legend: false
@@ -766,12 +771,6 @@ views:
                 icon: mdi:percent
                 tap_action:
                   action: more-info
-          - type: entities
-            entities:
-              - entity: sensor.zendure_2400_ac_energie_import
-                name: Import
-              - entity: sensor.zendure_2400_ac_energie_export
-                name: Export
           - type: custom:apexcharts-card
             header:
               show: true
@@ -788,14 +787,16 @@ views:
                   labels:
                     show: true
                     style:
-                      colors: '#7b7c83'
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
               tooltip:
                 x:
                   format: MM-yyyy
                   show: false
               grid:
                 show: true
-                borderColor: '#332f2c'
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
                 strokeDashArray: 0
                 padding:
                   top: -10
@@ -809,7 +810,7 @@ views:
                 axisTicks:
                   show: false
                 axisBorder:
-                  color: '#616269'
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
             series:
               - entity: sensor.zendure_2400_ac_energie_import
                 name: Import
@@ -831,6 +832,12 @@ views:
                 color: '#b3e3d9'
                 show:
                   in_header: false
+          - type: entities
+            entities:
+              - entity: sensor.zendure_2400_ac_energie_import
+                name: Import
+              - entity: sensor.zendure_2400_ac_energie_export
+                name: Export
       - type: grid
         cards:
           - type: heading
@@ -873,113 +880,109 @@ views:
                     state: Ja
                 name: Duur
                 state_content: name
-            visibility:
-              - condition: state
-                entity: input_boolean.dynamisch_tonen_op_dashboard
-                state: 'on'
-          - type: horizontal-stack
-            cards:
-              - type: custom:apexcharts-card
-                update_interval: 1sec
-                graph_span: 24h
-                apex_config:
-                  markers:
-                    size: 0
-                    hover:
-                      size: 0
-                  plotOptions:
-                    bar:
-                      columnWidth: 90%
-                  tooltip:
-                    enabledOnSeries:
-                      - 0
-                    followCursor: true
-                    shared: true
-                    intersect: false
-                    enabled: true
-                    x:
-                      format: HH:mm
-                      show: false
-                    'y':
-                      formatter: |
-                        EVAL: (val) => `${val.toFixed(3)} €/kWh`
-                  grid:
-                    show: true
-                    borderColor: '#332f2c'
-                    strokeDashArray: 0
-                    padding:
-                      top: -10
-                  chart:
-                    height: 150px
-                    stacked: true
-                    stackOnlyBar: true
-                  yaxis:
-                    - title:
-                        text: ''
-                      decimalsInFloat: 2
-                      forceNiceScale: true
-                      labels:
-                        style:
-                          colors: '#7b7c83'
-                  xaxis:
-                    labels:
-                      show: false
-                    axisTicks:
-                      show: false
-                    axisBorder:
-                      color: '#616269'
-                  legend:
-                    show: false
-                span:
-                  start: day
-                series:
-                  - entity: sensor.dynamisch_goedkoopste_periode
-                    name: Vandaag
-                    type: column
-                    float_precision: 3
-                    color: '#e0e0e3'
-                    show:
-                      in_header: false
-                      legend_value: false
-                      extremas: false
-                    data_generator: |
-                      const data = entity.attributes.raw_today;
-                      if (!data) return [];
+          - type: custom:apexcharts-card
+            update_interval: 1sec
+            graph_span: 24h
+            apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
+              plotOptions:
+                bar:
+                  columnWidth: 90%
+              tooltip:
+                enabledOnSeries:
+                  - 0
+                followCursor: true
+                shared: true
+                intersect: false
+                enabled: true
+                x:
+                  format: HH:mm
+                  show: false
+                'y':
+                  formatter: |
+                    EVAL: (val) => `${val.toFixed(3)} €/kWh`
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+                stacked: true
+                stackOnlyBar: true
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 2
+                  forceNiceScale: true
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              legend:
+                show: false
+            span:
+              start: day
+            series:
+              - entity: sensor.dynamisch_goedkoopste_periode
+                name: Vandaag
+                type: column
+                float_precision: 3
+                color: '#e0e0e3'
+                show:
+                  in_header: false
+                  legend_value: false
+                  extremas: false
+                data_generator: |
+                  const data = entity.attributes.raw_today;
+                  if (!data) return [];
 
-                      return data.map((item, index) => {
-                        const tijdStart = new Date(item.start).getTime();
-                        const duration = item.duration
-                                          ? item.duration * 1000
-                                          : (data[index + 1]
-                                              ? new Date(data[index + 1].start).getTime() - tijdStart
-                                              : 3600000);
-                        const tijdEind = tijdStart + duration;
+                  return data.map((item, index) => {
+                    const tijdStart = new Date(item.start).getTime();
+                    const duration = item.duration
+                                      ? item.duration * 1000
+                                      : (data[index + 1]
+                                          ? new Date(data[index + 1].start).getTime() - tijdStart
+                                          : 3600000);
+                    const tijdEind = tijdStart + duration;
 
-                        const prijs = item.value;
-                        const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
+                    const prijs = item.value;
+                    const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
 
-                        // Standaardkleur: #e0e0e3
-                        let kleur = "rgba(224,224,227,1)";
+                    // Standaardkleur: #e0e0e3
+                    let kleur = "rgba(224,224,227,1)";
 
-                        if (prijs < 0) {
-                          kleur = verleden ? "rgba(93,173,226,0.25)" : "rgba(93,173,226,1)";
-                        }
-                        else if (item.goedkoop === "ja") {
-                          kleur = verleden ? "rgba(1,161,128,0.25)" : "rgba(1,161,128,1)";
-                        }
-                        else if (item.duur === "ja") {
-                          kleur = verleden ? "rgba(197,59,44,0.25)" : "rgba(197,59,44,1)";
-                        }
-                        else {
-                          kleur = verleden ? "rgba(224,224,227,0.25)" : "rgba(224,224,227,1)";
-                        }
+                    if (prijs < 0) {
+                      kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
+                    }
+                    else if (item.goedkoop === "ja") {
+                      kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
+                    }
+                    else if (item.duur === "ja") {
+                      kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
+                    }
+                    else {
+                      kleur = verleden ? "rgba(162,162,163,0.15)" : "rgba(162,162,163,1)";
+                    }
 
-                        return {
-                          x: tijdStart,
-                          y: prijs,
-                          fillColor: kleur
-                        };
-                      });
+                    return {
+                      x: tijdStart,
+                      y: prijs,
+                      fillColor: kleur
+                    };
+                  });
           - type: horizontal-stack
             cards:
               - type: tile
@@ -1020,9 +1023,6 @@ views:
               - condition: time
                 after: '13:30:00'
                 before: '24:00:00'
-              - condition: state
-                entity: input_boolean.dynamisch_tonen_op_dashboard
-                state: 'on'
             badges: []
           - type: horizontal-stack
             cards:
@@ -1054,7 +1054,7 @@ views:
                         EVAL: (val) => `${val.toFixed(3)} €/kWh`
                   grid:
                     show: true
-                    borderColor: '#332f2c'
+                    borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
                     strokeDashArray: 0
                     padding:
                       top: -10
@@ -1069,14 +1069,18 @@ views:
                       forceNiceScale: true
                       labels:
                         style:
-                          colors: '#7b7c83'
+                          colors: >-
+                            color-mix(in srgb, var(--primary-text-color) 75%,
+                            transparent)
                   xaxis:
                     labels:
                       show: false
                     axisTicks:
                       show: false
                     axisBorder:
-                      color: '#616269'
+                      color: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
                   legend:
                     show: false
                 span:
@@ -1111,16 +1115,16 @@ views:
                         let kleur = "rgba(224,224,227,1)";
 
                         if (prijs < 0) {
-                          kleur = verleden ? "rgba(93,173,226,0.25)" : "rgba(93,173,226,1)";
+                          kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
                         }
                         else if (item.goedkoop === "ja") {
-                          kleur = verleden ? "rgba(1,161,128,0.25)" : "rgba(1,161,128,1)";
+                          kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
                         }
                         else if (item.duur === "ja") {
-                          kleur = verleden ? "rgba(197,59,44,0.25)" : "rgba(197,59,44,1)";
+                          kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
                         }
                         else {
-                          kleur = verleden ? "rgba(224,224,227,0.25)" : "rgba(224,224,227,1)";
+                          kleur = verleden ? "rgba(162,162,163,0.15)" : "rgba(162,162,163,1)";
                         }
 
                         return {
@@ -1181,7 +1185,7 @@ views:
     icon: mdi:battery
     dense_section_placement: false
   - type: sections
-    max_columns: 3
+    max_columns: 4
     icon: mdi:battery-heart-variant
     path: gezondheid
     title: Gezondheid
@@ -1203,8 +1207,6 @@ views:
                 name: Signaalsterkte
               - entity: sensor.zendure_2400_ac_error
                 name: Error
-              - entity: sensor.zendure_2400_ac_soc_status
-                name: SOC Status
               - entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
                 name: Omvormer Max. Oplaadvermogen
               - entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
@@ -1218,103 +1220,6 @@ views:
                 name: Minimale Laadpercentage
               - entity: sensor.zendure_2400_ac_maximale_laadpercentage
                 name: Maximale Laadpercentage
-          - type: heading
-            icon: ''
-            heading: Omvormer Temperatuur
-            heading_style: title
-            badges:
-              - type: entity
-                show_state: true
-                show_icon: true
-                entity: sensor.zendure_2400_ac_omvormer_temperatuur
-                color: '#01a180'
-                tap_action:
-                  action: more-info
-          - type: markdown
-            content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
-              de omvormer over de afgelopen 7 dagen. De groene lijn geeft de
-              grens aan waarop de omvormer zijn vermogen begint terug te
-              schroeven. Dit gebeurt vanaf 60 °C.
-
-
-              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
-              grafiek gemiddeld 1 uur achter.
-            text_only: true
-            visibility:
-              - condition: state
-                entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
-          - type: custom:apexcharts-card
-            experimental:
-              hidden_by_default: true
-              color_threshold: true
-            header:
-              show: true
-              title: ''
-            graph_span: 7day
-            stacked: true
-            cache: false
-            apex_config:
-              annotations:
-                yaxis:
-                  - 'y': 60
-                    borderColor: '#01a180'
-                    strokeDashArray: 2
-              yaxis:
-                - decimalsInFloat: 0
-                  max: 80
-                  labels:
-                    show: true
-                    style:
-                      colors: '#7b7c83'
-              tooltip:
-                x:
-                  format: dd-MM (HH:mm)
-                  show: false
-              grid:
-                show: true
-                borderColor: '#332f2c'
-                strokeDashArray: 0
-                padding:
-                  top: -10
-              chart:
-                height: 150px
-              legend:
-                show: false
-              xaxis:
-                labels:
-                  show: false
-                axisTicks:
-                  show: false
-                axisBorder:
-                  color: '#616269'
-            series:
-              - entity: sensor.zendure_2400_ac_omvormer_temperatuur
-                name: Omvormer Temperatuur
-                stroke_width: 2
-                opacity: 0.2
-                curve: smooth
-                extend_to: now
-                statistics:
-                  period: hour
-                  type: max
-                  align: start
-                type: area
-                color: '#e4e4e7'
-                show:
-                  in_header: false
-                color_threshold:
-                  - value: 0
-                    opacity: 0.2
-                  - value: 30
-                    opacity: 0.35
-                  - value: 40
-                    opacity: 0.5
-                  - value: 50
-                    opacity: 0.65
-                  - value: 60
-                    opacity: 0.8
           - type: heading
             icon: ''
             heading: Relais Schakelingen
@@ -1361,21 +1266,24 @@ views:
               annotations:
                 yaxis:
                   - 'y': 100
-                    borderColor: '#01a180'
-                    strokeDashArray: 2
+                    borderColor: var(--accent-color)
+                    strokeDashArray: 4
+                    borderWidth: 2
               yaxis:
                 - decimalsInFloat: 0
                   labels:
                     show: true
                     style:
-                      colors: '#7b7c83'
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
               tooltip:
                 x:
                   format: d/MM
                   show: false
               grid:
                 show: true
-                borderColor: '#332f2c'
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
                 strokeDashArray: 0
                 padding:
                   top: -10
@@ -1389,7 +1297,7 @@ views:
                 axisTicks:
                   show: false
                 axisBorder:
-                  color: '#616269'
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
             series:
               - entity: sensor.zendure_2400_ac_relais_schakelingen_opladen_vandaag
                 name: Relais Schakelingen Opladen
@@ -1399,7 +1307,7 @@ views:
                   type: max
                   align: middle
                 type: column
-                color: '#e0e0e3'
+                color: '#01a180'
                 show:
                   in_header: false
                   extremas: false
@@ -1410,12 +1318,212 @@ views:
                   type: max
                   align: middle
                 type: column
-                color: '#e0e0e3'
+                color: '#01a180'
+                show:
+                  in_header: false
+                  extremas: false
+          - type: heading
+            icon: ''
+            heading: Kalibraties
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_soc_status
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_laatste_kalibratie
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            stacked: true
+            header:
+              show: true
+              title: ''
+            graph_span: 2month
+            span:
+              start: month
+              offset: '-1month'
+            cache: false
+            apex_config:
+              yaxis:
+                - decimalsInFloat: 0
+                  max: 100
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: d/MM
+                  show: false
+                'y':
+                  formatter: |
+                    function(value, { seriesIndex, w }) {
+                      const name = w.globals.seriesNames[seriesIndex];
+                      if (name === "Geen kalibratie") {
+                        return "";
+                      }
+                      return value;
+                    }
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_2400_ac_laadpercentage
+                name: Kalibratie Voltooid
+                transform: |
+                  return x === 100 ? x : null;
+                statistics:
+                  period: day
+                  type: max
+                  align: middle
+                type: column
+                color: '#01a180'
+                show:
+                  in_header: false
+                  extremas: false
+              - entity: sensor.zendure_2400_ac_laadpercentage
+                name: Geen Kalibratie
+                opacity: 0.7
+                transform: |
+                  return x < 100 ? x : null;
+                statistics:
+                  period: day
+                  type: max
+                  align: middle
+                type: column
+                color: '#a2a2a3'
                 show:
                   in_header: false
                   extremas: false
       - type: grid
         cards:
+          - type: heading
+            icon: ''
+            heading: Omvormer Temperatuur
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_omvormer_temperatuur
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
+              de omvormer over de afgelopen 7 dagen. De groene lijn geeft de
+              grens aan waarop de omvormer zijn vermogen begint terug te
+              schroeven. Dit gebeurt vanaf 60 °C.
+
+
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            header:
+              show: true
+              title: ''
+            graph_span: 7day
+            stacked: true
+            cache: false
+            apex_config:
+              annotations:
+                yaxis:
+                  - 'y': 60
+                    borderColor: var(--accent-color)
+                    strokeDashArray: 4
+                    borderWidth: 2
+              yaxis:
+                - decimalsInFloat: 0
+                  max: 80
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: dd-MM (HH:mm)
+                  show: false
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_2400_ac_omvormer_temperatuur
+                name: Omvormer Temperatuur
+                stroke_width: 2
+                opacity: 0.2
+                curve: smooth
+                extend_to: now
+                statistics:
+                  period: hour
+                  type: max
+                  align: start
+                type: area
+                color: '#01a180'
+                show:
+                  in_header: false
+                color_threshold:
+                  - value: 0
+                    opacity: 0.2
+                  - value: 30
+                    opacity: 0.35
+                  - value: 40
+                    opacity: 0.5
+                  - value: 50
+                    opacity: 0.65
+                  - value: 60
+                    opacity: 0.8
           - type: heading
             icon: ''
             heading: Per Batterij
@@ -1589,14 +1697,16 @@ views:
                   labels:
                     show: true
                     style:
-                      colors: '#7b7c83'
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
               tooltip:
                 x:
                   format: HH:mm
                   show: false
               grid:
                 show: true
-                borderColor: '#332f2c'
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
                 strokeDashArray: 0
                 padding:
                   top: -10
@@ -1610,7 +1720,7 @@ views:
                 axisTicks:
                   show: false
                 axisBorder:
-                  color: '#616269'
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
             series:
               - entity: sensor.zendure_2400_ac_efficientie_import
                 name: Efficiëntie Import (gemiddeld)
@@ -1622,7 +1732,7 @@ views:
                   type: mean
                   align: start
                 type: area
-                color: '#e4e4e7'
+                color: '#01a180'
                 show:
                   in_header: false
                 color_threshold:
@@ -1647,7 +1757,7 @@ views:
                 opacity: 0
                 extend_to: now
                 transform: return Math.max(0, x);
-                color: '#01a180'
+                color: '#e4e4e7'
                 show:
                   in_header: false
           - type: entities
@@ -1696,14 +1806,16 @@ views:
                   labels:
                     show: true
                     style:
-                      colors: '#7b7c83'
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
               tooltip:
                 x:
                   format: HH:mm
                   show: false
               grid:
                 show: true
-                borderColor: '#332f2c'
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
                 strokeDashArray: 0
                 padding:
                   top: -10
@@ -1717,7 +1829,7 @@ views:
                 axisTicks:
                   show: false
                 axisBorder:
-                  color: '#616269'
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
             series:
               - entity: sensor.zendure_2400_ac_efficientie_export
                 name: Efficiëntie Export (gemiddeld)
@@ -1729,7 +1841,7 @@ views:
                   type: mean
                   align: start
                 type: area
-                color: '#e4e4e7'
+                color: '#01a180'
                 show:
                   in_header: false
                 color_threshold:
@@ -1754,7 +1866,7 @@ views:
                 opacity: 0
                 extend_to: now
                 transform: return Math.max(0, -x);
-                color: '#01a180'
+                color: '#e4e4e7'
                 show:
                   in_header: false
           - type: entities
@@ -1767,7 +1879,7 @@ views:
                 name: Efficientie Export (24u gemiddelde)
     cards: []
   - type: sections
-    max_columns: 3
+    max_columns: 4
     title: Configuratie
     path: configuratie
     icon: mdi:cog
@@ -1776,25 +1888,76 @@ views:
         cards:
           - type: heading
             icon: ''
+            heading: Gekoppelde Zendure
+            heading_style: title
+          - type: markdown
+            grid_options:
+              columns: 3
+              rows: auto
+            text_only: true
+            content: >
+              {% set product = states('sensor.zendure_2400_ac_productserie') %}
+
+              {% if product == 'solarFlow2400AC' %} <img
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_ac.png"
+              width="100">
+
+              {% elif product == 'solarFlow2400AC+' %} <img
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_ac_plus.png"
+              width="100">
+
+              {% elif product == 'solarFlow1600AC+' %} <img
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_1600_ac_plus.png"
+              width="100">
+
+              {% elif product == 'solarFlow800Pro' %} <img
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_800_pro.png"
+              width="100">
+
+              {% elif product == 'solarFlow800Plus' %} <img
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_800_plus.png"
+              width="100">
+
+              {% else %} <img
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_ac.png"
+              width="100"> {% endif %}
+          - type: markdown
+            content: >-
+              {% set product = states('sensor.zendure_2400_ac_productserie') %}
+              {% if product == 'solarFlow2400AC' %} **Solarflow 2400 AC** {%
+              elif product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {%
+              elif product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {%
+              elif product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
+              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
+              **Onbekend** {% endif %} ({{
+              states('sensor.zendure_2400_ac_totale_capaciteit') }} kWh)
+
+              {{ states('sensor.zendure_2400_ac_serienummer') }}
+            grid_options:
+              columns: 9
+              rows: auto
+          - type: heading
+            icon: ''
             heading: Configuratie (Basis)
             heading_style: title
             badges: []
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Vul hier het
-              IP-adres van je Zendure en van je HomeWizard P1 (lokale API moet
-              aanstaan) in. Gebruik je een afwijkende P1-sensor, dan kun je deze
-              instellen via **Afwijkende P1 Sensor ⚙️**.
+              IP-adres van je Zendure in onder **Zendure 2400 AC IP-adres⚙️** en
+              van je HomeWizard P1 (lokale API moet aanstaan) onder **Homewizard
+              P1 IP-adres⚙️**. Gebruik je een afwijkende P1-sensor, dan kun je
+              deze instellen via **Afwijkende P1 Sensor⚙️**.
 
 
-              Hier stel je ook de **Standby Vertraging ⚙️** in. Wanneer de
+              Hier stel je ook de **Standby Vertraging⚙️** in. Wanneer de
               Zendure geen actieve taak heeft, gaat hij na de ingestelde periode
               volledig in standby. Het verbruik bedraagt dan ongeveer 0,2 kWh
               per dag.
 
 
               Wil je niet te veel gedoe neem dan in eerste instantie de **Advies
-              Instellingen ⚙️** voor het gedrag in één keer over. Pas het daarna
+              Instellingen⚙️** voor het gedrag in één keer over. Pas het daarna
               na eigen smaak aan.
             text_only: true
             visibility:
@@ -1886,16 +2049,16 @@ views:
               <ha-alert alert-type="info">Helptekst</ha-alert>Maak je geen
               gebruik van een Homewizard P1 maar heb je wel een P1/CT sensor
               waarbij -watt teruglevering is en +watt import per seconden is vul
-              deze dan hier in.
+              deze dan hier in onder **Afwijkende P1 Sensor⚙️**.
 
 
-              Ook kun je hier een afwijkende batterij volgorde instellen.
-              Hiermee bepaal je zelf een afwijkende volgorde van de batterijen.
-              De juiste volgorde bepaal je mede aan de hand van
-              **sensor.zendure_2400_ac_batterij_serienummers** en de sticker op
-              de batterij(en). Op deze manier zullen de batterijtemperaturen en
-              het laadpercentage de juiste volgorde hanteren zoals die van de
-              batterij(en) in de stapel.
+              Ook kun je hier een afwijkende batterij volgorde instellen onder
+              **Batterij Volgorde⚙️**. Hiermee bepaal je zelf een afwijkende
+              volgorde van de batterijen. De juiste volgorde bepaal je mede aan
+              de hand van **sensor.zendure_2400_ac_batterij_serienummers** en de
+              sticker op de batterij(en). Op deze manier zullen de
+              batterijtemperaturen en het laadpercentage de juiste volgorde
+              hanteren zoals die van de batterij(en) in de stapel.
             text_only: true
             visibility:
               - condition: state
@@ -1937,8 +2100,26 @@ views:
             icon: ''
             heading_style: title
             heading: Configuratie (Dashboard)
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier stel je in of
+              je grafiek kleuren voor een licht of donker dashboard zijn via
+              **Thema dashboard⚙️**. Heb je een Home Assistant wat automatisch
+              omschakelt als het donker is dan kun je deze opnemen in je eigen
+              automatisering.
+
+
+              Ook is het mogelijk om de Dynamische informatie te verbergen of te
+              tonen op het eerste tabblad via **Dynamisch Tonen Op
+              Dashboard⚙️**.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
+              - entity: input_select.thema_dashboard
               - entity: input_boolean.help_tonen_op_dashboard
               - entity: input_boolean.dynamisch_tonen_op_dashboard
           - type: heading
