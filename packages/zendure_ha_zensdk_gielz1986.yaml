@@ -437,7 +437,7 @@ template:
               {% endif %}
             {% endif %}
           {% else %}
-            unknown
+            0
           {% endif %}
         attributes:
           raw_today: >-
@@ -550,7 +550,7 @@ template:
             {% else %}
               0
             {% endif %}
-            
+
       - name: "Dynamisch Spread Indicatie"
         unique_id: dynamisch_spread_indicatie
         icon: mdi:percent-box
