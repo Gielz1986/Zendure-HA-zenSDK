@@ -1240,7 +1240,7 @@ views:
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
               relaisschakelingen per dag van deze maand en de vorige maand. De
-              groene lijn geeft de grens aan waarop het aantal schakelingen als
+              stippellijn geeft de grens aan waarop het aantal schakelingen als
               verhoogd wordt beschouwd. Alles onder de 100 schakelingen per dag
               is normaal op een deels bewolkte dag.
 
@@ -1439,7 +1439,7 @@ views:
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
-              de omvormer over de afgelopen 7 dagen. De groene lijn geeft de
+              de omvormer over de afgelopen 7 dagen. De stippellijn geeft de
               grens aan waarop de omvormer zijn vermogen begint terug te
               schroeven. Dit gebeurt vanaf 60 °C.
 
