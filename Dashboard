@@ -1341,6 +1341,11 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_laatste_kalibratie_dagen
+                color: '#01a180'
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
