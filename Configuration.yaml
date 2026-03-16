@@ -303,11 +303,45 @@ template:
             mdi:flash
           {% endif %}
 
+  - trigger:
+      - platform: state
+        entity_id: sensor.zendure_2400_ac_laadpercentage
+        to: "100"
+
+    sensor:
+      - name: "Zendure 2400 AC Laatste Kalibratie"
+        unique_id: Zendure_2400_AC_Laatste_Kalibratie
+        device_class: timestamp
+        icon: mdi:sync
+        state: >
+          {% if trigger.platform == 'state' %}
+            {{ now().isoformat() }}
+          {% else %}
+            {{ this.state }}
+          {% endif %}
+
   - sensor:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "(April 2026) v20260312"
+        state: "(Mei 2026) v20260316"
+
+      - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
+        unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
+        unit_of_measurement: "d"
+        state: >
+         {% set last = states('sensor.zendure_2400_ac_laatste_kalibratie') %}
+         {% if last in ['unknown','unavailable',''] %}
+           0
+         {% else %}
+         {{ (now().date() - as_datetime(last).date()).days }}
+         {% endif %}
+        icon: >
+         {% if this.state | int < 29 %}
+           mdi:thumb-up
+         {% else %}
+           mdi:thumb-down
+         {% endif %}
 
       - name: "Zendure-HA-Zensdk Github Releasecheck"
         unique_id: zendure_ha_zensdk_github_releasecheck
@@ -1249,6 +1283,20 @@ template:
         attributes:
           totale_capaciteit_kwh: >
             {{ states('sensor.zendure_2400_ac_totale_capaciteit') }}
+          indicatie_beschikbare_energie_(zonder_verlies): >
+            {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+            {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
+            {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
+            {% set totale_capaciteit = states('sensor.zendure_2400_ac_totale_capaciteit') | float(0) %}
+
+            {% set effectief_laad = [laad, max_laad] | min %}
+            {% set bruikbaar_percentage = effectief_laad - min_laad %}
+
+            {% if bruikbaar_percentage <= 0 %}
+              0
+            {% else %}
+              {{ (bruikbaar_percentage / 100 * totale_capaciteit) | round(2) }}
+            {% endif %}
           bruikbaar_percentage: >
             {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
             {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
@@ -1691,14 +1739,21 @@ rest:
 
       - name: "Zendure 2400 AC Resterende Ontlaad Tijd"
         value_template: >
-         {% set vermogen_aansturing = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
-         {% if vermogen_aansturing < 0 %}
-         {% set total_minutes = value_json['properties']['remainOutTime'] | float(0) %}
-         {% set hours = (total_minutes // 60) | int %}
-         {% set minutes = (total_minutes % 60) | int %}
-          {{ hours }}u {{ minutes }}m
+         {% set vermogen = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+         {% set energie = states('sensor.zendure_2400_ac_indicatie_beschikbare_energie') | float(0) %}
+         {% if vermogen < 0 %}
+         {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
+         {% if ontlaadvermogen_kw > 0 %}
+           {% set uren = energie / ontlaadvermogen_kw %}
+           {% set total_minutes = (uren * 60) | int %}
+           {% set hours = total_minutes // 60 %}
+           {% set minutes = total_minutes % 60 %}
+           {{ hours }}u {{ minutes }}m
          {% else %}
-          Niet aan het ontladen
+           Onbekend
+         {% endif %}
+         {% else %}
+           Niet aan het ontladen
          {% endif %}
         icon: mdi:clock-time-eight-outline
         unique_id: zendure_2400_ac_resterende_ontlaad_tijd
