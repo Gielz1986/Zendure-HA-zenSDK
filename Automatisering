@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie April 2026 (v20260312)
+description: Configuratie Versie Mei 2026 (v20260316)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1261,18 +1261,27 @@ actions:
               hours: 0
               minutes: 0
               seconds: 0
-          - alias: SOC 10% lager dan maximale ingestelde SOC
-            condition: template
-            value_template: |
-              {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0) <= 
-                 (states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) - 10) }}
+          - condition: or
+            conditions:
+              - alias: SOC 10% lager dan maximale ingestelde SOC
+                condition: template
+                value_template: >
+                  {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
+                  <= 
+                     (states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) - 10) }}
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen
         sequence:
           - action: input_boolean.turn_off
             metadata: {}
             data: {}
             target:
               entity_id: input_boolean.dynamisch_recent_geladen
-        alias: Dynamisch recent geladen uitzetten onder de 90% SOC
+        alias: >-
+          Dynamisch recent geladen uitzetten onder de 90% SOC of tijdens
+          Dynamisch Handelen
       - conditions:
           - condition: trigger
             id:
