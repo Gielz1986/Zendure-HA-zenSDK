@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie Mei 2026 (v20260316)
+description: Configuratie Versie Mei 2026 (v20260317)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -654,6 +654,7 @@ actions:
             state:
               - Normale werking
               - Laadlimiet bereikt
+              - unknown
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
@@ -767,6 +768,7 @@ actions:
             state:
               - Normale werking
               - Laadlimiet bereikt
+              - unknown
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
@@ -869,6 +871,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - condition: template
             value_template: >
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
@@ -978,6 +981,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - condition: template
             value_template: >
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
@@ -1306,6 +1310,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - alias: SOC lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -1419,6 +1424,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - alias: SOC lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -1523,6 +1529,7 @@ actions:
             state:
               - Normale werking
               - Laadlimiet bereikt
+              - unknown
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
