@@ -313,7 +313,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "(Mei 2026) v20260316"
+        state: "(Mei 2026) v20260319"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
