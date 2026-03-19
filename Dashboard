@@ -829,7 +829,7 @@ views:
                   type: change
                   align: start
                 type: column
-                color: '#b3e3d9'
+                color: '#a2a2a3'
                 show:
                   in_header: false
           - type: entities
@@ -1346,6 +1346,22 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_laatste_kalibratie_dagen
                 color: '#01a180'
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
+              kalibraties aangegeven met een groene kleur deze maand en de
+              vorige maand. De batterij kalibratie vind plaats wanneer de
+              batterij tot 100% is opgeladen. Zodra er langer dan 1 maand geen
+              kalibratie is geweest doet de BMS dit vanzelf.
+
+
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -1362,7 +1378,9 @@ views:
             apex_config:
               yaxis:
                 - decimalsInFloat: 0
+                  min: 0
                   max: 100
+                  tickAmount: 4
                   labels:
                     show: true
                     style:
@@ -1415,7 +1433,6 @@ views:
                   extremas: false
               - entity: sensor.zendure_2400_ac_laadpercentage
                 name: Geen Kalibratie
-                opacity: 0.7
                 transform: |
                   return x < 100 ? x : null;
                 statistics:
@@ -1446,7 +1463,7 @@ views:
               <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
               de omvormer over de afgelopen 7 dagen. De stippellijn geeft de
               grens aan waarop de omvormer zijn vermogen begint terug te
-              schroeven. Dit gebeurt vanaf 60 °C.
+              schroeven. Dit gebeurt vanaf 55 °C.
 
 
               Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
@@ -1469,13 +1486,15 @@ views:
             apex_config:
               annotations:
                 yaxis:
-                  - 'y': 60
+                  - 'y': 55
                     borderColor: var(--accent-color)
                     strokeDashArray: 4
                     borderWidth: 2
               yaxis:
                 - decimalsInFloat: 0
+                  min: 0
                   max: 80
+                  tickAmount: 4
                   labels:
                     show: true
                     style:
