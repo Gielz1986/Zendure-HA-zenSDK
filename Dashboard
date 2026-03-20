@@ -7,7 +7,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: mdi:battery
+            icon: ''
             heading_style: title
             badges:
               - type: entity
@@ -1461,13 +1461,9 @@ views:
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
-              de omvormer over de afgelopen 7 dagen. De stippellijn geeft de
-              grens aan waarop de omvormer zijn vermogen begint terug te
-              schroeven. Dit gebeurt vanaf 55 °C.
-
-
-              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
-              grafiek gemiddeld 1 uur achter.
+              de omvormer van vandaag. De stippellijn geeft de grens aan waarop
+              de omvormer zijn vermogen begint terug te schroeven. Dit gebeurt
+              vanaf 55 °C.
             text_only: true
             visibility:
               - condition: state
@@ -1480,7 +1476,9 @@ views:
             header:
               show: true
               title: ''
-            graph_span: 7day
+            graph_span: 1day
+            span:
+              start: day
             stacked: true
             cache: false
             apex_config:
@@ -1503,7 +1501,7 @@ views:
                         transparent)
               tooltip:
                 x:
-                  format: dd-MM (HH:mm)
+                  format: HH:mm
                   show: false
               grid:
                 show: true
@@ -1530,7 +1528,7 @@ views:
                 curve: smooth
                 extend_to: now
                 statistics:
-                  period: hour
+                  period: 5minute
                   type: max
                   align: start
                 type: area
@@ -1901,6 +1899,329 @@ views:
                 name: Efficientie Export
               - entity: sensor.zendure_2400_ac_efficientie_export_24u_gemiddelde
                 name: Efficientie Export (24u gemiddelde)
+    cards: []
+  - type: sections
+    max_columns: 3
+    path: geschiedenis
+    title: Geschiedenis
+    icon: mdi:history
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_vermogen_aansturing
+                tap_action:
+                  action: more-info
+                color: '#01a180'
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_laadpercentage
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
+                icon: mdi:swap-vertical-bold
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+            heading: Batterij (7 dagen)
+          - type: vertical-stack
+            cards:
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                  color_threshold: true
+                  brush: true
+                brush:
+                  selection_span: 1d
+                  apex_config:
+                    grid:
+                      strokeDashArray: 0
+                      borderColor: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                      show: true
+                    yaxis:
+                      show: false
+                    xaxis:
+                      labels:
+                        show: false
+                      axisTicks:
+                        show: false
+                      axisBorder:
+                        color: >-
+                          color-mix(in srgb, var(--divider-color) 50%,
+                          transparent)
+                    chart:
+                      height: 100
+                cache: true
+                update_interval: 15min
+                stacked: true
+                header:
+                  show: true
+                  show_states: true
+                  title: ''
+                graph_span: 8d
+                span:
+                  offset: '-7d'
+                  start: day
+                series:
+                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                    name: Batterij
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    transform: return -x;
+                    stroke_width: 2
+                    opacity: 0.35
+                    extend_to: now
+                    color: '#01a180'
+                    float_precision: 0
+                    color_threshold:
+                      - value: -2000
+                        opacity: 0.5
+                      - value: -1750
+                        opacity: 0.45
+                      - value: -1500
+                        opacity: 0.4
+                      - value: -1250
+                        opacity: 0.35
+                      - value: -1000
+                        opacity: 0.3
+                      - value: -750
+                        opacity: 0.25
+                      - value: -500
+                        opacity: 0.15
+                      - value: 0
+                        opacity: 0.1
+                      - value: 500
+                        opacity: 0.15
+                      - value: 750
+                        opacity: 0.25
+                      - value: 1000
+                        opacity: 0.3
+                      - value: 1250
+                        opacity: 0.35
+                      - value: 1500
+                        opacity: 0.4
+                      - value: 1750
+                        opacity: 0.45
+                      - value: 2000
+                        opacity: 0.5
+                    yaxis_id: energy
+                    show:
+                      in_brush: true
+                      in_header: false
+                      in_legend: false
+                  - entity: sensor.p1_nom_doel
+                    name: P1 (NOM Doel)
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    stroke_width: 0
+                    opacity: 0.2
+                    extend_to: now
+                    color: '#c0c0c2'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_brush: true
+                      in_header: false
+                      in_legend: false
+                apex_config:
+                  tooltip:
+                    x:
+                      format: dd-MM (HH:mm)
+                      show: false
+                  xaxis:
+                    labels:
+                      show: false
+                      style:
+                        colors: grey
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 0
+                      labels:
+                        style:
+                          colors: >-
+                            color-mix(in srgb, var(--primary-text-color) 75%,
+                            transparent)
+                  grid:
+                    strokeDashArray: 0
+                    borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                    show: true
+                  chart:
+                    height: 300px
+                    zoom:
+                      enabled: true
+                      allowMouseWheelZoom: true
+                      autoScaleYaxis: true
+                  legend:
+                    show: false
+                    floating: true
+                    horizontalAlign: left
+                    offsetX: 25
+                    offsetY: 17
+                    formatter: |
+                      EVAL:function(seriesName, opts) {
+                        // filter series die niet in de legenda moeten
+                        if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
+                        return seriesName;
+                      }
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+                visibility:
+                  - condition: state
+                    entity: input_select.zendure_2400_ac_modus_selecteren
+                    state_not: Handmatig
+            grid_options:
+              columns: 36
+              rows: auto
+          - type: heading
+            icon: ''
+            heading: Omvormer Temperatuur (7 dagen)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_omvormer_temperatuur
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: vertical-stack
+            cards:
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                  color_threshold: true
+                  brush: true
+                brush:
+                  selection_span: 1d
+                  apex_config:
+                    grid:
+                      strokeDashArray: 0
+                      borderColor: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                      show: true
+                    yaxis:
+                      show: false
+                    xaxis:
+                      labels:
+                        show: false
+                      axisTicks:
+                        show: false
+                      axisBorder:
+                        color: >-
+                          color-mix(in srgb, var(--divider-color) 50%,
+                          transparent)
+                    chart:
+                      height: 100
+                header:
+                  show: true
+                  title: ''
+                graph_span: 8day
+                span:
+                  offset: '-7d'
+                  start: day
+                stacked: true
+                cache: false
+                apex_config:
+                  annotations:
+                    yaxis:
+                      - 'y': 55
+                        borderColor: var(--accent-color)
+                        strokeDashArray: 4
+                        borderWidth: 2
+                  yaxis:
+                    - decimalsInFloat: 0
+                      min: 0
+                      max: 80
+                      tickAmount: 4
+                      labels:
+                        show: true
+                        style:
+                          colors: >-
+                            color-mix(in srgb, var(--primary-text-color) 75%,
+                            transparent)
+                  tooltip:
+                    x:
+                      format: dd-MM (HH:mm)
+                      show: false
+                  grid:
+                    show: true
+                    borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                    strokeDashArray: 0
+                    padding:
+                      top: -10
+                  chart:
+                    height: 200px
+                  legend:
+                    show: false
+                  xaxis:
+                    labels:
+                      show: false
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                series:
+                  - entity: sensor.zendure_2400_ac_omvormer_temperatuur
+                    name: Omvormer Temperatuur
+                    stroke_width: 2
+                    opacity: 0.2
+                    curve: smooth
+                    extend_to: now
+                    statistics:
+                      period: 5minute
+                      type: max
+                      align: start
+                    type: area
+                    color: '#01a180'
+                    show:
+                      in_header: false
+                      in_brush: true
+                    color_threshold:
+                      - value: 0
+                        opacity: 0.2
+                      - value: 30
+                        opacity: 0.35
+                      - value: 40
+                        opacity: 0.5
+                      - value: 50
+                        opacity: 0.65
+                      - value: 60
+                        opacity: 0.8
+            grid_options:
+              columns: 36
+              rows: auto
+        column_span: 3
     cards: []
   - type: sections
     max_columns: 4
