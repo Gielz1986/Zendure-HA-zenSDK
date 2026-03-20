@@ -261,7 +261,7 @@ views:
                   align: start
                 type: area
                 stroke_width: 0
-                opacity: 0.2
+                opacity: 0.3
                 extend_to: now
                 color: '#c0c0c2'
                 float_precision: 0
@@ -440,7 +440,7 @@ views:
                   align: start
                 type: area
                 stroke_width: 0
-                opacity: 0.2
+                opacity: 0.3
                 extend_to: now
                 color: '#c0c0c2'
                 float_precision: 0
@@ -2109,7 +2109,7 @@ views:
                       align: start
                     type: area
                     stroke_width: 0
-                    opacity: 0.2
+                    opacity: 0.3
                     extend_to: now
                     color: '#c0c0c2'
                     float_precision: 0
