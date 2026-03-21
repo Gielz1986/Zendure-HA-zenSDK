@@ -324,7 +324,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "(Mei 2026) v20260319"
+        state: "(Mei 2026) v20260321"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -347,17 +347,21 @@ template:
         unique_id: zendure_ha_zensdk_github_releasecheck
         state: >
           {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie')
-             | regex_findall('v(\d{8})') | first %}
-          {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name')
-             | regex_replace('v','') %}
+            | regex_findall('v(\d{8})') | first %}
+          {% set github_raw = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name') %}
+          {% if github_raw in ['unknown', 'unavailable', None] %}
+          {% set github_date = None %}
+          {% else %}
+          {% set github_date = github_raw | regex_replace('v','') %}
+          {% endif %}
           {% if config_date and github_date %}
-            {% if config_date > github_date %}
-              Pre-release actief
-            {% elif config_date < github_date %}
-              Nieuwe release op GitHub
-            {% else %}
-              Up-to-date
-            {% endif %}
+          {% if config_date > github_date %}
+            Pre-release actief
+          {% elif config_date < github_date %}
+            Nieuwe release op GitHub
+          {% else %}
+            Up-to-date
+          {% endif %}
           {% else %}
             Onbekend
           {% endif %}
