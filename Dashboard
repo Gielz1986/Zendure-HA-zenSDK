@@ -547,7 +547,7 @@ views:
                   func: avg
                   duration: 5sec
                 type: area
-                invert: true
+                transform: return -x;
                 offset: '-5s'
                 stroke_width: 2
                 opacity: 0.35
