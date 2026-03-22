@@ -93,7 +93,7 @@ input_number:
     name: Zendure 2400 AC Max. Oplaadvermogen
     icon: mdi:format-vertical-align-top
     min: 800
-    max: 4800
+    max: 10800
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -102,7 +102,7 @@ input_number:
     name: Zendure 2400 AC Max. Ontlaadvermogen
     icon: mdi:format-vertical-align-bottom
     min: 800
-    max: 4800
+    max: 10800
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -155,8 +155,8 @@ input_number:
   zendure_2400_ac_handmatig_vermogen:
     name: Zendure 2400 AC Handmatig Vermogen
     icon: mdi:flash
-    min: -4800
-    max: 4800
+    min: -10800
+    max: 10800
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -313,7 +313,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "(Mei 2026) v20260321"
+        state: "(Mei 2026) v20260322"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
