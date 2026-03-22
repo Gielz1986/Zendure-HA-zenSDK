@@ -80,7 +80,7 @@ homeassistant:
 
 </details>
 
-![Preview](Images/Instellingen-070326.png) 
+![Preview](Images/Instellingen-220326.png) 
 <sub>*plug-n-play dashboard</sub>
 
 <br>
