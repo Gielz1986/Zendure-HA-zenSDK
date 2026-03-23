@@ -2612,7 +2612,7 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: navigate
-                  navigation_path: /dashboard-zendure/releasenotes
+                  navigation_path: releasenotes
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Hier kun je zien
