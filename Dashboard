@@ -1624,6 +1624,7 @@ views:
                     opacity: 0.8
               - entity: sensor.zendure_2400_ac_vermogen_aansturing
                 name: Batterij
+                transform: return -x;
                 statistics:
                   period: 5minute
                   type: max
@@ -2327,6 +2328,7 @@ views:
                         opacity: 0.8
                   - entity: sensor.zendure_2400_ac_vermogen_aansturing
                     name: Batterij
+                    transform: return -x;
                     statistics:
                       period: 5minute
                       type: max
