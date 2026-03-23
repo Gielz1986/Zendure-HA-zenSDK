@@ -1622,6 +1622,23 @@ views:
                     opacity: 0.65
                   - value: 60
                     opacity: 0.8
+              - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                name: Batterij
+                statistics:
+                  period: 5minute
+                  type: max
+                  align: start
+                type: line
+                curve: smooth
+                stroke_width: 0
+                opacity: 1
+                extend_to: now
+                color: var(--accent-color)
+                float_precision: 0
+                yaxis_id: percentage
+                show:
+                  in_header: false
+                  in_legend: false
           - type: heading
             icon: ''
             heading: Per Batterij
@@ -2308,6 +2325,23 @@ views:
                         opacity: 0.65
                       - value: 60
                         opacity: 0.8
+                  - entity: sensor.zendure_2400_ac_vermogen_aansturing
+                    name: Batterij
+                    statistics:
+                      period: 5minute
+                      type: max
+                      align: start
+                    type: line
+                    curve: smooth
+                    stroke_width: 0
+                    opacity: 1
+                    extend_to: now
+                    color: var(--accent-color)
+                    float_precision: 0
+                    yaxis_id: percentage
+                    show:
+                      in_header: false
+                      in_legend: false
             grid_options:
               columns: 36
               rows: auto
