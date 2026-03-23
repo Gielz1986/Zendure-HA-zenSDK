@@ -2613,6 +2613,26 @@ views:
                 tap_action:
                   action: navigate
                   navigation_path: releasenotes
+            visibility:
+              - condition: state
+                entity: sensor.zendure_ha_zensdk_github_releasecheck
+                state_not: Pre-release actief
+          - type: heading
+            icon: ''
+            heading: Versiebeheer
+            heading_style: title
+            badges:
+              - type: button
+                icon: mdi:information
+                text: Toon pre-releasenotes
+                color: '#01a180'
+                tap_action:
+                  action: url
+                  url_path: https://github.com/Gielz1986/Zendure-HA-zenSDK/pulls
+            visibility:
+              - condition: state
+                entity: sensor.zendure_ha_zensdk_github_releasecheck
+                state: Pre-release actief
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Hier kun je zien
@@ -2674,11 +2694,14 @@ views:
         cards:
           - type: markdown
             content: >
+              **{{ state_attr('sensor.github_zendure_ha_zensdk_gielz1986',
+              'tag_name')}}**
+
               {{ state_attr('sensor.github_zendure_ha_zensdk_gielz1986',
               'body')}}
-            text_only: true
             grid_options:
               columns: 24
               rows: auto
+            text_only: true
         column_span: 2
     cards: []
