@@ -1558,6 +1558,10 @@ views:
             stacked: true
             cache: false
             apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
               annotations:
                 yaxis:
                   - 'y': 55
@@ -1805,6 +1809,10 @@ views:
             stacked: true
             cache: false
             apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
               yaxis:
                 - decimalsInFloat: 0
                   min: 0
@@ -1914,6 +1922,10 @@ views:
             stacked: true
             cache: false
             apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
               yaxis:
                 - decimalsInFloat: 0
                   min: 0
@@ -2259,6 +2271,10 @@ views:
                 stacked: true
                 cache: false
                 apex_config:
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
                   annotations:
                     yaxis:
                       - 'y': 55
