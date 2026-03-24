@@ -2393,6 +2393,10 @@ views:
               src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_ac_plus.png"
               width="100">
 
+              {% elif product == 'solarFlow2400Pro' %} <img
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_pro.png.png"
+              width="100">
+
               {% elif product == 'solarFlow1600AC+' %} <img
               src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_1600_ac_plus.png"
               width="100">
@@ -2413,6 +2417,7 @@ views:
               {% set product = states('sensor.zendure_2400_ac_productserie') %}
               {% if product == 'solarFlow2400AC' %} **Solarflow 2400 AC** {%
               elif product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {%
+              elif product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {%
               elif product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {%
               elif product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
               product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
