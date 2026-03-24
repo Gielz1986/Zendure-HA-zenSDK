@@ -72,7 +72,7 @@ homeassistant:
 
 1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
 2. Maak eerst een **backup** van je `configuration.yaml`.
-3. Pas daarna je `configuration.yaml` aan door gebruik te maken van de GitHub [configuration.yaml](./packages/configuration.yaml).
+3. Pas daarna je `configuration.yaml` aan door gebruik te maken van de GitHub [configuration.yaml](./configuration.yaml).
 4. Herstart Home Assistant.
 5. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
 
