@@ -118,7 +118,7 @@ De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwe
 
 1. Maak een nieuwe automatisering aan.
 2. Klik rechtsboven op **Bewerken in YAML**.
-3. Plak de YAML-code `(zie automatisering bestand)`.
+3. Plak de YAML-code uit het [automation.yaml](./Automation.yaml) bestand van deze GitHub.   
 4. Sla op, en start de automatisering.
 
 ![Preview](Images/Automation1.gif)   
