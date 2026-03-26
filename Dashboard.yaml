@@ -2394,7 +2394,7 @@ views:
               width="100">
 
               {% elif product == 'solarFlow2400Pro' %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_pro.png.png"
+              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_pro.png"
               width="100">
 
               {% elif product == 'solarFlow1600AC+' %} <img
