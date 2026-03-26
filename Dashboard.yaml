@@ -2386,31 +2386,31 @@ views:
               {% set product = states('sensor.zendure_2400_ac_productserie') %}
 
               {% if product == 'solarFlow2400AC' %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_ac.png"
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
               width="100">
 
               {% elif product == 'solarFlow2400AC+' %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_ac_plus.png"
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac_plus.png"
               width="100">
 
               {% elif product == 'solarFlow2400Pro' %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_pro.png"
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_pro.png"
               width="100">
 
               {% elif product == 'solarFlow1600AC+' %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_1600_ac_plus.png"
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_1600_ac_plus.png"
               width="100">
 
               {% elif product == 'solarFlow800Pro' %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_800_pro.png"
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_pro.png"
               width="100">
 
               {% elif product == 'solarFlow800Plus' %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_800_plus.png"
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_plus.png"
               width="100">
 
               {% else %} <img
-              src="https://raw.githubusercontent.com/Gielz1986/Zendure-HA-zenSDK/main/Devices/sf_2400_ac.png"
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
               width="100"> {% endif %}
           - type: markdown
             content: >-
