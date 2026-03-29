@@ -571,7 +571,7 @@ template:
             0
           {% endif %}
         attributes:
-          handmatige_periode: >
+          manual_periods: >
             {% if states('input_text.dynamic_manual_period') | length > 0 %}
               n.v.t.
             {% else %}
@@ -586,7 +586,7 @@ template:
               {% endfor %}
               {{ ns.result | join(';') }}
             {% endif %}
-          goedkoopste_periode: >
+          lowest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
@@ -595,7 +595,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          duurste_periode: >
+          highest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
             {% set duur = uren | selectattr('duur','equalto','Yes') | sort(attribute='start') | list %}
             [
@@ -604,7 +604,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          gemiddelde_goedkoop: >
+          average_lowest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
@@ -612,7 +612,7 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          gemiddelde_duur: >
+          average_highest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
             {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
@@ -620,9 +620,9 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          verschil_waarde: >
-            {% set g = state_attr('sensor.dynamic_spread_indication','gemiddelde_goedkoop') %}
-            {% set d = state_attr('sensor.dynamic_spread_indication','gemiddelde_duur') %}
+          difference_in_value: >
+            {% set g = state_attr('sensor.dynamic_spread_indication','average_lowest_price') %}
+            {% set d = state_attr('sensor.dynamic_spread_indication','average_highest_price') %}
             {% if g not in ['n.v.t.', None] and d not in ['n.v.t.', None] %}
               €{{ '%.4f' % (d[1:] | float - g[1:] | float) }}
             {% else %}
@@ -648,7 +648,7 @@ template:
             0
           {% endif %}
         attributes:
-          handmatige_periode: >
+          manual_periods: >
             {% if states('input_text.dynamic_manual_period') | length > 0 %}
               n.v.t.
             {% else %}
@@ -663,7 +663,7 @@ template:
               {% endfor %}
               {{ ns.result | join(';') }}
             {% endif %}
-          goedkoopste_periode: >
+          lowest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
@@ -672,7 +672,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          duurste_periode: >
+          highest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
             {% set duur = uren | sort(attribute='value', reverse=true) | list %}
             [
@@ -681,7 +681,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          gemiddelde_goedkoop: >
+          average_lowest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
@@ -689,7 +689,7 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          gemiddelde_duur: >
+          average_highest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
             {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
@@ -697,9 +697,9 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          verschil_waarde: >
-            {% set g = state_attr('sensor.dynamic_spread_indication_nzh','gemiddelde_goedkoop') %}
-            {% set d = state_attr('sensor.dynamic_spread_indication_nzh','gemiddelde_duur') %}
+          difference_in_value: >
+            {% set g = state_attr('sensor.dynamic_spread_indication_nzh','average_lowest_price') %}
+            {% set d = state_attr('sensor.dynamic_spread_indication_nzh','average_highest_price') %}
             {% if g not in ['n.v.t.', None] and d not in ['n.v.t.', None] %}
               €{{ '%.4f' % (d[1:] | float - g[1:] | float) }}
             {% else %}
@@ -722,7 +722,7 @@ template:
             0
           {% endif %}
         attributes:
-          handmatige_periode: >
+          manual_periods: >
             {% if states('input_text.dynamic_manual_period_tomorrow') | length > 0 %}
               n.v.t.
             {% else %}
@@ -737,7 +737,7 @@ template:
               {% endfor %}
               {{ ns.result | join(';') }}
             {% endif %}
-          goedkoopste_periode: >
+          lowest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
@@ -746,7 +746,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          duurste_periode: >
+          highest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
             {% set duur = uren | selectattr('duur','equalto','Yes') | sort(attribute='start') | list %}
             [
@@ -755,7 +755,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          gemiddelde_goedkoop: >
+          average_lowest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
@@ -763,7 +763,7 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          gemiddelde_duur: >
+          average_highest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
             {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
@@ -771,9 +771,9 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          verschil_waarde: >
-            {% set g = state_attr('sensor.dynamic_spread_indication_tomorrow','gemiddelde_goedkoop') %}
-            {% set d = state_attr('sensor.dynamic_spread_indication_tomorrow','gemiddelde_duur') %}
+          difference_in_value: >
+            {% set g = state_attr('sensor.dynamic_spread_indication_tomorrow','average_lowest_price') %}
+            {% set d = state_attr('sensor.dynamic_spread_indication_tomorrow','average_highest_price') %}
             {% if g not in ['n.v.t.', None] and d not in ['n.v.t.', None] %}
               €{{ '%.4f' % (d[1:] | float - g[1:] | float) }}
             {% else %}
@@ -797,7 +797,7 @@ template:
             0
           {% endif %}
         attributes:
-          handmatige_periode: >
+          manual_periods: >
             {% if states('input_text.dynamic_manual_period_tomorrow') | length > 0 %}
               n.v.t.
             {% else %}
@@ -812,7 +812,7 @@ template:
               {% endfor %}
               {{ ns.result | join(';') }}
             {% endif %}
-          goedkoopste_periode: >
+          lowest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
@@ -821,7 +821,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          duurste_periode: >
+          highest_price_periods: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope_tomorrow') or [] %}
             {% set duur = uren | sort(attribute='value', reverse=true) | list %}
             [
@@ -830,7 +830,7 @@ template:
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
-          gemiddelde_goedkoop: >
+          average_lowest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
             {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
@@ -838,7 +838,7 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          gemiddelde_duur: >
+          average_highest_price: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope_tomorrow') or [] %}
             {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
@@ -846,9 +846,9 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
-          verschil_waarde: >
-            {% set g = state_attr('sensor.dynamic_spread_indication_nzh_tomorrow','gemiddelde_goedkoop') %}
-            {% set d = state_attr('sensor.dynamic_spread_indication_nzh_tomorrow','gemiddelde_duur') %}
+          difference_in_value: >
+            {% set g = state_attr('sensor.dynamic_spread_indication_nzh_tomorrow','average_lowest_price') %}
+            {% set d = state_attr('sensor.dynamic_spread_indication_nzh_tomorrow','average_highest_price') %}
             {% if g not in ['n.v.t.', None] and d not in ['n.v.t.', None] %}
               €{{ '%.4f' % (d[1:] | float - g[1:] | float) }}
             {% else %}
