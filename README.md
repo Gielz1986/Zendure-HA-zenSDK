@@ -45,7 +45,7 @@ Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐
 ---
 
 1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-2. Plaats [Zendure_ha_zensdk_gielz1986.yaml](./Dutch%20(NL)%20Integration/packages/zendure_ha_zensdk_gielz1986.yaml) uit de map packages van GitHub in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
+2. Plaats [Zendure_ha_zensdk_gielz1986.yaml](./Dutch%20(NL)%20Integration/packages/zendure_gielz1986_NL.yaml) uit de map packages van GitHub in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
 3. Maak nu een **backup** van je `configuration.yaml`.
 4. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
 
@@ -62,21 +62,6 @@ homeassistant:
 
 ---
 
-
-</details>
-
-<details>
-  <summary>🖱️ <strong>Klik hier</strong> 🖱️ voor de klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
-  
----
-
-1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-2. Maak eerst een **backup** van je `configuration.yaml`.
-3. Pas daarna je `configuration.yaml` aan door gebruik te maken van de GitHub [Configuration.yaml](./Configuration.yaml).
-4. Herstart Home Assistant.
-5. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
-
----
 
 </details>
 
@@ -118,7 +103,7 @@ De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwe
 
 1. Maak een nieuwe automatisering aan.
 2. Klik rechtsboven op **Bewerken in YAML**.
-3. Plak de YAML-code uit het [Automation.yaml](./Automation.yaml) bestand van deze GitHub.   
+3. Plak de YAML-code uit het [Automation.yaml](./Dutch%20(NL)%20Integration/Automation.yaml) bestand van deze GitHub.   
 4. Sla op, en start de automatisering.
 
 ![Preview](Images/Automation1.gif)   
@@ -152,7 +137,7 @@ Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in geb
 3. Klik vervolgens op **Dashboard toevoegen** en kies voor **leeg nieuw dashboard**.
 4. Open het nieuwe dashboard.
 5. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
-6. Plak de YAML-code uit het [Dashboard.yaml](./Dashboard.yaml) bestand van deze GitHub.
+6. Plak de YAML-code uit het [Dashboard.yaml](./Dutch%20(NL)%20Integration/Dashboard.yaml) bestand van deze GitHub.
 7. Sla op en het dashboard is volledig bruikbaar.
 8. [Ga naar de WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
 
