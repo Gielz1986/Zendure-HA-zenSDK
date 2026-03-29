@@ -60,7 +60,7 @@ homeassistant:
 
 ---
 
-![Preview](Images/Instellingen-220326.png)  
+![Preview](Images/Settings-290326.png)  
 <sub>*plug-n-play dashboard*</sub>
 
 <br>
