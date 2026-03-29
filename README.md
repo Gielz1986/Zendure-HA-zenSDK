@@ -34,7 +34,7 @@ Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
 
 #### ℹ️ Required Hardware
 
-- Homewizard P1 (or another P1/CT meter that provides per-second data (+watt import / -watt export)).
+- Homewizard P1 (or another home energy meter that provides per-second data (+watt import / -watt export)).
 - One Solarflow 2400 (AC, AC+ or AC Pro) / Solarflow 1600 AC+ / Solarflow 800 (Pro or Plus).
 - Or two identical inverters combined with the [Node-RED proxy by Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
@@ -81,7 +81,7 @@ homeassistant:
 | `zendure_setting_start_discharging_at` | **(Recommended: 100W) 100–500W** – Defines when discharging starts |
 | `zendure_setting_discharge_buffer` | **(Recommended: 5W) 0–250W** – Extra margin for discharging |
 | **Configuration (Optional)** | **Information** |
-| `home_energy_setting_meter_sensor` | **e.g. sensor.custom_energy** – Add your own energy sensor (+watt import / -watt export). This will take priority |
+| `home_energy_setting_meter_sensor` | **e.g. sensor.custom_energy** – Add your own home energy sensor (+watt import / -watt export). This will take priority |
 | `zendure_setting_battery_order` | **e.g. 1;5;3;4;2** – Manually define battery order based on serial numbers and physical stacking |
 | **Configuration (Dynamic)** | **Information** |
 | `dynamic_setting_nordpool_sensor` | **e.g. sensor.nordpool_kwh_nl_eur_3_09_0** – Your Nordpool (HACS) sensor |
