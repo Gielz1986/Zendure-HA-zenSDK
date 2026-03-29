@@ -134,7 +134,7 @@ You can now also directly use a fully plug-n-play dashboard:
 
 1. Requires [Apexcharts HACS](https://github.com/RomRider/apexcharts-card) and (optionally) [Graphite HACS](https://github.com/TilmanGriesel/graphite).
 2. Create a new empty dashboard via ⚙️ and go to **Dashboards**.
-3. Click **Add Dashboard** and choose **Empty dashboard**
+3. Click **Add Dashboard** and choose **New dashboard from scratch**
 4. Open the new dashboard.
 5. Click the pencil icon → 3 dots → **Raw configuration editor**.
 6. Paste the YAML from [Dashboard.yaml](./Global%20(EN)%20Integration/Dashboard.yaml).
