@@ -43,7 +43,7 @@ Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
 ### #️⃣ Configuration and Restart
 
 1. Make sure **HEMS is disabled** in the Zendure app.
-2. Place [Zendure_gielz1986_NL.yaml](./Global%20(EN)%20Integration/packages/zendure_gielz1986_NL.yaml) from the GitHub packages folder into your Home Assistant `packages` folder. If it does not exist, create it.
+2. Place [Zendure_gielz1986_EN.yaml](./Global%20(EN)%20Integration/packages/zendure_gielz1986_EN.yaml) from the GitHub packages folder into your Home Assistant `packages` folder. If it does not exist, create it.
 3. Create a **backup** of your `configuration.yaml`.
 4. Then edit your `configuration.yaml` and add the following:
 
