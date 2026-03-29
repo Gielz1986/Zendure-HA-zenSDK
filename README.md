@@ -118,7 +118,7 @@ The moment has arrived: time for your battery to prove it’s more than just an 
 3. Select your desired mode to activate the **Zendure zenSDK (Gielz)** automation.
 4. The battery will with the desired operation mode.
 
-![Preview](Images/Modus-16022026.gif)  
+![Preview](Images/Mode-290326.gif)  
 
 <sub>
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen">
