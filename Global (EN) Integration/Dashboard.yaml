@@ -1,0 +1,2701 @@
+views:
+  - type: sections
+    max_columns: 3
+    title: Zendure
+    path: zendure
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_power
+                tap_action:
+                  action: more-info
+                color: '#01a180'
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_total_electricity_level
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_relay_switches_today
+                icon: mdi:swap-vertical-bold
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+            heading: Battery
+          - type: markdown
+            content: >
+              {% set modus = states('input_select.zendure_operation_mode') %}
+
+              {% if modus == 'Standby' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> Zet de batterij volledig in
+              standby en **Opslagmodus** zal naar **Opslaan in Flash** gaan.
+              Hierdoor is het ook 0 watt op een KWH MID Meter.   
+
+
+              100% standby, de batterij gebruikt nog 0,2 kWh per dag.
+
+              {% elif modus == 'Handmatig' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> Via **Handmatig Vermogen**
+              kun je zelf aangeven wat de batterij doet. -watt voor ontladen en
+              +watt voor opladen.   
+
+              {% elif modus == 'Nul op de meter' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> Constant nul op de meter
+              behouden (-xx watt bij opladen en -xx watt bij ontladen). Je kunt
+              het opladen finetunen via **Oplaadmarge⚙️** waarbij je aangeeft
+              hoeveel buffer/marge de batterij moet behouden tot 0 watt. Het
+              ontladen kun je finetunen via **Ontlaadmarge ⚙️** waarbij je
+              aangeeft hoeveel extra watt de batterij moet ontladen boven op nul
+              op de meter. Beide zijn handig om vaste kleine schommelingen in je
+              huisverbruik standaard te compenseren.
+
+
+              Ook kun je zelf instellen wanneer de batterij start met opladen
+              via **Opladen Starten Bij⚙️** en wanneer hij start met ontladen
+              via **Ontladen starten bij ⚙️** 
+
+              {% elif modus == 'Dynamisch NOM' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
+              gebruiken met Nordpool sensor⚙️. 
+
+
+              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
+              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
+              Vervolgens vul je de overige duurste uren in via **Duurste
+              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
+              Periodes** op JA staat zal er opgeladen worden indien **Spread**
+              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
+              Periodes** erg lang op JA staat zal de batterij pas weer gaan
+              laden wanneer de batterij ontladen is tot 90%. De batterij zal na
+              laden constant nul op de meter behouden (-xx watt bij opladen en
+              -xx watt bij ontladen).
+
+              {% elif modus == 'Dynamisch NOM (Duur)' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
+              gebruiken met Nordpool sensor⚙️. 
+
+
+              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
+              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
+              Vervolgens vul je de overige duurste uren in via **Duurste
+              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
+              Periodes** op JA staat zal er opgeladen worden indien **Spread**
+              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
+              Periodes** erg lang op JA staat zal hij pas weer gaan laden
+              wanneer de batterij ontladen is tot 90%. Mocht er nog ruimte zijn
+              om meer op te laden zal de batterij dit bij teruglevering gaan
+              doen. Wanneer **Goedkoopste Periodes** op JA staat zal de batterij
+              alleen slim gaan ontladen en de rest van de tijd staat de batterij
+              in standby.
+
+              {% elif modus == 'Dynamisch Handelen' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
+              gebruiken met Nordpool sensor⚙️. 
+
+
+              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
+              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
+              Vervolgens vul je de overige duurste uren in via **Duurste
+              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
+              Periodes** op JA staat zal er opgeladen worden indien **Spread**
+              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
+              Periodes** erg lang op JA staat zal de batterij pas weer gaan
+              laden wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
+              Periodes** op JA staat zal de batterij op maximaal vermogen gaan
+              ontladen en de rest van de tijd staat de batterij in standby.
+
+              {% elif modus == 'Dynamisch Handelen + NOM' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
+              gebruiken met Nordpool sensor ⚙️. 
+
+
+              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
+              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
+              Vervolgens vul je de overige duurste uren in via **Duurste
+              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
+              Periodes** op JA staat zal er opgeladen worden indien **Spread**
+              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
+              Periodes** erg lang op JA staat zal de batterij pas weer gaan
+              laden wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
+              Periodes** op JA staat zal de batterij op maximaal vermogen gaan
+              ontladen en de rest van de tijd **Nul op de meter**.
+
+              {% elif modus == 'Alleen slim ontladen' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> Identiek aan **Nul op de
+              meter**, alleen zonder opladen.
+
+              {% elif modus == 'Alleen slim opladen' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> Identiek aan **Nul op de
+              meter**, alleen zonder ontladen.
+
+              {% elif modus == 'Snel opladen' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> Snel opladen op maximaal
+              vermogen wat ingesteld staat bij **Max. Oplaadvermogen⚙️**.
+
+              {% elif modus == 'Snel ontladen' %} <ha-alert
+              alert-type="info">Helptekst</ha-alert> Snel ontladen op maximaal
+              vermogen wat ingesteld staat bij **Max. Ontlaadvermogen⚙️**.
+
+              {% else %} <ha-alert alert-type="warning">Helptekst</ha-alert>
+              Selecteer een modus om uitleg te zien. {% endif %}
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_select.zendure_operation_mode
+                secondary_info: none
+            show_header_toggle: false
+            state_color: false
+          - type: entities
+            entities:
+              - entity: input_number.zendure_manual_power
+                name: Power
+                secondary_info: last-changed
+            visibility:
+              - condition: state
+                entity: input_select.zendure_operation_mode
+                state: Handmatig
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+              brush: false
+            brush:
+              selection_span: 1d
+              apex_config:
+                grid:
+                  strokeDashArray: 0
+                  borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                  show: true
+                yaxis:
+                  show: false
+                xaxis:
+                  labels:
+                    show: false
+                  axisTicks:
+                    show: false
+                  axisBorder:
+                    color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                chart:
+                  height: 100
+            cache: true
+            update_interval: 15min
+            stacked: true
+            header:
+              show: true
+              show_states: true
+              title: ''
+            graph_span: 1d
+            span:
+              start: day
+            series:
+              - entity: sensor.zendure_power
+                name: Battery
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                transform: return -x;
+                stroke_width: 2
+                opacity: 0.35
+                extend_to: now
+                color: '#01a180'
+                float_precision: 0
+                color_threshold:
+                  - value: -2000
+                    opacity: 0.5
+                  - value: -1750
+                    opacity: 0.45
+                  - value: -1500
+                    opacity: 0.4
+                  - value: -1250
+                    opacity: 0.35
+                  - value: -1000
+                    opacity: 0.3
+                  - value: -750
+                    opacity: 0.25
+                  - value: -500
+                    opacity: 0.15
+                  - value: 0
+                    opacity: 0.1
+                  - value: 500
+                    opacity: 0.15
+                  - value: 750
+                    opacity: 0.25
+                  - value: 1000
+                    opacity: 0.3
+                  - value: 1250
+                    opacity: 0.35
+                  - value: 1500
+                    opacity: 0.4
+                  - value: 1750
+                    opacity: 0.45
+                  - value: 2000
+                    opacity: 0.5
+                yaxis_id: energy
+                show:
+                  in_brush: true
+                  in_header: false
+                  in_legend: true
+              - entity: sensor.home_energy_meter_target
+                name: Home Energy Meter
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                stroke_width: 0
+                opacity: 0.3
+                extend_to: now
+                color: '#c0c0c2'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_brush: true
+                  in_header: false
+                  in_legend: false
+              - entity: sensor.zendure_total_electricity_level
+                name: Electricity Level
+                statistics:
+                  period: 5minute
+                  type: max
+                  align: start
+                type: line
+                curve: smooth
+                stroke_width: 0
+                opacity: 1
+                extend_to: now
+                color: var(--accent-color)
+                float_precision: 0
+                yaxis_id: percentage
+                show:
+                  in_header: false
+                  in_legend: false
+            apex_config:
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              xaxis:
+                labels:
+                  show: false
+                  style:
+                    colors: grey
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 0
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              grid:
+                strokeDashArray: 0
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                show: true
+              chart:
+                height: 300px
+                toolbar:
+                  autoSelected: pan
+                  show: true
+                  tools:
+                    download: false
+                    zoom: true
+                    zoomin: false
+                    zoomout: false
+                    pan: true
+                zoom:
+                  enabled: true
+                  allowMouseWheelZoom: true
+                  autoScaleYaxis: true
+              legend:
+                show: true
+                floating: true
+                horizontalAlign: left
+                offsetX: 25
+                offsetY: 17
+                formatter: |
+                  EVAL:function(seriesName, opts) {
+                    // filter series die niet in de legenda moeten
+                    if(seriesName === "Electricity Level" || seriesName === "Home Energy Meter") return "";
+                    return seriesName;
+                  }
+              markers:
+                size: 0
+                hover:
+                  size: 0
+            visibility:
+              - condition: state
+                entity: input_select.zendure_operation_mode
+                state_not: Handmatig
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+              brush: false
+            brush:
+              selection_span: 1d
+              apex_config:
+                grid:
+                  strokeDashArray: 0
+                  borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                  show: true
+                yaxis:
+                  show: false
+                xaxis:
+                  labels:
+                    show: false
+                  axisTicks:
+                    show: false
+                  axisBorder:
+                    color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                chart:
+                  height: 100
+            cache: true
+            update_interval: 15min
+            stacked: true
+            header:
+              show: true
+              show_states: true
+              title: ''
+            graph_span: 1d
+            span:
+              start: day
+            series:
+              - entity: sensor.zendure_power
+                name: Battery
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                transform: return -x;
+                stroke_width: 2
+                opacity: 0.35
+                extend_to: now
+                color: '#01a180'
+                float_precision: 0
+                color_threshold:
+                  - value: -2000
+                    opacity: 0.5
+                  - value: -1750
+                    opacity: 0.45
+                  - value: -1500
+                    opacity: 0.4
+                  - value: -1250
+                    opacity: 0.35
+                  - value: -1000
+                    opacity: 0.3
+                  - value: -750
+                    opacity: 0.25
+                  - value: -500
+                    opacity: 0.15
+                  - value: 0
+                    opacity: 0.1
+                  - value: 500
+                    opacity: 0.15
+                  - value: 750
+                    opacity: 0.25
+                  - value: 1000
+                    opacity: 0.3
+                  - value: 1250
+                    opacity: 0.35
+                  - value: 1500
+                    opacity: 0.4
+                  - value: 1750
+                    opacity: 0.45
+                  - value: 2000
+                    opacity: 0.5
+                yaxis_id: energy
+                show:
+                  in_brush: true
+                  in_header: false
+                  in_legend: true
+              - entity: sensor.home_energy_meter_target
+                name: Home Energy Meter
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                stroke_width: 0
+                opacity: 0.3
+                extend_to: now
+                color: '#c0c0c2'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_brush: true
+                  in_header: false
+                  in_legend: false
+              - entity: sensor.zendure_total_electricity_level
+                name: Electricity Level
+                statistics:
+                  period: 5minute
+                  type: max
+                  align: start
+                type: line
+                curve: smooth
+                stroke_width: 0
+                opacity: 1
+                extend_to: now
+                color: var(--accent-color)
+                float_precision: 0
+                yaxis_id: percentage
+                show:
+                  in_header: false
+                  in_legend: false
+            apex_config:
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              xaxis:
+                labels:
+                  show: false
+                  style:
+                    colors: grey
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 0
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              grid:
+                strokeDashArray: 0
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                show: true
+              chart:
+                height: 204px
+                toolbar:
+                  autoSelected: pan
+                  show: true
+                  tools:
+                    download: false
+                    zoom: true
+                    zoomin: false
+                    zoomout: false
+                    pan: true
+                zoom:
+                  enabled: true
+                  allowMouseWheelZoom: true
+                  autoScaleYaxis: true
+              legend:
+                show: true
+                floating: true
+                horizontalAlign: left
+                offsetX: 25
+                offsetY: 17
+                formatter: |
+                  EVAL:function(seriesName, opts) {
+                    // filter series die niet in de legenda moeten
+                    if(seriesName === "Electricity Level" || seriesName === "Home Energy Meter") return "";
+                    return seriesName;
+                  }
+              markers:
+                size: 0
+                hover:
+                  size: 0
+            visibility:
+              - condition: state
+                entity: input_select.zendure_operation_mode
+                state: Handmatig
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            cache: false
+            stacked: true
+            update_interval: 5sec
+            header:
+              show: true
+              show_states: true
+              title: ''
+            graph_span: 10min
+            series:
+              - entity: sensor.zendure_power
+                name: Battery
+                group_by:
+                  func: avg
+                  duration: 5sec
+                type: area
+                transform: return -x;
+                offset: '-5s'
+                stroke_width: 2
+                opacity: 0.35
+                extend_to: now
+                color: '#01a180'
+                float_precision: 0
+                color_threshold:
+                  - value: -2000
+                    opacity: 0.5
+                  - value: -1750
+                    opacity: 0.45
+                  - value: -1500
+                    opacity: 0.4
+                  - value: -1250
+                    opacity: 0.35
+                  - value: -1000
+                    opacity: 0.3
+                  - value: -750
+                    opacity: 0.25
+                  - value: -500
+                    opacity: 0.15
+                  - value: 0
+                    opacity: 0.1
+                  - value: 500
+                    opacity: 0.15
+                  - value: 750
+                    opacity: 0.25
+                  - value: 1000
+                    opacity: 0.3
+                  - value: 1250
+                    opacity: 0.35
+                  - value: 1500
+                    opacity: 0.4
+                  - value: 1750
+                    opacity: 0.45
+                  - value: 2000
+                    opacity: 0.5
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: true
+                  offset_in_name: false
+              - entity: sensor.home_energy_meter_target
+                name: Home Energy Meter
+                offset: '-5s'
+                group_by:
+                  func: avg
+                  duration: 5sec
+                type: area
+                stroke_width: 0
+                opacity: 0.3
+                extend_to: now
+                color: '#c0c0c2'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_header: false
+                  in_legend: false
+              - entity: input_number.zendure_setting_start_discharging_at
+                name: Start discharging
+                type: line
+                stroke_width: 2
+                color: var(--accent-color)
+                opacity: 1
+                stroke_dash: 2
+                curve: stepline
+                extend_to: now
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  hidden_by_default: true
+                  in_header: false
+              - entity: input_number.zendure_setting_start_charging_at
+                name: Start charging
+                type: line
+                stroke_width: 2
+                color: var(--accent-color)
+                opacity: 1
+                stroke_dash: 2
+                curve: stepline
+                extend_to: now
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  hidden_by_default: true
+                  in_header: false
+            apex_config:
+              toolbar:
+                show: true
+                tools:
+                  download: true
+                  selection: true
+                  zoom: true
+                  zoomin: true
+                  zoomout: true
+                  pan: true
+              tooltip:
+                x:
+                  format: HH:mm:ss
+                  show: false
+              xaxis:
+                labels:
+                  show: false
+                  style:
+                    colors: grey
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 0
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              grid:
+                strokeDashArray: 0
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                show: true
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: true
+                floating: true
+                horizontalAlign: left
+                offsetX: 25
+                offsetY: 17
+                formatter: |
+                  EVAL:function(seriesName, opts) {
+                    // filter series die niet in de legenda moeten
+                    if(seriesName === "Leeg" || seriesName === "Home Energy Meter (-5s)") return "";
+                    return seriesName;
+                  }
+              markers:
+                size: 0
+                hover:
+                  size: 0
+          - type: heading
+            icon: ''
+            heading: Zero Import
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.home_energy_zero_import_duration_today
+                color: '#01a180'
+                icon: mdi:leaf
+                tap_action:
+                  action: more-info
+                name: Today
+                state_content:
+                  - name
+                  - state
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je het
+              aantal nul-importuren per dag van deze maand en de vorige maand.
+              Dit overzicht laat zien hoe goed je dagen zijn verlopen met
+              betrekking tot het niet importeren van stroom. Elke seconde dat
+              het P1-vermogen op 0 of lager staat, wordt meegeteld in het
+              totaal.
+
+
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+            header:
+              show: true
+              title: ''
+            graph_span: 2month
+            span:
+              start: month
+              offset: '-1month'
+            cache: false
+            apex_config:
+              yaxis:
+                - decimalsInFloat: 0
+                  tickAmount: 4
+                  min: 0
+                  max: 24
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: d/MM
+                  show: false
+                'y':
+                  formatter: |
+                    EVAL:function(value) {
+                      const h = Math.floor(value);
+                      const m = Math.round((value - h) * 60);
+                      return h + "u " + m + "m";
+                    }
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+                row:
+                  opacity: 0.5
+              chart:
+                height: 150px
+              legend:
+                show: false
+                floating: true
+                horizontalAlign: left
+                offsetX: 0
+                offsetY: 17
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.home_energy_zero_import_duration_today
+                name: Nul import
+                statistics:
+                  period: day
+                  type: max
+                  align: start
+                type: column
+                color: '#01a180'
+                show:
+                  in_header: false
+                  in_legend: false
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Control
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.home_energy_meter_power
+                state_content: state
+                color: '#01a180'
+                icon: mdi:home
+                tap_action:
+                  action: more-info
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.zendure_soc_limit_status
+                name: SOC-limit Status
+              - entity: sensor.zendure_indication_available_energy
+                name: Available Energy
+              - entity: sensor.zendure_indication_remaining_discharge_time
+                name: Remaining Discharge Time
+              - entity: sensor.zendure_charging_mode
+                name: Charging Mode
+              - entity: sensor.zendure_set_discharge_power
+                name: Discharge Power
+              - entity: sensor.zendure_set_charge_power
+                name: Charge Power
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Import | Export
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_rte_total
+                name: RTE
+                state_content:
+                  - name
+                  - state
+                color: '#01a180'
+                icon: mdi:percent
+                tap_action:
+                  action: more-info
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: ''
+            graph_span: 24month
+            span:
+              start: month
+              offset: '-23month'
+            cache: false
+            apex_config:
+              yaxis:
+                - decimalsInFloat: 0
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: MM-yyyy
+                  show: false
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_energy_import
+                name: Import
+                statistics:
+                  period: month
+                  type: change
+                  align: start
+                type: column
+                color: '#01a180'
+                show:
+                  in_header: false
+              - entity: sensor.zendure_energy_export
+                name: Export
+                statistics:
+                  period: month
+                  type: change
+                  align: start
+                type: column
+                color: '#a2a2a3'
+                show:
+                  in_header: false
+          - type: entities
+            entities:
+              - entity: sensor.zendure_energy_import
+                name: Import
+              - entity: sensor.zendure_energy_export
+                name: Export
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Dynamic Today
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.dynamic_nordpool
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.dynamic_lowest_price_period
+                icon: mdi:arrow-down-bold
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+                visibility:
+                  - condition: state
+                    entity: sensor.dynamic_lowest_price_period
+                    state: Ja
+                name: Cheap
+                state_content: name
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.dynamic_highest_price_period
+                color: '#c53b2c'
+                icon: mdi:arrow-up-bold
+                tap_action:
+                  action: more-info
+                visibility:
+                  - condition: state
+                    entity: sensor.dynamic_highest_price_period
+                    state: Ja
+                name: Expensive
+                state_content: name
+          - type: custom:apexcharts-card
+            update_interval: 1sec
+            graph_span: 24h
+            apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
+              plotOptions:
+                bar:
+                  columnWidth: 90%
+              tooltip:
+                enabledOnSeries:
+                  - 0
+                followCursor: true
+                shared: true
+                intersect: false
+                enabled: true
+                x:
+                  format: HH:mm
+                  show: false
+                'y':
+                  formatter: |
+                    EVAL: (val) => `${val.toFixed(3)} €/kWh`
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+                stacked: true
+                stackOnlyBar: true
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 2
+                  forceNiceScale: true
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              legend:
+                show: false
+            span:
+              start: day
+            series:
+              - entity: sensor.dynamic_lowest_price_period
+                name: Vandaag
+                type: column
+                float_precision: 3
+                color: '#e0e0e3'
+                show:
+                  in_header: false
+                  legend_value: false
+                  extremas: false
+                data_generator: |
+                  const data = entity.attributes.raw_today;
+                  if (!data) return [];
+
+                  return data.map((item, index) => {
+                    const tijdStart = new Date(item.start).getTime();
+                    const duration = item.duration
+                                      ? item.duration * 1000
+                                      : (data[index + 1]
+                                          ? new Date(data[index + 1].start).getTime() - tijdStart
+                                          : 3600000);
+                    const tijdEind = tijdStart + duration;
+
+                    const prijs = item.value;
+                    const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
+
+                    // Standaardkleur: #e0e0e3
+                    let kleur = "rgba(224,224,227,1)";
+
+                    if (prijs < 0) {
+                      kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
+                    }
+                    else if (item.goedkoop === "ja") {
+                      kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
+                    }
+                    else if (item.duur === "ja") {
+                      kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
+                    }
+                    else {
+                      kleur = verleden ? "rgba(162,162,163,0.15)" : "rgba(162,162,163,1)";
+                    }
+
+                    return {
+                      x: tijdStart,
+                      y: prijs,
+                      fillColor: kleur
+                    };
+                  });
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                grid_options:
+                  columns: 12
+                  rows: 1
+                entity: sensor.dynamic_spread_indication
+                name: Spread
+                state_content:
+                  - state
+                  - verschil_waarde
+                vertical: false
+                features_position: bottom
+              - type: tile
+                grid_options:
+                  columns: 12
+                  rows: 1
+                entity: sensor.dynamic_spread_indication_nzh
+                name: Spread NZH
+                state_content:
+                  - state
+                  - verschil_waarde
+                vertical: false
+                features_position: bottom
+          - type: entities
+            entities:
+              - entity: input_number.dynamic_lowest_price_x_period
+                name: Lowest Price Periods
+              - entity: input_number.dynamic_highest_price_x_period
+                name: Highest Price Periods
+              - entity: input_text.dynamic_manual_period
+                name: Manual Periods
+          - type: heading
+            icon: ''
+            heading: Dynamic Today
+            heading_style: title
+            visibility:
+              - condition: time
+                after: '13:30:00'
+                before: '24:00:00'
+            badges: []
+          - type: horizontal-stack
+            cards:
+              - type: custom:apexcharts-card
+                update_interval: 1sec
+                graph_span: 24h
+                apex_config:
+                  noData:
+                    text: Vanaf 14:00 zijn de prijzen van morgen bekend.
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+                  plotOptions:
+                    bar:
+                      columnWidth: 90%
+                  tooltip:
+                    enabledOnSeries:
+                      - 0
+                    followCursor: true
+                    shared: true
+                    intersect: false
+                    enabled: true
+                    x:
+                      format: HH:mm
+                      show: false
+                    'y':
+                      formatter: |
+                        EVAL: (val) => `${val.toFixed(3)} €/kWh`
+                  grid:
+                    show: true
+                    borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                    strokeDashArray: 0
+                    padding:
+                      top: -10
+                  chart:
+                    height: 150px
+                    stacked: true
+                    stackOnlyBar: true
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 2
+                      forceNiceScale: true
+                      labels:
+                        style:
+                          colors: >-
+                            color-mix(in srgb, var(--primary-text-color) 75%,
+                            transparent)
+                  xaxis:
+                    labels:
+                      show: false
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                  legend:
+                    show: false
+                span:
+                  start: day
+                  offset: +1d
+                series:
+                  - entity: sensor.dynamic_lowest_price_period
+                    name: Morgen
+                    type: column
+                    float_precision: 3
+                    color: '#e0e0e3'
+                    show:
+                      in_header: false
+                      legend_value: false
+                    data_generator: |
+                      const data = entity.attributes.raw_tomorrow;
+                      if (!data) return [];
+
+                      return data.map((item, index) => {
+                        const tijdStart = new Date(item.start).getTime();
+                        const duration = item.duration
+                                          ? item.duration * 1000
+                                          : (data[index + 1]
+                                              ? new Date(data[index + 1].start).getTime() - tijdStart
+                                              : 3600000);
+                        const tijdEind = tijdStart + duration;
+
+                        const prijs = item.value;
+                        const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
+
+                        // Standaardkleur: #e0e0e3
+                        let kleur = "rgba(224,224,227,1)";
+
+                        if (prijs < 0) {
+                          kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
+                        }
+                        else if (item.goedkoop === "ja") {
+                          kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
+                        }
+                        else if (item.duur === "ja") {
+                          kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
+                        }
+                        else {
+                          kleur = verleden ? "rgba(162,162,163,0.15)" : "rgba(162,162,163,1)";
+                        }
+
+                        return {
+                          x: tijdStart,
+                          y: prijs,
+                          fillColor: kleur
+                        };
+                      });
+                visibility:
+                  - condition: time
+                    after: '13:30:00'
+                    before: '24:00:00'
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                grid_options:
+                  columns: 12
+                  rows: 1
+                entity: sensor.dynamic_spread_indication_tomorrow
+                name: Spread
+                state_content:
+                  - state
+                  - verschil_waarde
+                vertical: false
+                features_position: bottom
+              - type: tile
+                grid_options:
+                  columns: 12
+                  rows: 1
+                entity: sensor.dynamic_spread_indication_nzh_tomorrow
+                name: Spread NZH
+                state_content:
+                  - state
+                  - verschil_waarde
+                vertical: false
+                features_position: bottom
+            visibility:
+              - condition: time
+                after: '13:30:00'
+                before: '24:00:00'
+          - type: entities
+            entities:
+              - entity: input_number.dynamic_lowest_price_x_period_tomorrow
+                name: Lowest Price Periods Tomorrow
+              - entity: input_number.dynamic_highest_price_x_period_tomorrow
+                name: Highest Price Periods Tomorrow
+              - entity: input_text.dynamic_manual_period_tomorrow
+                name: Manual Periods Tomorrow
+            visibility:
+              - condition: time
+                after: '13:30:00'
+                before: '24:00:00'
+        visibility:
+          - condition: state
+            entity: input_boolean.dashboard_setting_show_dynamic
+            state: 'on'
+    cards: []
+    icon: mdi:battery
+    dense_section_placement: false
+  - type: sections
+    max_columns: 4
+    icon: mdi:battery-heart-variant
+    path: gezondheid
+    title: Health
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Global
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.zendure_total_batteries
+                name: Total Batteries
+              - entity: sensor.zendure_total_capacity
+                name: Total Capacity
+              - entity: sensor.zendure_wifi_signal_strength
+                name: WIFI Signal Strength
+              - entity: sensor.zendure_error
+                name: Error
+              - entity: sensor.zendure_inverter_max_charge_power
+                name: Inverter Max. Charge Power
+              - entity: sensor.zendure_inverter_max_discharge_power
+                name: Inverter Max. Discharge Power
+              - entity: sensor.zendure_storage_mode
+                name: Storage Mode
+              - entity: sensor.zendure_battery_voltage
+                name: Battery Voltage
+              - entity: sensor.zendure_minimum_electricity_level
+                name: Min. Electricity Level (SOC)
+              - entity: sensor.zendure_maximum_electricity_level
+                name: Max. Electricity Level (SOC)
+          - type: heading
+            icon: ''
+            heading: Relay Switches
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_relay_switches_today
+                color: '#01a180'
+                name: Today
+                state_content:
+                  - name
+                  - state
+                tap_action:
+                  action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
+              relaisschakelingen per dag van deze maand en de vorige maand. De
+              stippellijn geeft de grens aan waarop het aantal schakelingen als
+              verhoogd wordt beschouwd. Alles onder de 100 schakelingen per dag
+              is normaal op een deels bewolkte dag.
+
+
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: custom:apexcharts-card
+            stacked: true
+            header:
+              show: true
+              title: ''
+            graph_span: 2month
+            span:
+              start: month
+              offset: '-1month'
+            cache: false
+            apex_config:
+              annotations:
+                yaxis:
+                  - 'y': 100
+                    borderColor: var(--accent-color)
+                    strokeDashArray: 4
+                    borderWidth: 2
+              yaxis:
+                - decimalsInFloat: 0
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: d/MM
+                  show: false
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_relay_switches_charging_today
+                name: Relay Switches (Charging)
+                transform: 'return x > 0 ? x - 1 : 0;'
+                statistics:
+                  period: day
+                  type: max
+                  align: middle
+                type: column
+                color: '#01a180'
+                show:
+                  in_header: false
+                  extremas: false
+              - entity: sensor.zendure_relay_switches_discharging_today
+                name: Relay Switches (Discharging)
+                statistics:
+                  period: day
+                  type: max
+                  align: middle
+                type: column
+                color: '#01a180'
+                show:
+                  in_header: false
+                  extremas: false
+          - type: heading
+            icon: ''
+            heading: Calibrations
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_calibrating
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_last_calibration
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_last_calibration_days
+                color: '#01a180'
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
+              kalibraties aangegeven met een groene kleur deze maand en de
+              vorige maand. De batterij kalibratie vind plaats wanneer de
+              batterij tot 100% is opgeladen. Zodra er langer dan 1 maand geen
+              kalibratie is geweest doet de BMS dit vanzelf.
+
+
+              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
+              grafiek gemiddeld 1 uur achter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            stacked: true
+            header:
+              show: true
+              title: ''
+            graph_span: 2month
+            span:
+              start: month
+              offset: '-1month'
+            cache: false
+            apex_config:
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  max: 100
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: d/MM
+                  show: false
+                'y':
+                  formatter: |
+                    function(value, { seriesIndex, w }) {
+                      const name = w.globals.seriesNames[seriesIndex];
+                      if (name === "Geen kalibratie") {
+                        return "";
+                      }
+                      return value;
+                    }
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_total_electricity_level
+                name: Calibration Finished
+                transform: |
+                  return x === 100 ? x : null;
+                statistics:
+                  period: day
+                  type: max
+                  align: middle
+                type: column
+                color: '#01a180'
+                show:
+                  in_header: false
+                  extremas: false
+              - entity: sensor.zendure_total_electricity_level
+                name: No Calibration
+                transform: |
+                  return x < 100 ? x : null;
+                statistics:
+                  period: day
+                  type: max
+                  align: middle
+                type: column
+                color: '#a2a2a3'
+                show:
+                  in_header: false
+                  extremas: false
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Inverter Temperature
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_inverter_temperature
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
+              de omvormer van vandaag. De stippellijn geeft de grens aan waarop
+              de omvormer zijn vermogen begint terug te schroeven. Dit gebeurt
+              vanaf 55 °C.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            header:
+              show: true
+              title: ''
+            graph_span: 1day
+            span:
+              start: day
+            stacked: true
+            cache: false
+            apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
+              annotations:
+                yaxis:
+                  - 'y': 55
+                    borderColor: var(--accent-color)
+                    strokeDashArray: 4
+                    borderWidth: 2
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  max: 80
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_inverter_temperature
+                name: Inverter Temperature
+                stroke_width: 2
+                opacity: 0.2
+                curve: smooth
+                extend_to: now
+                statistics:
+                  period: 5minute
+                  type: max
+                  align: start
+                type: area
+                color: '#01a180'
+                show:
+                  in_header: false
+                color_threshold:
+                  - value: 0
+                    opacity: 0.2
+                  - value: 30
+                    opacity: 0.35
+                  - value: 40
+                    opacity: 0.5
+                  - value: 50
+                    opacity: 0.65
+                  - value: 60
+                    opacity: 0.8
+              - entity: sensor.zendure_power
+                name: Battery
+                transform: return Math.abs(x)
+                statistics:
+                  period: 5minute
+                  type: max
+                  align: start
+                type: line
+                curve: smooth
+                stroke_width: 0
+                opacity: 1
+                extend_to: now
+                color: var(--accent-color)
+                float_precision: 0
+                yaxis_id: percentage
+                show:
+                  in_header: false
+                  in_legend: false
+          - type: heading
+            icon: ''
+            heading: Batteries
+            heading_style: title
+          - type: horizontal-stack
+            cards:
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_battery_1_temperature
+                    name: Battery 1 Temperature
+                  - entity: sensor.zendure_battery_1_electricity_level
+                    name: Battery 1 Electricity Level
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_total_batteries
+                    state: '1'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_battery_1_temperature
+                    name: Battery 1 Temperature
+                  - entity: sensor.zendure_battery_2_temperature
+                    name: Battery 2 Temperature
+                  - entity: sensor.zendure_battery_1_electricity_level
+                    name: Battery 1 Electricity Level
+                  - entity: sensor.zendure_battery_2_electricity_level
+                    name: Battery 2 Electricity Level
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_total_batteries
+                    state: '2'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_battery_1_temperature
+                    name: Battery 1 Temperature
+                  - entity: sensor.zendure_battery_2_temperature
+                    name: Battery 2 Temperature
+                  - entity: sensor.zendure_battery_3_temperature
+                    name: Battery 3 Temperature
+                  - entity: sensor.zendure_battery_1_electricity_level
+                    name: Battery 1 Electricity Level
+                  - entity: sensor.zendure_battery_2_electricity_level
+                    name: Battery 2 Electricity Level
+                  - entity: sensor.zendure_battery_3_electricity_level
+                    name: Battery 3 Electricity Level
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_total_batteries
+                    state: '3'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_battery_1_temperature
+                    name: Battery 1 Temperature
+                  - entity: sensor.zendure_battery_2_temperature
+                    name: Battery 2 Temperature
+                  - entity: sensor.zendure_battery_3_temperature
+                    name: Battery 3 Temperature
+                  - entity: sensor.zendure_battery_4_temperature
+                    name: Battery 4 Temperature
+                  - entity: sensor.zendure_battery_1_electricity_level
+                    name: Battery 1 Electricity Level
+                  - entity: sensor.zendure_battery_2_electricity_level
+                    name: Battery 2 Electricity Level
+                  - entity: sensor.zendure_battery_3_electricity_level
+                    name: Battery 3 Electricity Level
+                  - entity: sensor.zendure_battery_4_electricity_level
+                    name: Battery 4 Electricity Level
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_total_batteries
+                    state: '4'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_battery_1_temperature
+                    name: Battery 1 Temperature
+                  - entity: sensor.zendure_battery_2_temperature
+                    name: Battery 2 Temperature
+                  - entity: sensor.zendure_battery_3_temperature
+                    name: Battery 3 Temperature
+                  - entity: sensor.zendure_battery_4_temperature
+                    name: Battery 4 Temperature
+                  - entity: sensor.zendure_battery_5_temperature
+                    name: Battery 5 Temperature
+                  - entity: sensor.zendure_battery_1_electricity_level
+                    name: Battery 1 Electricity Level
+                  - entity: sensor.zendure_battery_2_electricity_level
+                    name: Battery 2 Electricity Level
+                  - entity: sensor.zendure_battery_3_electricity_level
+                    name: Battery 3 Electricity Level
+                  - entity: sensor.zendure_battery_4_electricity_level
+                    name: Battery 4 Electricity Level
+                  - entity: sensor.zendure_battery_5_electricity_level
+                    name: Battery 5 Electricity Level
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_total_batteries
+                    state: '5'
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.zendure_battery_1_temperature
+                    name: Battery 1 Temperature
+                  - entity: sensor.zendure_battery_2_temperature
+                    name: Battery 2 Temperature
+                  - entity: sensor.zendure_battery_3_temperature
+                    name: Battery 3 Temperature
+                  - entity: sensor.zendure_battery_4_temperature
+                    name: Battery 4 Temperature
+                  - entity: sensor.zendure_battery_5_temperature
+                    name: Battery 5 Temperature
+                  - entity: sensor.zendure_battery_6_temperature
+                    name: Battery 6 Temperature
+                  - entity: sensor.zendure_battery_1_electricity_level
+                    name: Battery 1 Electricity Level
+                  - entity: sensor.zendure_battery_2_electricity_level
+                    name: Battery 2 Electricity Level
+                  - entity: sensor.zendure_battery_3_electricity_level
+                    name: Battery 3 Electricity Level
+                  - entity: sensor.zendure_battery_4_electricity_level
+                    name: Battery 4 Electricity Level
+                  - entity: sensor.zendure_battery_5_electricity_level
+                    name: Battery 5 Electricity Level
+                  - entity: sensor.zendure_battery_6_electricity_level
+                    name: Battery 6 Electricity Level
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_total_batteries
+                    state: '6'
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: ' Import Efficiency (Indication)'
+            heading_style: title
+            badges: []
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je de
+              efficiëntie van het laden van vandaag. De meting vergelijkt het
+              vermogen aan de DC-zijde met het vermogen aan de AC-zijde. Gebruik
+              deze waarde als indicatie om te beoordelen hoe efficiënt er wordt
+              geladen.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            update_interval: 5min
+            header:
+              show: true
+              title: ''
+            graph_span: 1day
+            span:
+              start: day
+            stacked: true
+            cache: false
+            apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  max: 100
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_import_efficiency
+                name: Import Efficiency (average)
+                stroke_width: 2
+                opacity: 0.2
+                extend_to: now
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                color: '#01a180'
+                show:
+                  in_header: false
+                color_threshold:
+                  - value: 0
+                    opacity: 0.2
+                  - value: 20
+                    opacity: 0.3
+                  - value: 40
+                    opacity: 0.4
+                  - value: 60
+                    opacity: 0.5
+                  - value: 80
+                    opacity: 0.6
+              - entity: sensor.zendure_power
+                name: Import Power (average)
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                stroke_width: 0
+                opacity: 0
+                extend_to: now
+                transform: return Math.max(0, x);
+                color: '#e4e4e7'
+                show:
+                  in_header: false
+          - type: entities
+            entities:
+              - entity: sensor.zendure_power_import_dc
+                name: Import Power DC
+              - entity: sensor.zendure_import_efficiency
+                name: Import Efficiency
+              - entity: sensor.zendure_import_efficiency_24h_average
+                name: Import Efficiency (24h average)
+          - type: heading
+            icon: ''
+            heading: Export Efficiency (Indication)
+            heading_style: title
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je de
+              efficiëntie van het ontladen van vandaag. De meting vergelijkt het
+              vermogen aan de DC-zijde met het vermogen aan de AC-zijde. Gebruik
+              deze waarde als indicatie om te beoordelen hoe efficiënt er wordt
+              ontladen.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+            update_interval: 5min
+            header:
+              show: true
+              title: ''
+            graph_span: 1day
+            span:
+              start: day
+            stacked: true
+            cache: false
+            apex_config:
+              markers:
+                size: 0
+                hover:
+                  size: 0
+              yaxis:
+                - decimalsInFloat: 0
+                  min: 0
+                  max: 100
+                  tickAmount: 4
+                  labels:
+                    show: true
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+              legend:
+                show: false
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+            series:
+              - entity: sensor.zendure_export_efficiency
+                name: Export Efficiency (average)
+                stroke_width: 2
+                opacity: 0.2
+                extend_to: now
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                color: '#01a180'
+                show:
+                  in_header: false
+                color_threshold:
+                  - value: 0
+                    opacity: 0.2
+                  - value: 20
+                    opacity: 0.3
+                  - value: 40
+                    opacity: 0.4
+                  - value: 60
+                    opacity: 0.5
+                  - value: 80
+                    opacity: 0.6
+              - entity: sensor.zendure_power
+                name: Export Power (average)
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                stroke_width: 0
+                opacity: 0
+                extend_to: now
+                transform: return Math.max(0, -x);
+                color: '#e4e4e7'
+                show:
+                  in_header: false
+          - type: entities
+            entities:
+              - entity: sensor.zendure_power_export_dc
+                name: Export Power DC
+              - entity: sensor.zendure_export_efficiency
+                name: Export Efficiency
+              - entity: sensor.zendure_export_efficiency_24h_average
+                name: Export Efficiency (24h average)
+    cards: []
+  - type: sections
+    max_columns: 3
+    path: geschiedenis
+    title: Geschiedenis
+    icon: mdi:history
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_power
+                tap_action:
+                  action: more-info
+                color: '#01a180'
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_total_electricity_level
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_relay_switches_today
+                icon: mdi:swap-vertical-bold
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+            heading: Battery (7 days)
+          - type: vertical-stack
+            cards:
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                  color_threshold: true
+                  brush: true
+                brush:
+                  selection_span: 1d
+                  apex_config:
+                    grid:
+                      strokeDashArray: 0
+                      borderColor: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                      show: true
+                    yaxis:
+                      show: false
+                    xaxis:
+                      labels:
+                        show: false
+                      axisTicks:
+                        show: false
+                      axisBorder:
+                        color: >-
+                          color-mix(in srgb, var(--divider-color) 50%,
+                          transparent)
+                    chart:
+                      height: 100
+                cache: true
+                update_interval: 15min
+                stacked: true
+                header:
+                  show: true
+                  show_states: true
+                  title: ''
+                graph_span: 8d
+                span:
+                  offset: '-7d'
+                  start: day
+                series:
+                  - entity: sensor.zendure_power
+                    name: Battery
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    transform: return -x;
+                    stroke_width: 2
+                    opacity: 0.35
+                    extend_to: now
+                    color: '#01a180'
+                    float_precision: 0
+                    color_threshold:
+                      - value: -2000
+                        opacity: 0.5
+                      - value: -1750
+                        opacity: 0.45
+                      - value: -1500
+                        opacity: 0.4
+                      - value: -1250
+                        opacity: 0.35
+                      - value: -1000
+                        opacity: 0.3
+                      - value: -750
+                        opacity: 0.25
+                      - value: -500
+                        opacity: 0.15
+                      - value: 0
+                        opacity: 0.1
+                      - value: 500
+                        opacity: 0.15
+                      - value: 750
+                        opacity: 0.25
+                      - value: 1000
+                        opacity: 0.3
+                      - value: 1250
+                        opacity: 0.35
+                      - value: 1500
+                        opacity: 0.4
+                      - value: 1750
+                        opacity: 0.45
+                      - value: 2000
+                        opacity: 0.5
+                    yaxis_id: energy
+                    show:
+                      in_brush: true
+                      in_header: false
+                      in_legend: false
+                  - entity: sensor.home_energy_meter_target
+                    name: Home Energy Meter
+                    statistics:
+                      period: 5minute
+                      type: mean
+                      align: start
+                    type: area
+                    stroke_width: 0
+                    opacity: 0.3
+                    extend_to: now
+                    color: '#c0c0c2'
+                    float_precision: 0
+                    yaxis_id: energy
+                    show:
+                      in_brush: true
+                      in_header: false
+                      in_legend: false
+                  - entity: sensor.zendure_total_electricity_level
+                    name: Electricity Level
+                    statistics:
+                      period: 5minute
+                      type: max
+                      align: start
+                    type: line
+                    curve: smooth
+                    stroke_width: 0
+                    opacity: 1
+                    extend_to: now
+                    color: var(--accent-color)
+                    float_precision: 0
+                    yaxis_id: percentage
+                    show:
+                      in_header: false
+                      in_legend: false
+                apex_config:
+                  tooltip:
+                    x:
+                      format: dd-MM (HH:mm)
+                      show: false
+                  xaxis:
+                    labels:
+                      show: false
+                      style:
+                        colors: grey
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                  yaxis:
+                    - title:
+                        text: ''
+                      decimalsInFloat: 0
+                      labels:
+                        style:
+                          colors: >-
+                            color-mix(in srgb, var(--primary-text-color) 75%,
+                            transparent)
+                  grid:
+                    strokeDashArray: 0
+                    borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                    show: true
+                  chart:
+                    height: 300px
+                    zoom:
+                      autoScaleYaxis: true
+                  legend:
+                    show: false
+                    floating: true
+                    horizontalAlign: left
+                    offsetX: 25
+                    offsetY: 17
+                    formatter: |
+                      EVAL:function(seriesName, opts) {
+                        // filter series die niet in de legenda moeten
+                        if(seriesName === "leeg" || seriesName === "P1 (NOM Doel)") return "";
+                        return seriesName;
+                      }
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+            grid_options:
+              columns: 36
+              rows: auto
+          - type: heading
+            icon: ''
+            heading: Inverter Temperature (7 days)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_inverter_temperature
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: vertical-stack
+            cards:
+              - type: custom:apexcharts-card
+                experimental:
+                  hidden_by_default: true
+                  color_threshold: true
+                  brush: true
+                brush:
+                  selection_span: 1d
+                  apex_config:
+                    grid:
+                      strokeDashArray: 0
+                      borderColor: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                      show: true
+                    yaxis:
+                      show: false
+                      min: 0
+                      max: 80
+                      tickAmount: 0
+                    xaxis:
+                      labels:
+                        show: false
+                      axisTicks:
+                        show: false
+                      axisBorder:
+                        color: >-
+                          color-mix(in srgb, var(--divider-color) 50%,
+                          transparent)
+                    chart:
+                      height: 100
+                header:
+                  show: true
+                  title: ''
+                graph_span: 8day
+                span:
+                  offset: '-7d'
+                  start: day
+                stacked: true
+                cache: false
+                apex_config:
+                  markers:
+                    size: 0
+                    hover:
+                      size: 0
+                  annotations:
+                    yaxis:
+                      - 'y': 55
+                        borderColor: var(--accent-color)
+                        strokeDashArray: 4
+                        borderWidth: 2
+                  yaxis:
+                    - decimalsInFloat: 0
+                      min: 0
+                      max: 80
+                      tickAmount: 4
+                      labels:
+                        show: true
+                        style:
+                          colors: >-
+                            color-mix(in srgb, var(--primary-text-color) 75%,
+                            transparent)
+                  tooltip:
+                    x:
+                      format: dd-MM (HH:mm)
+                      show: false
+                  grid:
+                    show: true
+                    borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                    strokeDashArray: 0
+                    padding:
+                      top: -10
+                  chart:
+                    height: 200px
+                  legend:
+                    show: false
+                  xaxis:
+                    labels:
+                      show: false
+                    axisTicks:
+                      show: false
+                    axisBorder:
+                      color: >-
+                        color-mix(in srgb, var(--divider-color) 50%,
+                        transparent)
+                series:
+                  - entity: sensor.zendure_inverter_temperature
+                    name: Inverter Temperature
+                    stroke_width: 2
+                    opacity: 0.2
+                    curve: smooth
+                    extend_to: now
+                    statistics:
+                      period: 5minute
+                      type: max
+                      align: start
+                    type: area
+                    color: '#01a180'
+                    show:
+                      in_header: false
+                      in_brush: true
+                    color_threshold:
+                      - value: 0
+                        opacity: 0.2
+                      - value: 30
+                        opacity: 0.35
+                      - value: 40
+                        opacity: 0.5
+                      - value: 50
+                        opacity: 0.65
+                      - value: 60
+                        opacity: 0.8
+                  - entity: sensor.zendure_power
+                    name: Battery
+                    transform: return Math.abs(x)
+                    statistics:
+                      period: 5minute
+                      type: max
+                      align: start
+                    type: line
+                    curve: smooth
+                    stroke_width: 0
+                    opacity: 1
+                    extend_to: now
+                    color: var(--accent-color)
+                    float_precision: 0
+                    yaxis_id: percentage
+                    show:
+                      in_header: false
+                      in_legend: false
+            grid_options:
+              columns: 36
+              rows: auto
+        column_span: 3
+    cards: []
+  - type: sections
+    max_columns: 4
+    title: Settings
+    path: configuratie
+    icon: mdi:cog
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Connected Zendure
+            heading_style: title
+          - type: markdown
+            grid_options:
+              columns: 3
+              rows: auto
+            text_only: true
+            content: >
+              {% set product = states('sensor.zendure_productserie') %}
+
+              {% if product == 'solarFlow2400AC' %} <img
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
+              width="100">
+
+              {% elif product == 'solarFlow2400AC+' %} <img
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac_plus.png"
+              width="100">
+
+              {% elif product == 'solarFlow2400Pro' %} <img
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_pro.png"
+              width="100">
+
+              {% elif product == 'solarFlow1600AC+' %} <img
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_1600_ac_plus.png"
+              width="100">
+
+              {% elif product == 'solarFlow800Pro' %} <img
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_pro.png"
+              width="100">
+
+              {% elif product == 'solarFlow800Plus' %} <img
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_plus.png"
+              width="100">
+
+              {% else %} <img
+              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
+              width="100"> {% endif %}
+          - type: markdown
+            content: >-
+              {% set product = states('sensor.zendure_productserie') %} {% if
+              product == 'solarFlow2400AC' %} **Solarflow 2400 AC** {% elif
+              product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {% elif
+              product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {% elif
+              product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {% elif
+              product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
+              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
+              **Onbekend** {% endif %} ({{
+              states('sensor.zendure_total_capacity') }} kWh)
+
+              {{ states('sensor.zendure_serienumber') }}
+            grid_options:
+              columns: 9
+              rows: auto
+          - type: heading
+            icon: ''
+            heading: Configuration (Basic)
+            heading_style: title
+            badges: []
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Vul hier het
+              IP-adres van je Zendure in onder **Zendure 2400 AC IP-adres⚙️** en
+              van je HomeWizard P1 (lokale API moet aanstaan) onder **Homewizard
+              P1 IP-adres⚙️**. Gebruik je een afwijkende P1-sensor, dan kun je
+              deze instellen via **Afwijkende P1 Sensor⚙️**.
+
+
+              Hier stel je ook de **Standby Vertraging⚙️** in. Wanneer de
+              Zendure geen actieve taak heeft, gaat hij na de ingestelde periode
+              volledig in standby. Het verbruik bedraagt dan ongeveer 0,2 kWh
+              per dag.
+
+
+              Wil je niet te veel gedoe neem dan in eerste instantie de **Advies
+              Instellingen⚙️** voor het gedrag in één keer over. Pas het daarna
+              na eigen smaak aan.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_text.zendure_setting_ip_address
+              - entity: input_text.homewizard_setting_p1_ip_address
+              - entity: input_number.zendure_setting_standby_delay
+                name: Standby Delay
+              - entity: input_button.zendure_setting_set_default_settings
+                name: Set Default Settings
+          - type: heading
+            icon: ''
+            heading: Configuration (Charging)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_inverter_max_charge_power
+                icon: mdi:api
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
+              maximaal oplaadvermogen van je Zendure in en maak de keuze wanneer
+              jij wilt dat hij tijdens de **Nul op de meter** modus gaat starten
+              met opladen en hoeveel marge hij moet houden tussen terugleveren
+              en nul op de meter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_number.zendure_setting_max_charge_power
+                name: Max. Charge Power
+              - entity: input_number.zendure_setting_start_charging_at
+                name: Start Charging At
+              - entity: input_number.zendure_setting_charge_buffer
+                name: Charge Buffer
+          - type: heading
+            icon: ''
+            heading: Configuration (Discharging)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_inverter_max_discharge_power
+                color: '#01a180'
+                icon: mdi:api
+                tap_action:
+                  action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
+              maximaal ontlaadvermogen van je Zendure in en maak de keuze
+              wanneer jij wilt dat hij tijdens de **Nul op de meter** modus gaat
+              starten met ontladen en hoeveel extra hij moet ontladen dan nul op
+              de meter.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_number.zendure_setting_max_discharge_power
+                name: Max Discharge Power
+              - entity: input_number.zendure_setting_start_discharging_at
+                name: Start Discharge At
+              - entity: input_number.zendure_setting_discharge_buffer
+                name: Discharge Buffer
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading: Configuration (Optional)
+            heading_style: title
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Maak je geen
+              gebruik van een Homewizard P1 maar heb je wel een P1/CT sensor
+              waarbij -watt teruglevering is en +watt import per seconden is vul
+              deze dan hier in onder **Afwijkende P1 Sensor⚙️**.
+
+
+              Ook kun je hier een afwijkende batterij volgorde instellen onder
+              **Batterij Volgorde⚙️**. Hiermee bepaal je zelf een afwijkende
+              volgorde van de batterijen. De juiste volgorde bepaal je mede aan
+              de hand van **sensor.zendure_battery_serienumbers** en de sticker
+              op de batterij(en). Op deze manier zullen de batterijtemperaturen
+              en het laadpercentage de juiste volgorde hanteren zoals die van de
+              batterij(en) in de stapel.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_text.home_energy_setting_meter_sensor
+              - entity: input_text.zendure_setting_battery_order
+                name: Battery Order
+          - type: heading
+            icon: ''
+            heading: Configuration (Dynamic)
+            heading_style: title
+            badges: []
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Heb je een
+              dynamisch contract dan kun je hier de Nordpool HACS sensor
+              invullen en aangeven wat de minimale spread moet zijn om gebruik
+              te maken van het laden en ontladen op lage en hoge tarieven.
+
+
+              Heb je een 15 minuten contract vink dit dan aan zodat de grafieken
+              en de prijzen goed gezet worden.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_text.dynamic_setting_nordpool_sensor
+              - entity: input_number.dynamic_setting_minimal_spread
+                name: Minimal Spread
+              - entity: input_boolean.dynamic_setting_15_minute_interval
+                name: 15 Minute Interval
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Configuration (Dashboard)
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier stel je in of
+              je de Dynamische informatie wilt verbergen of tonen op het eerste
+              tabblad via **Dynamisch Tonen Op Dashboard⚙️**.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_boolean.dashboard_setting_show_help
+              - entity: input_boolean.dashboard_setting_show_dynamic
+          - type: heading
+            icon: ''
+            heading: Version
+            heading_style: title
+            badges:
+              - type: button
+                icon: mdi:information
+                text: Show Last Releasenotes
+                color: '#01a180'
+                tap_action:
+                  action: navigate
+                  navigation_path: releasenotes
+            visibility:
+              - condition: state
+                entity: sensor.github_zendure_gielz1986_releasecheck
+                state_not: Pre-release actief
+          - type: heading
+            icon: ''
+            heading: Version
+            heading_style: title
+            badges:
+              - type: button
+                icon: mdi:information
+                text: Show pre-releasenotes
+                color: '#01a180'
+                tap_action:
+                  action: url
+                  url_path: https://github.com/Gielz1986/Zendure-HA-zenSDK/pulls
+            visibility:
+              - condition: state
+                entity: sensor.github_zendure_gielz1986_releasecheck
+                state: Pre-release actief
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Hier kun je zien
+              welke package versie je gebruikt en wat de nieuwste versie is op
+              GitHub. Ook zie je meteen hoeveel problemen er openstaan en kun je
+              hier op doorklikken naar GitHub.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: sensor.zendure_configuration_version
+                name: Installed version
+              - entity: sensor.github_zendure_gielz1986
+                name: Available version
+              - entity: sensor.github_zendure_gielz1986_releasecheck
+                name: Releasecheck
+          - type: markdown
+            content: >
+              &nbsp;&nbsp;[![Open
+              Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Open%20Issues&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+            grid_options:
+              columns: 12
+              rows: auto
+            text_only: true
+      - type: grid
+        cards:
+          - type: heading
+            heading: Logbook (Last 4 hours)
+            heading_style: title
+            badges:
+              - type: button
+                icon: mdi:information
+                tap_action:
+                  action: navigate
+                  navigation_path: /logbook
+                color: '#01a180'
+                text: More
+          - type: logbook
+            target:
+              entity_id:
+                - input_select.zendure_operation_mode
+            grid_options:
+              columns: 12
+              rows: 15
+            hours_to_show: 4
+    cards: []
+    dense_section_placement: false
+  - type: sections
+    max_columns: 2
+    subview: true
+    path: releasenotes
+    title: Releasenotes
+    icon: mdi:github
+    sections:
+      - type: grid
+        cards:
+          - type: markdown
+            content: |
+              **{{ state_attr('sensor.github_zendure_gielz1986', 'tag_name')}}**
+              {{ state_attr('sensor.github_zendure_gielz1986', 'body')}}
+            grid_options:
+              columns: 24
+              rows: auto
+            text_only: true
+        column_span: 2
+    cards: []
