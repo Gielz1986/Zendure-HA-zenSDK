@@ -1062,7 +1062,7 @@ views:
                 name: Spread
                 state_content:
                   - state
-                  - verschil_waarde
+                  - difference_in_value
                 vertical: false
                 features_position: bottom
               - type: tile
@@ -1073,7 +1073,7 @@ views:
                 name: Spread NZH
                 state_content:
                   - state
-                  - verschil_waarde
+                  - difference_in_value
                 vertical: false
                 features_position: bottom
           - type: entities
@@ -1216,7 +1216,7 @@ views:
                 name: Spread
                 state_content:
                   - state
-                  - verschil_waarde
+                  - difference_in_value
                 vertical: false
                 features_position: bottom
               - type: tile
@@ -1227,7 +1227,7 @@ views:
                 name: Spread NZH
                 state_content:
                   - state
-                  - verschil_waarde
+                  - difference_in_value
                 vertical: false
                 features_position: bottom
             visibility:
