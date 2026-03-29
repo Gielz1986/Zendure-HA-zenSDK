@@ -1,4 +1,6 @@
 # Zendure Home Assistant Integration
+Global (English) | [Nederlands](README.nl.md)
+
 [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Current%20Version&&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
 [![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Issues&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
 [![Issue SLA](https://img.shields.io/badge/Average%20Resolution%20Time-~7%20Days-brightgreen?style=for-the-badge&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
