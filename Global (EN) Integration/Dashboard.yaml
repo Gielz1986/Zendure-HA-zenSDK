@@ -932,7 +932,7 @@ views:
                 visibility:
                   - condition: state
                     entity: sensor.dynamic_lowest_price_period
-                    state: Ja
+                    state: 'Yes'
                 name: Cheap
                 state_content: name
               - type: entity
@@ -946,7 +946,7 @@ views:
                 visibility:
                   - condition: state
                     entity: sensor.dynamic_highest_price_period
-                    state: Ja
+                    state: 'Yes'
                 name: Expensive
                 state_content: name
           - type: custom:apexcharts-card
@@ -1036,10 +1036,10 @@ views:
                     if (prijs < 0) {
                       kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
                     }
-                    else if (item.goedkoop === "ja") {
+                    else if (item.goedkoop === "Yes") {
                       kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
                     }
-                    else if (item.duur === "ja") {
+                    else if (item.duur === "Yes") {
                       kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
                     }
                     else {
@@ -1186,10 +1186,10 @@ views:
                         if (prijs < 0) {
                           kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
                         }
-                        else if (item.goedkoop === "ja") {
+                        else if (item.goedkoop === "Yes") {
                           kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
                         }
-                        else if (item.duur === "ja") {
+                        else if (item.duur === "Yes") {
                           kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
                         }
                         else {
