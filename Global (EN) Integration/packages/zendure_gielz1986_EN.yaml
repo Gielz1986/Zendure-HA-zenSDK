@@ -561,8 +561,8 @@ template:
         unit_of_measurement: "%"
         state: >
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-          {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
-          {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+          {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
+          {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
@@ -578,9 +578,9 @@ template:
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
               {% set ns = namespace(result=[]) %}
               {% for uur in uren %}
-                {% if uur.goedkoop == 'ja' %}
+                {% if uur.goedkoop == 'Yes' %}
                   {% set ns.result = ns.result + ['G' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
-                {% elif uur.duur == 'ja' %}
+                {% elif uur.duur == 'Yes' %}
                   {% set ns.result = ns.result + ['D' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
                 {% endif %}
               {% endfor %}
@@ -588,7 +588,7 @@ template:
             {% endif %}
           goedkoopste_periode: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | sort(attribute='start') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
             {% for uur in goedkoop %}
               "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
@@ -597,7 +597,7 @@ template:
             ]
           duurste_periode: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set duur = uren | selectattr('duur','equalto','ja') | sort(attribute='start') | list %}
+            {% set duur = uren | selectattr('duur','equalto','Yes') | sort(attribute='start') | list %}
             [
             {% for uur in duur %}
               "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
@@ -606,7 +606,7 @@ template:
             ]
           gemiddelde_goedkoop: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
               €{{ '%.4f' % (goedkoop | map(attribute='value') | sum / goedkoop | count) }}
             {% else %}
@@ -614,7 +614,7 @@ template:
             {% endif %}
           gemiddelde_duur: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+            {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
               €{{ '%.4f' % (duur | map(attribute='value') | sum / duur | count) }}
             {% else %}
@@ -637,7 +637,7 @@ template:
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
           {% set duurste = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
 
-          {% set goedkope_uren = uren | selectattr('goedkoop','equalto','ja') | list %}
+          {% set goedkope_uren = uren | selectattr('goedkoop','equalto','Yes') | list %}
           {% set dure_uren = duurste | list %}
 
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
@@ -655,9 +655,9 @@ template:
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
               {% set ns = namespace(result=[]) %}
               {% for uur in uren %}
-                {% if uur.goedkoop == 'ja' %}
+                {% if uur.goedkoop == 'Yes' %}
                   {% set ns.result = ns.result + ['G' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
-                {% elif uur.duur == 'ja' %}
+                {% elif uur.duur == 'Yes' %}
                   {% set ns.result = ns.result + ['D' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
                 {% endif %}
               {% endfor %}
@@ -665,7 +665,7 @@ template:
             {% endif %}
           goedkoopste_periode: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | sort(attribute='start') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
             {% for uur in goedkoop %}
               "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
@@ -683,7 +683,7 @@ template:
             ]
           gemiddelde_goedkoop: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
               €{{ '%.4f' % (goedkoop | map(attribute='value') | sum / goedkoop | count) }}
             {% else %}
@@ -691,7 +691,7 @@ template:
             {% endif %}
           gemiddelde_duur: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
-            {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+            {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
               €{{ '%.4f' % (duur | map(attribute='value') | sum / duur | count) }}
             {% else %}
@@ -712,8 +712,8 @@ template:
         unit_of_measurement: "%"
         state: >
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
-          {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
-          {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+          {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
+          {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
@@ -729,9 +729,9 @@ template:
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
               {% set ns = namespace(result=[]) %}
               {% for uur in uren %}
-                {% if uur.goedkoop == 'ja' %}
+                {% if uur.goedkoop == 'Yes' %}
                   {% set ns.result = ns.result + ['G' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
-                {% elif uur.duur == 'ja' %}
+                {% elif uur.duur == 'Yes' %}
                   {% set ns.result = ns.result + ['D' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
                 {% endif %}
               {% endfor %}
@@ -739,7 +739,7 @@ template:
             {% endif %}
           goedkoopste_periode: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | sort(attribute='start') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
             {% for uur in goedkoop %}
               "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
@@ -748,7 +748,7 @@ template:
             ]
           duurste_periode: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
-            {% set duur = uren | selectattr('duur','equalto','ja') | sort(attribute='start') | list %}
+            {% set duur = uren | selectattr('duur','equalto','Yes') | sort(attribute='start') | list %}
             [
             {% for uur in duur %}
               "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
@@ -757,7 +757,7 @@ template:
             ]
           gemiddelde_goedkoop: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
               €{{ '%.4f' % (goedkoop | map(attribute='value') | sum / goedkoop | count) }}
             {% else %}
@@ -765,7 +765,7 @@ template:
             {% endif %}
           gemiddelde_duur: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
-            {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+            {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
               €{{ '%.4f' % (duur | map(attribute='value') | sum / duur | count) }}
             {% else %}
@@ -787,7 +787,7 @@ template:
         state: >
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
           {% set duurste = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope_tomorrow') or [] %}
-          {% set goedkope_uren = uren | selectattr('goedkoop','equalto','ja') | list %}
+          {% set goedkope_uren = uren | selectattr('goedkoop','equalto','Yes') | list %}
           {% set dure_uren = duurste | list %}
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
@@ -804,9 +804,9 @@ template:
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
               {% set ns = namespace(result=[]) %}
               {% for uur in uren %}
-                {% if uur.goedkoop == 'ja' %}
+                {% if uur.goedkoop == 'Yes' %}
                   {% set ns.result = ns.result + ['G' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
-                {% elif uur.duur == 'ja' %}
+                {% elif uur.duur == 'Yes' %}
                   {% set ns.result = ns.result + ['D' ~ (uur.start | as_datetime).strftime('%H:%M')] %}
                 {% endif %}
               {% endfor %}
@@ -814,7 +814,7 @@ template:
             {% endif %}
           goedkoopste_periode: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | sort(attribute='start') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
             [
             {% for uur in goedkoop %}
               "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
@@ -832,7 +832,7 @@ template:
             ]
           gemiddelde_goedkoop: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
             {% if goedkoop | count > 0 %}
               €{{ '%.4f' % (goedkoop | map(attribute='value') | sum / goedkoop | count) }}
             {% else %}
@@ -840,7 +840,7 @@ template:
             {% endif %}
           gemiddelde_duur: >
             {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope_tomorrow') or [] %}
-            {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+            {% set duur = uren | selectattr('duur','equalto','Yes') | list %}
             {% if duur | count > 0 %}
               €{{ '%.4f' % (duur | map(attribute='value') | sum / duur | count) }}
             {% else %}
@@ -913,7 +913,7 @@ template:
               | selectattr('start', 'le', nu.isoformat())
               | selectattr('end', 'gt', nu.isoformat())
               | list %}
-            {{ 'Ja' if actief | length > 0 else 'Nee' }}
+            {{ 'Yes' if actief | length > 0 else 'No' }}
           {% else %}
             Onbekend
           {% endif %}
@@ -954,8 +954,8 @@ template:
                   "start": "{{ uur.start }}",
                   "end": "{{ uur.end }}",
                   "value": {{ uur.value }},
-                  "goedkoop": "{{ 'ja' if uur.start in ns.goede_starttijden else 'nee' }}",
-                  "duur": "{{ 'ja' if uur.start in ns.dure_starttijden else 'nee' }}"
+                  "goedkoop": "{{ 'Yes' if uur.start in ns.goede_starttijden else 'No' }}",
+                  "duur": "{{ 'Yes' if uur.start in ns.dure_starttijden else 'No' }}"
                 }{% if not loop.last %},{% endif %}
               {% endfor %}
               ]
@@ -1017,7 +1017,7 @@ template:
               | selectattr('start', 'le', nu.isoformat())
               | selectattr('end', 'gt', nu.isoformat())
               | list %}
-            {{ 'Ja' if in_goedkoop_blok | length > 0 else 'Nee' }}
+            {{ 'Yes' if in_goedkoop_blok | length > 0 else 'No' }}
           {% else %}
             Onbekend
           {% endif %}
@@ -1082,8 +1082,8 @@ template:
                   "start": "{{ uur.start }}",
                   "end": "{{ uur.end }}",
                   "value": {{ uur.value }},
-                  "goedkoop": "{{ 'ja' if uur.start in ns.goedkope_starttijden else 'nee' }}",
-                  "duur": "{{ 'ja' if uur.start in ns.dure_starttijden else 'nee' }}"
+                  "goedkoop": "{{ 'Yes' if uur.start in ns.goedkope_starttijden else 'No' }}",
+                  "duur": "{{ 'Yes' if uur.start in ns.dure_starttijden else 'No' }}"
                 }{% if not loop.last %},{% endif %}
               {% endfor %}
               ]
@@ -1150,8 +1150,8 @@ template:
                   "start": "{{ uur.start }}",
                   "end": "{{ uur.end }}",
                   "value": {{ uur.value }},
-                  "goedkoop": "{{ 'ja' if uur.start in ns.goedkope_starttijden else 'nee' }}",
-                  "duur": "{{ 'ja' if uur.start in ns.dure_starttijden else 'nee' }}"
+                  "goedkoop": "{{ 'Yes' if uur.start in ns.goedkope_starttijden else 'No' }}",
+                  "duur": "{{ 'Yes' if uur.start in ns.dure_starttijden else 'No' }}"
                 }{% if not loop.last %},{% endif %}
               {% endfor %}
               ]
@@ -1162,14 +1162,14 @@ template:
             {% set prijzen = state_attr('sensor.dynamic_lowest_price_period','raw_today') %}
             {% if prijzen %}
               {% set eerste_goedkoop = prijzen
-                | selectattr('goedkoop','eq','ja')
+                | selectattr('goedkoop','eq','Yes')
                 | map(attribute='start')
                 | map('as_datetime')
                 | sort
                 | first %}
               [
               {% for uur in prijzen
-                if uur.duur == 'ja'
+                if uur.duur == 'Yes'
                 and (uur.start | as_datetime > eerste_goedkoop)
               %}
                 {
@@ -1177,7 +1177,7 @@ template:
                   "end": "{{ uur.end }}",
                   "value": {{ uur.value }},
                   "goedkoop": "{{ uur.goedkoop }}",
-                  "duur": "ja"
+                  "duur": "Yes"
                 }{% if not loop.last %},{% endif %}
               {% endfor %}
               ]
@@ -1189,14 +1189,14 @@ template:
 
             {% if prijzen %}
               {% set eerste_goedkoop = prijzen
-                | selectattr('goedkoop','eq','ja')
+                | selectattr('goedkoop','eq','Yes')
                 | map(attribute='start')
                 | map('as_datetime')
                 | sort
                 | first %}
               [
               {% for uur in prijzen
-                if uur.duur == 'ja'
+                if uur.duur == 'Yes'
                 and (uur.start | as_datetime > eerste_goedkoop)
               %}
                 {
@@ -1204,7 +1204,7 @@ template:
                   "end": "{{ uur.end }}",
                   "value": {{ uur.value }},
                   "goedkoop": "{{ uur.goedkoop }}",
-                  "duur": "ja"
+                  "duur": "Yes"
                 }{% if not loop.last %},{% endif %}
               {% endfor %}
               ]
