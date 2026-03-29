@@ -68,28 +68,28 @@ homeassistant:
 | Explanation per configuration item | |
 |-|-|
 | **Configuration (Basic)** | **Information** |
-| `zendure_2400_ac_ip_address` | **e.g. 192.168.0.172** – Found in the Zendure app under device information |
-| `homewizard_p1_ip_address` | **(Recommended: use Homewizard P1) e.g. 192.168.0.192** – Enable local API in the Homewizard app |
-| `zendure_2400_ac_standby_delay` | **(Recommended: 15 minutes) 5–30 minutes** – Defines how quickly the inverter goes into full standby at 0 activity. Prevents ~19W idle consumption |
-| `zendure_2400_ac_apply_recommended_settings` | Once the battery is running, you can use this to apply the recommended settings below |
+| `zendure_setting_ip_address` | **e.g. 192.168.0.172** – Found in the Zendure app under device information |
+| `homewizard_setting_p1_ip_address` | **e.g. 192.168.0.192** – Enable local API in the Homewizard app |
+| `zendure_setting_standby_delay` | **(Recommended: 15 minutes) 5–30 minutes** – Defines how quickly the inverter goes into full standby at 0 activity. Prevents ~19W idle consumption |
+| `zendure_setting_set_default_settings` | Once the battery is running, you can use this to apply the recommended settings below |
 | **Configuration (Charging)** | **Information** |
-| `zendure_2400_ac_max_charge_power` | **800–2400W** – Maximum charging power (up to 4800W with multiple inverters via Node-RED) |
-| `zendure_2400_ac_charge_start_threshold` | **(Recommended: -300W) -1000 to -100W** – Defines when charging starts |
-| `zendure_2400_ac_charge_margin` | **(Recommended: 50W) 0–250W** – Determines how much less to include during charging. In summer you can increase this (e.g. 200W) to prevent daytime grid import |
+| `zendure_setting_max_charge_power` | **800–2400W** – Maximum charging power (up to 4800W with multiple inverters via Node-RED) |
+| `zendure_setting_start_charging_at` | **(Recommended: -300W) -1000 to -100W** – Defines when charging starts |
+| `zendure_setting_charge_buffer` | **(Recommended: 50W) 0–250W** – Determines how much less to include during charging. In summer you can increase this (e.g. 200W) to prevent daytime grid import |
 | **Configuration (Discharging)** | **Information** |
-| `zendure_2400_ac_max_discharge_power` | **800–2400W** – Maximum discharge power |
-| `zendure_2400_ac_discharge_start_threshold` | **(Recommended: 100W) 100–500W** – Defines when discharging starts |
-| `zendure_2400_ac_discharge_margin` | **(Recommended: 5W) 0–250W** – Extra margin for discharging |
+| `zendure_setting_max_discharge_power` | **800–2400W** – Maximum discharge power |
+| `zendure_setting_start_discharging_at` | **(Recommended: 100W) 100–500W** – Defines when discharging starts |
+| `zendure_setting_discharge_buffer` | **(Recommended: 5W) 0–250W** – Extra margin for discharging |
 | **Configuration (Optional)** | **Information** |
-| `custom_p1_sensor` | **e.g. sensor.custom_p1** – Add your own P1 sensor (+ consumption / - feed-in). This will take priority |
-| `zendure_2400_ac_battery_order` | **e.g. 1;5;3;4;2** – Manually define battery order based on serial numbers and physical stacking |
+| `home_energy_setting_meter_sensor` | **e.g. sensor.custom_energy** – Add your own energy sensor (+watt import / -watt export). This will take priority |
+| `zendure_setting_battery_order` | **e.g. 1;5;3;4;2** – Manually define battery order based on serial numbers and physical stacking |
 | **Configuration (Dynamic)** | **Information** |
-| `dynamic_nordpool_sensor` | **e.g. sensor.nordpool_kwh_nl_eur_3_09_0** – Your Nordpool (HACS) sensor |
-| `dynamic_minimum_spread` | **e.g. 25%** – Minimum price spread before dynamic charging/discharging activates |
-| `dynamic_15_minutes` | Enable this if you want to use 15-minute intervals |
+| `dynamic_setting_nordpool_sensor` | **e.g. sensor.nordpool_kwh_nl_eur_3_09_0** – Your Nordpool (HACS) sensor |
+| `dynamic_setting_minimal_spread` | **e.g. 25%** – Minimum price spread before dynamic charging/discharging activates |
+| `dynamic_setting_15_minute_interval` | Enable this if you want to use 15-minute intervals |
 | **Configuration (Dashboard)** | **Information** |
-| `show_help_on_dashboard` | Enable to show help text on the dashboard |
-| `show_dynamic_on_dashboard` | Enable to show dynamic control on the dashboard |
+| `dashboard_setting_show_help` | Enable to show help text on the dashboard |
+| `dashboard_setting_show_dynamic` | Enable to show dynamic control on the dashboard |
 
 ---
 
