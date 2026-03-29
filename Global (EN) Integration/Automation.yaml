@@ -20,9 +20,9 @@ triggers:
       minutes: 0
       seconds: 15
     from:
-      - Ja
+      - Yes
     to:
-      - Nee
+      - No
   - trigger: state
     entity_id:
       - sensor.dynamic_highest_price_period
@@ -32,9 +32,9 @@ triggers:
       minutes: 0
       seconds: 15
     from:
-      - Ja
+      - Yes
     to:
-      - Nee
+      - No
   - trigger: state
     entity_id:
       - input_number.dynamic_setting_minimal_spread
@@ -509,7 +509,7 @@ actions:
                   - condition: state
                     entity_id: sensor.dynamic_lowest_price_period
                     state:
-                      - Nee
+                      - No
                     for:
                       hours: 0
                       minutes: 0
@@ -517,7 +517,7 @@ actions:
                   - condition: state
                     entity_id: sensor.dynamic_highest_price_period
                     state:
-                      - Nee
+                      - No
                     for:
                       hours: 0
                       minutes: 0
@@ -699,7 +699,7 @@ actions:
                   - condition: state
                     entity_id: sensor.dynamic_highest_price_period
                     state:
-                      - Ja
+                      - Yes
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
@@ -802,7 +802,7 @@ actions:
                   - condition: state
                     entity_id: sensor.dynamic_highest_price_period
                     state:
-                      - Ja
+                      - Yes
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
@@ -1244,7 +1244,7 @@ actions:
             alias: input_text.dynamic_setting_nordpool_sensor is gevuld
           - condition: state
             entity_id: sensor.dynamic_lowest_price_period
-            state: Ja
+            state: Yes
           - condition: state
             entity_id: input_boolean.dynamic_recently_charged
             state: "on"
@@ -1288,7 +1288,7 @@ actions:
             state: Dynamic Smart Matching
           - condition: state
             entity_id: sensor.dynamic_lowest_price_period
-            state: Ja
+            state: Yes
           - condition: state
             entity_id: input_boolean.dynamic_recently_charged
             state: "off"
@@ -1341,7 +1341,7 @@ actions:
               name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamic_lowest_price_period
-                to: Nee
+                to: No
                 trigger: state
               - trigger: template
                 value_template: >
@@ -1402,7 +1402,7 @@ actions:
                   - Dynamisch Handelen + NOM
           - condition: state
             entity_id: sensor.dynamic_lowest_price_period
-            state: Ja
+            state: Yes
           - condition: state
             entity_id: input_boolean.dynamic_recently_charged
             state: "off"
@@ -1455,7 +1455,7 @@ actions:
               name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamic_lowest_price_period
-                to: Nee
+                to: No
                 trigger: state
               - trigger: template
                 value_template: >
@@ -1525,7 +1525,7 @@ actions:
           - condition: state
             entity_id: sensor.dynamic_highest_price_period
             state:
-              - Ja
+              - Yes
           - alias: >-
               sensor.dynamic_spread_indication moet hoger of gelijk zijn aan
               input_number.dynamic_setting_minimal_spread
@@ -1571,7 +1571,7 @@ actions:
               - entity_id:
                   - sensor.dynamic_highest_price_period
                 to:
-                  - Nee
+                  - No
                 trigger: state
               - trigger: state
                 entity_id:
