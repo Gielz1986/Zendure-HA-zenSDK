@@ -1817,7 +1817,7 @@ rest:
 
       - name: "Zendure Calibrating"
         value_template: >
-          {% set states = {0: "Goed", 1: "Kalibreren"} %}
+          {% set states = {0: "No", 1: "Yes"} %}
           {% set packState = value_json['properties']['socStatus'] | int %}
           {{ states.get(packState, "Onbekend") }}
         unique_id: zendure_calibrating
