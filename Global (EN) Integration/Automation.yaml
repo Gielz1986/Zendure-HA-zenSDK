@@ -53,7 +53,7 @@ triggers:
     id: systeem_instelling_adviesinstellingen
 conditions: []
 actions:
-  - alias: Modus Selecteren
+  - alias: Operation Mode
     choose:
       - conditions:
           - condition: trigger
@@ -88,7 +88,7 @@ actions:
           - action: rest_command.zendure_stop_with_everything
             data:
               sn: "{{ states('sensor.zendure_serienumber') }}"
-        alias: Handmatig
+        alias: Manual
       - conditions:
           - condition: trigger
             id: modus_trigger
@@ -134,7 +134,7 @@ actions:
           - action: rest_command.zendure_stop_with_everything
             data:
               sn: "{{ states('sensor.zendure_serienumber') }}"
-        alias: Dynamisch Handelen
+        alias: Dynamic Trading
       - conditions:
           - condition: trigger
             id: modus_trigger
@@ -171,7 +171,7 @@ actions:
               outputLimit: >-
                 {{ states('input_number.zendure_setting_max_discharge_power') |
                 int }}
-        alias: Snel ontladen
+        alias: Quick Discharge
       - conditions:
           - condition: trigger
             id: modus_trigger
@@ -186,8 +186,8 @@ actions:
               inputLimit: >-
                 {{ states('input_number.zendure_setting_max_charge_power') | int
                 }}
-        alias: Snel opladen
-  - alias: Systeem
+        alias: Quick Charge
+  - alias: System
     choose:
       - conditions:
           - condition: trigger
@@ -217,11 +217,10 @@ actions:
               sn: "{{ states('sensor.zendure_serienumber') }}"
           - action: logbook.log
             data:
-              message: |
-                ⚠️ Opslagmodus omzetten naar RAM —
+              message: ⚠️ Switch storage mode to RAM —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Wanneer opslag modus op Flash staat deze op RAM instellen
+        alias: When storage mode is set to Flash set it to RAM
       - conditions:
           - condition: trigger
             id:
@@ -249,12 +248,12 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                💤 Na {{ states('input_number.zendure_setting_standby_delay') |
-                int(5) }}                 minuten inactiviteit in standby
-                zetten                 (Opslagmodus omzetten naar Flash) —
+                💤 After {{ states('input_number.zendure_setting_standby_delay')
+                | int(5) }} minutes of inactivity go into full standby (Switch
+                storage mode to Flash) —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Na xx minuten inactiviteit in standby zetten
+        alias: Put on standby after xx minutes of inactivity
       - conditions:
           - condition: trigger
             id:
@@ -273,7 +272,7 @@ actions:
                       states('sensor.zendure_minimum_electricity_level') | float | round(0))
                      and
                      (states('sensor.zendure_set_charge_power') | float == 1200) }}
-            alias: SOC komt niet overeen met minimaal ingestelde SOC
+            alias: SOC does not match minimum configured SOC
           - condition: or
             conditions:
               - condition: state
@@ -303,8 +302,8 @@ actions:
                 before: sunset
                 before_offset: "-02:00:00"
               - alias: >-
-                  sensor.home_energy_meter_power kleiner dan
-                  input_number.zendure_2400_ac_start_opladen_bij
+                  sensor.home_energy_meter_power lower then
+                  input_number.zendure_setting_start_charging_at
                 condition: template
                 value_template: |
                   {{ states('sensor.home_energy_meter_power') | float(0)
@@ -331,15 +330,14 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚠️ Batterij SOC bescherming actief — Vermogen ingesteld op   {%
-                set soc = states('sensor.zendure_total_electricity_level') |
-                float |
+                ⚠️ Battery SOC protection active — Power set to {% set soc =
+                states('sensor.zendure_total_electricity_level') | float |
                   round(0) %} {% set min_soc =
                   states('sensor.zendure_minimum_electricity_level') | float | round(0) %}
                   {{ 1200 if soc < min_soc else 0 }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Opladen naar minimale SOC (bescherming)
+        alias: Charging to minimum SOC (protection)
       - conditions:
           - condition: or
             conditions:
@@ -370,12 +368,12 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximaal oplaadvermogen aangepast naar {{
+                ⚙️ Maximum charging power adjusted to {{
                 states('input_number.zendure_setting_max_charge_power') | int }}
                 watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Maximaal oplaadvermogen aanpassen
+        alias: Adjust maximum charging power
       - conditions:
           - condition: or
             conditions:
@@ -406,12 +404,12 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximaal ontlaadvermogen aangepast naar {{
+                ⚙️ Maximum discharge power adjusted to {{
                 states('input_number.zendure_setting_max_discharge_power') | int
                 }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Maximaal ontlaadvermogen aanpassen
+        alias: " Adjust maximum discharge power"
       - conditions:
           - condition: trigger
             id:
@@ -425,9 +423,7 @@ actions:
               value: 15
           - action: logbook.log
             data:
-              message: >-
-                ⚙️ Advies instellingen overnemen — Standby vertraging ingesteld
-                op 15 minuten — 
+              message: "⚙️ Set recommended settings — Standby delay set to 15 minutes — "
               entity_id: input_select.zendure_operation_mode
               name: " "
           - action: input_number.set_value
@@ -445,8 +441,8 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚙️ Advies instellingen overnemen — Ontladen starten bij 100 watt
-                verbruik en opladen starten bij -300 watt teruglevering — 
+                ⚙️ Set recommended settings — Start discharging at 100 watt
+                import and start charging at -300 watt export — 
               entity_id: input_select.zendure_operation_mode
               name: " "
           - action: input_number.set_value
@@ -464,11 +460,11 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚙️ Advies instellingen overnemen — Oplaadmarge ingesteld op 50
-                watt en ontlaadmarge ingesteld op 5 watt — 
+                ⚙️ Set recommended settings — Charge buffer set to 50 watt and
+                discharge buffer set to 5 watt — 
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Advies instellingen overnemen
+        alias: Set default preferred settings
       - conditions:
           - condition: trigger
             id:
@@ -543,11 +539,11 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚠️ Dynamisch laden/ontladen loopt status is foutief.
-                Gecorrigeerd naar status uit —
+                ⚠️ Dynamic charging/discharging running status is incorrect.
+                Corrected to status off —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamisch laden / ontladen controle
+        alias: Dynamic charging/discharging check
       - conditions:
           - condition: trigger
             id:
@@ -584,12 +580,12 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Huidig oplaadvermogen gecorrigeerd naar {{
+                ⚙️ Current charging power corrected to {{
                 states('input_number.zendure_setting_max_charge_power') | int }}
                 watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Huidig oplaadvermogen corrigeren
+        alias: Correct current charging power
       - conditions:
           - condition: trigger
             id:
@@ -627,21 +623,21 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Huidig ontlaadvermogen gecorrigeerd naar {{
+                ⚙️ Current discharge power corrected to {{
                 states('input_number.zendure_setting_max_discharge_power') | int
                 }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Huidig ontlaadvermogen corrigeren
-  - alias: NOM Aansturing
+        alias: " Correct current discharge power"
+  - alias: Smart Matching Control
     choose:
       - conditions:
           - condition: trigger
             id:
               - aansturing_trigger
           - alias: >-
-              sensor.home_energy_meter_power groter dan
-              input_number.zendure_2400_ac_start_ontladen_bij
+              sensor.home_energy_meter_power bigger then
+              input_number.zendure_setting_start_discharging_at
             condition: template
             value_template: |
               {{ states('sensor.home_energy_meter_power') | float(0)
@@ -652,7 +648,7 @@ actions:
               - Normal Operation
               - Charging Limit Reached
               - unknown
-          - alias: Tot de minimaal ingestelde SOC
+          - alias: Down to the minimum configured SOC
             condition: template
             value_template: |
               {{ states('sensor.zendure_total_electricity_level') | float >
@@ -706,8 +702,8 @@ actions:
                     state:
                       - Dynamic Smart Matching (Expensive)
                   - alias: >-
-                      sensor.dynamic_spread_indication moet hoger of gelijk zijn
-                      aan input_number.dynamic_setting_minimal_spread
+                      sensor.dynamic_spread_indication bigger or equal then
+                      input_number.dynamic_setting_minimal_spread
                     condition: template
                     value_template: >-
                       {{ states('sensor.dynamic_spread_indication') | float >=
@@ -743,7 +739,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                🔋 Ontladen starten — Vermogen ingesteld op {% set factor = 0.75
+                🔋 Discharging (Starting) — Power set to {% set factor = 0.75
                 %} 
                   {% set cap = states('input_number.zendure_setting_max_discharge_power') | float(0) %}
                   {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %}
@@ -754,7 +750,7 @@ actions:
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Start met ontladen bij +xxx watt (75% van de vraag)
+        alias: Start discharging at +xxx watt (75% of demand)
       - conditions:
           - condition: trigger
             id:
@@ -765,14 +761,14 @@ actions:
               - Normal Operation
               - Charging Limit Reached
               - unknown
-          - alias: Tot de minimaal ingestelde SOC
+          - alias: Down to the minimum configured SOC
             condition: template
             value_template: |
               {{ states('sensor.zendure_total_electricity_level') | float >
                states('sensor.zendure_minimum_electricity_level') | float }}
           - alias: >-
-              Nieuw in te stellen vermogen is anders dan huidig batterij
-              vermogen
+              The new power to be set is different from the current battery
+              power
             condition: template
             value_template: |-
               {% set factor = 1.00 %} {% set cap =
@@ -809,8 +805,8 @@ actions:
                     state:
                       - Dynamic Smart Matching (Expensive)
                   - alias: >-
-                      sensor.dynamic_spread_indication moet hoger of gelijk zijn
-                      aan input_number.dynamic_setting_minimal_spread
+                      sensor.dynamic_spread_indication bigger or equal then
+                      input_number.dynamic_setting_minimal_spread
                     condition: template
                     value_template: >-
                       {{ states('sensor.dynamic_spread_indication') | float >=
@@ -845,8 +841,8 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Ontladen balanceren — Vermogen ingesteld op {% set factor =
-                1.00 %} 
+                ⚡ Discharging (Balancing) — Power set to {% set factor = 1.00
+                %} 
                   {% set cap = states('input_number.zendure_setting_max_discharge_power') | float(0) %}
                   {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %}
                   {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} 
@@ -856,7 +852,7 @@ actions:
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Tijdens ontladen balanceren naar -xxx watt (100% van de vraag)
+        alias: During discharge balance to +xxx watt (100% of the demand)
       - conditions:
           - condition: trigger
             id:
@@ -865,8 +861,8 @@ actions:
             entity_id: sensor.zendure_soc_limit_status
             state:
               - Normal Operation
-              - Charging Limit Reached
               - unknown
+              - Discharge Limit Reached
           - condition: template
             value_template: >
               {{ states('sensor.zendure_total_electricity_level') | float |
@@ -952,9 +948,8 @@ actions:
             action: rest_command.zendure_x_charge
           - action: logbook.log
             data:
-              message: >
-                🔋 Opladen starten — Vermogen ingesteld op {% set factor = 0.75
-                %}
+              message: |
+                🔋 Charging (Starting) — Power set to {% set factor = 0.75 %}
                   {% set cap = states('input_number.zendure_setting_max_charge_power') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %}
                   {% set p1 = states('sensor.home_energy_meter_power') | float(0) %}
@@ -965,7 +960,7 @@ actions:
                   {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Start met opladen bij -xxx watt (75% van aanbod)
+        alias: " Start charging at -xxx watt (75% of demand)"
       - conditions:
           - condition: trigger
             id:
@@ -974,8 +969,8 @@ actions:
             entity_id: sensor.zendure_soc_limit_status
             state:
               - Normal Operation
-              - Charging Limit Reached
               - unknown
+              - Discharge Limit Reached
           - condition: template
             value_template: >
               {{ states('sensor.zendure_total_electricity_level') | float |
@@ -1045,9 +1040,8 @@ actions:
             action: rest_command.zendure_x_charge_balancing
           - action: logbook.log
             data:
-              message: >
-                ⚡ Opladen balanceren — Vermogen ingesteld op {% set factor =
-                1.00 %}
+              message: |
+                ⚡ Charging (Balancing) — Power set to {% set factor = 1.00 %}
                   {% set cap = states('input_number.zendure_setting_max_charge_power') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %}
                   {% set p1 = states('sensor.home_energy_meter_power') | float(0) %}
@@ -1058,8 +1052,8 @@ actions:
                   {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Tijdens opladen balanceren naar -xxx watt (100% van aanbod)
-  - alias: Handmatige Aansturing
+        alias: During charging balance to -xxx watt (100% of the demand)
+  - alias: Manual Control
     choose:
       - conditions:
           - condition: trigger
@@ -1092,12 +1086,12 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Handmatig laden — Vermogen ingesteld op {{
+                ⚡ Manual (Charging) — Power set to {{
                 states('input_number.zendure_manual_power') | int | abs }} watt
                 —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Handmatig laden
+        alias: Manual charging
       - conditions:
           - condition: trigger
             id:
@@ -1129,12 +1123,12 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Handmatig ontladen — Vermogen ingesteld op {{
+                ⚡ Manual (Discharging) — Power set to {{
                 states('input_number.zendure_manual_power') | int | abs }} watt
                 —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Handmatig ontladen
+        alias: Manual discharging
   - alias: Dynamisch Aansturing (Nordpool HACS sensor vereist)
     choose:
       - conditions:
