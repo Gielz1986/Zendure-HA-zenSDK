@@ -105,7 +105,7 @@ If you didn’t change any entity names above, you can simply create this automa
 4. Save and start the automation.
 
 ![Preview](Images/Global-Automation-300326.gif)  
-![Preview](Images/Automation2.gif)
+![Preview](Images/Global-Automation2-300326.gif)
 
 ---
 
