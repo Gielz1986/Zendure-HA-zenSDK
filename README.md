@@ -1,5 +1,5 @@
 # Zendure Home Assistant Integration
-<img width="20" height="20" alt="image" src="https://github.com/user-attachments/assets/eae2adcb-fd59-42ae-90cc-dd957630b667" /> **English (Global)**    <img width="20" height="20" alt="image" src="https://github.com/user-attachments/assets/b39b5d97-5fe7-412d-9640-95e601dcac89" /> **[Nederlands (NL)](README.nl.md)**
+<img width="20" height="20" alt="image" src="https://github.com/user-attachments/assets/eae2adcb-fd59-42ae-90cc-dd957630b667" /> **English (Global)**  &nbsp;&nbsp;&nbsp;  <img width="20" height="20" alt="image" src="https://github.com/user-attachments/assets/b39b5d97-5fe7-412d-9640-95e601dcac89" /> **[Dutch (NL)](README.nl.md)**
 
 [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Current%20Version&&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
 [![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Issues&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
