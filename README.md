@@ -43,7 +43,7 @@ Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
 ### #️⃣ Configuration and Restart
 
 1. Make sure **HEMS is disabled** in the Zendure app.
-2. Place [Zendure_gielz1986_EN.yaml](./Global%20(EN)%20Integration/packages/zendure_gielz1986_EN.yaml) from the GitHub packages folder into your Home Assistant `packages` folder. If it does not exist, create it.
+2. Place [Zendure_gielz1986_EN.yaml](./Global%20(EN)%20Integration/packages/zendure_gielz1986_global.yaml) from the GitHub packages folder into your Home Assistant `packages` folder. If it does not exist, create it.
 3. Create a **backup** of your `configuration.yaml`.
 4. Then edit your `configuration.yaml` and add the following:
 
@@ -101,7 +101,7 @@ If you didn’t change any entity names above, you can simply create this automa
 
 1. Create a new automation.
 2. Click **Edit in YAML**.
-3. Paste the YAML code from [Automation.yaml](./Global%20(EN)%20Integration/Automation.yaml).
+3. Paste the YAML code from [Automation.yaml](./Global%20(EN)%20Integration/automation_global.yaml).
 4. Save and start the automation.
 
 ![Preview](Images/Automation1.gif)  
@@ -137,7 +137,7 @@ You can now also directly use a fully plug-n-play dashboard:
 3. Click **Add Dashboard** and choose **New dashboard from scratch**
 4. Open the new dashboard.
 5. Click the pencil icon → 3 dots → **Raw configuration editor**.
-6. Paste the YAML from [Dashboard.yaml](./Global%20(EN)%20Integration/Dashboard.yaml).
+6. Paste the YAML from [Dashboard.yaml](./Global%20(EN)%20Integration/dashboard_global.yaml).
 7. Save — dashboard is ready to use.
 8. [Go to the WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) for explanation of all entities.
 
