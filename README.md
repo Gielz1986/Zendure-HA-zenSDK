@@ -136,9 +136,10 @@ You can now also directly use a fully plug-n-play dashboard:
 2. Create a new empty dashboard via ⚙️ and go to **Dashboards**.
 3. Click **Add Dashboard** and choose **New dashboard from scratch**
 4. Open the new dashboard.
-5. Click the pencil icon → 3 dots → **Raw configuration editor**.
-6. Paste the YAML from [Dashboard_global.yaml](./Global%20(EN)%20Integration/dashboard_global.yaml).
-7. Save — dashboard is ready to use.
-8. [Go to the WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) for explanation of all entities.
+5. Click on the 3 dots → **Edit Dashboard**.
+6. Click on the 3 dots → **Raw configuration editor**.
+7. Paste the YAML from [Dashboard_global.yaml](./Global%20(EN)%20Integration/dashboard_global.yaml).
+8. Save — dashboard is ready to use.
+9. [Go to the WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) for explanation of all entities.
 
-![Preview](Images/Plug-N-Play-Dashboard.gif)
+![Preview](Images/Global-Plug-N-Play-Dashboard.gif)
