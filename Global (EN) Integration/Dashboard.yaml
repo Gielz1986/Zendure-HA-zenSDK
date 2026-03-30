@@ -168,7 +168,7 @@ views:
             visibility:
               - condition: state
                 entity: input_select.zendure_operation_mode
-                state: Handmatig
+                state: Manual
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -347,7 +347,7 @@ views:
             visibility:
               - condition: state
                 entity: input_select.zendure_operation_mode
-                state_not: Handmatig
+                state_not: Manual
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -526,7 +526,7 @@ views:
             visibility:
               - condition: state
                 entity: input_select.zendure_operation_mode
-                state: Handmatig
+                state: Manual
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -2613,7 +2613,7 @@ views:
             visibility:
               - condition: state
                 entity: sensor.github_zendure_gielz1986_releasecheck
-                state_not: Pre-release actief
+                state_not: Pre-release Active
           - type: heading
             icon: ''
             heading: Version
@@ -2629,7 +2629,7 @@ views:
             visibility:
               - condition: state
                 entity: sensor.github_zendure_gielz1986_releasecheck
-                state: Pre-release actief
+                state: Pre-release Active
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Hier kun je zien
