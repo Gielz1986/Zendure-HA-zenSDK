@@ -1166,6 +1166,7 @@ views:
                 name: WIFI Signal Strength
               - entity: sensor.zendure_error
                 name: Error
+              - entity: sensor.zendure_calibrating
               - entity: sensor.zendure_inverter_max_charge_power
                 name: Inverter Max. Charge Power
               - entity: sensor.zendure_inverter_max_discharge_power
