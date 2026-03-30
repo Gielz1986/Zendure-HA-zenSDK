@@ -67,7 +67,7 @@ actions:
               sn: "{{ states('sensor.zendure_serienumber') }}"
           - action: logbook.log
             data:
-              message: ⚠️ Opslagmodus omzetten naar Flash —
+              message: ⚠️ Switch storage mode to Flash —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Standby
@@ -240,7 +240,7 @@ actions:
           - condition: state
             entity_id: sensor.zendure_calibrating
             state:
-              - Goed
+              - "No"
         sequence:
           - action: rest_command.zendure_full_standby
             data:
