@@ -104,7 +104,7 @@ If you didn’t change any entity names above, you can simply create this automa
 3. Paste the YAML code from [Automation_global.yaml](./Global%20(EN)%20Integration/automation_global.yaml).
 4. Save and start the automation.
 
-![Preview](Images/Automation1.gif)  
+![Preview](Images/Global-Automation-300326.gif)  
 ![Preview](Images/Automation2.gif)
 
 ---
