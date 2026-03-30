@@ -228,7 +228,7 @@ actions:
           - condition: state
             entity_id: sensor.zendure_storage_mode
             state:
-              - Ram Memory
+              - RAM Memory
           - condition: state
             entity_id: sensor.zendure_charging_mode
             state:
@@ -1129,7 +1129,7 @@ actions:
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Manual discharging
-  - alias: Dynamisch Aansturing (Nordpool HACS sensor vereist)
+  - alias: Dynamic Control (Nordpool HACS sensor required)
     choose:
       - conditions:
           - condition: trigger
@@ -1176,7 +1176,7 @@ actions:
               message: ⚙️ Dynamische instelling overzetten van morgen naar vandaag —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamisch omzetten van morgen naar vandaag
+        alias: Set dynamic manual periods from tomorrow into today
       - conditions:
           - condition: trigger
             id:
@@ -1228,7 +1228,7 @@ actions:
                 —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamische dure/goedkope periode afgerond terug naar standby
+        alias: Dynamic expensive/cheap period finished, back to standby
       - conditions:
           - condition: trigger
             id:
@@ -1251,7 +1251,7 @@ actions:
               seconds: 0
           - condition: or
             conditions:
-              - alias: SOC 10% lager dan maximale ingestelde SOC
+              - alias: SOC 10% lower than maximum set SOC
                 condition: template
                 value_template: >
                   {{ states('sensor.zendure_total_electricity_level') | float(0)
@@ -1268,8 +1268,8 @@ actions:
             target:
               entity_id: input_boolean.dynamic_recently_charged
         alias: >-
-          Dynamisch recent geladen uitzetten onder de 90% SOC of tijdens
-          Dynamisch Handelen
+          Dynamic recently charged off when below 90% SOC or during Dynamic
+          Trading
       - conditions:
           - condition: trigger
             id:
@@ -1295,17 +1295,17 @@ actions:
               - Normal Operation
               - Charging Limit Reached
               - unknown
-          - alias: SOC lager dan maximaal ingestelde SOC
+          - alias: SOC lower than maximum set SOC
             condition: template
             value_template: |2-
                     {{ states('sensor.zendure_total_electricity_level') | float(0) < 
                        states('sensor.zendure_maximum_electricity_level') | float(0) }}
           - alias: >-
-              sensor.dynamic_spread_indication_nzh moet hoger of gelijk zijn aan
+              sensor.dynamic_spread_indication_dsc higher or equal as
               input_number.dynamic_setting_minimal_spread
             condition: template
             value_template: >-
-              {{ states('sensor.dynamic_spread_indication_nzh') | float >=
+              {{ states('sensor.dynamic_spread_indication_dsc') | float >=
               states('input_number.dynamic_setting_minimal_spread') | float }}
           - condition: state
             entity_id: input_boolean.dynamic_charging_running
@@ -1354,14 +1354,15 @@ actions:
                   - input_number.dynamic_setting_minimal_spread
               - trigger: state
                 entity_id:
-                  - sensor.dynamic_spread_indication_nzh
+                  - sensor.dynamic_spread_indication_dsc
             continue_on_timeout: false
           - action: rest_command.zendure_stop_with_everything
             data:
               sn: "{{ states('sensor.zendure_serienumber') }}"
-          - entity_id: input_boolean.dynamic_recently_charged
-            action: input_boolean.turn_on
-            alias: input_boolean.dynamic_recently_charged aanzetten
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id: input_boolean.dynamic_recently_charged
           - action: input_boolean.turn_off
             target:
               entity_id:
@@ -1372,7 +1373,7 @@ actions:
               message: 💲 Dynamic Smart Matching goedkoop laden voltooid  —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamic Smart Matching goedkoop laden
+        alias: Dynamic Smart Matching cheap charging
       - conditions:
           - condition: trigger
             id:
@@ -1409,13 +1410,13 @@ actions:
               - Normal Operation
               - Discharging Limit Reached
               - unknown
-          - alias: SOC lager dan maximaal ingestelde SOC
+          - alias: SOC lower than maximum set SOC
             condition: template
             value_template: |2-
                     {{ states('sensor.zendure_total_electricity_level') | float(0) < 
                        states('sensor.zendure_maximum_electricity_level') | float(0) }}
           - alias: >-
-              sensor.dynamic_spread_indication moet hoger of gelijk zijn aan
+              sensor.dynamic_spread_indication higher or equal as
               input_number.dynamic_setting_minimal_spread
             condition: template
             value_template: >-
@@ -1487,7 +1488,7 @@ actions:
               message: 💲 Dynamisch goedkoop laden voltooid  —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamisch goedkoop laden
+        alias: Dynamic cheap charging
       - conditions:
           - condition: trigger
             id:
@@ -1514,7 +1515,7 @@ actions:
               - Normal Operation
               - Charging Limit Reached
               - unknown
-          - alias: Tot de minimaal ingestelde SOC
+          - alias: Up to the minimum configured SOC
             condition: template
             value_template: |
               {{ states('sensor.zendure_total_electricity_level') | float >
@@ -1524,7 +1525,7 @@ actions:
             state:
               - "Yes"
           - alias: >-
-              sensor.dynamic_spread_indication moet hoger of gelijk zijn aan
+              sensor.dynamic_spread_indication higher or equal as
               input_number.dynamic_setting_minimal_spread
             condition: template
             value_template: >-
@@ -1593,5 +1594,5 @@ actions:
               message: 💲 Dynamisch duur ontladen voltooid  —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamisch duur ontladen
+        alias: Dynamic expensive discharging
 mode: parallel
