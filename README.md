@@ -7,7 +7,7 @@
 
 ![Preview](Images/Dashboard-220326.gif) <br>
 <sub>
-<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten">
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities">
 Go to the explanation of all entities and the dashboard
 </a>
 </sub>
@@ -121,7 +121,7 @@ The moment has arrived: time for your battery to prove it’s more than just an 
 ![Preview](Images/Mode-290326.gif)  
 
 <sub>
-<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen">
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Operation-modes">
 Go to the explanation of all modes
 </a>
 </sub>
