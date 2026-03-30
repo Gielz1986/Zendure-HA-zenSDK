@@ -34,121 +34,12 @@ views:
                   action: more-info
             heading: Battery
           - type: markdown
-            content: >
-              {% set modus = states('input_select.zendure_operation_mode') %}
+            content: >-
+              <ha-alert alert-type="info">Help text</ha-alert>For explanations
+              of the different operation modes, see the wiki:  
 
-              {% if modus == 'Standby' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Zet de batterij volledig in
-              standby en **Opslagmodus** zal naar **Opslaan in Flash** gaan.
-              Hierdoor is het ook 0 watt op een KWH MID Meter.   
-
-
-              100% standby, de batterij gebruikt nog 0,2 kWh per dag.
-
-              {% elif modus == 'Handmatig' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Via **Handmatig Vermogen**
-              kun je zelf aangeven wat de batterij doet. -watt voor ontladen en
-              +watt voor opladen.   
-
-              {% elif modus == 'Nul op de meter' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Constant nul op de meter
-              behouden (-xx watt bij opladen en -xx watt bij ontladen). Je kunt
-              het opladen finetunen via **Oplaadmarge⚙️** waarbij je aangeeft
-              hoeveel buffer/marge de batterij moet behouden tot 0 watt. Het
-              ontladen kun je finetunen via **Ontlaadmarge ⚙️** waarbij je
-              aangeeft hoeveel extra watt de batterij moet ontladen boven op nul
-              op de meter. Beide zijn handig om vaste kleine schommelingen in je
-              huisverbruik standaard te compenseren.
-
-
-              Ook kun je zelf instellen wanneer de batterij start met opladen
-              via **Opladen Starten Bij⚙️** en wanneer hij start met ontladen
-              via **Ontladen starten bij ⚙️** 
-
-              {% elif modus == 'Dynamisch NOM' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
-              gebruiken met Nordpool sensor⚙️. 
-
-
-              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
-              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
-              Vervolgens vul je de overige duurste uren in via **Duurste
-              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
-              Periodes** op JA staat zal er opgeladen worden indien **Spread**
-              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
-              Periodes** erg lang op JA staat zal de batterij pas weer gaan
-              laden wanneer de batterij ontladen is tot 90%. De batterij zal na
-              laden constant nul op de meter behouden (-xx watt bij opladen en
-              -xx watt bij ontladen).
-
-              {% elif modus == 'Dynamisch NOM (Duur)' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
-              gebruiken met Nordpool sensor⚙️. 
-
-
-              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
-              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
-              Vervolgens vul je de overige duurste uren in via **Duurste
-              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
-              Periodes** op JA staat zal er opgeladen worden indien **Spread**
-              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
-              Periodes** erg lang op JA staat zal hij pas weer gaan laden
-              wanneer de batterij ontladen is tot 90%. Mocht er nog ruimte zijn
-              om meer op te laden zal de batterij dit bij teruglevering gaan
-              doen. Wanneer **Goedkoopste Periodes** op JA staat zal de batterij
-              alleen slim gaan ontladen en de rest van de tijd staat de batterij
-              in standby.
-
-              {% elif modus == 'Dynamisch Handelen' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
-              gebruiken met Nordpool sensor⚙️. 
-
-
-              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
-              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
-              Vervolgens vul je de overige duurste uren in via **Duurste
-              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
-              Periodes** op JA staat zal er opgeladen worden indien **Spread**
-              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
-              Periodes** erg lang op JA staat zal de batterij pas weer gaan
-              laden wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
-              Periodes** op JA staat zal de batterij op maximaal vermogen gaan
-              ontladen en de rest van de tijd staat de batterij in standby.
-
-              {% elif modus == 'Dynamisch Handelen + NOM' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> ⚠️ Let op: Alleen te
-              gebruiken met Nordpool sensor ⚙️. 
-
-
-              Vul als eerste in hoeveel uren je goedkoop zou willen laden per
-              dag via **Goedkoopste Periodes** dit is bijvoorbeeld 3 uur.
-              Vervolgens vul je de overige duurste uren in via **Duurste
-              Periodes** dit is bijvoorbeeld 3 uur. Wanneer nu **Goedkoopste
-              Periodes** op JA staat zal er opgeladen worden indien **Spread**
-              hoger is dan **Minimale Spread ⚙️**. Wanneer **Goedkoopste
-              Periodes** erg lang op JA staat zal de batterij pas weer gaan
-              laden wanneer de batterij ontladen is tot 90%. Wanneer **Duurste
-              Periodes** op JA staat zal de batterij op maximaal vermogen gaan
-              ontladen en de rest van de tijd **Nul op de meter**.
-
-              {% elif modus == 'Alleen slim ontladen' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Identiek aan **Nul op de
-              meter**, alleen zonder opladen.
-
-              {% elif modus == 'Alleen slim opladen' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Identiek aan **Nul op de
-              meter**, alleen zonder ontladen.
-
-              {% elif modus == 'Snel opladen' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Snel opladen op maximaal
-              vermogen wat ingesteld staat bij **Max. Oplaadvermogen⚙️**.
-
-              {% elif modus == 'Snel ontladen' %} <ha-alert
-              alert-type="info">Helptekst</ha-alert> Snel ontladen op maximaal
-              vermogen wat ingesteld staat bij **Max. Ontlaadvermogen⚙️**.
-
-              {% else %} <ha-alert alert-type="warning">Helptekst</ha-alert>
-              Selecteer een modus om uitleg te zien. {% endif %}
+              [Operation Modes (GitHub
+              Wiki)](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen)
             text_only: true
             visibility:
               - condition: state
@@ -708,16 +599,15 @@ views:
                   - state
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je het
-              aantal nul-importuren per dag van deze maand en de vorige maand.
-              Dit overzicht laat zien hoe goed je dagen zijn verlopen met
-              betrekking tot het niet importeren van stroom. Elke seconde dat
-              het P1-vermogen op 0 of lager staat, wordt meegeteld in het
-              totaal.
+              <ha-alert alert-type="info">Help text</ha-alert>Here you can see
+              the number of zero-import hours per day for this month and the
+              previous month. This overview shows how well your days have gone
+              in terms of not importing electricity. Every second that the home
+              energy meter is at 0 or below is counted in the total.
 
 
-              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
-              grafiek gemiddeld 1 uur achter.
+              This data comes from the statistics (LTS). As a result, the graph
+              is on average 1 hour behind.
             text_only: true
             visibility:
               - condition: state
@@ -782,7 +672,7 @@ views:
                   color: color-mix(in srgb, var(--divider-color) 50%, transparent)
             series:
               - entity: sensor.home_energy_zero_import_duration_today
-                name: Nul import
+                name: Zero Import
                 statistics:
                   period: day
                   type: max
@@ -1006,7 +896,7 @@ views:
               start: day
             series:
               - entity: sensor.dynamic_lowest_price_period
-                name: Vandaag
+                name: Today
                 type: column
                 float_precision: 3
                 color: '#e0e0e3'
@@ -1069,8 +959,8 @@ views:
                 grid_options:
                   columns: 12
                   rows: 1
-                entity: sensor.dynamic_spread_indication_nzh
-                name: Spread NZH
+                entity: sensor.dynamic_spread_indication_dsc
+                name: Spread DSC
                 state_content:
                   - state
                   - difference_in_value
@@ -1157,7 +1047,7 @@ views:
                   offset: +1d
                 series:
                   - entity: sensor.dynamic_lowest_price_period
-                    name: Morgen
+                    name: Tomorrow
                     type: column
                     float_precision: 3
                     color: '#e0e0e3'
@@ -1223,8 +1113,8 @@ views:
                 grid_options:
                   columns: 12
                   rows: 1
-                entity: sensor.dynamic_spread_indication_nzh_tomorrow
-                name: Spread NZH
+                entity: sensor.dynamic_spread_indication_dsc_tomorrow
+                name: Spread DSC
                 state_content:
                   - state
                   - difference_in_value
@@ -1306,15 +1196,15 @@ views:
                   action: more-info
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
-              relaisschakelingen per dag van deze maand en de vorige maand. De
-              stippellijn geeft de grens aan waarop het aantal schakelingen als
-              verhoogd wordt beschouwd. Alles onder de 100 schakelingen per dag
-              is normaal op een deels bewolkte dag.
+              <ha-alert alert-type="info">Help text</ha-alert>The number of
+              relay switches per day for this month and the previous month. The
+              dotted line indicates the threshold at which the number of
+              switches is considered elevated. Anything below 100 switches per
+              day is normal on a partly cloudy day.
 
 
-              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
-              grafiek gemiddeld 1 uur achter.
+              This data comes from the statistics (LTS). As a result, the graph
+              is on average 1 hour behind.
             text_only: true
             visibility:
               - condition: state
@@ -1416,15 +1306,15 @@ views:
                 color: '#01a180'
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
-              kalibraties aangegeven met een groene kleur deze maand en de
-              vorige maand. De batterij kalibratie vind plaats wanneer de
-              batterij tot 100% is opgeladen. Zodra er langer dan 1 maand geen
-              kalibratie is geweest doet de BMS dit vanzelf.
+              <ha-alert alert-type="info">Help text</ha-alert>The number of
+              calibrations shown in green for this month and the previous month.
+              Battery calibration takes place when the battery is charged to
+              100%. If no calibration has occurred for more than one month, the
+              BMS will perform it automatically.
 
 
-              Deze gegevens komen uit de statistics (LTS). Hierdoor loopt de
-              grafiek gemiddeld 1 uur achter.
+              This data comes from the statistics (LTS). As a result, the graph
+              is on average 1 hour behind.
             text_only: true
             visibility:
               - condition: state
@@ -1528,10 +1418,10 @@ views:
                   action: more-info
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>De temperatuur van
-              de omvormer van vandaag. De stippellijn geeft de grens aan waarop
-              de omvormer zijn vermogen begint terug te schroeven. Dit gebeurt
-              vanaf 55 °C.
+              <ha-alert alert-type="info">Help text</ha-alert>The temperature of
+              the inverter for today. The dotted line indicates the threshold at
+              which the inverter starts reducing its power. This happens from 55
+              °C.
             text_only: true
             visibility:
               - condition: state
@@ -1777,11 +1667,11 @@ views:
             badges: []
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je de
-              efficiëntie van het laden van vandaag. De meting vergelijkt het
-              vermogen aan de DC-zijde met het vermogen aan de AC-zijde. Gebruik
-              deze waarde als indicatie om te beoordelen hoe efficiënt er wordt
-              geladen.
+              <ha-alert alert-type="info">Help text</ha-alert>Here you can see
+              the charging efficiency for today. The measurement compares the
+              power on the DC side with the power on the AC side. Use this value
+              as an indication to assess how efficiently charging is being
+              performed.
             text_only: true
             visibility:
               - condition: state
@@ -1890,11 +1780,11 @@ views:
             heading_style: title
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Hier zie je de
-              efficiëntie van het ontladen van vandaag. De meting vergelijkt het
-              vermogen aan de DC-zijde met het vermogen aan de AC-zijde. Gebruik
-              deze waarde als indicatie om te beoordelen hoe efficiënt er wordt
-              ontladen.
+              <ha-alert alert-type="info">Help text</ha-alert>Here you can see
+              the discharging efficiency for today. The measurement compares the
+              power on the DC side with the power on the AC side. Use this value
+              as an indication to assess how efficiently discharging is being
+              performed.
             text_only: true
             visibility:
               - condition: state
@@ -2427,22 +2317,20 @@ views:
             badges: []
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Vul hier het
-              IP-adres van je Zendure in onder **Zendure 2400 AC IP-adres⚙️** en
-              van je HomeWizard P1 (lokale API moet aanstaan) onder **Homewizard
-              P1 IP-adres⚙️**. Gebruik je een afwijkende P1-sensor, dan kun je
-              deze instellen via **Afwijkende P1 Sensor⚙️**.
+              <ha-alert alert-type="info">Help text</ha-alert>Enter the IP
+              address of your Zendure under **Zendure 2400 AC IP address⚙️** and
+              that of your HomeWizard P1 (local API must be enabled) under
+              **HomeWizard P1 IP address⚙️**. If you are using a different home
+              energy sensor, you can configure it via **Home Energy Meter
+              Sensor⚙️**.
 
+              Here you also set the **Standby Delay⚙️**. When the Zendure has no
+              active task, it will go fully into standby after the set period.
+              The consumption is then approximately 0.2 kWh per day.
 
-              Hier stel je ook de **Standby Vertraging⚙️** in. Wanneer de
-              Zendure geen actieve taak heeft, gaat hij na de ingestelde periode
-              volledig in standby. Het verbruik bedraagt dan ongeveer 0,2 kWh
-              per dag.
-
-
-              Wil je niet te veel gedoe neem dan in eerste instantie de **Advies
-              Instellingen⚙️** voor het gedrag in één keer over. Pas het daarna
-              na eigen smaak aan.
+              If you don’t want too much hassle, initially adopt the **Set
+              Default Settings⚙️** for the behavior all at once. Afterwards,
+              adjust them to your own preference.
             text_only: true
             visibility:
               - condition: state
@@ -2471,11 +2359,10 @@ views:
                   action: more-info
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
-              maximaal oplaadvermogen van je Zendure in en maak de keuze wanneer
-              jij wilt dat hij tijdens de **Nul op de meter** modus gaat starten
-              met opladen en hoeveel marge hij moet houden tussen terugleveren
-              en nul op de meter.
+              <ha-alert alert-type="info">Help text</ha-alert>Set the maximum
+              charging power of your Zendure here and choose when you want it to
+              start charging during **Smart Matching** and how much buffer it
+              should maintain between feeding back to the grid and net zero.
             text_only: true
             visibility:
               - condition: state
@@ -2504,11 +2391,10 @@ views:
                   action: more-info
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
-              maximaal ontlaadvermogen van je Zendure in en maak de keuze
-              wanneer jij wilt dat hij tijdens de **Nul op de meter** modus gaat
-              starten met ontladen en hoeveel extra hij moet ontladen dan nul op
-              de meter.
+              <ha-alert alert-type="info">Help text</ha-alert>Set the maximum
+              discharge power of your Zendure here and choose when you want it
+              to start discharging during **Smart Matching** and how much extra
+              buffer it should discharge beyond net zero.
             text_only: true
             visibility:
               - condition: state
@@ -2530,19 +2416,20 @@ views:
             heading_style: title
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Maak je geen
-              gebruik van een Homewizard P1 maar heb je wel een P1/CT sensor
-              waarbij -watt teruglevering is en +watt import per seconden is vul
-              deze dan hier in onder **Afwijkende P1 Sensor⚙️**.
+              <ha-alert alert-type="info">Help text</ha-alert>If you are not
+              using a HomeWizard P1 but do have a home energy sensor where -watt
+              indicates export and +watt indicates import per second, enter it
+              here under **Home Energy Meter Sensor⚙️**. For example
+              **sensor.my_own_energy_meter**.
 
 
-              Ook kun je hier een afwijkende batterij volgorde instellen onder
-              **Batterij Volgorde⚙️**. Hiermee bepaal je zelf een afwijkende
-              volgorde van de batterijen. De juiste volgorde bepaal je mede aan
-              de hand van **sensor.zendure_battery_serienumbers** en de sticker
-              op de batterij(en). Op deze manier zullen de batterijtemperaturen
-              en het laadpercentage de juiste volgorde hanteren zoals die van de
-              batterij(en) in de stapel.
+              You can also set a custom battery order here under **Battery
+              Order⚙️**. This allows you to define a different order of the
+              batteries yourself. The correct order can be determined using
+              **sensor.zendure_battery_serienumbers** and the sticker on the
+              battery(ies). This ensures that the battery temperatures and
+              charge percentages follow the correct order as they are physically
+              stacked.
             text_only: true
             visibility:
               - condition: state
@@ -2560,19 +2447,21 @@ views:
             badges: []
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Heb je een
-              dynamisch contract dan kun je hier de Nordpool HACS sensor
-              invullen en aangeven wat de minimale spread moet zijn om gebruik
-              te maken van het laden en ontladen op lage en hoge tarieven.
+              <ha-alert alert-type="info">Help text</ha-alert>If you have a
+              dynamic contract, you can enter this under **Dynamic Nordpool
+              Sensor⚙️**. For example **sensor.nordpool_kwh_nl_eur_3_09_0** and
+              this has te be from the Nordpool HACS integration.
 
 
-              Heb je een 15 minuten contract vink dit dan aan zodat de grafieken
-              en de prijzen goed gezet worden.
-            text_only: true
+              Specify the minimum spread required to make use of charging and
+              discharging at low and high tariffs. If you have a 15-minute
+              contract, enable this so that the graphs and prices are set
+              correctly.
             visibility:
               - condition: state
                 entity: input_boolean.dashboard_setting_show_help
                 state: 'on'
+            text_only: true
           - type: entities
             entities:
               - entity: input_text.dynamic_setting_nordpool_sensor
@@ -2586,9 +2475,9 @@ views:
             heading: Configuration (Dashboard)
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Hier stel je in of
-              je de Dynamische informatie wilt verbergen of tonen op het eerste
-              tabblad via **Dynamisch Tonen Op Dashboard⚙️**.
+              <ha-alert alert-type="info">Help text</ha-alert>Here you can set
+              whether you want to hide or show the dynamic information on the
+              first tab via **Show Dynamic On Dashboard⚙️**.
             text_only: true
             visibility:
               - condition: state
@@ -2632,10 +2521,10 @@ views:
                 state: Pre-release Active
           - type: markdown
             content: >-
-              <ha-alert alert-type="info">Helptekst</ha-alert>Hier kun je zien
-              welke package versie je gebruikt en wat de nieuwste versie is op
-              GitHub. Ook zie je meteen hoeveel problemen er openstaan en kun je
-              hier op doorklikken naar GitHub.
+              <ha-alert alert-type="info">Help text</ha-alert>Here you can see
+              which package version you are using and what the latest version is
+              on GitHub. You can also immediately see how many issues are open
+              and go directly to GitHub from here.
             text_only: true
             visibility:
               - condition: state
