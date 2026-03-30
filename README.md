@@ -140,6 +140,6 @@ You can now also directly use a fully plug-n-play dashboard:
 6. Click on the 3 dots → **Raw configuration editor**.
 7. Paste the YAML from [Dashboard_global.yaml](./Global%20(EN)%20Integration/dashboard_global.yaml).
 8. Save — dashboard is ready to use.
-9. [Go to the WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) for explanation of all entities.
+9. [Go to the WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities) for explanation of all entities.
 
 ![Preview](Images/Global-Plug-N-Play-Dashboard.gif)
