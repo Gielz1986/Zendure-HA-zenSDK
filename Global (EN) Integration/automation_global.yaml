@@ -1,5 +1,5 @@
-alias: Zendure zenSDK (Gielz) EN
-description: Configuration Version May 2026 (v20260329)
+alias: Zendure zenSDK (Gielz) Global
+description: Configuration Version (v20260330)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -248,8 +248,8 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                💤 After {{ states('input_number.zendure_setting_standby_delay')
-                | int(5) }} minutes of inactivity go into full standby (Switch
+                💤 {{ states('input_number.zendure_setting_standby_delay') |
+                int(5) }} minutes of inactivity going into full standby (Switch
                 storage mode to Flash) —
               entity_id: input_select.zendure_operation_mode
               name: " "
@@ -1173,7 +1173,7 @@ actions:
             action: input_text.set_value
           - action: logbook.log
             data:
-              message: ⚙️ Dynamische instelling overzetten van morgen naar vandaag —
+              message: ⚙️ Dynamic period settings copied from tomorrow to today —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Set dynamic manual periods from tomorrow into today
@@ -1223,9 +1223,7 @@ actions:
               sn: "{{ states('sensor.zendure_serienumber') }}"
           - action: logbook.log
             data:
-              message: >-
-                💲 Dynamische dure/goedkope periode afgerond terug naar standby 
-                —
+              message: 💲 Dynamic expensive/cheap period complete back to standby  —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic expensive/cheap period finished, back to standby
@@ -1333,7 +1331,7 @@ actions:
                 }}
           - action: logbook.log
             data:
-              message: 💲 Dynamic Smart Matching goedkoop laden gestart —
+              message: 💲 Dynamic Smart Matching cheap charging started —
               entity_id: input_select.zendure_operation_mode
               name: " "
           - wait_for_trigger:
@@ -1370,7 +1368,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamic Smart Matching goedkoop laden voltooid  —
+              message: 💲 Dynamic Smart Matching cheap charging complete   —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic Smart Matching cheap charging
@@ -1448,7 +1446,7 @@ actions:
                 }}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch goedkoop laden gestart —
+              message: 💲 Dynamic cheap charging started —
               entity_id: input_select.zendure_operation_mode
               name: " "
           - wait_for_trigger:
@@ -1485,7 +1483,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch goedkoop laden voltooid  —
+              message: 💲 Dynamic cheap charging complete  —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic cheap charging
@@ -1557,7 +1555,7 @@ actions:
                 int }}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch duur ontladen gestart —
+              message: 💲 Dynamic expensive discharge started —
               entity_id: input_select.zendure_operation_mode
               name: " "
           - wait_for_trigger:
@@ -1591,7 +1589,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch duur ontladen voltooid  —
+              message: 💲 Dynamic expensive discharge complete  —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic expensive discharging
