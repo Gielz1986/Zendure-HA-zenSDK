@@ -20,9 +20,9 @@ triggers:
       minutes: 0
       seconds: 15
     from:
-      - Yes
+      - "Yes"
     to:
-      - No
+      - "No"
   - trigger: state
     entity_id:
       - sensor.dynamic_highest_price_period
@@ -32,9 +32,9 @@ triggers:
       minutes: 0
       seconds: 15
     from:
-      - Yes
+      - "Yes"
     to:
-      - No
+      - "No"
   - trigger: state
     entity_id:
       - input_number.dynamic_setting_minimal_spread
@@ -76,7 +76,8 @@ actions:
             id: modus_trigger
           - condition: state
             entity_id: input_select.zendure_operation_mode
-            state: Handmatig
+            state:
+              - Manual
         sequence:
           - action: input_number.set_value
             metadata: {}
@@ -128,7 +129,7 @@ actions:
           - condition: state
             entity_id: input_select.zendure_operation_mode
             state:
-              - Dynamisch Handelen
+              - Dynamic Trading
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
@@ -162,7 +163,7 @@ actions:
           - condition: state
             entity_id: input_select.zendure_operation_mode
             state:
-              - Snel ontladen
+              - Quick Discharge
         sequence:
           - action: rest_command.zendure_quick_discharge
             data:
@@ -177,7 +178,7 @@ actions:
           - condition: state
             entity_id: input_select.zendure_operation_mode
             state:
-              - Snel opladen
+              - Quick Charge
         sequence:
           - action: rest_command.zendure_quick_charge
             data:
@@ -487,7 +488,7 @@ actions:
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
-                      - Handmatig
+                      - Manual
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
@@ -495,11 +496,11 @@ actions:
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
-                      - Snel ontladen
+                      - Quick Discharge
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
-                      - Snel opladen
+                      - Quick Discharge
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
@@ -509,7 +510,7 @@ actions:
                   - condition: state
                     entity_id: sensor.dynamic_lowest_price_period
                     state:
-                      - No
+                      - "No"
                     for:
                       hours: 0
                       minutes: 0
@@ -517,7 +518,7 @@ actions:
                   - condition: state
                     entity_id: sensor.dynamic_highest_price_period
                     state:
-                      - No
+                      - "No"
                     for:
                       hours: 0
                       minutes: 0
@@ -568,7 +569,7 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Snel opladen
+                  - Quick Charge
                 for:
                   hours: 0
                   minutes: 0
@@ -611,7 +612,7 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Snel ontladen
+                  - Quick Discharge
                 for:
                   hours: 0
                   minutes: 0
@@ -693,13 +694,13 @@ actions:
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
-                      - Dynamisch Handelen + NOM
+                      - Dynamic Trading + Smart Matching
               - condition: and
                 conditions:
                   - condition: state
                     entity_id: sensor.dynamic_highest_price_period
                     state:
-                      - Yes
+                      - "Yes"
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
@@ -796,13 +797,13 @@ actions:
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
-                      - Dynamisch Handelen + NOM
+                      - Dynamic Trading + Smart Matching
               - condition: and
                 conditions:
                   - condition: state
                     entity_id: sensor.dynamic_highest_price_period
                     state:
-                      - Yes
+                      - "Yes"
                   - condition: state
                     entity_id: input_select.zendure_operation_mode
                     state:
@@ -906,7 +907,7 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen + NOM
+                  - Dynamic Trading + Smart Matching
           - alias: Minstens 2 automatiseringen na ontladen pas activeren
             condition: or
             conditions:
@@ -1016,7 +1017,7 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen + NOM
+                  - Dynamic Trading + Smart Matching
           - condition: and
             conditions:
               - condition: state
@@ -1074,7 +1075,8 @@ actions:
                   - handmatig_trigger
           - condition: state
             entity_id: input_select.zendure_operation_mode
-            state: Handmatig
+            state:
+              - Manual
           - condition: numeric_state
             entity_id: input_number.zendure_manual_power
             above: -1
@@ -1110,7 +1112,8 @@ actions:
                   - handmatig_trigger
           - condition: state
             entity_id: input_select.zendure_operation_mode
-            state: Handmatig
+            state:
+              - Manual
           - condition: numeric_state
             entity_id: input_number.zendure_manual_power
             below: 1
@@ -1211,7 +1214,7 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen
+                  - Dynamic Trading
           - condition: or
             conditions:
               - condition: numeric_state
@@ -1244,7 +1247,7 @@ actions:
             alias: input_text.dynamic_setting_nordpool_sensor is gevuld
           - condition: state
             entity_id: sensor.dynamic_lowest_price_period
-            state: Yes
+            state: "Yes"
           - condition: state
             entity_id: input_boolean.dynamic_recently_charged
             state: "on"
@@ -1263,7 +1266,7 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen
+                  - Dynamic Trading
         sequence:
           - action: input_boolean.turn_off
             metadata: {}
@@ -1288,7 +1291,7 @@ actions:
             state: Dynamic Smart Matching
           - condition: state
             entity_id: sensor.dynamic_lowest_price_period
-            state: Yes
+            state: "Yes"
           - condition: state
             entity_id: input_boolean.dynamic_recently_charged
             state: "off"
@@ -1341,7 +1344,7 @@ actions:
               name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamic_lowest_price_period
-                to: No
+                to: "No"
                 trigger: state
               - trigger: template
                 value_template: >
@@ -1395,14 +1398,14 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen
+                  - Dynamic Trading
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen + NOM
+                  - Dynamic Trading + Smart Matching
           - condition: state
             entity_id: sensor.dynamic_lowest_price_period
-            state: Yes
+            state: "Yes"
           - condition: state
             entity_id: input_boolean.dynamic_recently_charged
             state: "off"
@@ -1455,7 +1458,7 @@ actions:
               name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamic_lowest_price_period
-                to: No
+                to: "No"
                 trigger: state
               - trigger: template
                 value_template: >
@@ -1506,11 +1509,11 @@ actions:
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen
+                  - Dynamic Trading
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
-                  - Dynamisch Handelen + NOM
+                  - Dynamic Trading + Smart Matching
           - condition: state
             entity_id: sensor.zendure_soc_limit_status
             state:
@@ -1525,7 +1528,7 @@ actions:
           - condition: state
             entity_id: sensor.dynamic_highest_price_period
             state:
-              - Yes
+              - "Yes"
           - alias: >-
               sensor.dynamic_spread_indication moet hoger of gelijk zijn aan
               input_number.dynamic_setting_minimal_spread
@@ -1571,7 +1574,7 @@ actions:
               - entity_id:
                   - sensor.dynamic_highest_price_period
                 to:
-                  - No
+                  - "No"
                 trigger: state
               - trigger: state
                 entity_id:
