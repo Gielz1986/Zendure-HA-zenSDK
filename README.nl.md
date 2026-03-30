@@ -5,7 +5,7 @@
 
 ![Preview](Images/Dashboard-220326.gif) <br>
 <sub>
-<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten">
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Nederlands-%E2%80%90-Beschikbare-entiteiten">
 Ga naar de uitleg over alle entiteiten en het dashboard
 </a>
 </sub>
@@ -114,7 +114,7 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 
 ![Preview](Images/Modus-16022026.gif) <br>
 <sub>
-<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen">
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Nederlands-%E2%80%90-Modussen">
 Ga naar de uitleg over alle verschillende modussen
 </a>
 </sub>
