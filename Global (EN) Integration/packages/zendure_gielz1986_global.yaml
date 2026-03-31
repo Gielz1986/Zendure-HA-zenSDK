@@ -313,7 +313,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260330"
+        state: "v20260331"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -629,7 +629,7 @@ template:
               n.v.t.
             {% endif %}
 
-      - name: "Dynamic Spread Indication DSC"
+      - name: "Dynamic Spread Indication (Direct Self Consumption)"
         unique_id: dynamic_spread_indication_dsc
         icon: mdi:percent-box
         unit_of_measurement: "%"
@@ -780,7 +780,7 @@ template:
               n.v.t.
             {% endif %}
 
-      - name: "Dynamic Spread Indication DSC Tomorrow"
+      - name: "Dynamic Spread Indication (Direct Self Consumption) Tomorrow"
         unique_id: dynamic_spread_indication_dsc_tomorrow
         icon: mdi:percent-box
         unit_of_measurement: "%"
