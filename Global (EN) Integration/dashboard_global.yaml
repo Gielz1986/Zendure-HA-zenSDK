@@ -990,7 +990,7 @@ views:
                 graph_span: 24h
                 apex_config:
                   noData:
-                    text: Vanaf 14:00 zijn de prijzen van morgen bekend.
+                    text: Tomorrow's prices will be known from 14:00.
                   markers:
                     size: 0
                     hover:
