@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260330)
+description: Configuration Version (v20260331)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -67,7 +67,7 @@ actions:
               sn: "{{ states('sensor.zendure_serienumber') }}"
           - action: logbook.log
             data:
-              message: ⚠️ Switch storage mode to Flash —
+              message: ⚠️Switch storage mode to Flash —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Standby
@@ -217,7 +217,7 @@ actions:
               sn: "{{ states('sensor.zendure_serienumber') }}"
           - action: logbook.log
             data:
-              message: ⚠️ Switch storage mode to RAM —
+              message: ⚠️Switch storage mode to RAM —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: When storage mode is set to Flash set it to RAM
@@ -248,7 +248,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                💤 {{ states('input_number.zendure_setting_standby_delay') |
+                💤{{states('input_number.zendure_setting_standby_delay') |
                 int(5) }} minutes of inactivity going into full standby (Switch
                 storage mode to Flash) —
               entity_id: input_select.zendure_operation_mode
@@ -330,7 +330,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚠️ Battery SOC protection active — Power set to {% set soc =
+                ⚠️Battery SOC protection active — Power set to {% set soc =
                 states('sensor.zendure_total_electricity_level') | float |
                   round(0) %} {% set min_soc =
                   states('sensor.zendure_minimum_electricity_level') | float | round(0) %}
@@ -368,7 +368,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximum charging power adjusted to {{
+                ⚙️Maximum charging power adjusted to {{
                 states('input_number.zendure_setting_max_charge_power') | int }}
                 watt —
               entity_id: input_select.zendure_operation_mode
@@ -404,7 +404,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximum discharge power adjusted to {{
+                ⚙️Maximum discharge power adjusted to {{
                 states('input_number.zendure_setting_max_discharge_power') | int
                 }} watt —
               entity_id: input_select.zendure_operation_mode
@@ -423,7 +423,7 @@ actions:
               value: 15
           - action: logbook.log
             data:
-              message: "⚙️ Set recommended settings — Standby delay set to 15 minutes — "
+              message: "⚙️Set recommended settings — Standby delay set to 15 minutes — "
               entity_id: input_select.zendure_operation_mode
               name: " "
           - action: input_number.set_value
@@ -441,7 +441,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚙️ Set recommended settings — Start discharging at 100 watt
+                ⚙️Set recommended settings — Start discharging at 100 watt
                 import and start charging at -300 watt export — 
               entity_id: input_select.zendure_operation_mode
               name: " "
@@ -460,7 +460,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚙️ Set recommended settings — Charge buffer set to 50 watt and
+                ⚙️Set recommended settings — Charge buffer set to 50 watt and
                 discharge buffer set to 5 watt — 
               entity_id: input_select.zendure_operation_mode
               name: " "
@@ -539,7 +539,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚠️ Dynamic charging/discharging running status is incorrect.
+                ⚠️Dynamic charging/discharging running status is incorrect.
                 Corrected to status off —
               entity_id: input_select.zendure_operation_mode
               name: " "
@@ -580,7 +580,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Current charging power corrected to {{
+                ⚙️Current charging power corrected to {{
                 states('input_number.zendure_setting_max_charge_power') | int }}
                 watt —
               entity_id: input_select.zendure_operation_mode
@@ -623,7 +623,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Current discharge power corrected to {{
+                ⚙️Current discharge power corrected to {{
                 states('input_number.zendure_setting_max_discharge_power') | int
                 }} watt —
               entity_id: input_select.zendure_operation_mode
@@ -738,9 +738,8 @@ actions:
             action: rest_command.zendure_x_discharge
           - action: logbook.log
             data:
-              message: >
-                🔋 Discharging (Starting) — Power set to {% set factor = 0.75
-                %} 
+              message: |
+                🔋Discharging (Starting) — Power set to {% set factor = 0.75 %} 
                   {% set cap = states('input_number.zendure_setting_max_discharge_power') | float(0) %}
                   {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %}
                   {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} 
@@ -840,9 +839,8 @@ actions:
             action: rest_command.zendure_x_discharge_balancing
           - action: logbook.log
             data:
-              message: >
-                ⚡ Discharging (Balancing) — Power set to {% set factor = 1.00
-                %} 
+              message: |
+                ⚡Discharging (Balancing) — Power set to {% set factor = 1.00 %} 
                   {% set cap = states('input_number.zendure_setting_max_discharge_power') | float(0) %}
                   {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %}
                   {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} 
@@ -949,7 +947,7 @@ actions:
           - action: logbook.log
             data:
               message: |
-                🔋 Charging (Starting) — Power set to {% set factor = 0.75 %}
+                🔋Charging (Starting) — Power set to {% set factor = 0.75 %}
                   {% set cap = states('input_number.zendure_setting_max_charge_power') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %}
                   {% set p1 = states('sensor.home_energy_meter_power') | float(0) %}
@@ -1041,7 +1039,7 @@ actions:
           - action: logbook.log
             data:
               message: |
-                ⚡ Charging (Balancing) — Power set to {% set factor = 1.00 %}
+                ⚡Charging (Balancing) — Power set to {% set factor = 1.00 %}
                   {% set cap = states('input_number.zendure_setting_max_charge_power') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %}
                   {% set p1 = states('sensor.home_energy_meter_power') | float(0) %}
@@ -1086,7 +1084,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Manual (Charging) — Power set to {{
+                ⚡Manual (Charging) — Power set to {{
                 states('input_number.zendure_manual_power') | int | abs }} watt
                 —
               entity_id: input_select.zendure_operation_mode
@@ -1123,7 +1121,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Manual (Discharging) — Power set to {{
+                ⚡Manual (Discharging) — Power set to {{
                 states('input_number.zendure_manual_power') | int | abs }} watt
                 —
               entity_id: input_select.zendure_operation_mode
@@ -1173,7 +1171,7 @@ actions:
             action: input_text.set_value
           - action: logbook.log
             data:
-              message: ⚙️ Dynamic period settings copied from tomorrow to today —
+              message: ⚙️Dynamic period settings copied from tomorrow to today —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Set dynamic manual periods from tomorrow into today
@@ -1223,7 +1221,7 @@ actions:
               sn: "{{ states('sensor.zendure_serienumber') }}"
           - action: logbook.log
             data:
-              message: 💲 Dynamic expensive/cheap period complete back to standby  —
+              message: 💲Dynamic expensive/cheap period complete back to standby  —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic expensive/cheap period finished, back to standby
@@ -1291,7 +1289,7 @@ actions:
             entity_id: sensor.zendure_soc_limit_status
             state:
               - Normal Operation
-              - Charging Limit Reached
+              - Discharge Limit Reached
               - unknown
           - alias: SOC lower than maximum set SOC
             condition: template
@@ -1331,7 +1329,7 @@ actions:
                 }}
           - action: logbook.log
             data:
-              message: 💲 Dynamic Smart Matching cheap charging started —
+              message: 💲Dynamic Smart Matching cheap charging started —
               entity_id: input_select.zendure_operation_mode
               name: " "
           - wait_for_trigger:
@@ -1368,7 +1366,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamic Smart Matching cheap charging complete   —
+              message: 💲Dynamic Smart Matching cheap charging complete   —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic Smart Matching cheap charging
@@ -1406,7 +1404,7 @@ actions:
             entity_id: sensor.zendure_soc_limit_status
             state:
               - Normal Operation
-              - Discharging Limit Reached
+              - Discharge Limit Reached
               - unknown
           - alias: SOC lower than maximum set SOC
             condition: template
@@ -1446,7 +1444,7 @@ actions:
                 }}
           - action: logbook.log
             data:
-              message: 💲 Dynamic cheap charging started —
+              message: 💲Dynamic cheap charging started —
               entity_id: input_select.zendure_operation_mode
               name: " "
           - wait_for_trigger:
@@ -1483,7 +1481,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamic cheap charging complete  —
+              message: 💲Dynamic cheap charging complete  —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic cheap charging
@@ -1555,7 +1553,7 @@ actions:
                 int }}
           - action: logbook.log
             data:
-              message: 💲 Dynamic expensive discharge started —
+              message: 💲Dynamic expensive discharge started —
               entity_id: input_select.zendure_operation_mode
               name: " "
           - wait_for_trigger:
@@ -1589,7 +1587,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamic expensive discharge complete  —
+              message: 💲Dynamic expensive discharge complete  —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic expensive discharging
