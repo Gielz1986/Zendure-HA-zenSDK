@@ -39,7 +39,7 @@ Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐
 ### #️⃣ Configuratie en herstart
 
 1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-2. Plaats [Zendure_gielz1986_nederlands.yaml](./Dutch%20(NL)%20Integration/packages/zendure_gielz1986_nl.yaml) uit de map packages van GitHub in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
+2. Plaats [Zendure_gielz1986_nl.yaml](./Dutch%20(NL)%20Integration/packages/zendure_gielz1986_nl.yaml) uit de map packages van GitHub in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
 3. Maak nu een **backup** van je `configuration.yaml`.
 4. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
 
@@ -95,7 +95,7 @@ De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwe
 
 1. Maak een nieuwe automatisering aan.
 2. Klik rechtsboven op **Bewerken in YAML**.
-3. Plak de YAML-code uit het [Automation_nederlands.yaml](./Dutch%20(NL)%20Integration/automation_nl.yaml) bestand van deze GitHub.   
+3. Plak de YAML-code uit het [Automation_nl.yaml](./Dutch%20(NL)%20Integration/automation_nl.yaml) bestand van deze GitHub.   
 4. Sla op, en start de automatisering.
 
 ![Preview](Images/Automation1.gif)   
@@ -130,7 +130,7 @@ Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in geb
 4. Open het nieuwe dashboard.
 5. Klik rechtsboven op de 3 puntjes en kies **Dashboard bewerken**
 6. Klik rechtsboven op de 3 puntjes en kies **Ruwe configuratie-editor**.
-7. Plak de YAML-code uit het [Dashboard_nederlands.yaml](./Dutch%20(NL)%20Integration/dashboard_nl.yaml) bestand van deze GitHub.
+7. Plak de YAML-code uit het [Dashboard_nl.yaml](./Dutch%20(NL)%20Integration/dashboard_nl.yaml) bestand van deze GitHub.
 8. Sla op en het dashboard is volledig bruikbaar.
 9. [Ga naar de WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
 
