@@ -645,7 +645,7 @@ views:
                     EVAL:function(value) {
                       const h = Math.floor(value);
                       const m = Math.round((value - h) * 60);
-                      return h + "u " + m + "m";
+                      return h + "h " + m + "m";
                     }
               grid:
                 show: true
