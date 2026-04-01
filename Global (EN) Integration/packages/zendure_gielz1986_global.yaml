@@ -204,7 +204,7 @@ input_number:
 
 sensor:
   - platform: history_stats
-    name: "Zero Import Duration (Today)"
+    name: "Home Energy Zero Import Duration Today"
     unique_id: home_energy_zero_import_duration_today
     entity_id: binary_sensor.home_energy_zero_import_active
     state: "on"
@@ -213,7 +213,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: "Zendure Relay Switches Charging (Today)"
+    name: "Zendure Relay Switches Charging Today"
     unique_id: zendure_relay_switches_charging_today
     entity_id: sensor.zendure_charging_mode
     state: "Charging"
@@ -222,7 +222,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: history_stats
-    name: "Zendure Relay Switches Discharging (Today)"
+    name: "Zendure Relay Switches Discharging Today"
     unique_id: zendure_relay_switches_discharging_today
     entity_id: sensor.zendure_charging_mode
     state: "Discharging"
@@ -231,8 +231,8 @@ sensor:
     end: "{{ now() }}"
 
   - platform: statistics
-    name: "Zendure Import Efficiency (24h average)"
-    unique_id: zendure_import_efficiency_24u
+    name: "Zendure Import Efficiency 24h"
+    unique_id: zendure_import_efficiency_24h
     entity_id: sensor.zendure_import_efficiency
     state_characteristic: mean
     sampling_size: 86400
@@ -240,8 +240,8 @@ sensor:
       hours: 24
 
   - platform: statistics
-    name: "Zendure Export Efficiency (24h average)"
-    unique_id: zendure_export_efficiency_24u
+    name: "Zendure Export Efficiency 24h"
+    unique_id: zendure_export_efficiency_24h
     entity_id: sensor.zendure_export_efficiency
     state_characteristic: mean
     sampling_size: 86400
@@ -281,7 +281,7 @@ sensor:
 
 template:
   - binary_sensor:
-      - name: "Zero Import Active"
+      - name: "Home Energy Zero Import Active"
         unique_id: home_energy_zero_import_active
         device_class: power
         state: "{{ states('sensor.home_energy_meter_power') | float(0) < 1 }}"
@@ -365,7 +365,7 @@ template:
           mdi:emoticon-sad-outline
          {% endif %}
 
-      - name: "Home Energy Target"
+      - name: "Home Energy Meter Target"
         unique_id: home_energy_meter_target
         unit_of_measurement: "W"
         state_class: measurement
@@ -373,7 +373,7 @@ template:
         state: > 
          {{ (states('sensor.home_energy_meter_power') | float(0) + (states('sensor.zendure_power') | float(0) * -1)) | round(0) }}
 
-      - name: "Zendure Relay Switches (Today)"
+      - name: "Zendure Relay Switches Today"
         unique_id: zendure_relay_switches_today
         icon: mdi:swap-vertical-bold
         state_class: total_increasing
@@ -629,7 +629,7 @@ template:
               n.v.t.
             {% endif %}
 
-      - name: "Dynamic Spread Indication (Direct Self Consumption)"
+      - name: "Dynamic Spread Indication DSC"
         unique_id: dynamic_spread_indication_dsc
         icon: mdi:percent-box
         unit_of_measurement: "%"
@@ -780,7 +780,7 @@ template:
               n.v.t.
             {% endif %}
 
-      - name: "Dynamic Spread Indication (Direct Self Consumption) Tomorrow"
+      - name: "Dynamic Spread Indication DSC Tomorrow"
         unique_id: dynamic_spread_indication_dsc_tomorrow
         icon: mdi:percent-box
         unit_of_measurement: "%"
@@ -1536,7 +1536,7 @@ rest:
         value_template: "{{ value_json.sn }}"
         icon: mdi:identifier
 
-      - name: "Zendure Power Import (DC)"
+      - name: "Zendure Power Import DC"
         unique_id: zendure_power_import_dc
         value_template: >
          {% set ns = namespace(total=0) %}
@@ -1550,7 +1550,7 @@ rest:
         state_class: measurement
         device_class: power
 
-      - name: "Zendure Power Export (DC)"
+      - name: "Zendure Power Export DC"
         unique_id: zendure_power_export_dc
         value_template: >
          {% set ns = namespace(total=0) %}
