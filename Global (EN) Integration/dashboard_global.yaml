@@ -1773,7 +1773,7 @@ views:
                 name: Import Power DC
               - entity: sensor.zendure_import_efficiency
                 name: Import Efficiency
-              - entity: sensor.zendure_import_efficiency_24h_average
+              - entity: sensor.zendure_import_efficiency_24h
                 name: Import Efficiency (24h average)
           - type: heading
             icon: ''
@@ -1886,7 +1886,7 @@ views:
                 name: Export Power DC
               - entity: sensor.zendure_export_efficiency
                 name: Export Efficiency
-              - entity: sensor.zendure_export_efficiency_24h_average
+              - entity: sensor.zendure_export_efficiency_24h
                 name: Export Efficiency (24h average)
     cards: []
   - type: sections
