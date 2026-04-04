@@ -1335,6 +1335,31 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_setting_ip_address') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure Power Offgrid Socket 1"
+        value_template: "{{ value_json['properties']['gridOffPower'] | int }}"
+        unique_id: zendure_power_offgrid_socket_1
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        icon: mdi:power-plug
+
+      - name: "Zendure Offgrid Mode"
+        value_template: >
+          {% set states = {0: "Normal", 1: "Eco", 2: "Turned Off"} %}
+          {% set packState = value_json['properties']['gridOffMode'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: zendure_offgrid_mode
+        icon: >
+         {% if this.state == 'Normal' %}
+          mdi:power-plug
+         {% elif this.state == 'Eco' %}
+          mdi:power-plug
+         {% elif this.state == 'Turned Off' %}
+          mdi:power-plug-off
+         {% else %}
+          mdi:power-plug-outline
+         {% endif %}
+
       - name: "Zendure Productserie"
         unique_id: zendure_productserie
         value_template: "{{ value_json.product }}"
