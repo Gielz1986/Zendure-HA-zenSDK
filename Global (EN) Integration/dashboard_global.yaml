@@ -20,6 +20,17 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
+                entity: sensor.zendure_power_offgrid_socket_1
+                tap_action:
+                  action: more-info
+                color: '#01a180'
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_offgrid_mode
+                    state_not: Turned Off
+              - type: entity
+                show_state: true
+                show_icon: true
                 entity: sensor.zendure_total_electricity_level
                 color: '#01a180'
                 tap_action:
@@ -1166,7 +1177,10 @@ views:
                 name: WIFI Signal Strength
               - entity: sensor.zendure_error
                 name: Error
+              - entity: sensor.zendure_offgrid_mode
+                name: Offgrid Mode
               - entity: sensor.zendure_calibrating
+                name: Calibrating
               - entity: sensor.zendure_inverter_max_charge_power
                 name: Inverter Max. Charge Power
               - entity: sensor.zendure_inverter_max_discharge_power
@@ -1656,9 +1670,9 @@ views:
                   - entity: sensor.zendure_battery_6_electricity_level
                     name: Battery 6 Electricity Level
                 visibility:
-                  - condition: state
-                    entity: sensor.zendure_total_batteries
-                    state: '6'
+                  - condition: numeric_state
+                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    above: 5
       - type: grid
         cards:
           - type: heading
