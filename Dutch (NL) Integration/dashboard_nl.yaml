@@ -20,6 +20,17 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
+                entity: sensor.zendure_2400_ac_vermogen_offgrid_stopcontact_1
+                tap_action:
+                  action: more-info
+                color: '#01a180'
+                visibility:
+                  - condition: state
+                    entity: sensor.zendure_2400_ac_offgrid_modus
+                    state_not: Uitgeschakeld
+              - type: entity
+                show_state: true
+                show_icon: true
                 entity: sensor.zendure_2400_ac_laadpercentage
                 color: '#01a180'
                 tap_action:
@@ -1283,6 +1294,10 @@ views:
                 name: Signaalsterkte
               - entity: sensor.zendure_2400_ac_error
                 name: Error
+              - entity: sensor.zendure_2400_ac_offgrid_modus
+                name: Offgrid Modus
+              - entity: sensor.zendure_2400_ac_soc_status
+                name: SOC Status
               - entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
                 name: Omvormer Max. Oplaadvermogen
               - entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
@@ -1403,13 +1418,6 @@ views:
             heading: Kalibraties
             heading_style: title
             badges:
-              - type: entity
-                show_state: true
-                show_icon: true
-                entity: sensor.zendure_2400_ac_soc_status
-                color: '#01a180'
-                tap_action:
-                  action: more-info
               - type: entity
                 show_state: true
                 show_icon: true
@@ -1773,9 +1781,9 @@ views:
                   - entity: sensor.zendure_2400_ac_batterij_6_laadpercentage
                     name: Batterij 6 Laadpercentage
                 visibility:
-                  - condition: state
+                  - condition: numeric_state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
-                    state: '6'
+                    above: 5
       - type: grid
         cards:
           - type: heading
