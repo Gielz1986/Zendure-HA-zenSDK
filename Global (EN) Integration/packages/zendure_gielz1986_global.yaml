@@ -313,7 +313,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260404"
+        state: "v20260405"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1335,9 +1335,9 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_setting_ip_address') }}/properties/report"
     scan_interval: 1
     sensor:
-      - name: "Zendure Power Offgrid Socket 1"
+      - name: "Zendure Power Offgrid Outlet 1"
         value_template: "{{ value_json['properties']['gridOffPower'] | int }}"
-        unique_id: zendure_power_offgrid_socket_1
+        unique_id: zendure_power_offgrid_outlet_1
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
