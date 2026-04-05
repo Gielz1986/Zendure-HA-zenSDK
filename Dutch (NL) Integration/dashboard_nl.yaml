@@ -703,6 +703,146 @@ views:
                   size: 0
           - type: heading
             icon: ''
+            heading: PV
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                color: var(--accent-color)
+                entity: sensor.zendure_power_pv_total
+                tap_action:
+                  action: more-info
+            visibility:
+              - condition: state
+                entity: input_boolean.pv_tonen_op_dashboard
+                state: 'on'
+          - type: custom:apexcharts-card
+            experimental:
+              hidden_by_default: true
+              color_threshold: true
+              brush: false
+            brush:
+              selection_span: 1d
+              apex_config:
+                grid:
+                  strokeDashArray: 0
+                  borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                  show: true
+                yaxis:
+                  show: false
+                xaxis:
+                  labels:
+                    show: false
+                  axisTicks:
+                    show: false
+                  axisBorder:
+                    color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                chart:
+                  height: 100
+            cache: true
+            update_interval: 15min
+            stacked: true
+            header:
+              show: true
+              show_states: true
+              title: ''
+            graph_span: 1d
+            span:
+              start: day
+            series:
+              - entity: sensor.zendure_2400_ac_vermogen_pv_totaal
+                name: PV Total
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                stroke_width: 2
+                extend_to: now
+                color: var(--accent-color)
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_brush: true
+                  in_header: false
+                  in_legend: true
+            apex_config:
+              tooltip:
+                x:
+                  format: HH:mm
+                  show: false
+              xaxis:
+                labels:
+                  show: false
+                  style:
+                    colors: grey
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 0
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
+                        transparent)
+              grid:
+                strokeDashArray: 0
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                show: true
+              chart:
+                height: 150px
+                toolbar:
+                  autoSelected: pan
+                  show: true
+                  tools:
+                    download: false
+                    zoom: true
+                    zoomin: false
+                    zoomout: false
+                    pan: true
+              fill:
+                type: gradient
+                gradient:
+                  shade: dark
+                  type: vertical
+                  shadeIntensity: 0.3
+                  inverseColors: true
+                  opacityFrom: 1
+                  opacityTo: 0.2
+                  stops:
+                    - 0
+                    - 100
+                zoom:
+                  enabled: true
+                  allowMouseWheelZoom: true
+                  autoScaleYaxis: true
+              legend:
+                show: true
+                floating: true
+                horizontalAlign: left
+                offsetX: 25
+                offsetY: 17
+                formatter: |
+                  EVAL:function(seriesName, opts) {
+                    // filter series die niet in de legenda moeten
+                    if(seriesName === "Electricity Level" || seriesName === "Home Energy Meter") return "";
+                    return seriesName;
+                  }
+              markers:
+                size: 0
+                hover:
+                  size: 0
+            visibility:
+              - condition: state
+                entity: input_boolean.pv_tonen_op_dashboard
+                state: 'on'
+          - type: heading
+            icon: ''
             heading: Nul Import
             heading_style: title
             badges:
@@ -2613,6 +2753,7 @@ views:
           - type: entities
             entities:
               - entity: input_boolean.help_tonen_op_dashboard
+              - entity: input_boolean.pv_tonen_op_dashboard
               - entity: input_boolean.dynamisch_tonen_op_dashboard
           - type: heading
             icon: ''
