@@ -47,7 +47,7 @@ input_boolean:
 
   pv_tonen_op_dashboard:
     name: PV Tonen Op Dashboard
-    icon: mdi:information-outline
+    icon: mdi:solar-panel
 
 input_text:
   zendure_2400_ac_batterij_volgorde:
