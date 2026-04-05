@@ -20,7 +20,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: sensor.zendure_power_offgrid_socket_1
+                entity: sensor.zendure_power_offgrid_outlet_1
                 tap_action:
                   action: more-info
                 color: '#01a180'
