@@ -45,6 +45,10 @@ input_boolean:
     name: Help Tonen Op Dashboard
     icon: mdi:information-outline
 
+  pv_tonen_op_dashboard:
+    name: PV Tonen Op Dashboard
+    icon: mdi:information-outline
+
 input_text:
   zendure_2400_ac_batterij_volgorde:
     name: Zendure 2400 AC Batterij Volgorde
@@ -247,6 +251,14 @@ sensor:
     sampling_size: 86400
     max_age:
       hours: 24
+
+  - platform: integration
+    name: "Zendure 2400 AC PV Import"
+    unique_id: zendure_2400_ac_pv_import
+    source: sensor.zendure_2400_ac_vermogen_pv_totaal
+    unit_prefix: k
+    round: 2
+    method: trapezoidal
 
   - platform: integration
     name: "Zendure 2400 AC Energie Import"
@@ -1335,6 +1347,13 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC Vermogen PV Totaal"
+        value_template: "{{ value_json['properties']['solarInputPower'] | int }}"
+        unique_id: Zendure_2400_AC_Vermogen_PV_Totaal
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
       - name: "Zendure 2400 AC Vermogen Offgrid Stopcontact 1"
         value_template: "{{ value_json['properties']['gridOffPower'] | int }}"
         unique_id: Zendure_2400_AC_Vermogen_Offgrid_Stopcontact_1
@@ -1722,12 +1741,30 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen Aansturing"
         value_template: >
-          {% set opladen = value_json['properties']['gridInputPower'] | int %}
-          {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
-          {% if opladen != 0 %}
-            {{ opladen }}
+          {% set pv_status = value_json['properties']['pvStatus'] | int %}
+          {% set soc_limit = value_json['properties']['socLimit'] | int %}
+
+          {% if pv_status == 0 %}
+            {% set opladen = value_json['properties']['outputPackPower'] | int %}
+            {% set ontladen = - (value_json['properties']['packInputPower'] | int) %}
+            {% if opladen != 0 %}
+              {{ opladen }}
+            {% else %}
+              {{ ontladen }}
+            {% endif %}
+
           {% else %}
-            {{ ontladen }}
+            {% set opladen = value_json['properties']['gridInputPower'] | int %}
+            {% set opladen_vol = value_json['properties']['outputPackPower'] | int %}
+            {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
+
+            {% if soc_limit == 1 %}
+              {{ opladen_vol }}
+            {% elif opladen != 0 %}
+              {{ opladen }}
+            {% else %}
+              {{ ontladen }}
+            {% endif %}
           {% endif %}
         unique_id: Zendure_2400_AC_Vermogen_Aansturing
         unit_of_measurement: "W"
