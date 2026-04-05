@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie April 2026 (v20260312)
+description: Configuratie Versie (v20260405)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -67,7 +67,7 @@ actions:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
           - action: logbook.log
             data:
-              message: ⚠️ Opslagmodus omzetten naar Flash —
+              message: ⚠️Opslagmodus omzetten naar Flash —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Standby
@@ -216,8 +216,7 @@ actions:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
           - action: logbook.log
             data:
-              message: |
-                ⚠️ Opslagmodus omzetten naar RAM —
+              message: ⚠️Opslagmodus omzetten naar RAM —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Wanneer opslag modus op Flash staat deze op RAM instellen
@@ -248,9 +247,8 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                💤 Na {{
-                states('input_number.zendure_2400_ac_standby_vertraging') |
-                int(5) }}                 minuten inactiviteit in standby
+                💤Na {{states('input_number.zendure_2400_ac_standby_vertraging')
+                | int(5) }}                 minuten inactiviteit in standby
                 zetten                 (Opslagmodus omzetten naar Flash) —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
@@ -330,7 +328,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚠️ Batterij SOC bescherming actief — Vermogen ingesteld op   {%
+                ⚠️Batterij SOC bescherming actief — Vermogen ingesteld op   {%
                 set soc = states('sensor.zendure_2400_ac_laadpercentage') |
                 float |
                   round(0) %} {% set min_soc =
@@ -370,7 +368,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximaal oplaadvermogen aangepast naar {{
+                ⚙️Maximaal oplaadvermogen aangepast naar {{
                 states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
@@ -407,7 +405,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Maximaal ontlaadvermogen aangepast naar {{
+                ⚙️Maximaal ontlaadvermogen aangepast naar {{
                 states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
@@ -427,7 +425,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚙️ Advies instellingen overnemen — Standby vertraging ingesteld
+                ⚙️Advies instellingen overnemen — Standby vertraging ingesteld
                 op 15 minuten — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
@@ -446,7 +444,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚙️ Advies instellingen overnemen — Ontladen starten bij 100 watt
+                ⚙️Advies instellingen overnemen — Ontladen starten bij 100 watt
                 verbruik en opladen starten bij -300 watt teruglevering — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
@@ -465,7 +463,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚙️ Advies instellingen overnemen — Oplaadmarge ingesteld op 50
+                ⚙️Advies instellingen overnemen — Oplaadmarge ingesteld op 50
                 watt en ontlaadmarge ingesteld op 5 watt — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
@@ -544,8 +542,8 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                ⚠️ Dynamisch laden/ontladen loopt status is foutief.
-                Gecorrigeerd naar status uit —
+                ⚠️Dynamisch laden/ontladen loopt status is foutief. Gecorrigeerd
+                naar status uit —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Dynamisch laden / ontladen controle
@@ -586,7 +584,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Huidig oplaadvermogen gecorrigeerd naar {{
+                ⚙️Huidig oplaadvermogen gecorrigeerd naar {{
                 states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
@@ -630,7 +628,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚙️ Huidig ontlaadvermogen gecorrigeerd naar {{
+                ⚙️Huidig ontlaadvermogen gecorrigeerd naar {{
                 states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
@@ -654,6 +652,7 @@ actions:
             state:
               - Normale werking
               - Laadlimiet bereikt
+              - unknown
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
@@ -746,7 +745,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                🔋 Ontladen starten — Vermogen ingesteld op {% set factor = 0.75
+                🔋Ontladen starten — Vermogen ingesteld op {% set factor = 0.75
                 %} 
                   {% set cap = states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float(0) %}
                   {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0)) %}
@@ -767,6 +766,7 @@ actions:
             state:
               - Normale werking
               - Laadlimiet bereikt
+              - unknown
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
@@ -848,7 +848,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Ontladen balanceren — Vermogen ingesteld op {% set factor =
+                ⚡Ontladen balanceren — Vermogen ingesteld op {% set factor =
                 1.00 %} 
                   {% set cap = states('input_number.zendure_2400_ac_max_ontlaadvermogen') | float(0) %}
                   {% set correctie = -1 * (states('input_number.zendure_2400_ac_ontlaadmarge') | float(0)) %}
@@ -869,6 +869,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - condition: template
             value_template: >
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
@@ -956,7 +957,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                🔋 Opladen starten — Vermogen ingesteld op {% set factor = 0.75
+                🔋Opladen starten — Vermogen ingesteld op {% set factor = 0.75
                 %}
                   {% set cap = states('input_number.zendure_2400_ac_max_oplaadvermogen') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
@@ -978,6 +979,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - condition: template
             value_template: >
               {{ states('sensor.zendure_2400_ac_laadpercentage') | float |
@@ -1049,8 +1051,8 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Opladen balanceren — Vermogen ingesteld op {% set factor =
-                1.00 %}
+                ⚡Opladen balanceren — Vermogen ingesteld op {% set factor = 1.00
+                %}
                   {% set cap = states('input_number.zendure_2400_ac_max_oplaadvermogen') | float(0) %}
                   {% set correctie_export = states('input_number.zendure_2400_ac_oplaadmarge') | float(0) %}
                   {% set p1 = states('sensor.p1_aansturing_vermogen') | float(0) %}
@@ -1097,7 +1099,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Handmatig laden — Vermogen ingesteld op {{
+                ⚡Handmatig laden — Vermogen ingesteld op {{
                 states('input_number.zendure_2400_ac_handmatig_vermogen') | int
                 | abs }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
@@ -1136,7 +1138,7 @@ actions:
           - action: logbook.log
             data:
               message: >
-                ⚡ Handmatig ontladen — Vermogen ingesteld op {{
+                ⚡Handmatig ontladen — Vermogen ingesteld op {{
                 states('input_number.zendure_2400_ac_handmatig_vermogen') | int
                 | abs }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
@@ -1185,7 +1187,7 @@ actions:
             action: input_text.set_value
           - action: logbook.log
             data:
-              message: ⚙️ Dynamische instelling overzetten van morgen naar vandaag —
+              message: ⚙️Dynamische instelling overzetten van morgen naar vandaag —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Dynamisch omzetten van morgen naar vandaag
@@ -1236,7 +1238,7 @@ actions:
           - action: logbook.log
             data:
               message: >-
-                💲 Dynamische dure/goedkope periode afgerond terug naar standby 
+                💲Dynamische dure/goedkope periode afgerond terug naar standby 
                 —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
@@ -1261,18 +1263,27 @@ actions:
               hours: 0
               minutes: 0
               seconds: 0
-          - alias: SOC 10% lager dan maximale ingestelde SOC
-            condition: template
-            value_template: |
-              {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0) <= 
-                 (states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) - 10) }}
+          - condition: or
+            conditions:
+              - alias: SOC 10% lager dan maximale ingestelde SOC
+                condition: template
+                value_template: >
+                  {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
+                  <= 
+                     (states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) - 10) }}
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen
         sequence:
           - action: input_boolean.turn_off
             metadata: {}
             data: {}
             target:
               entity_id: input_boolean.dynamisch_recent_geladen
-        alias: Dynamisch recent geladen uitzetten onder de 90% SOC
+        alias: >-
+          Dynamisch recent geladen uitzetten onder de 90% SOC of tijdens
+          Dynamisch Handelen
       - conditions:
           - condition: trigger
             id:
@@ -1297,6 +1308,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - alias: SOC lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -1335,7 +1347,7 @@ actions:
                 int }}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch NOM goedkoop laden gestart —
+              message: 💲Dynamisch NOM goedkoop laden gestart —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
           - wait_for_trigger:
@@ -1371,7 +1383,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch NOM goedkoop laden voltooid  —
+              message: 💲Dynamisch NOM goedkoop laden voltooid  —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Dynamisch NOM goedkoop laden
@@ -1410,6 +1422,7 @@ actions:
             state:
               - Normale werking
               - Ontlaadlimiet bereikt
+              - unknown
           - alias: SOC lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -1448,7 +1461,7 @@ actions:
                 int }}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch goedkoop laden gestart —
+              message: 💲Dynamisch goedkoop laden gestart —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
           - wait_for_trigger:
@@ -1485,7 +1498,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch goedkoop laden voltooid  —
+              message: 💲Dynamisch goedkoop laden voltooid  —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Dynamisch goedkoop laden
@@ -1514,6 +1527,7 @@ actions:
             state:
               - Normale werking
               - Laadlimiet bereikt
+              - unknown
           - alias: Tot de minimaal ingestelde SOC
             condition: template
             value_template: |
@@ -1556,7 +1570,7 @@ actions:
                 int }}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch duur ontladen gestart —
+              message: 💲Dynamisch duur ontladen gestart —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
           - wait_for_trigger:
@@ -1590,7 +1604,7 @@ actions:
             data: {}
           - action: logbook.log
             data:
-              message: 💲 Dynamisch duur ontladen voltooid  —
+              message: 💲Dynamisch duur ontladen voltooid  —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Dynamisch duur ontladen

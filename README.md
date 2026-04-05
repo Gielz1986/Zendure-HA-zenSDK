@@ -1,53 +1,51 @@
-#  Zendure Home Assistant Integratie
-[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Huidige%20Versie&&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
-[![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Problemen&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
-[![Issue SLA](https://img.shields.io/badge/Gemiddelde%20Oplostijd-~7%20Dagen-brightgreen?style=for-the-badge&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+# Zendure Home Assistant Integration
+<img width="25" height="25" alt="image" src="https://github.com/user-attachments/assets/eae2adcb-fd59-42ae-90cc-dd957630b667" /> **English (Global)**  &nbsp;&nbsp;&nbsp;  <img width="25" height="25" alt="image" src="https://github.com/user-attachments/assets/b39b5d97-5fe7-412d-9640-95e601dcac89" /> **[Dutch (NL)](README.nl.md)**
 
-![Preview](Images/Dashboard-140326.png) <br>
+[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Current%20Version&&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
+[![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Issues&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+[![Issue SLA](https://img.shields.io/badge/Average%20Resolution%20Time-~7%20Days-brightgreen?style=for-the-badge&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
+
+![Preview](Images/Global-Dashboard-300326.gif) <br>
 <sub>
-<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten">
-Ga naar de uitleg over alle entiteiten en het dashboard
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities">
+Go to the explanation of all entities and the dashboard
 </a>
 </sub>
 
 <br>
 
-**Om in slechts 2️⃣ simpele stappen je batterij volledig lokaal werkend te krijgen in Home Assistant.**
+**Get your battery fully running locally in Home Assistant in just 2️⃣ simple steps.**
 
-Gebaseerd op de zenSDK RESTful API voor Home Assistant. Deze package maakt lokaal verbinding met één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro of Plus). Perfect voor iedereen die zijn batterij **100% lokaal en volledig onder eigen controle** wil draaien in Home Assistant. Inmiddels zijn er **11 voorgeprogrammeerde modussen**  — van heerlijk NOMen op basis van de grote vuurbal tot energieboer spelen met dynamisch handelen voor een paar stuivers.
+Based on the zenSDK RESTful API for Home Assistant. This package connects locally to one Zendure Solarflow 2400 (AC, AC+ or AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro or Plus). Perfect for anyone who wants to run their battery **100% locally and fully under their own control** in Home Assistant.
 
-Heb je de smaak te pakken en meerdere omvormers staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
+There are now **11 preconfigured modes** — from relaxed solar-based usage to acting like an energy trader with dynamic pricing for a few extra cents.
 
-Vind je dit project nuttig en wil je verdere ontwikkeling supporten? <br>
-Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐.
+Do you have multiple inverters? Then you can expand this with the [Node-RED proxy by Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). This proxy ensures everything in this automation works seamlessly together, allowing multiple identical inverters to be controlled intelligently with optimal power distribution.
+
+Do you find this project useful and want to support further development?  
+Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
 
 <a href="https://www.buymeacoffee.com/gielz" target="_blank">
   <img src="https://github.com/Gielz1986/Zendure-zenSDK-HA/blob/main/Images/bmc.png?raw=true" width="120" alt="Buy Me a Coffee">
 </a><br><br>
 
 
-## 1️⃣ Entiteiten beschikbaar maken
+## 1️⃣ Making Entities Available
 
-#### ℹ️ Benodigde hardware
+#### ℹ️ Required Hardware
 
-- Homewizard P1 (of een andere P1/CT-meter die data per seconden levert (+watt afname / -watt teruglevering).
-- één Solarflow 2400 (AC, AC+ of AC Pro) / Solarflow 1600 AC+ / Solarflow 800 (Pro of Plus).
-- Of twee dezelfde omvormers in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
-
----
-
-### #️⃣ Configuratie en herstart
-
-<details>
-  <summary>🖱️ <strong>Klik hier</strong> 🖱️ voor de configuratie via een package waarbij de configuration.yaml schoon blijft.</summary>
-
+- Homewizard P1 (or another home energy meter that provides per-second data (+watt import / -watt export)).
+- One Solarflow 2400 (AC, AC+ or AC Pro) / Solarflow 1600 AC+ / Solarflow 800 (Pro or Plus).
+- Or two identical inverters combined with the [Node-RED proxy by Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
 ---
 
-1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-2. Plaats `zendure_ha_zensdk_gielz1986.yaml` uit de map packages van GitHub in de map packages van Home Assistant. Mocht de map packages niet bestaan maak deze dan aan.
-3. Maak nu een **backup** van je `configuration.yaml`.
-4. Pas daarna je `configuration.yaml` aan door de onderstaande regel toe te voegen.
+### #️⃣ Configuration and Restart
+
+1. Make sure **HEMS is disabled** in the Zendure app.
+2. Place [Zendure_gielz1986_global.yaml](./Global%20(EN)%20Integration/packages/zendure_gielz1986_global.yaml) from the GitHub packages folder into your Home Assistant `packages` folder. If it does not exist, create it.
+3. Create a **backup** of your `configuration.yaml`.
+4. Then edit your `configuration.yaml` and add the following:
 
 ```
 homeassistant:
@@ -57,103 +55,91 @@ homeassistant:
 | ![Preview](Images/packages2.png) |
 |-----------------------------------|
 
-5. Herstart Home Assistant.
-6. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
+5. Restart Home Assistant.
+6. Optionally create the plug-n-play dashboard [Go to Plug-N-Play Dashboard](#-optional-plug-n-play-dashboard). Or fill in the entities below in Home Assistant and restart again.
 
 ---
 
-
-</details>
-
-<details>
-  <summary>🖱️ <strong>Klik hier</strong> 🖱️ voor de klassieke configuratie waarbij alles in de configuration.yaml zit.</summary>
-  
----
-
-1. Zorg ervoor dat **HEMS is uitgeschakeld** in de Zendure-app.
-2. Maak eerst een **backup** van je `configuration.yaml`.
-3. Pas daarna je `configuration.yaml` aan door gebruik te maken van de GitHub `configuration.yaml`.
-4. Herstart Home Assistant.
-5. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
-
----
-
-</details>
-
-![Preview](Images/Instellingen-070326.png) 
-<sub>*plug-n-play dashboard</sub>
+![Preview](Images/Settings-300326.png)  
+<sub>*plug-n-play dashboard*</sub>
 
 <br>
 
-| Uitleg per configuratie item | |  
+| Explanation per configuration item | |
 |-|-|
-| **Configuratie (Basis)** | **Informatie**|  
-| `zendure_2400_ac_ip_adres`       | **bijvoorbeeld 192.168.0.172** – In de Zendure app onder device Information |  
-| `homewizard_p1_ip_adres`    | **(Instellingsadvies: gebruik een Homewizard P1) bijvoorbeeld 192.168.0.192** – In de Homewizard app (lokale API aanzetten)  |  
-| `zendure_2400_ac_standby_vertraging` | **(Instellingsadvies: 15 minuten) 5-30 minuten** – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt | 
-| `zendure_2400_ac_advies_instellingen_overnemen` | Zodra de batterij draait kun je met deze knop de onderstaande instellingsadviezen direct overnemen. | 
-| **Configuratie (Opladen)** |**Informatie**|  
-| `zendure_2400_ac_max_oplaadvermogen`    | **800 t/m 2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt  |  
-| `zendure_2400_ac_opladen_starten_bij` | **(Instellingsadvies: -300 watt) -1000 t/m -100 watt** – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge  | 
-| `zendure_2400_ac_oplaadmarge` | **(Instellingsadvies: 50 watt) 0 t/m 250 watt** – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS)  | 
-| **Configuratie (Ontladen)** |**Informatie**|  
-| `zendure_2400_ac_max_ontlaadvermogen`    | **800 t/m 2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt |  
-| `zendure_2400_ac_ontladen_starten_bij` | **(Instellingsadvies: 100 watt) 100 t/m 500 watt** – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra ontlaadmarge | 
-| `zendure_2400_ac_ontlaadmarge` | **(Instellingsadvies: 5 watt) 0 t/m 250 watt** – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is | 
-| **Configuratie (Optioneel)** |**Informatie**|  
-| `afwijkende_p1_sensor` | **bijvoorbeeld `sensor.eigen_P1`** – je eigen afwijkende P1 sensor toevoegen waarbij +watt afname is en -watt teruglevering (vul je hier je eigen sensor in dan is deze altijd leidend). [Ga naar WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/2-%E2%80%90-Afwijkende-P1-CT-meters-(API's)) voor afwijkende P1/CT API's. |  
-| `zendure_2400_ac_batterij_volgorde` | **bijvoorbeeld 1;5;3;4;2** – hiermee bepaal je zelf een afwijkende volgorde van de batterijen. De juiste volgorde bepaal je mede aan de hand van `sensor.zendure_2400_ac_batterij_serienummers` en de sticker op de batterij(en). Op deze manier zullen de batterijtemperaturen en het laadpercentage de juiste volgorde hebben zoals die van de batterij(en) in de stapel.| 
-| **Configuratie (Dynamisch)** |**Informatie**|  
-| `dynamisch_nordpool_sensor` | **bijvoorbeeld `sensor.nordpool_kwh_nl_eur_3_09_0`** – je eigen sensor van Nordpool (HACS) toevoegen. Wanneer je het Dynamisch Nordpool gedeelte in gebruik gaat nemen moet je voor dat je deze in gebruik neemt bij `dynamisch_handmatige_periode` en `dynamisch_handmatige_periode_morgen` even **unknown** weghalen. Hierna zal het dynamisch gedeelte werken. Alles wat in de forecast (morgen) gezet word zal overgenomen worden om 00:00 via de automatisering en verschijnen in vandaag. |  
-| `dynamisch_minimale_spread` | **bijvoorbeeld 25%** - Hiermee geef je aan vanaf hoeveel spread de batterij dynamisch gaat laden en opladen op hoog vermogen.  |  
-| `dynamisch_15_minuten` | Vink dit aan wanneer je gebruik wilt maken van 15 minuten periodes  |  
-| **Configuratie (Dashboard)** |**Informatie**|  
-| `help_tonen_op_dashboard` | Vink dit aan om de helpteksten te tonen bij de meest relevante onderdelen.  |  
-| `dynamisch_tonen_op_dashboard` | Vink dit aan om de dynamische sturing te tonen op het dashboard.  |  
+| **Configuration (Basic)** | **Information** |
+| `zendure_setting_ip_address` | **e.g. 192.168.0.172** – Found in the Zendure app under device information |
+| `homewizard_setting_p1_ip_address` | **e.g. 192.168.0.192** – Enable local API in the Homewizard app |
+| `zendure_setting_standby_delay` | **(Recommended: 15 minutes) 5–30 minutes** – Defines how quickly the inverter goes into full standby at 0 activity. Prevents ~19W idle consumption |
+| `zendure_setting_set_default_settings` | Once the battery is running, you can use this to apply the recommended settings below |
+| **Configuration (Charging)** | **Information** |
+| `zendure_setting_max_charge_power` | **800–2400W** – Maximum charging power (up to 4800W with multiple inverters via Node-RED) |
+| `zendure_setting_start_charging_at` | **(Recommended: -300W) -1000 to -100W** – Defines when charging starts |
+| `zendure_setting_charge_buffer` | **(Recommended: 50W) 0–250W** – Determines how much less to include during charging. In summer you can increase this (e.g. 200W) to prevent daytime grid import |
+| **Configuration (Discharging)** | **Information** |
+| `zendure_setting_max_discharge_power` | **800–2400W** – Maximum discharge power |
+| `zendure_setting_start_discharging_at` | **(Recommended: 100W) 100–500W** – Defines when discharging starts |
+| `zendure_setting_discharge_buffer` | **(Recommended: 5W) 0–250W** – Extra margin for discharging |
+| **Configuration (Optional)** | **Information** |
+| `home_energy_setting_meter_sensor` | **e.g. sensor.custom_energy** – Add your own home energy sensor (+watt import / -watt export). This will take priority |
+| `zendure_setting_battery_order` | **e.g. 1;5;3;4;2** – Manually define battery order based on serial numbers and physical stacking |
+| **Configuration (Dynamic)** | **Information** |
+| `dynamic_setting_nordpool_sensor` | **e.g. sensor.nordpool_kwh_nl_eur_3_09_0** – Your Nordpool (HACS) sensor |
+| `dynamic_setting_minimal_spread` | **e.g. 25%** – Minimum price spread before dynamic charging/discharging activates |
+| `dynamic_setting_15_minute_interval` | Enable this if you want to use 15-minute intervals |
+| **Configuration (Dashboard)** | **Information** |
+| `dashboard_setting_show_help` | Enable to show help text on the dashboard |
+| `dashboard_setting_show_dynamic` | Enable to show dynamic control on the dashboard |
 
-<br>
+---
 
-## 2️⃣ Zendure zenSDK (Gielz) automatisering
-De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwerkt. Kies uit 11 verschillende modi om hem precies zo te laten werken als jij wilt. Heb je bij het bovenstaande geen namen aangepast dan is het een kwestie van deze nieuwe automatisering aanmaken.
+## 2️⃣ Zendure zenSDK (Gielz) Automation
 
-1. Maak een nieuwe automatisering aan.
-2. Klik rechtsboven op **Bewerken in YAML**.
-3. Plak de YAML-code `(zie automatisering bestand)`.
-4. Sla op, en start de automatisering.
+The engine of everything: it charges smartly, discharges smartly, and ensures everything works together. Choose from 11 different modes to make it behave exactly how you want.
 
-![Preview](Images/Automation1.gif)   
+If you didn’t change any entity names above, you can simply create this automation:
 
-![Preview](Images/Automation2.gif) 
+1. Create a new automation.
+2. Click **Edit in YAML**.
+3. Paste the YAML code from [Automation_global.yaml](./Global%20(EN)%20Integration/automation_global.yaml).
+4. Save and start the automation.
 
-<br>
+![Preview](Images/Global-Automation-300326.gif)  
+![Preview](Images/Global-Automation2-300326.gif)
 
-## ✅ Batterij mag aan de slag
-Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan alleen een dure decoratie met kabels.
+---
 
-1. Open het plug-n-play dashboard of voeg de entiteit **Zendure 2400 AC Modus Selecteren** toe aan je eigen dashboard.
-3. De modus zal op **Standby** staan.
-4. Kies hier je gewenste modus om de **Zendure zenSDK (Gielz) automatisering** te activeren.
-5. De batterij zal nu aan de slag gaan.
+## ✅ Battery Ready to Go
 
-![Preview](Images/Modus-16022026.gif) <br>
+The moment has arrived: time for your battery to prove it’s more than just an expensive decoration with cables.
+
+1. Open the plug-n-play dashboard or add the entity **Zendure Operation Mode**.
+2. The mode will be set to **Standby**.
+3. Select your desired mode to activate the **Zendure zenSDK (Gielz)** automation.
+4. The battery will with the desired operation mode.
+
+![Preview](Images/Mode-290326.gif)  
+
 <sub>
-<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen">
-Ga naar de uitleg over alle verschillende modussen
+<a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Operation-modes">
+Go to the explanation of all modes
 </a>
 </sub>
 
-<br>
+---
 
-## 🔃 (Optioneel) Plug-N-Play Dashboard
-Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
+## 🔃 (Optional) Plug-N-Play Dashboard
 
-1. Voor dit dashboard is [Apexcharts HACS](https://github.com/RomRider/apexcharts-card) vereist. En (optioneel) [Graphite HACS](https://github.com/TilmanGriesel/graphite).
-2. Maak een nieuw leeg dashboard aan via links onderin op ⚙️ te klikken en ga dan naar **Dashboards**.
-3. Klik vervolgens op **Dashboard toevoegen** en kies voor **leeg nieuw dashboard**.
-4. Open het nieuwe dashboard.
-5. Klik rechtsboven op het potlood en kies daarna onder de 3 puntjes **Ruwe configuratie-editor**.
-6. Plak de YAML-code `(zie dashboard bestand)`.
-7. Sla op en het dashboard is volledig bruikbaar.
-8. [Ga naar de WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
+You can now also directly use a fully plug-n-play dashboard:
 
-![Preview](Images/Plug-N-Play-Dashboard.gif) 
+1. Requires [Apexcharts HACS](https://github.com/RomRider/apexcharts-card) and (optionally) [Graphite HACS](https://github.com/TilmanGriesel/graphite).
+2. Create a new empty dashboard via ⚙️ and go to **Dashboards**.
+3. Click **Add Dashboard** and choose **New dashboard from scratch**
+4. Open the new dashboard.
+5. Click on the 3 dots → **Edit Dashboard**.
+6. Click on the 3 dots → **Raw configuration editor**.
+7. Paste the YAML from [Dashboard_global.yaml](./Global%20(EN)%20Integration/dashboard_global.yaml).
+8. Save — dashboard is ready to use.
+9. [Go to the WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities) for explanation of all entities.
+
+![Preview](Images/Global-Plug-N-Play-Dashboard.gif)

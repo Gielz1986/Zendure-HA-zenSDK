@@ -1,0 +1,1594 @@
+alias: Zendure zenSDK (Gielz) Global
+description: Configuration Version (v20260405)
+triggers:
+  - seconds: /5
+    id: aansturing_trigger
+    trigger: time_pattern
+  - at: "00:00:00"
+    id: dynamisch_middernacht
+    trigger: time
+  - entity_id:
+      - input_select.zendure_operation_mode
+    id: modus_trigger
+    trigger: state
+  - trigger: state
+    entity_id:
+      - sensor.dynamic_lowest_price_period
+    id: modus_dynamisch_goedkoop
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 15
+    from:
+      - "Yes"
+    to:
+      - "No"
+  - trigger: state
+    entity_id:
+      - sensor.dynamic_highest_price_period
+    id: modus_dynamisch_duur
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 15
+    from:
+      - "Yes"
+    to:
+      - "No"
+  - trigger: state
+    entity_id:
+      - input_number.dynamic_setting_minimal_spread
+    id: modus_dynamisch_spread
+  - trigger: state
+    entity_id:
+      - input_number.zendure_setting_max_charge_power
+    id: systeem_instelling_maxoplaadvermogen
+  - trigger: state
+    entity_id:
+      - input_number.zendure_setting_max_discharge_power
+    id: systeem_instelling_maxontlaadvermogen
+  - trigger: state
+    entity_id:
+      - input_button.zendure_setting_set_default_settings
+    id: systeem_instelling_adviesinstellingen
+conditions: []
+actions:
+  - alias: Operation Mode
+    choose:
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state: Standby
+        sequence:
+          - action: rest_command.zendure_full_standby
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - action: logbook.log
+            data:
+              message: ⚠️Switch storage mode to Flash —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Standby
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Manual
+        sequence:
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_manual_power
+            data:
+              value: 0
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+        alias: Manual
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state: Smart Matching
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+        alias: Smart Matching
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state: Dynamic Smart Matching
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+        alias: Dynamic Smart Matching
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Dynamic Smart Matching (Expensive)
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+        alias: Dynamic Smart Matching (Expensive)
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Dynamic Trading
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+        alias: Dynamic Trading
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state: Smart Charge Only
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+        alias: Smart Charge Only
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state: Smart Discharge Only
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+        alias: Smart Discharge Only
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Quick Discharge
+        sequence:
+          - action: rest_command.zendure_quick_discharge
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              outputLimit: >-
+                {{ states('input_number.zendure_setting_max_discharge_power') |
+                int }}
+        alias: Quick Discharge
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Quick Charge
+        sequence:
+          - action: rest_command.zendure_quick_charge
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: >-
+                {{ states('input_number.zendure_setting_max_charge_power') | int
+                }}
+        alias: Quick Charge
+  - alias: System
+    choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.zendure_storage_mode
+            state:
+              - Flash Memory
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                above: 100
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                below: 0
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Standby
+        sequence:
+          - action: rest_command.zendure_save_in_ram
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - action: logbook.log
+            data:
+              message: ⚠️Switch storage mode to RAM —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: When storage mode is set to Flash set it to RAM
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.zendure_storage_mode
+            state:
+              - RAM Memory
+          - condition: state
+            entity_id: sensor.zendure_charging_mode
+            state:
+              - Standby
+            for:
+              minutes: >-
+                {{ states('input_number.zendure_setting_standby_delay') | int(5)
+                }}
+          - condition: state
+            entity_id: sensor.zendure_calibrating
+            state:
+              - "No"
+        sequence:
+          - action: rest_command.zendure_full_standby
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - action: logbook.log
+            data:
+              message: >-
+                💤{{states('input_number.zendure_setting_standby_delay') |
+                int(5) }} minutes of inactivity going into full standby (Switch
+                storage mode to Flash) —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Put on standby after xx minutes of inactivity
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: or
+            conditions:
+              - condition: template
+                value_template: >
+                  {{ (states('sensor.zendure_total_electricity_level') | float)
+                  <
+                     states('sensor.zendure_minimum_electricity_level') | float }}
+              - condition: template
+                value_template: >
+                  {{ (states('sensor.zendure_total_electricity_level') | float |
+                  round(0) ==
+                      states('sensor.zendure_minimum_electricity_level') | float | round(0))
+                     and
+                     (states('sensor.zendure_set_charge_power') | float == 1200) }}
+            alias: SOC does not match minimum configured SOC
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Standby
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Charge Only
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Discharge Only
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Dynamic Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Smart Matching (Expensive)
+          - condition: or
+            conditions:
+              - condition: sun
+                after: sunrise
+                after_offset: "02:00:00"
+                before: sunset
+                before_offset: "-02:00:00"
+              - alias: >-
+                  sensor.home_energy_meter_power lower then
+                  input_number.zendure_setting_start_charging_at
+                condition: template
+                value_template: |
+                  {{ states('sensor.home_energy_meter_power') | float(0)
+                     < states('input_number.zendure_setting_start_charging_at') | float(0) }}
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "off"
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: >
+                {% set soc = states('sensor.zendure_total_electricity_level') |
+                float | round(0) %} {% set min_soc =
+                states('sensor.zendure_minimum_electricity_level') | float |
+                round(0) %} {{ 1200 if soc < min_soc else 0 }}
+            action: rest_command.zendure_x_charge
+          - action: logbook.log
+            data:
+              message: >
+                ⚠️Battery SOC protection active — Power set to {% set soc =
+                states('sensor.zendure_total_electricity_level') | float |
+                  round(0) %} {% set min_soc =
+                  states('sensor.zendure_minimum_electricity_level') | float | round(0) %}
+                  {{ 1200 if soc < min_soc else 0 }} watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Charging to minimum SOC (protection)
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_maxoplaadvermogen
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ states('sensor.zendure_inverter_max_charge_power') |
+                      float !=
+                      states('input_number.zendure_setting_max_charge_power') |
+                      float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              instellingitem: chargeMaxLimit
+              instellinginhoud: >-
+                {{ states('input_number.zendure_setting_max_charge_power') | int
+                }}
+            action: rest_command.zendure_setting
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Maximum charging power adjusted to {{
+                states('input_number.zendure_setting_max_charge_power') | int }}
+                watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Adjust maximum charging power
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_maxontlaadvermogen
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ states('sensor.zendure_inverter_max_discharge_power') |
+                      float !=
+                      states('input_number.zendure_setting_max_discharge_power')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              instellingitem: inverseMaxPower
+              instellinginhoud: >-
+                {{ states('input_number.zendure_setting_max_discharge_power') |
+                int }}
+            action: rest_command.zendure_setting
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Maximum discharge power adjusted to {{
+                states('input_number.zendure_setting_max_discharge_power') | int
+                }} watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: " Adjust maximum discharge power"
+      - conditions:
+          - condition: trigger
+            id:
+              - systeem_instelling_adviesinstellingen
+        sequence:
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_setting_standby_delay
+            data:
+              value: 15
+          - action: logbook.log
+            data:
+              message: "⚙️Set recommended settings — Standby delay set to 15 minutes — "
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_setting_start_charging_at
+            data:
+              value: -300
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_setting_start_discharging_at
+            data:
+              value: 100
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️Set recommended settings — Start discharging at 100 watt
+                import and start charging at -300 watt export — 
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_setting_discharge_buffer
+            data:
+              value: 5
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_setting_charge_buffer
+            data:
+              value: 50
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️Set recommended settings — Charge buffer set to 50 watt and
+                discharge buffer set to 5 watt — 
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Set default preferred settings
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: or
+            conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Smart Discharge Only
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Smart Charge Only
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Manual
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Smart Matching
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Quick Discharge
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Quick Discharge
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Standby
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id: sensor.dynamic_lowest_price_period
+                    state:
+                      - "No"
+                    for:
+                      hours: 0
+                      minutes: 0
+                      seconds: 10
+                  - condition: state
+                    entity_id: sensor.dynamic_highest_price_period
+                    state:
+                      - "No"
+                    for:
+                      hours: 0
+                      minutes: 0
+                      seconds: 10
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "on"
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "on"
+        sequence:
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+                - input_boolean.dynamic_discharging_running
+            data: {}
+          - action: logbook.log
+            data:
+              message: >-
+                ⚠️Dynamic charging/discharging running status is incorrect.
+                Corrected to status off —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Dynamic charging/discharging check
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{ states('sensor.zendure_set_charge_power') | float !=
+              states('input_number.zendure_setting_max_charge_power') | float }}
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "on"
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Quick Charge
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 10
+        sequence:
+          - action: rest_command.zendure_quick_charge
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: >-
+                {{ states('input_number.zendure_setting_max_charge_power') | int
+                }}
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Current charging power corrected to {{
+                states('input_number.zendure_setting_max_charge_power') | int }}
+                watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Correct current charging power
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{ states('sensor.zendure_set_discharge_power') | float !=
+              states('input_number.zendure_setting_max_discharge_power') | float
+              }}
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "on"
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Quick Discharge
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 10
+        sequence:
+          - action: rest_command.zendure_quick_discharge
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              outputLimit: >-
+                {{ states('input_number.zendure_setting_max_discharge_power') |
+                int }}
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Current discharge power corrected to {{
+                states('input_number.zendure_setting_max_discharge_power') | int
+                }} watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: " Correct current discharge power"
+  - alias: Smart Matching Control
+    choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - alias: >-
+              sensor.home_energy_meter_power bigger then
+              input_number.zendure_setting_start_discharging_at
+            condition: template
+            value_template: |
+              {{ states('sensor.home_energy_meter_power') | float(0)
+                 > states('input_number.zendure_setting_start_discharging_at') | float(0) }}
+          - condition: state
+            entity_id: sensor.zendure_soc_limit_status
+            state:
+              - Normal Operation
+              - Charging Limit Reached
+              - unknown
+          - alias: Down to the minimum configured SOC
+            condition: template
+            value_template: |
+              {{ states('sensor.zendure_total_electricity_level') | float >
+               states('sensor.zendure_minimum_electricity_level') | float }}
+          - condition: numeric_state
+            entity_id: sensor.zendure_power
+            above: -30
+            below: 30
+          - alias: Minstens 2 automatiseringen na opladen pas activeren
+            condition: or
+            conditions:
+              - condition: state
+                entity_id: sensor.zendure_charging_mode
+                state: Charging
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 9
+              - condition: state
+                entity_id: sensor.zendure_charging_mode
+                state: Discharging
+              - condition: state
+                entity_id: sensor.zendure_charging_mode
+                state: Standby
+          - condition: or
+            conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state: Smart Matching
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state: Smart Discharge Only
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Dynamic Smart Matching
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Dynamic Trading + Smart Matching
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id: sensor.dynamic_highest_price_period
+                    state:
+                      - "Yes"
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Dynamic Smart Matching (Expensive)
+                  - alias: >-
+                      sensor.dynamic_spread_indication bigger or equal then
+                      input_number.dynamic_setting_minimal_spread
+                    condition: template
+                    value_template: >-
+                      {{ states('sensor.dynamic_spread_indication') | float >=
+                      states('input_number.dynamic_setting_minimal_spread') |
+                      float }}
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "off"
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              outputLimit: >-
+                {% set factor = 0.75 %}  {% set cap =
+                states('input_number.zendure_setting_max_discharge_power') |
+                float(0) %} {% set correctie = -1 *
+                (states('input_number.zendure_setting_discharge_buffer') |
+                float(0)) %} {% set p1 =
+                states('sensor.home_energy_meter_power') | float(0) %}  {% set
+                zendure = states('sensor.zendure_power') | float(0) %}
+
+                {% set totaal = (p1 - zendure - correctie) * factor %} {% set
+                beperkt = [ [totaal, 0] | max, cap ] | min %}
+
+                {{ beperkt | int }}
+            action: rest_command.zendure_x_discharge
+          - action: logbook.log
+            data:
+              message: |
+                🔋Discharging (Starting) — Power set to {% set factor = 0.75 %} 
+                  {% set cap = states('input_number.zendure_setting_max_discharge_power') | float(0) %}
+                  {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %}
+                  {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} 
+                  {% set zendure = states('sensor.zendure_power') | float(0) %}
+
+                  {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
+                  [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Start discharging at +xxx watt (75% of demand)
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.zendure_soc_limit_status
+            state:
+              - Normal Operation
+              - Charging Limit Reached
+              - unknown
+          - alias: Down to the minimum configured SOC
+            condition: template
+            value_template: |
+              {{ states('sensor.zendure_total_electricity_level') | float >
+               states('sensor.zendure_minimum_electricity_level') | float }}
+          - alias: >-
+              The new power to be set is different from the current battery
+              power
+            condition: template
+            value_template: |-
+              {% set factor = 1.00 %} {% set cap =
+                states('input_number.zendure_setting_max_discharge_power') | float(0) %} {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %} {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} {% set zendure = states('sensor.zendure_power') | float(0) %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_set_discharge_power') | int(0) %} {{ huidig != target }}
+          - condition: numeric_state
+            entity_id: sensor.zendure_power
+            below: 0
+          - condition: or
+            conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state: Smart Matching
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state: Smart Discharge Only
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Dynamic Smart Matching
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Dynamic Trading + Smart Matching
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id: sensor.dynamic_highest_price_period
+                    state:
+                      - "Yes"
+                  - condition: state
+                    entity_id: input_select.zendure_operation_mode
+                    state:
+                      - Dynamic Smart Matching (Expensive)
+                  - alias: >-
+                      sensor.dynamic_spread_indication bigger or equal then
+                      input_number.dynamic_setting_minimal_spread
+                    condition: template
+                    value_template: >-
+                      {{ states('sensor.dynamic_spread_indication') | float >=
+                      states('input_number.dynamic_setting_minimal_spread') |
+                      float }}
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "off"
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              outputLimit: >-
+                {% set factor = 1.00 %}  {% set cap =
+                states('input_number.zendure_setting_max_discharge_power') |
+                float(0) %} {% set correctie = -1 *
+                (states('input_number.zendure_setting_discharge_buffer') |
+                float(0)) %} {% set p1 =
+                states('sensor.home_energy_meter_power') | float(0) %}  {% set
+                zendure = states('sensor.zendure_power') | float(0) %}
+
+                {% set totaal = (p1 - zendure - correctie) * factor %} {% set
+                beperkt = [ [totaal, 0] | max, cap ] | min %} {{ beperkt | int
+                }}
+            action: rest_command.zendure_x_discharge_balancing
+          - action: logbook.log
+            data:
+              message: |
+                ⚡Discharging (Balancing) — Power set to {% set factor = 1.00 %} 
+                  {% set cap = states('input_number.zendure_setting_max_discharge_power') | float(0) %}
+                  {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %}
+                  {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} 
+                  {% set zendure = states('sensor.zendure_power') | float(0) %}
+
+                  {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
+                  [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: During discharge balance to +xxx watt (100% of the demand)
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.zendure_soc_limit_status
+            state:
+              - Normal Operation
+              - unknown
+              - Discharge Limit Reached
+          - condition: template
+            value_template: >
+              {{ states('sensor.zendure_total_electricity_level') | float |
+              round(0) >=
+                 states('sensor.zendure_minimum_electricity_level') | float | round(0) }}
+            alias: SOC is gelijk of groter dan de minimale SOC
+          - alias: >-
+              sensor.home_energy_meter_power kleiner dan
+              input_number.zendure_2400_ac_start_opladen_bij
+            condition: template
+            value_template: |
+              {{ states('sensor.home_energy_meter_power') | float(0)
+                 < states('input_number.zendure_setting_start_charging_at') | float(0) }}
+          - alias: Lager dan maximaal ingestelde SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
+                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+          - condition: numeric_state
+            entity_id: sensor.zendure_power
+            above: -30
+            below: 30
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Charge Only
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Dynamic Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Smart Matching (Expensive)
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading + Smart Matching
+          - alias: Minstens 2 automatiseringen na ontladen pas activeren
+            condition: or
+            conditions:
+              - condition: state
+                entity_id: sensor.zendure_charging_mode
+                state: Discharging
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 9
+                  milliseconds: 0
+              - condition: state
+                entity_id: sensor.zendure_charging_mode
+                state: Charging
+              - condition: state
+                entity_id: sensor.zendure_charging_mode
+                state: Standby
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "off"
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: >-
+                {% set factor = 0.75 %} {% set cap =
+                states('input_number.zendure_setting_max_charge_power') |
+                float(0) %} {% set correctie_export =
+                states('input_number.zendure_setting_charge_buffer') | float(0)
+                %} {% set p1 = states('sensor.home_energy_meter_power') |
+                float(0) %} {% set zendure = states('sensor.zendure_power') |
+                float(0) %} {% set verschil = zendure - p1 - correctie_export %}
+                {% set beperkt = verschil * factor if verschil > 0 else 0 %} {%
+                set beperkt = beperkt if beperkt < cap else cap %} {{ beperkt |
+                int }}
+            action: rest_command.zendure_x_charge
+          - action: logbook.log
+            data:
+              message: |
+                🔋Charging (Starting) — Power set to {% set factor = 0.75 %}
+                  {% set cap = states('input_number.zendure_setting_max_charge_power') | float(0) %}
+                  {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %}
+                  {% set p1 = states('sensor.home_energy_meter_power') | float(0) %}
+                  {% set zendure = states('sensor.zendure_power') | float(0) %}
+                  {% set verschil = zendure - p1 - correctie_export %}
+                  {% set beperkt = verschil * factor if verschil > 0 else 0 %}
+                  {% set beperkt = beperkt if beperkt < cap else cap %}
+                  {{ beperkt | int }} watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: " Start charging at -xxx watt (75% of demand)"
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.zendure_soc_limit_status
+            state:
+              - Normal Operation
+              - unknown
+              - Discharge Limit Reached
+          - condition: template
+            value_template: >
+              {{ states('sensor.zendure_total_electricity_level') | float |
+              round(0) >=
+                 states('sensor.zendure_minimum_electricity_level') | float | round(0) }}
+            alias: SOC is gelijk of groter dan de minimale SOC
+          - alias: >-
+              Nieuw in te stellen vermogen is anders dan huidig batterij
+              vermogen
+            condition: template
+            value_template: |-
+              {% set factor = 1.00 %} {% set cap =
+                states('input_number.zendure_setting_max_charge_power') | float(0) %} {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %} {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} {% set zendure = states('sensor.zendure_power') | float(0) %} {% set verschil = (zendure - p1 - correctie_export) * factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_set_charge_power') | int(0) %} {{ huidig != target }}
+          - alias: Lager dan maximaal ingestelde SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
+                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+          - condition: template
+            value_template: "{{ this.attributes.current == 0 }}"
+          - condition: numeric_state
+            entity_id: sensor.zendure_power
+            above: 0
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Charge Only
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Dynamic Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Smart Matching (Expensive)
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading + Smart Matching
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "off"
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: >-
+                {% set factor = 1.00 %}{% set cap =
+                states('input_number.zendure_setting_max_charge_power') |
+                float(0) %} {% set correctie_export =
+                states('input_number.zendure_setting_charge_buffer') | float(0)
+                %} {% set p1 = states('sensor.home_energy_meter_power') |
+                float(0) %} {% set zendure = states('sensor.zendure_power') |
+                float(0) %} {% set verschil = zendure - p1 - correctie_export %}
+                {% set beperkt = verschil * factor if verschil > 0 else 0 %} {%
+                set beperkt = beperkt if beperkt < cap else cap %} {{ beperkt |
+                int }}
+            action: rest_command.zendure_x_charge_balancing
+          - action: logbook.log
+            data:
+              message: |
+                ⚡Charging (Balancing) — Power set to {% set factor = 1.00 %}
+                  {% set cap = states('input_number.zendure_setting_max_charge_power') | float(0) %}
+                  {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %}
+                  {% set p1 = states('sensor.home_energy_meter_power') | float(0) %}
+                  {% set zendure = states('sensor.zendure_power') | float(0) %}
+                  {% set verschil = zendure - p1 - correctie_export %}
+                  {% set beperkt = verschil * factor if verschil > 0 else 0 %}
+                  {% set beperkt = beperkt if beperkt < cap else cap %}
+                  {{ beperkt | int }} watt —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: During charging balance to -xxx watt (100% of the demand)
+  - alias: Manual Control
+    choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - aansturing_trigger
+              - condition: trigger
+                id:
+                  - handmatig_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Manual
+          - condition: numeric_state
+            entity_id: input_number.zendure_manual_power
+            above: -1
+          - condition: template
+            value_template: |-
+              {{ states('input_number.zendure_manual_power') | int | abs !=
+                 states('sensor.zendure_set_charge_power') | int }}
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: "{{ states('input_number.zendure_manual_power') | int | abs }}"
+            action: rest_command.zendure_x_charge
+          - action: logbook.log
+            data:
+              message: >
+                ⚡Manual (Charging) — Power set to {{
+                states('input_number.zendure_manual_power') | int | abs }} watt
+                —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Manual charging
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: or
+            conditions:
+              - condition: trigger
+                id:
+                  - aansturing_trigger
+              - condition: trigger
+                id:
+                  - handmatig_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Manual
+          - condition: numeric_state
+            entity_id: input_number.zendure_manual_power
+            below: 1
+          - condition: template
+            value_template: |-
+              {{ states('input_number.zendure_manual_power') | int | abs !=
+                 states('sensor.zendure_set_discharge_power') | int }}
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              outputLimit: "{{ states('input_number.zendure_manual_power') | int | abs }}"
+            action: rest_command.zendure_x_discharge
+          - action: logbook.log
+            data:
+              message: >
+                ⚡Manual (Discharging) — Power set to {{
+                states('input_number.zendure_manual_power') | int | abs }} watt
+                —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Manual discharging
+  - alias: Dynamic Control (Nordpool HACS sensor required)
+    choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - dynamisch_middernacht
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamic_setting_nordpool_sensor is gevuld
+        sequence:
+          - alias: Zet goedkoopste periode van morgen naar vandaag
+            target:
+              entity_id: input_number.dynamic_lowest_price_x_period
+            data:
+              value: >-
+                {{ states('input_number.dynamic_lowest_price_x_period_tomorrow')
+                | float }}
+            action: input_number.set_value
+          - alias: Zet duurste periode van morgen naar vandaag
+            target:
+              entity_id: input_number.dynamic_highest_price_x_period
+            data:
+              value: >-
+                {{
+                states('input_number.dynamic_highest_price_x_period_tomorrow') |
+                float }}
+            action: input_number.set_value
+          - alias: Zet handmatige periode van morgen naar vandaag
+            target:
+              entity_id: input_text.dynamic_manual_period
+            data:
+              value: "{{ states('input_text.dynamic_manual_period_tomorrow') }}"
+            action: input_text.set_value
+          - alias: Reset handmatige periode van morgen
+            target:
+              entity_id: input_text.dynamic_manual_period_tomorrow
+            data:
+              value: ""
+            action: input_text.set_value
+          - action: logbook.log
+            data:
+              message: ⚙️Dynamic period settings copied from tomorrow to today —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Set dynamic manual periods from tomorrow into today
+      - conditions:
+          - condition: trigger
+            id:
+              - modus_dynamisch_goedkoop
+              - modus_dynamisch_duur
+              - modus_dynamisch_spread
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamic_setting_nordpool_sensor is gevuld
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: input_boolean.dynamic_charging_running
+                state:
+                  - "off"
+              - condition: state
+                entity_id: input_boolean.dynamic_discharging_running
+                state:
+                  - "off"
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Smart Matching (Expensive)
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                above: 0
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                below: 0
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - action: logbook.log
+            data:
+              message: 💲Dynamic expensive/cheap period complete back to standby  —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Dynamic expensive/cheap period finished, back to standby
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamic_setting_nordpool_sensor is gevuld
+          - condition: state
+            entity_id: sensor.dynamic_lowest_price_period
+            state: "Yes"
+          - condition: state
+            entity_id: input_boolean.dynamic_recently_charged
+            state: "on"
+            for:
+              hours: 0
+              minutes: 0
+              seconds: 0
+          - condition: or
+            conditions:
+              - alias: SOC 10% lower than maximum set SOC
+                condition: template
+                value_template: >
+                  {{ states('sensor.zendure_total_electricity_level') | float(0)
+                  <= 
+                     (states('sensor.zendure_maximum_electricity_level') | float(0) - 10) }}
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading
+        sequence:
+          - action: input_boolean.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: input_boolean.dynamic_recently_charged
+        alias: >-
+          Dynamic recently charged off when below 90% SOC or during Dynamic
+          Trading
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamic_setting_nordpool_sensor is gevuld
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state: Dynamic Smart Matching
+          - condition: state
+            entity_id: sensor.dynamic_lowest_price_period
+            state: "Yes"
+          - condition: state
+            entity_id: input_boolean.dynamic_recently_charged
+            state: "off"
+          - condition: state
+            entity_id: sensor.zendure_soc_limit_status
+            state:
+              - Normal Operation
+              - Discharge Limit Reached
+              - unknown
+          - alias: SOC lower than maximum set SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
+                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+          - alias: >-
+              sensor.dynamic_spread_indication_dsc higher or equal as
+              input_number.dynamic_setting_minimal_spread
+            condition: template
+            value_template: >-
+              {{ states('sensor.dynamic_spread_indication_dsc') | float >=
+              states('input_number.dynamic_setting_minimal_spread') | float }}
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - "off"
+        sequence:
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+          - action: rest_command.zendure_save_in_ram
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 5
+              milliseconds: 0
+          - action: rest_command.zendure_quick_charge
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: >-
+                {{ states('input_number.zendure_setting_max_charge_power') | int
+                }}
+          - action: logbook.log
+            data:
+              message: 💲Dynamic Smart Matching cheap charging started —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+          - wait_for_trigger:
+              - entity_id: sensor.dynamic_lowest_price_period
+                to: "No"
+                trigger: state
+              - trigger: template
+                value_template: >
+                  {{ states('sensor.zendure_total_electricity_level') | float(0)
+                  ==
+                     states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                alias: Maximale ingestelde SOC bereikt
+              - trigger: state
+                entity_id:
+                  - input_select.zendure_operation_mode
+              - trigger: state
+                entity_id:
+                  - input_number.dynamic_setting_minimal_spread
+              - trigger: state
+                entity_id:
+                  - sensor.dynamic_spread_indication_dsc
+            continue_on_timeout: false
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id: input_boolean.dynamic_recently_charged
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+            data: {}
+          - action: logbook.log
+            data:
+              message: 💲Dynamic Smart Matching cheap charging complete   —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Dynamic Smart Matching cheap charging
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamic_setting_nordpool_sensor is gevuld
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Smart Matching (Expensive)
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading + Smart Matching
+          - condition: state
+            entity_id: sensor.dynamic_lowest_price_period
+            state: "Yes"
+          - condition: state
+            entity_id: input_boolean.dynamic_recently_charged
+            state: "off"
+          - condition: state
+            entity_id: sensor.zendure_soc_limit_status
+            state:
+              - Normal Operation
+              - Discharge Limit Reached
+              - unknown
+          - alias: SOC lower than maximum set SOC
+            condition: template
+            value_template: |2-
+                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
+                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+          - alias: >-
+              sensor.dynamic_spread_indication higher or equal as
+              input_number.dynamic_setting_minimal_spread
+            condition: template
+            value_template: >-
+              {{ states('sensor.dynamic_spread_indication') | float >=
+              states('input_number.dynamic_setting_minimal_spread') | float }}
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - "off"
+        sequence:
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+          - action: rest_command.zendure_save_in_ram
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 5
+              milliseconds: 0
+          - action: rest_command.zendure_quick_charge
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              inputLimit: >-
+                {{ states('input_number.zendure_setting_max_charge_power') | int
+                }}
+          - action: logbook.log
+            data:
+              message: 💲Dynamic cheap charging started —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+          - wait_for_trigger:
+              - entity_id: sensor.dynamic_lowest_price_period
+                to: "No"
+                trigger: state
+              - trigger: template
+                value_template: >
+                  {{ states('sensor.zendure_total_electricity_level') | float(0)
+                  ==
+                     states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                alias: Maximale ingestelde SOC bereikt
+              - trigger: state
+                entity_id:
+                  - input_select.zendure_operation_mode
+              - trigger: state
+                entity_id:
+                  - input_number.dynamic_setting_minimal_spread
+              - trigger: state
+                entity_id:
+                  - sensor.dynamic_spread_indication
+            continue_on_timeout: false
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id: input_boolean.dynamic_recently_charged
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+            data: {}
+          - action: logbook.log
+            data:
+              message: 💲Dynamic cheap charging complete  —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Dynamic cheap charging
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamic_setting_nordpool_sensor is gevuld
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading + Smart Matching
+          - condition: state
+            entity_id: sensor.zendure_soc_limit_status
+            state:
+              - Normal Operation
+              - Charging Limit Reached
+              - unknown
+          - alias: Up to the minimum configured SOC
+            condition: template
+            value_template: |
+              {{ states('sensor.zendure_total_electricity_level') | float >
+               states('sensor.zendure_minimum_electricity_level') | float }}
+          - condition: state
+            entity_id: sensor.dynamic_highest_price_period
+            state:
+              - "Yes"
+          - alias: >-
+              sensor.dynamic_spread_indication higher or equal as
+              input_number.dynamic_setting_minimal_spread
+            condition: template
+            value_template: >-
+              {{ states('sensor.dynamic_spread_indication') | float >=
+              states('input_number.dynamic_setting_minimal_spread') | float }}
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - "off"
+        sequence:
+          - action: input_boolean.turn_on
+            data: {}
+            target:
+              entity_id:
+                - input_boolean.dynamic_discharging_running
+          - action: rest_command.zendure_save_in_ram
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 5
+              milliseconds: 0
+          - action: rest_command.zendure_quick_discharge
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+              outputLimit: >-
+                {{ states('input_number.zendure_setting_max_discharge_power') |
+                int }}
+          - action: logbook.log
+            data:
+              message: 💲Dynamic expensive discharge started —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+          - wait_for_trigger:
+              - alias: Tot minimale SOC
+                trigger: template
+                value_template: |-
+                  {{ states('sensor.zendure_total_electricity_level') | float <=
+                     states('sensor.zendure_minimum_electricity_level') | float }}
+              - entity_id:
+                  - sensor.dynamic_highest_price_period
+                to:
+                  - "No"
+                trigger: state
+              - trigger: state
+                entity_id:
+                  - input_select.zendure_operation_mode
+              - trigger: state
+                entity_id:
+                  - input_number.dynamic_setting_minimal_spread
+              - trigger: state
+                entity_id:
+                  - sensor.dynamic_spread_indication
+            continue_on_timeout: false
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serienumber') }}"
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_discharging_running
+            data: {}
+          - action: logbook.log
+            data:
+              message: 💲Dynamic expensive discharge complete  —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Dynamic expensive discharging
+mode: parallel
