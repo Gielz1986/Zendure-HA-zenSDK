@@ -45,6 +45,10 @@ input_boolean:
     name: Show Help On Dashboard
     icon: mdi:information-outline
 
+  dashboard_setting_show_pv:
+    name: Show PV On Dashboard
+    icon: mdi:information-outline
+
 input_text:
   zendure_setting_battery_order:
     name: Zendure Battery Order
@@ -247,6 +251,14 @@ sensor:
     sampling_size: 86400
     max_age:
       hours: 24
+
+  - platform: integration
+    name: "Zendure PV Import"
+    unique_id: zendure_pv_import
+    source: sensor.zendure_power_pv_total
+    unit_prefix: k
+    round: 2
+    method: trapezoidal
 
   - platform: integration
     name: "Zendure Energy Import"
@@ -1335,6 +1347,16 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_setting_ip_address') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure Power PV Total"
+        value_template: >
+          {% set solar = value_json['properties']['solarInputPower'] | int %}
+          {% set grid = value_json['properties']['gridOffPower'] | int %}
+          {{ solar + (0 - grid if grid < 0 else 0) }}
+        unique_id: zendure_power_pv_total
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
       - name: "Zendure Power Offgrid Outlet 1"
         value_template: "{{ value_json['properties']['gridOffPower'] | int }}"
         unique_id: zendure_power_offgrid_outlet_1
@@ -1722,12 +1744,27 @@ rest:
 
       - name: "Zendure Power"
         value_template: >
-          {% set opladen = value_json['properties']['gridInputPower'] | int %}
-          {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
+          {% set pv_status = value_json['properties']['pvStatus'] | int %}
+          {% set soc_limit = value_json['properties']['socLimit'] | int %}
+          {% if pv_status == 0 %}
+          {% set opladen = value_json['properties']['outputPackPower'] | int %}
+          {% set ontladen = - (value_json['properties']['packInputPower'] | int) %}
           {% if opladen != 0 %}
             {{ opladen }}
           {% else %}
             {{ ontladen }}
+          {% endif %}
+          {% else %}
+           {% set opladen = value_json['properties']['gridInputPower'] | int %}
+           {% set opladen_vol = value_json['properties']['outputPackPower'] | int %}
+           {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
+          {% if soc_limit == 1 %}
+           {{ opladen_vol }}
+          {% elif opladen != 0 %}
+           {{ opladen }}
+          {% else %}
+           {{ ontladen }}
+          {% endif %}
           {% endif %}
         unique_id: zendure_power
         unit_of_measurement: "W"
