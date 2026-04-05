@@ -47,7 +47,7 @@ input_boolean:
 
   dashboard_setting_show_pv:
     name: Show PV On Dashboard
-    icon: mdi:information-outline
+    icon: mdi:solar-panel
 
 input_text:
   zendure_setting_battery_order:
