@@ -14,7 +14,7 @@ Go to the explanation of all entities and the dashboard
 
 <br>
 
-**Get your battery fully running locally in Home Assistant in just 2️⃣ simple steps.**
+**Get your battery running locally in Home Assistant in just 2️⃣ simple steps.**
 
 Based on the zenSDK RESTful API for Home Assistant. This package connects locally to one Zendure Solarflow 2400 (AC, AC+ or AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro or Plus). Perfect for anyone who wants to run their battery **100% locally and fully under their own control** in Home Assistant.
 
