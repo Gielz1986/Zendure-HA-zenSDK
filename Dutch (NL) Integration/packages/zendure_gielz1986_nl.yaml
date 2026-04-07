@@ -1891,12 +1891,12 @@ rest:
         unique_id: Zendure_2400_AC_Error
         icon: mdi:battery-alert
 
-      - name: "Zendure 2400 AC SOC Status"
+      - name: "Zendure 2400 AC Kalibreren"
         value_template: >
-          {% set states = {0: "Goed", 1: "Kalibreren"} %}
+          {% set states = {0: "Nee", 1: "Ja"} %}
           {% set packState = value_json['properties']['socStatus'] | int %}
           {{ states.get(packState, "Onbekend") }}
-        unique_id: Zendure_2400_AC_SOC_Status
+        unique_id: Zendure_2400_AC_Kalibreren
         icon: mdi:battery-heart-variant
 
       - name: "Zendure 2400 AC Ingesteld Ontlaadvermogen"
