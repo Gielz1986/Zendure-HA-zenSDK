@@ -600,7 +600,21 @@ views:
                 show_state: true
                 show_icon: true
                 color: var(--accent-color)
+                entity: sensor.zendure_pv_passthrough
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                color: var(--accent-color)
                 entity: sensor.zendure_power_pv_total
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: true
+                color: var(--accent-color)
+                entity: sensor.zendure_pv_import_daily
                 tap_action:
                   action: more-info
             visibility:
@@ -731,6 +745,37 @@ views:
               - condition: state
                 entity: input_boolean.dashboard_setting_show_pv
                 state: 'on'
+      - type: grid
+        cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Control
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.home_energy_meter_power
+                state_content: state
+                color: '#01a180'
+                icon: mdi:home
+                tap_action:
+                  action: more-info
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.zendure_soc_limit_status
+                name: SOC-limit Status
+              - entity: sensor.zendure_indication_available_energy
+                name: Available Energy
+              - entity: sensor.zendure_indication_remaining_discharge_time
+                name: Remaining Discharge Time
+              - entity: sensor.zendure_charging_mode
+                name: Charging Mode
+              - entity: sensor.zendure_set_discharge_power
+                name: Discharge Power
+              - entity: sensor.zendure_set_charge_power
+                name: Charge Power
           - type: heading
             icon: ''
             heading: Zero Import
@@ -833,37 +878,6 @@ views:
                 show:
                   in_header: false
                   in_legend: false
-      - type: grid
-        cards:
-          - type: heading
-            icon: ''
-            heading_style: title
-            heading: Control
-            badges:
-              - type: entity
-                show_state: true
-                show_icon: true
-                entity: sensor.home_energy_meter_power
-                state_content: state
-                color: '#01a180'
-                icon: mdi:home
-                tap_action:
-                  action: more-info
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - entity: sensor.zendure_soc_limit_status
-                name: SOC-limit Status
-              - entity: sensor.zendure_indication_available_energy
-                name: Available Energy
-              - entity: sensor.zendure_indication_remaining_discharge_time
-                name: Remaining Discharge Time
-              - entity: sensor.zendure_charging_mode
-                name: Charging Mode
-              - entity: sensor.zendure_set_discharge_power
-                name: Discharge Power
-              - entity: sensor.zendure_set_charge_power
-                name: Charge Power
           - type: heading
             icon: ''
             heading_style: title
