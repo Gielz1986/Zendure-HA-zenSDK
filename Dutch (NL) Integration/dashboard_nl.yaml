@@ -881,7 +881,7 @@ views:
               - entity: sensor.zendure_2400_ac_soc_limiet_status
                 name: SOC-limiet Status
               - entity: sensor.zendure_2400_ac_indicatie_beschikbare_energie
-                name: Indicatie Beschikbare Energie
+                name: Beschikbare Energie
                 secondary_info: none
               - entity: sensor.zendure_2400_ac_resterende_ontlaad_tijd
                 name: Resterende Ontlaad Tijd
