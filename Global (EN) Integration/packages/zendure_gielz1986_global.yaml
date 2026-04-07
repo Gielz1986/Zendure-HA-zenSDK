@@ -291,6 +291,12 @@ sensor:
     value_template: "{{ value_json.name }}"
     icon: mdi:github
 
+utility_meter:
+  zendure_pv_import_daily:
+    source: sensor.zendure_pv_import
+    name: Zendure PV Import Daily
+    cycle: daily
+
 template:
   - binary_sensor:
       - name: "Home Energy Zero Import Active"
@@ -325,7 +331,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260405"
+        state: "v20260407"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1265,7 +1271,7 @@ template:
           {% set max_laad = states('sensor.zendure_maximum_electricity_level') | float(100) %}
           {% set totale_capaciteit = states('sensor.zendure_total_capacity') | float(0) %}
 
-          {% set export_eff = states('sensor.zendure_export_efficiency_24u') | float(0) %}
+          {% set export_eff = states('sensor.zendure_export_efficiency_24h') | float(0) %}
           {% set rte_totaal = states('sensor.zendure_rte_total') | float(0) %}
 
           {% set effectief_laad = [laad, max_laad] | min %}
@@ -1308,7 +1314,7 @@ template:
             {% set max_laad = states('sensor.zendure_maximum_electricity_level') | float(100) %}
             {{ ([laad, max_laad] | min - min_laad) | round(1) }} %
           used_export_efficiency: >
-            {% set export_eff = states('sensor.zendure_export_efficiency_24u') | float(0) %}
+            {% set export_eff = states('sensor.zendure_export_efficiency_24h') | float(0) %}
             {% set rte_totaal = states('sensor.zendure_rte_total') | float(0) %}
             {% set rte_export_equivalent = (rte_totaal / 100) ** 0.5 * 100 %}
             {% if export_eff < 70 %}
@@ -1317,7 +1323,7 @@ template:
               {{ export_eff | round(1) }} %
             {% endif %}
           source_export_efficiency: >
-            {% set export_eff = states('sensor.zendure_export_efficiency_24u') | float(0) %}
+            {% set export_eff = states('sensor.zendure_export_efficiency_24h') | float(0) %}
             {% if export_eff < 70 %}
               RTE total (√RTE × 100)
             {% else %}
@@ -1347,6 +1353,14 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_setting_ip_address') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure PV Passthrough"
+        value_template: >
+          {% set states = {0: "Battery", 2: "Home"} %}
+          {% set packState = value_json['properties']['pass'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: zendure_pv_passthrough
+        icon: mdi:arrow-decision
+
       - name: "Zendure Power PV Total"
         value_template: >
           {% set solar = value_json['properties']['solarInputPower'] | int %}
@@ -1745,7 +1759,7 @@ rest:
       - name: "Zendure Power"
         value_template: >
           {% set pv_status = value_json['properties']['pvStatus'] | int %}
-          {% set soc_limit = value_json['properties']['socLimit'] | int %}
+          {% set pass = value_json['properties']['pass'] | int %}
           {% if pv_status == 0 %}
           {% set opladen = value_json['properties']['outputPackPower'] | int %}
           {% set ontladen = - (value_json['properties']['packInputPower'] | int) %}
@@ -1758,7 +1772,7 @@ rest:
            {% set opladen = value_json['properties']['gridInputPower'] | int %}
            {% set opladen_vol = value_json['properties']['outputPackPower'] | int %}
            {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
-          {% if soc_limit == 1 %}
+          {% if pass == 2 %}
            {{ opladen_vol }}
           {% elif opladen != 0 %}
            {{ opladen }}
