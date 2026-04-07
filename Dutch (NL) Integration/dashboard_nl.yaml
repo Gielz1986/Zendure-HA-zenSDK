@@ -28,6 +28,9 @@ views:
                   - condition: state
                     entity: sensor.zendure_2400_ac_offgrid_modus
                     state_not: Uitgeschakeld
+                  - condition: numeric_state
+                    entity: sensor.zendure_2400_ac_vermogen_offgrid_stopcontact_1
+                    above: 0
               - type: entity
                 show_state: true
                 show_icon: true
