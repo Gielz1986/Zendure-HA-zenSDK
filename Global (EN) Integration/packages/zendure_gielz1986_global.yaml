@@ -331,7 +331,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260407"
+        state: "v20260408"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1877,7 +1877,7 @@ rest:
         icon: >
           {% if this.state == 'Charging' %}
            mdi:battery-plus-variant
-          {% elif this.state == 'Discharing' %}
+          {% elif this.state == 'Discharging' %}
            mdi:battery-minus-variant
           {% else %}
            mdi:battery-outline
