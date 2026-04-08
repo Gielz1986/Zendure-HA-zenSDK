@@ -1460,13 +1460,6 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: sensor.zendure_calibrating
-                color: '#01a180'
-                tap_action:
-                  action: more-info
-              - type: entity
-                show_state: true
-                show_icon: true
                 entity: sensor.zendure_last_calibration
                 color: '#01a180'
                 tap_action:
