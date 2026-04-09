@@ -720,9 +720,22 @@ views:
                 show_state: true
                 show_icon: true
                 color: var(--accent-color)
-                entity: sensor.zendure_power_pv_total
-                tap_action:
-                  action: more-info
+                entity: sensor.zendure_2400_ac_vermogen_pv_naar_batterij
+                icon: mdi:battery
+                visibility:
+                  - condition: numeric_state
+                    entity: sensor.zendure_2400_ac_vermogen_pv_naar_batterij
+                    above: 0
+              - type: entity
+                show_state: true
+                show_icon: true
+                color: var(--accent-color)
+                entity: sensor.zendure_2400_ac_vermogen_pv_naar_huis
+                icon: mdi:home
+                visibility:
+                  - condition: numeric_state
+                    entity: sensor.zendure_2400_ac_vermogen_pv_naar_huis
+                    above: 0
               - type: entity
                 show_state: true
                 show_icon: true
@@ -1451,8 +1464,8 @@ views:
                 name: Error
               - entity: sensor.zendure_2400_ac_offgrid_modus
                 name: Offgrid Modus
-              - entity: sensor.zendure_2400_ac_soc_status
-                name: SOC Status
+              - entity: sensor.zendure_2400_ac_kalibreren
+                name: Kalibreren
               - entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
                 name: Omvormer Max. Oplaadvermogen
               - entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
