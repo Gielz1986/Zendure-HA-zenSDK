@@ -610,9 +610,22 @@ views:
                 show_state: true
                 show_icon: true
                 color: var(--accent-color)
-                entity: sensor.zendure_power_pv_total
-                tap_action:
-                  action: more-info
+                entity: sensor.zendure_power_pv_to_battery
+                icon: mdi:battery
+                visibility:
+                  - condition: numeric_state
+                    entity: sensor.zendure_power_pv_to_battery
+                    above: 0
+              - type: entity
+                show_state: true
+                show_icon: true
+                color: var(--accent-color)
+                entity: sensor.zendure_power_pv_to_home
+                icon: mdi:home
+                visibility:
+                  - condition: numeric_state
+                    entity: sensor.zendure_power_pv_to_home
+                    above: 0
               - type: entity
                 show_state: true
                 show_icon: true
