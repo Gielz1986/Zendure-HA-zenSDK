@@ -331,7 +331,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260408"
+        state: "v20260409"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1355,18 +1355,61 @@ rest:
     sensor:
       - name: "Zendure PV Passthrough"
         value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set states = {0: "Battery", 2: "Home"} %}
           {% set packState = value_json['properties']['pass'] | int %}
-          {{ states.get(packState, "Onbekend") }}
+          {{ states.get(packState, "Onbekend") if pv == 1 else "No PV" }}
         unique_id: zendure_pv_passthrough
         icon: mdi:arrow-decision
 
+      - name: "Zendure Power PV To Home"
+        value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set home = value_json['properties']['outputHomePower'] | float(0) %}
+          {% set pack_in = value_json['properties']['packInputPower'] | float(0) %}
+          {{ (home - pack_in) | round(1) if pv == 1 else 0 }}
+        unique_id: zendure_power_pv_to_home
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
       - name: "Zendure Power PV Total"
         value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | int %}
           {% set grid = value_json['properties']['gridOffPower'] | int %}
-          {{ solar + (0 - grid if grid < 0 else 0) }}
+          {{ (solar + (0 - grid if grid < 0 else 0)) if pv == 1 else 0 }}
         unique_id: zendure_power_pv_total
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure Power PV To Battery"
+        value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pack = value_json['properties']['outputPackPower'] | float(0) %}
+          {% set grid = value_json['properties']['gridInputPower'] | float(0) %}
+          {{ (pack - grid) | round(1) if pv == 1 else 0 }}
+        unique_id: zendure_power_pv_to_battery
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure Power From Home"
+        value_template: >
+          {% set grid_in = value_json['properties']['gridInputPower'] | float(0) %}
+          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {{ (grid_in - (grid_off if grid_off > 0 else 0)) | round(1) }}
+        unique_id: zendure_power_from_home
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure Power To Home"
+        value_template: >
+          {% set pack_out = value_json['properties']['packInputPower'] | float(0) %}
+          {{ pack_out | round(1) }}
+        unique_id: zendure_power_to_home
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
@@ -1760,25 +1803,31 @@ rest:
         value_template: >
           {% set pv_status = value_json['properties']['pvStatus'] | int %}
           {% set pass = value_json['properties']['pass'] | int %}
+          {% set ac_mode = value_json['properties']['acMode'] | int %}
           {% if pv_status == 0 %}
-          {% set opladen = value_json['properties']['outputPackPower'] | int %}
-          {% set ontladen = - (value_json['properties']['packInputPower'] | int) %}
-          {% if opladen != 0 %}
-            {{ opladen }}
+            {% set opladen = value_json['properties']['outputPackPower'] | int %}
+            {% set ontladen = - (value_json['properties']['packInputPower'] | int) %}
+            {% if opladen != 0 %}
+              {{ opladen }}
+            {% else %}
+              {{ ontladen }}
+            {% endif %}
           {% else %}
-            {{ ontladen }}
-          {% endif %}
-          {% else %}
-           {% set opladen = value_json['properties']['gridInputPower'] | int %}
-           {% set opladen_vol = value_json['properties']['outputPackPower'] | int %}
-           {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
-          {% if pass == 2 %}
-           {{ opladen_vol }}
-          {% elif opladen != 0 %}
-           {{ opladen }}
-          {% else %}
-           {{ ontladen }}
-          {% endif %}
+            {% set opladen = value_json['properties']['gridInputPower'] | int %}
+            {% set opladen_vol = value_json['properties']['outputPackPower'] | int %}
+            {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
+            {% if pass == 2 %}
+              {% set result = opladen_vol %}
+            {% elif opladen != 0 %}
+              {% set result = opladen %}
+            {% else %}
+              {% set result = ontladen %}
+            {% endif %}
+            {% if ac_mode == 1 and result < 0 %}
+              {{ 0 }}
+            {% else %}
+              {{ result }}
+            {% endif %}
           {% endif %}
         unique_id: zendure_power
         unit_of_measurement: "W"
