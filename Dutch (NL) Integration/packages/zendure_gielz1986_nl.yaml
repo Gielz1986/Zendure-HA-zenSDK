@@ -1356,18 +1356,24 @@ rest:
       - name: "Zendure 2400 AC PV Doorvoer"
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set states = {0: "Batterij", 2: "Huis"} %}
           {% set packState = value_json['properties']['pass'] | int %}
-          {{ states.get(packState, "Onbekend") if pv == 1 else "Geen PV" }}
+          {{ states.get(packState, "Onbekend") if pv_active else "Geen PV" }}
         unique_id: Zendure_2400_AC_PV_Doorvoer
         icon: mdi:arrow-decision
 
       - name: "Zendure 2400 AC Vermogen PV Naar Huis"
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set home = value_json['properties']['outputHomePower'] | float(0) %}
           {% set pack_in = value_json['properties']['packInputPower'] | float(0) %}
-          {{ (home - pack_in) | round(1) if pv == 1 else 0 }}
+          {{ (home - pack_in) | round(1) if pv_active else 0 }}
         unique_id: Zendure_2400_AC_Vermogen_PV_Naar_Huis
         unit_of_measurement: "W"
         state_class: measurement
@@ -1376,9 +1382,10 @@ rest:
       - name: "Zendure 2400 AC Vermogen PV Totaal"
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
-          {% set solar = value_json['properties']['solarInputPower'] | int %}
-          {% set grid = value_json['properties']['gridOffPower'] | int %}
-          {{ (solar + (0 - grid if grid < 0 else 0)) if pv == 1 else 0 }}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {{ (solar + (0 - grid_off if grid_off < 0 else 0)) if pv_active else 0 }}
         unique_id: Zendure_2400_AC_Vermogen_PV_Totaal
         unit_of_measurement: "W"
         state_class: measurement
@@ -1387,9 +1394,12 @@ rest:
       - name: "Zendure 2400 AC Vermogen PV Naar Batterij"
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set pack = value_json['properties']['outputPackPower'] | float(0) %}
           {% set grid = value_json['properties']['gridInputPower'] | float(0) %}
-          {{ (pack - grid) | round(1) if pv == 1 else 0 }}
+          {{ (pack - grid) | round(1) if pv_active else 0 }}
         unique_id: Zendure_2400_AC_Vermogen_PV_Naar_Batterij
         unit_of_measurement: "W"
         state_class: measurement
@@ -1801,22 +1811,20 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen Aansturing"
         value_template: >
-          {% set pv_status = value_json['properties']['pvStatus'] | int %}
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set pass = value_json['properties']['pass'] | int %}
           {% set ac_mode = value_json['properties']['acMode'] | int %}
-          {% if pv_status == 0 %}
-            {% set opladen = value_json['properties']['outputPackPower'] | int %}
-            {% set ontladen = - (value_json['properties']['packInputPower'] | int) %}
-            {% if opladen != 0 %}
-              {{ opladen }}
-            {% else %}
-              {{ ontladen }}
-            {% endif %}
+          {% if not pv_active %}
+            {% set opladen = value_json['properties']['outputPackPower'] | float(0) %}
+            {% set ontladen = - (value_json['properties']['packInputPower'] | float(0)) %}
+            {{ opladen if opladen != 0 else ontladen }}
           {% else %}
-            {% set opladen = value_json['properties']['gridInputPower'] | int %}
-            {% set opladen_vol = value_json['properties']['outputPackPower'] | int %}
-            {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
-
+            {% set opladen = value_json['properties']['gridInputPower'] | float(0) %}
+            {% set opladen_vol = value_json['properties']['outputPackPower'] | float(0) %}
+            {% set ontladen = - (value_json['properties']['outputHomePower'] | float(0)) %}
             {% if pass == 2 %}
               {% set result = opladen_vol %}
             {% elif opladen != 0 %}
@@ -1825,7 +1833,7 @@ rest:
               {% set result = ontladen %}
             {% endif %}
             {% if ac_mode == 1 and result < 0 %}
-              {{ 0 }}
+              0
             {% else %}
               {{ result }}
             {% endif %}
