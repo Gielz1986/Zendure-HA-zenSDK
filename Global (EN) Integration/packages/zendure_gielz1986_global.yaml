@@ -344,7 +344,7 @@ template:
          {{ (now().date() - as_datetime(last).date()).days }}
          {% endif %}
         icon: >
-         {% if this.state | int < 29 %}
+         {% if this.state | int(0) < 29 %}
            mdi:thumb-up
          {% else %}
            mdi:thumb-down
