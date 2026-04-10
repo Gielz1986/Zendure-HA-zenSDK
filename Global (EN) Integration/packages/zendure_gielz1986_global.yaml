@@ -1435,7 +1435,7 @@ rest:
       - name: "Zendure Offgrid Mode"
         value_template: >
           {% set states = {0: "Normal", 1: "Eco", 2: "Turned Off"} %}
-          {% set packState = value_json.get('properties', {}).get('gridOffPower', 0) | int %}
+          {% set packState = value_json.get('properties', {}).get('gridOffMode', 2) | int %}
           {{ states.get(packState, "Onbekend") }}
         unique_id: zendure_offgrid_mode
         icon: >
