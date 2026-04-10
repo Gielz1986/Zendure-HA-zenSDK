@@ -331,7 +331,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260409"
+        state: "v20260410"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -1357,11 +1357,11 @@ rest:
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
-          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set states = {0: "Batterij", 2: "Huis"} %}
           {% set packState = value_json['properties']['pass'] | int %}
-          {{ states.get(packState, "Onbekend") if pv_active else "Geen PV" }}
+          {{ states.get(packState, "Onbekend") if pv_active else "PV Offline" }}
         unique_id: Zendure_2400_AC_PV_Doorvoer
         icon: mdi:arrow-decision
 
@@ -1369,7 +1369,7 @@ rest:
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
-          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set home = value_json['properties']['outputHomePower'] | float(0) %}
           {% set pack_in = value_json['properties']['packInputPower'] | float(0) %}
@@ -1383,7 +1383,7 @@ rest:
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
-          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {{ (solar + (0 - grid_off if grid_off < 0 else 0)) if pv_active else 0 }}
         unique_id: Zendure_2400_AC_Vermogen_PV_Totaal
@@ -1395,7 +1395,7 @@ rest:
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
-          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set pack = value_json['properties']['outputPackPower'] | float(0) %}
           {% set grid = value_json['properties']['gridInputPower'] | float(0) %}
@@ -1408,7 +1408,7 @@ rest:
       - name: "Zendure 2400 AC Vermogen Van Huis"
         value_template: >
           {% set grid_in = value_json['properties']['gridInputPower'] | float(0) %}
-          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {{ (grid_in - (grid_off if grid_off > 0 else 0)) | round(1) }}
         unique_id: Zendure_2400_AC_Vermogen_Van_Huis
         unit_of_measurement: "W"
@@ -1425,7 +1425,7 @@ rest:
         device_class: power
 
       - name: "Zendure 2400 AC Vermogen Offgrid Stopcontact 1"
-        value_template: "{{ value_json['properties']['gridOffPower'] | int }}"
+        value_template: "{{ value_json.get('properties', {}).get('gridOffPower', 0) | int }}"
         unique_id: Zendure_2400_AC_Vermogen_Offgrid_Stopcontact_1
         unit_of_measurement: "W"
         state_class: measurement
@@ -1435,7 +1435,7 @@ rest:
       - name: "Zendure 2400 AC Offgrid Modus"
         value_template: >
           {% set states = {0: "Normaal", 1: "Eco", 2: "Uitgeschakeld"} %}
-          {% set packState = value_json['properties']['gridOffMode'] | int %}
+          {% set packState = value_json.get('properties', {}).get('gridOffPower', 0) | int %}
           {{ states.get(packState, "Onbekend") }}
         unique_id: Zendure_2400_AC_Offgrid_Modus
         icon: >
@@ -1813,7 +1813,7 @@ rest:
         value_template: >
           {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
-          {% set grid_off = value_json['properties']['gridOffPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
           {% set pass = value_json['properties']['pass'] | int %}
           {% set ac_mode = value_json['properties']['acMode'] | int %}
@@ -1920,25 +1920,23 @@ rest:
 
       - name: "Zendure 2400 AC Modus"
         value_template: >
-          {% set ac_mode = value_json['properties']['acMode'] | int %}
-          {% set input_power = value_json['properties']['gridInputPower'] | int %}
-          {% set output_power = value_json['properties']['outputHomePower'] | int %}
-
-          {% if ac_mode == 1 and input_power > 0 %}
-           Opladen
-          {% elif ac_mode == 2 and output_power > 0 %}
-           Ontladen
+          {% set power = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+          {% if power > 0 %}
+            Opladen
+          {% elif power < 0 %}
+            Ontladen
           {% else %}
-           Standby
+            Standby
           {% endif %}
-        unique_id: Zendure_2400_AC_Modus
+        unique_id: zendure_2400_ac_modus
         icon: >
-          {% if this.state == 'Opladen' %}
-           mdi:battery-plus-variant
-          {% elif this.state == 'Ontladen' %}
-           mdi:battery-minus-variant
+          {% set power = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+          {% if power > 0 %}
+            mdi:battery-plus-variant
+          {% elif power < 0 %}
+            mdi:battery-minus-variant
           {% else %}
-           mdi:battery-outline
+            mdi:battery-outline
           {% endif %}
 
       - name: "Zendure 2400 AC Error"
