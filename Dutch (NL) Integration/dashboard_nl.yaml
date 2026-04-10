@@ -901,7 +901,7 @@ views:
                   size: 0
             visibility:
               - condition: state
-                entity: input_boolean.dashboard_setting_show_pv
+                entity: input_boolean.pv_tonen_op_dashboard
                 state: 'on'
       - type: grid
         cards:
