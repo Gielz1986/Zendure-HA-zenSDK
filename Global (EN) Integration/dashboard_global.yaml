@@ -616,6 +616,8 @@ views:
                   - condition: numeric_state
                     entity: sensor.zendure_power_pv_to_battery
                     above: 0
+                tap_action:
+                  action: more-info
               - type: entity
                 show_state: true
                 show_icon: true
@@ -626,6 +628,8 @@ views:
                   - condition: numeric_state
                     entity: sensor.zendure_power_pv_to_home
                     above: 0
+                tap_action:
+                  action: more-info
               - type: entity
                 show_state: true
                 show_icon: true
@@ -672,13 +676,14 @@ views:
               start: day
             series:
               - entity: sensor.zendure_power_pv_total
-                name: PV Total
+                name: Total
                 statistics:
                   period: 5minute
                   type: mean
                   align: start
                 type: area
                 stroke_width: 2
+                opacity: 0.35
                 extend_to: now
                 color: var(--accent-color)
                 float_precision: 0
@@ -687,6 +692,57 @@ views:
                   in_brush: true
                   in_header: false
                   in_legend: true
+                color_threshold:
+                  - value: 0
+                    opacity: 0.1
+                  - value: 100
+                    opacity: 0.15
+                  - value: 200
+                    opacity: 0.25
+                  - value: 300
+                    opacity: 0.3
+                  - value: 400
+                    opacity: 0.35
+                  - value: 500
+                    opacity: 0.4
+                  - value: 600
+                    opacity: 0.45
+                  - value: 700
+                    opacity: 0.5
+              - entity: sensor.zendure_power_pv_to_battery
+                name: To Battery
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                opacity: 0
+                stroke_width: 0
+                extend_to: now
+                color: '#01a180'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_brush: true
+                  in_header: false
+                  in_legend: false
+              - entity: sensor.zendure_power_pv_to_home
+                name: To Home
+                statistics:
+                  period: 5minute
+                  type: mean
+                  align: start
+                type: area
+                opacity: 0.35
+                stroke_width: 0
+                extend_to: now
+                color: '#c0c0c2'
+                float_precision: 0
+                yaxis_id: energy
+                show:
+                  in_brush: true
+                  in_header: false
+                  in_legend: false
             apex_config:
               tooltip:
                 x:
@@ -702,7 +758,8 @@ views:
                 axisBorder:
                   color: color-mix(in srgb, var(--divider-color) 50%, transparent)
               yaxis:
-                - title:
+                - min: 0
+                  title:
                     text: ''
                   decimalsInFloat: 0
                   labels:
@@ -716,31 +773,6 @@ views:
                 show: true
               chart:
                 height: 150px
-                toolbar:
-                  autoSelected: pan
-                  show: true
-                  tools:
-                    download: false
-                    zoom: true
-                    zoomin: false
-                    zoomout: false
-                    pan: true
-              fill:
-                type: gradient
-                gradient:
-                  shade: dark
-                  type: vertical
-                  shadeIntensity: 0.3
-                  inverseColors: true
-                  opacityFrom: 1
-                  opacityTo: 0.2
-                  stops:
-                    - 0
-                    - 100
-                zoom:
-                  enabled: true
-                  allowMouseWheelZoom: true
-                  autoScaleYaxis: true
               legend:
                 show: true
                 floating: true
@@ -750,7 +782,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "Electricity Level" || seriesName === "Home Energy Meter") return "";
+                    if(seriesName === "To Battery" || seriesName === "To Home") return "";
                     return seriesName;
                   }
               markers:
@@ -1834,7 +1866,7 @@ views:
                     name: Battery 6 Electricity Level
                 visibility:
                   - condition: numeric_state
-                    entity: sensor.zendure_2400_ac_aantal_batterijen
+                    entity: sensor.zendure_total_batteries
                     above: 5
       - type: grid
         cards:
