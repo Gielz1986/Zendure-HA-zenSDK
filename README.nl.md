@@ -57,7 +57,7 @@ homeassistant:
 ---
 
 
-![Preview](Images/Instellingen-220326.png) 
+![Preview](Images/NL-Settings-110426.png) 
 <sub>*plug-n-play dashboard</sub>
 
 <br>
@@ -85,7 +85,8 @@ homeassistant:
 | `dynamisch_minimale_spread` | **bijvoorbeeld 25%** - Hiermee geef je aan vanaf hoeveel spread de batterij dynamisch gaat laden en opladen op hoog vermogen.  |  
 | `dynamisch_15_minuten` | Vink dit aan wanneer je gebruik wilt maken van 15 minuten periodes  |  
 | **Configuratie (Dashboard)** |**Informatie**|  
-| `help_tonen_op_dashboard` | Vink dit aan om de helpteksten te tonen bij de meest relevante onderdelen.  |  
+| `help_tonen_op_dashboard` | Vink dit aan om de helpteksten te tonen bij de meest relevante onderdelen.  | 
+| `pv_tonen_op_dashboard` | Vink dit aan om de verbonden (offgrid/mppt) PV te tonen op het dashboard.  |  
 | `dynamisch_tonen_op_dashboard` | Vink dit aan om de dynamische sturing te tonen op het dashboard.  |  
 
 <br>
