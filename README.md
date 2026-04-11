@@ -77,7 +77,7 @@ homeassistant:
 | `zendure_setting_start_charging_at` | **(Recommended: -300W) -1000 to -100W** – Defines when charging starts |
 | `zendure_setting_charge_buffer` | **(Recommended: 50W) 0–250W** – Determines how much less to include during charging. In summer you can increase this (e.g. 200W) to prevent daytime grid import |
 | **Configuration (Discharging)** | **Information** |
-| `zendure_setting_max_discharge_power` | **800–2400W** – Maximum discharge power |
+| `zendure_setting_max_discharge_power` | **800–2400W** – Maximum discharge power (up to 4800W with multiple inverters via Node-RED) |
 | `zendure_setting_start_discharging_at` | **(Recommended: 100W) 100–500W** – Defines when discharging starts |
 | `zendure_setting_discharge_buffer` | **(Recommended: 5W) 0–250W** – Extra margin for discharging |
 | **Configuration (Optional)** | **Information** |
