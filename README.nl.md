@@ -134,6 +134,6 @@ Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in geb
 6. Klik rechtsboven op de 3 puntjes en kies **Ruwe configuratie-editor**.
 7. Plak de YAML-code uit het [Dashboard_nl.yaml](./Dutch%20(NL)%20Integration/dashboard_nl.yaml) bestand van deze GitHub.
 8. Sla op en het dashboard is volledig bruikbaar.
-9. [Ga naar de WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/3-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
+9. [Ga naar de WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/NL-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
 
 ![Preview](Images/Plug-N-Play-Dashboard.gif) 
