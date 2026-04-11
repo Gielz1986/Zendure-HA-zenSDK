@@ -60,7 +60,7 @@ homeassistant:
 
 ---
 
-![Preview](Images/Settings-300326.png)  
+![Preview](Images/Global-Settings-110426b.png)  
 <sub>*plug-n-play dashboard*</sub>
 
 <br>
@@ -89,6 +89,7 @@ homeassistant:
 | `dynamic_setting_15_minute_interval` | Enable this if you want to use 15-minute intervals |
 | **Configuration (Dashboard)** | **Information** |
 | `dashboard_setting_show_help` | Enable to show help text on the dashboard |
+| `dashboard_setting_show_pv` | Enable to show connected (offgrid/mppt) PV on the dashboard |
 | `dashboard_setting_show_dynamic` | Enable to show dynamic control on the dashboard |
 
 ---
