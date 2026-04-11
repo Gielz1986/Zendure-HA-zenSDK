@@ -45,6 +45,10 @@ input_boolean:
     name: Help Tonen Op Dashboard
     icon: mdi:information-outline
 
+  pv_tonen_op_dashboard:
+    name: PV Tonen Op Dashboard
+    icon: mdi:solar-panel
+
 input_text:
   zendure_2400_ac_batterij_volgorde:
     name: Zendure 2400 AC Batterij Volgorde
@@ -93,7 +97,7 @@ input_number:
     name: Zendure 2400 AC Max. Oplaadvermogen
     icon: mdi:format-vertical-align-top
     min: 800
-    max: 4800
+    max: 7200
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -102,7 +106,7 @@ input_number:
     name: Zendure 2400 AC Max. Ontlaadvermogen
     icon: mdi:format-vertical-align-bottom
     min: 800
-    max: 4800
+    max: 7200
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -155,8 +159,8 @@ input_number:
   zendure_2400_ac_handmatig_vermogen:
     name: Zendure 2400 AC Handmatig Vermogen
     icon: mdi:flash
-    min: -4800
-    max: 4800
+    min: -7200
+    max: 7200
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -249,6 +253,14 @@ sensor:
       hours: 24
 
   - platform: integration
+    name: "Zendure 2400 AC PV Import"
+    unique_id: zendure_2400_ac_pv_import
+    source: sensor.zendure_2400_ac_vermogen_pv_totaal
+    unit_prefix: k
+    round: 2
+    method: trapezoidal
+
+  - platform: integration
     name: "Zendure 2400 AC Energie Import"
     unique_id: zendure_2400_ac_energie_import
     source: sensor.zendure_2400_ac_vermogen_import
@@ -276,8 +288,14 @@ sensor:
       - name
       - published_at
       - body
-    value_template: "{{ value_json.tag_name }}"
+    value_template: "{{ value_json.name }}"
     icon: mdi:github
+
+utility_meter:
+  zendure_2400_ac_pv_import_dagelijks:
+    source: sensor.zendure_2400_ac_pv_import
+    name: Zendure 2400 AC PV Import Dagelijks
+    cycle: daily
 
 template:
   - binary_sensor:
@@ -292,27 +310,65 @@ template:
             mdi:flash
           {% endif %}
 
+  - trigger:
+      - platform: state
+        entity_id: sensor.zendure_2400_ac_laadpercentage
+        to: "100"
+
+    sensor:
+      - name: "Zendure 2400 AC Laatste Kalibratie"
+        unique_id: Zendure_2400_AC_Laatste_Kalibratie
+        device_class: timestamp
+        icon: mdi:sync
+        state: >
+          {% if trigger.platform == 'state' %}
+            {{ now().isoformat() }}
+          {% else %}
+            {{ this.state }}
+          {% endif %}
+
   - sensor:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "(April 2026) v20260312"
+        state: "v20260411"
+
+      - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
+        unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
+        unit_of_measurement: "d"
+        state: >
+         {% set last = states('sensor.zendure_2400_ac_laatste_kalibratie') %}
+         {% if last in ['unknown','unavailable',''] %}
+           0
+         {% else %}
+         {{ (now().date() - as_datetime(last).date()).days }}
+         {% endif %}
+        icon: >
+         {% if this.state | int(0) < 29 %}
+           mdi:thumb-up
+         {% else %}
+           mdi:thumb-down
+         {% endif %}
 
       - name: "Zendure-HA-Zensdk Github Releasecheck"
         unique_id: zendure_ha_zensdk_github_releasecheck
         state: >
           {% set config_date = states('sensor.zendure_2400_ac_configuratie_versie')
-             | regex_findall('v(\d{8})') | first %}
-          {% set github_date = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name')
-             | regex_replace('v','') %}
+            | regex_findall('v(\d{8})') | first %}
+          {% set github_raw = state_attr('sensor.github_zendure_ha_zensdk_gielz1986', 'tag_name') %}
+          {% if github_raw in ['unknown', 'unavailable', None] %}
+          {% set github_date = None %}
+          {% else %}
+          {% set github_date = github_raw | regex_replace('v','') %}
+          {% endif %}
           {% if config_date and github_date %}
-            {% if config_date > github_date %}
-              Pre-release actief
-            {% elif config_date < github_date %}
-              Nieuwe release op GitHub
-            {% else %}
-              Up-to-date
-            {% endif %}
+          {% if config_date > github_date %}
+            Pre-release actief
+          {% elif config_date < github_date %}
+            Nieuwe release op GitHub
+          {% else %}
+            Up-to-date
+          {% endif %}
           {% else %}
             Onbekend
           {% endif %}
@@ -403,7 +459,7 @@ template:
               {% endif %}
             {% endif %}
           {% else %}
-            unknown
+            0
           {% endif %}
         attributes:
           raw_today: >-
@@ -516,7 +572,7 @@ template:
             {% else %}
               0
             {% endif %}
-            
+
       - name: "Dynamisch Spread Indicatie"
         unique_id: dynamisch_spread_indicatie
         icon: mdi:percent-box
@@ -1238,6 +1294,20 @@ template:
         attributes:
           totale_capaciteit_kwh: >
             {{ states('sensor.zendure_2400_ac_totale_capaciteit') }}
+          indicatie_beschikbare_energie_(zonder_verlies): >
+            {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+            {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
+            {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
+            {% set totale_capaciteit = states('sensor.zendure_2400_ac_totale_capaciteit') | float(0) %}
+
+            {% set effectief_laad = [laad, max_laad] | min %}
+            {% set bruikbaar_percentage = effectief_laad - min_laad %}
+
+            {% if bruikbaar_percentage <= 0 %}
+              0
+            {% else %}
+              {{ (bruikbaar_percentage / 100 * totale_capaciteit) | round(2) }}
+            {% endif %}
           bruikbaar_percentage: >
             {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
             {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
@@ -1283,6 +1353,102 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC PV Doorvoer"
+        value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set states = {0: "Batterij", 2: "Huis"} %}
+          {% set packState = value_json['properties']['pass'] | int %}
+          {{ states.get(packState, "Onbekend") if pv_active else "PV Offline" }}
+        unique_id: Zendure_2400_AC_PV_Doorvoer
+        icon: mdi:arrow-decision
+
+      - name: "Zendure 2400 AC Vermogen PV Naar Huis"
+        value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set home = value_json['properties']['outputHomePower'] | float(0) %}
+          {% set pack_in = value_json['properties']['packInputPower'] | float(0) %}
+          {{ (home - pack_in) | round(1) if pv_active else 0 }}
+        unique_id: Zendure_2400_AC_Vermogen_PV_Naar_Huis
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure 2400 AC Vermogen PV Totaal"
+        value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {{ (solar + (0 - grid_off if grid_off < 0 else 0)) if pv_active else 0 }}
+        unique_id: Zendure_2400_AC_Vermogen_PV_Totaal
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure 2400 AC Vermogen PV Naar Batterij"
+        value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set pack = value_json['properties']['outputPackPower'] | float(0) %}
+          {% set grid = value_json['properties']['gridInputPower'] | float(0) %}
+          {{ (pack - grid) | round(1) if pv_active else 0 }}
+        unique_id: Zendure_2400_AC_Vermogen_PV_Naar_Batterij
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure 2400 AC Vermogen Van Huis"
+        value_template: >
+          {% set grid_in = value_json['properties']['gridInputPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
+          {{ (grid_in - (grid_off if grid_off > 0 else 0)) | round(1) }}
+        unique_id: Zendure_2400_AC_Vermogen_Van_Huis
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure 2400 AC Vermogen Naar Huis"
+        value_template: >
+          {% set pack_out = value_json['properties']['packInputPower'] | float(0) %}
+          {{ pack_out | round(1) }}
+        unique_id: Zendure_2400_AC_Vermogen_Naar_Huis
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure 2400 AC Vermogen Offgrid Stopcontact 1"
+        value_template: "{{ value_json.get('properties', {}).get('gridOffPower', 0) | int }}"
+        unique_id: Zendure_2400_AC_Vermogen_Offgrid_Stopcontact_1
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        icon: mdi:power-plug
+
+      - name: "Zendure 2400 AC Offgrid Modus"
+        value_template: >
+          {% set states = {0: "Normaal", 1: "Eco", 2: "Uitgeschakeld"} %}
+          {% set packState = value_json.get('properties', {}).get('gridOffMode', 2) | int %}
+          {{ states.get(packState, "Onbekend") }}
+        unique_id: Zendure_2400_AC_Offgrid_Modus
+        icon: >
+         {% if this.state == 'Normaal' %}
+          mdi:power-plug
+         {% elif this.state == 'Eco' %}
+          mdi:power-plug
+         {% elif this.state == 'Uitgeschakeld' %}
+          mdi:power-plug-off
+         {% else %}
+          mdi:power-plug-outline
+         {% endif %}
+
       - name: "Zendure 2400 AC Productserie"
         unique_id: Zendure_2400_AC_Productserie
         value_template: "{{ value_json.product }}"
@@ -1645,12 +1811,32 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen Aansturing"
         value_template: >
-          {% set opladen = value_json['properties']['gridInputPower'] | int %}
-          {% set ontladen = - (value_json['properties']['outputHomePower'] | int) %}
-          {% if opladen != 0 %}
-            {{ opladen }}
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set pass = value_json['properties']['pass'] | int %}
+          {% set ac_mode = value_json['properties']['acMode'] | int %}
+          {% if not pv_active %}
+            {% set opladen = value_json['properties']['outputPackPower'] | float(0) %}
+            {% set ontladen = - (value_json['properties']['packInputPower'] | float(0)) %}
+            {{ opladen if opladen != 0 else ontladen }}
           {% else %}
-            {{ ontladen }}
+            {% set opladen = value_json['properties']['gridInputPower'] | float(0) %}
+            {% set opladen_vol = value_json['properties']['outputPackPower'] | float(0) %}
+            {% set ontladen = - (value_json['properties']['outputHomePower'] | float(0)) %}
+            {% if pass == 2 %}
+              {% set result = opladen_vol %}
+            {% elif opladen != 0 %}
+              {% set result = opladen %}
+            {% else %}
+              {% set result = ontladen %}
+            {% endif %}
+            {% if ac_mode == 1 and result < 0 %}
+              0
+            {% else %}
+              {{ result }}
+            {% endif %}
           {% endif %}
         unique_id: Zendure_2400_AC_Vermogen_Aansturing
         unit_of_measurement: "W"
@@ -1680,14 +1866,21 @@ rest:
 
       - name: "Zendure 2400 AC Resterende Ontlaad Tijd"
         value_template: >
-         {% set vermogen_aansturing = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
-         {% if vermogen_aansturing < 0 %}
-         {% set total_minutes = value_json['properties']['remainOutTime'] | float(0) %}
-         {% set hours = (total_minutes // 60) | int %}
-         {% set minutes = (total_minutes % 60) | int %}
-          {{ hours }}u {{ minutes }}m
+         {% set vermogen = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+         {% set energie = states('sensor.zendure_2400_ac_indicatie_beschikbare_energie') | float(0) %}
+         {% if vermogen < 0 %}
+         {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
+         {% if ontlaadvermogen_kw > 0 %}
+           {% set uren = energie / ontlaadvermogen_kw %}
+           {% set total_minutes = (uren * 60) | int %}
+           {% set hours = total_minutes // 60 %}
+           {% set minutes = total_minutes % 60 %}
+           {{ hours }}u {{ minutes }}m
          {% else %}
-          Niet aan het ontladen
+           Onbekend
+         {% endif %}
+         {% else %}
+           Niet aan het ontladen
          {% endif %}
         icon: mdi:clock-time-eight-outline
         unique_id: zendure_2400_ac_resterende_ontlaad_tijd
@@ -1727,25 +1920,23 @@ rest:
 
       - name: "Zendure 2400 AC Modus"
         value_template: >
-          {% set ac_mode = value_json['properties']['acMode'] | int %}
-          {% set input_power = value_json['properties']['gridInputPower'] | int %}
-          {% set output_power = value_json['properties']['outputHomePower'] | int %}
-
-          {% if ac_mode == 1 and input_power > 0 %}
-           Opladen
-          {% elif ac_mode == 2 and output_power > 0 %}
-           Ontladen
+          {% set power = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+          {% if power > 0 %}
+            Opladen
+          {% elif power < 0 %}
+            Ontladen
           {% else %}
-           Standby
+            Standby
           {% endif %}
         unique_id: Zendure_2400_AC_Modus
         icon: >
-          {% if this.state == 'Opladen' %}
-           mdi:battery-plus-variant
-          {% elif this.state == 'Ontladen' %}
-           mdi:battery-minus-variant
+          {% set power = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+          {% if power > 0 %}
+            mdi:battery-plus-variant
+          {% elif power < 0 %}
+            mdi:battery-minus-variant
           {% else %}
-           mdi:battery-outline
+            mdi:battery-outline
           {% endif %}
 
       - name: "Zendure 2400 AC Error"
@@ -1756,12 +1947,12 @@ rest:
         unique_id: Zendure_2400_AC_Error
         icon: mdi:battery-alert
 
-      - name: "Zendure 2400 AC SOC Status"
+      - name: "Zendure 2400 AC Kalibreren"
         value_template: >
-          {% set states = {0: "Goed", 1: "Kalibreren"} %}
+          {% set states = {0: "Nee", 1: "Ja"} %}
           {% set packState = value_json['properties']['socStatus'] | int %}
           {{ states.get(packState, "Onbekend") }}
-        unique_id: Zendure_2400_AC_SOC_Status
+        unique_id: Zendure_2400_AC_Kalibreren
         icon: mdi:battery-heart-variant
 
       - name: "Zendure 2400 AC Ingesteld Ontlaadvermogen"
