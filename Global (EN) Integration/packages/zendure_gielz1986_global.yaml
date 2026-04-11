@@ -38,7 +38,7 @@ input_boolean:
     icon: mdi:battery-check
 
   dashboard_setting_show_dynamic:
-    name: Show Dynamic On Dasbhaord
+    name: Show Dynamic On Dashboard
     icon: mdi:cash
 
   dashboard_setting_show_help:
@@ -331,7 +331,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260410"
+        state: "v20260411"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
