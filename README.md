@@ -81,7 +81,7 @@ homeassistant:
 | `zendure_setting_start_discharging_at` | **(Recommended: 100W) 100–500W** – Defines when discharging starts |
 | `zendure_setting_discharge_buffer` | **(Recommended: 5W) 0–250W** – Extra margin for discharging |
 | **Configuration (Optional)** | **Information** |
-| `home_energy_setting_meter_sensor` | **e.g. sensor.custom_energy** – Add your own home energy sensor (+watt import / -watt export). This will take priority. [Go to WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/2-%E2%80%90-Global-and-NL-%E2%80%90-P1-CT-meters-(API's))) for P1/CT API's. |
+| `home_energy_setting_meter_sensor` | **e.g. sensor.custom_energy** – Add your own home energy sensor (+watt import / -watt export). This will take priority. [Go to WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-and-NL-%E2%80%90-P1-CT-meters-(API's))) for P1/CT API's. |
 | `zendure_setting_battery_order` | **e.g. 1;5;3;4;2** – Manually define battery order based on serial numbers and physical stacking |
 | **Configuration (Dynamic)** | **Information** |
 | `dynamic_setting_nordpool_sensor` | **e.g. sensor.nordpool_kwh_nl_eur_3_09_0** – Your Nordpool (HACS) sensor |
