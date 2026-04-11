@@ -53,7 +53,7 @@ views:
               of the different operation modes, see the wiki:  
 
               [Operation Modes (GitHub
-              Wiki)](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/4-%E2%80%90-De-verschillende-modussen)
+              Wiki)](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Operation-modes)
             text_only: true
             visibility:
               - condition: state
@@ -2760,7 +2760,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            heading: Logbook (Last 4 hours)
+            heading: Logbook (last 4 hours)
             heading_style: title
             badges:
               - type: button
