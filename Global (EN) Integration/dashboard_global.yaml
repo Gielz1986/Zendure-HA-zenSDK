@@ -34,7 +34,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: sensor.zendure_total_electricity_level
+                entity: sensor.zendure_total_state_of_charge
                 color: '#01a180'
                 tap_action:
                   action: more-info
@@ -174,7 +174,7 @@ views:
                   in_brush: true
                   in_header: false
                   in_legend: false
-              - entity: sensor.zendure_total_electricity_level
+              - entity: sensor.zendure_total_state_of_charge
                 name: Electricity Level
                 statistics:
                   period: 5minute
@@ -353,7 +353,7 @@ views:
                   in_brush: true
                   in_header: false
                   in_legend: false
-              - entity: sensor.zendure_total_electricity_level
+              - entity: sensor.zendure_total_state_of_charge
                 name: Electricity Level
                 statistics:
                   period: 5minute
@@ -1391,10 +1391,10 @@ views:
                 name: Storage Mode
               - entity: sensor.zendure_battery_voltage
                 name: Battery Voltage
-              - entity: sensor.zendure_minimum_electricity_level
-                name: Min. Electricity Level (SOC)
-              - entity: sensor.zendure_maximum_electricity_level
-                name: Max. Electricity Level (SOC)
+              - entity: sensor.zendure_minimum_state_of_charge
+                name: Min. State Of Charge
+              - entity: sensor.zendure_maximum_state_of_charge
+                name: Max. State Of Charge
           - type: heading
             icon: ''
             heading: Relay Switches
@@ -1586,7 +1586,7 @@ views:
                 axisBorder:
                   color: color-mix(in srgb, var(--divider-color) 50%, transparent)
             series:
-              - entity: sensor.zendure_total_electricity_level
+              - entity: sensor.zendure_total_state_of_charge
                 name: Calibration Finished
                 transform: |
                   return x === 100 ? x : null;
@@ -1599,7 +1599,7 @@ views:
                 show:
                   in_header: false
                   extremas: false
-              - entity: sensor.zendure_total_electricity_level
+              - entity: sensor.zendure_total_state_of_charge
                 name: No Calibration
                 transform: |
                   return x < 100 ? x : null;
@@ -1747,8 +1747,8 @@ views:
                 entities:
                   - entity: sensor.zendure_battery_1_temperature
                     name: Battery 1 Temperature
-                  - entity: sensor.zendure_battery_1_electricity_level
-                    name: Battery 1 Electricity Level
+                  - entity: sensor.zendure_battery_1_state_of_charge
+                    name: Battery 1 State Of Charge
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1760,10 +1760,10 @@ views:
                     name: Battery 1 Temperature
                   - entity: sensor.zendure_battery_2_temperature
                     name: Battery 2 Temperature
-                  - entity: sensor.zendure_battery_1_electricity_level
-                    name: Battery 1 Electricity Level
-                  - entity: sensor.zendure_battery_2_electricity_level
-                    name: Battery 2 Electricity Level
+                  - entity: sensor.zendure_battery_1_state_of_charge
+                    name: Battery 1 State Of Charge
+                  - entity: sensor.zendure_battery_2_state_of_charge
+                    name: Battery 2 State Of Charge
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1777,12 +1777,12 @@ views:
                     name: Battery 2 Temperature
                   - entity: sensor.zendure_battery_3_temperature
                     name: Battery 3 Temperature
-                  - entity: sensor.zendure_battery_1_electricity_level
-                    name: Battery 1 Electricity Level
-                  - entity: sensor.zendure_battery_2_electricity_level
-                    name: Battery 2 Electricity Level
-                  - entity: sensor.zendure_battery_3_electricity_level
-                    name: Battery 3 Electricity Level
+                  - entity: sensor.zendure_battery_1_state_of_charge
+                    name: Battery 1 State Of Charge
+                  - entity: sensor.zendure_battery_2_state_of_charge
+                    name: Battery 2 State Of Charge
+                  - entity: sensor.zendure_battery_3_state_of_charge
+                    name: Battery 3 State Of Charge
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1798,14 +1798,14 @@ views:
                     name: Battery 3 Temperature
                   - entity: sensor.zendure_battery_4_temperature
                     name: Battery 4 Temperature
-                  - entity: sensor.zendure_battery_1_electricity_level
-                    name: Battery 1 Electricity Level
-                  - entity: sensor.zendure_battery_2_electricity_level
-                    name: Battery 2 Electricity Level
-                  - entity: sensor.zendure_battery_3_electricity_level
-                    name: Battery 3 Electricity Level
-                  - entity: sensor.zendure_battery_4_electricity_level
-                    name: Battery 4 Electricity Level
+                  - entity: sensor.zendure_battery_1_state_of_charge
+                    name: Battery 1 State Of Charge
+                  - entity: sensor.zendure_battery_2_state_of_charge
+                    name: Battery 2 State Of Charge
+                  - entity: sensor.zendure_battery_3_state_of_charge
+                    name: Battery 3 State Of Charge
+                  - entity: sensor.zendure_battery_4_state_of_charge
+                    name: Battery 4 State Of Charge
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1823,16 +1823,16 @@ views:
                     name: Battery 4 Temperature
                   - entity: sensor.zendure_battery_5_temperature
                     name: Battery 5 Temperature
-                  - entity: sensor.zendure_battery_1_electricity_level
-                    name: Battery 1 Electricity Level
-                  - entity: sensor.zendure_battery_2_electricity_level
-                    name: Battery 2 Electricity Level
-                  - entity: sensor.zendure_battery_3_electricity_level
-                    name: Battery 3 Electricity Level
-                  - entity: sensor.zendure_battery_4_electricity_level
-                    name: Battery 4 Electricity Level
-                  - entity: sensor.zendure_battery_5_electricity_level
-                    name: Battery 5 Electricity Level
+                  - entity: sensor.zendure_battery_1_state_of_charge
+                    name: Battery 1 State Of Charge
+                  - entity: sensor.zendure_battery_2_state_of_charge
+                    name: Battery 2 State Of Charge
+                  - entity: sensor.zendure_battery_3_state_of_charge
+                    name: Battery 3 State Of Charge
+                  - entity: sensor.zendure_battery_4_state_of_charge
+                    name: Battery 4 State Of Charge
+                  - entity: sensor.zendure_battery_5_state_of_charge
+                    name: Battery 5 State Of Charge
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1852,18 +1852,18 @@ views:
                     name: Battery 5 Temperature
                   - entity: sensor.zendure_battery_6_temperature
                     name: Battery 6 Temperature
-                  - entity: sensor.zendure_battery_1_electricity_level
-                    name: Battery 1 Electricity Level
-                  - entity: sensor.zendure_battery_2_electricity_level
-                    name: Battery 2 Electricity Level
-                  - entity: sensor.zendure_battery_3_electricity_level
-                    name: Battery 3 Electricity Level
-                  - entity: sensor.zendure_battery_4_electricity_level
-                    name: Battery 4 Electricity Level
-                  - entity: sensor.zendure_battery_5_electricity_level
-                    name: Battery 5 Electricity Level
-                  - entity: sensor.zendure_battery_6_electricity_level
-                    name: Battery 6 Electricity Level
+                  - entity: sensor.zendure_battery_1_state_of_charge
+                    name: Battery 1 State Of Charge
+                  - entity: sensor.zendure_battery_2_state_of_charge
+                    name: Battery 2 State Of Charge
+                  - entity: sensor.zendure_battery_3_state_of_charge
+                    name: Battery 3 State Of Charge
+                  - entity: sensor.zendure_battery_4_state_of_charge
+                    name: Battery 4 State Of Charge
+                  - entity: sensor.zendure_battery_5_state_of_charge
+                    name: Battery 5 State Of Charge
+                  - entity: sensor.zendure_battery_6_state_of_charge
+                    name: Battery 6 State Of Charge
                 visibility:
                   - condition: numeric_state
                     entity: sensor.zendure_total_batteries
@@ -2120,7 +2120,7 @@ views:
               - type: entity
                 show_state: true
                 show_icon: true
-                entity: sensor.zendure_total_electricity_level
+                entity: sensor.zendure_total_state_of_charge
                 color: '#01a180'
                 tap_action:
                   action: more-info
@@ -2240,7 +2240,7 @@ views:
                       in_brush: true
                       in_header: false
                       in_legend: false
-                  - entity: sensor.zendure_total_electricity_level
+                  - entity: sensor.zendure_total_state_of_charge
                     name: Electricity Level
                     statistics:
                       period: 5minute
@@ -2475,7 +2475,7 @@ views:
               rows: auto
             text_only: true
             content: >
-              {% set product = states('sensor.zendure_productserie') %}
+              {% set product = states('sensor.zendure_product_model') %}
 
               {% if product == 'solarFlow2400AC' %} <img
               src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
@@ -2506,7 +2506,7 @@ views:
               width="100"> {% endif %}
           - type: markdown
             content: >-
-              {% set product = states('sensor.zendure_productserie') %} {% if
+              {% set product = states('sensor.zendure_product_model') %} {% if
               product == 'solarFlow2400AC' %} **Solarflow 2400 AC** {% elif
               product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {% elif
               product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {% elif
@@ -2516,7 +2516,7 @@ views:
               **Onbekend** {% endif %} ({{
               states('sensor.zendure_total_capacity') }} kWh)
 
-              {{ states('sensor.zendure_serienumber') }}
+              {{ states('sensor.zendure_serial_number') }}
             grid_options:
               columns: 9
               rows: auto
