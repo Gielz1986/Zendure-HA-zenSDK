@@ -294,6 +294,7 @@ sensor:
 utility_meter:
   zendure_pv_import_daily:
     source: sensor.zendure_pv_import
+    unique_id: utility_meter.zendure_pv_import_daily
     name: Zendure PV Import Daily
     cycle: daily
 
@@ -312,7 +313,7 @@ template:
 
   - trigger:
       - platform: state
-        entity_id: sensor.zendure_total_electricity_level
+        entity_id: sensor.zendure_total_state_of_charge
         to: "100"
 
     sensor:
@@ -331,7 +332,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260411"
+        state: "v20260412"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1266,9 +1267,9 @@ template:
         device_class: energy
         icon: mdi:lightning-bolt-circle
         state: >
-          {% set laad = states('sensor.zendure_total_electricity_level') | float(0) %}
-          {% set min_laad = states('sensor.zendure_minimum_electricity_level') | float(0) %}
-          {% set max_laad = states('sensor.zendure_maximum_electricity_level') | float(100) %}
+          {% set laad = states('sensor.zendure_total_state_of_charge') | float(0) %}
+          {% set min_laad = states('sensor.zendure_minimum_state_of_charge') | float(0) %}
+          {% set max_laad = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
           {% set totale_capaciteit = states('sensor.zendure_total_capacity') | float(0) %}
 
           {% set export_eff = states('sensor.zendure_export_efficiency_24h') | float(0) %}
@@ -1295,9 +1296,9 @@ template:
           total_capacity_kwh: >
             {{ states('sensor.zendure_total_capacity') }}
           indication_available_energy_(without_loss): >
-            {% set laad = states('sensor.zendure_total_electricity_level') | float(0) %}
-            {% set min_laad = states('sensor.zendure_minimum_electricity_level') | float(0) %}
-            {% set max_laad = states('sensor.zendure_maximum_electricity_level') | float(100) %}
+            {% set laad = states('sensor.zendure_total_state_of_charge') | float(0) %}
+            {% set min_laad = states('sensor.zendure_minimum_state_of_charge') | float(0) %}
+            {% set max_laad = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
             {% set totale_capaciteit = states('sensor.zendure_total_capacity') | float(0) %}
 
             {% set effectief_laad = [laad, max_laad] | min %}
@@ -1309,9 +1310,9 @@ template:
               {{ (bruikbaar_percentage / 100 * totale_capaciteit) | round(2) }}
             {% endif %}
           usable_percentage: >
-            {% set laad = states('sensor.zendure_total_electricity_level') | float(0) %}
-            {% set min_laad = states('sensor.zendure_minimum_electricity_level') | float(0) %}
-            {% set max_laad = states('sensor.zendure_maximum_electricity_level') | float(100) %}
+            {% set laad = states('sensor.zendure_total_state_of_charge') | float(0) %}
+            {% set min_laad = states('sensor.zendure_minimum_state_of_charge') | float(0) %}
+            {% set max_laad = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
             {{ ([laad, max_laad] | min - min_laad) | round(1) }} %
           used_export_efficiency: >
             {% set export_eff = states('sensor.zendure_export_efficiency_24h') | float(0) %}
@@ -1449,8 +1450,8 @@ rest:
           mdi:power-plug-outline
          {% endif %}
 
-      - name: "Zendure Productserie"
-        unique_id: zendure_productserie
+      - name: "Zendure Product Model"
+        unique_id: zendure_product_model
         value_template: "{{ value_json.product }}"
         icon: mdi:identifier
 
@@ -1511,7 +1512,7 @@ rest:
           mdi:battery-outline
          {% endif %}
           
-      - name: "Zendure Battery Serienumbers"
+      - name: "Zendure Battery Serial Numbers"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
           {% set packdata = value_json['packData'] %}
@@ -1532,10 +1533,10 @@ rest:
             {% endfor %}
           {% endif %}
           {{ ns.sn_list | join('\n') }}
-        unique_id: zendure_battery_serienumbers
+        unique_id: zendure_battery_serinumbers
         icon: mdi:identifier
 
-      - name: "Zendure Battery 1 Electricity Level"
+      - name: "Zendure Battery 1 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
           {% set packdata = value_json['packData'] %}
@@ -1547,12 +1548,12 @@ rest:
             {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
             {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
           {% endif %}
-        unique_id: "zendure_battery_1_electricity_level"
+        unique_id: "zendure_battery_1_state_of_charge"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
 
-      - name: "Zendure Battery 2 Electricity Level"
+      - name: "Zendure Battery 2 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
           {% set packdata = value_json['packData'] %}
@@ -1564,12 +1565,12 @@ rest:
             {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
             {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
           {% endif %}
-        unique_id: "zendure_battery_2_electricity_level"
+        unique_id: "zendure_battery_2_state_of_charge"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
 
-      - name: "Zendure Battery 3 Electricity Level"
+      - name: "Zendure Battery 3 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
           {% set packdata = value_json['packData'] %}
@@ -1581,12 +1582,12 @@ rest:
             {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
             {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
           {% endif %}
-        unique_id: "zendure_battery_3_electricity_level"
+        unique_id: "zendure_battery_3_state_of_charge"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
 
-      - name: "Zendure Battery 4 Electricity Level"
+      - name: "Zendure Battery 4 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
           {% set packdata = value_json['packData'] %}
@@ -1598,12 +1599,12 @@ rest:
             {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
             {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
           {% endif %}
-        unique_id: "zendure_battery_4_electricity_level"
+        unique_id: "zendure_battery_4_state_of_charge"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
 
-      - name: "Zendure Battery 5 Electricity Level"
+      - name: "Zendure Battery 5 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
           {% set packdata = value_json['packData'] %}
@@ -1615,12 +1616,12 @@ rest:
             {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
             {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
           {% endif %}
-        unique_id: "zendure_battery_5_electricity_level"
+        unique_id: "zendure_battery_5_state_of_charge"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
 
-      - name: "Zendure Battery 6 Electricity Level"
+      - name: "Zendure Battery 6 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
           {% set packdata = value_json['packData'] %}
@@ -1632,7 +1633,7 @@ rest:
             {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
             {{ packdata[idx]['socLevel'] if idx < packdata | length else 'unknown' }}
           {% endif %}
-        unique_id: "zendure_battery_6_electricity_level"
+        unique_id: "zendure_battery_6_state_of_charge"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
@@ -1645,8 +1646,8 @@ rest:
           {{ states.get(packState, "Onbekend") }}
         icon: mdi:swap-vertical-bold
         
-      - name: "Zendure Serienumber"
-        unique_id: zendure_serienumber
+      - name: "Zendure Serial Number"
+        unique_id: zendure_serial_number
         value_template: "{{ value_json.sn }}"
         icon: mdi:identifier
 
@@ -1864,7 +1865,7 @@ rest:
         device_class: voltage
         icon: mdi:sine-wave
 
-      - name: "Zendure Indication Remaining  Discharge Time"
+      - name: "Zendure Indication Remaining Discharge Time"
         value_template: >
          {% set vermogen = states('sensor.zendure_power') | float(0) %}
          {% set energie = states('sensor.zendure_indication_available_energy') | float(0) %}
@@ -1895,27 +1896,27 @@ rest:
         device_class: temperature
         icon: mdi:thermometer
 
-      - name: "Zendure Total Electricity Level"
+      - name: "Zendure Total State Of Charge"
         value_template: "{{ value_json['properties']['electricLevel'] }}"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
-        unique_id: zendure_total_electricity_level
+        unique_id: zendure_total_state_of_charge
 
-      - name: "Zendure Minimum Electricity Level"
+      - name: "Zendure Minimum State Of Charge"
         value_template: "{{ (value_json['properties']['minSoc'] | int / 10) | int }}"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
-        unique_id: zendure_minimum_electricity_level
+        unique_id: zendure_minimum_state_of_charge
         icon: mdi:battery-high
 
-      - name: "Zendure Maximum Electricity Level"
+      - name: "Zendure Maximum State Of Charge"
         value_template: "{{ (value_json['properties']['socSet'] | int / 10) | int }}"
         device_class: battery
         unit_of_measurement: "%"
         state_class: measurement
-        unique_id: zendure_maximum_electricity_level
+        unique_id: zendure_maximum_state_of_charge
         icon: mdi:battery-high
 
       - name: "Zendure Charging Mode"
