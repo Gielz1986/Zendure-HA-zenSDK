@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260411)
+description: Configuration Version (v20260412)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -64,7 +64,7 @@ actions:
         sequence:
           - action: rest_command.zendure_full_standby
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: logbook.log
             data:
               message: ⚠️Switch storage mode to Flash —
@@ -87,7 +87,7 @@ actions:
               value: 0
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Manual
       - conditions:
           - condition: trigger
@@ -98,7 +98,7 @@ actions:
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Smart Matching
       - conditions:
           - condition: trigger
@@ -109,7 +109,7 @@ actions:
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Dynamic Smart Matching
       - conditions:
           - condition: trigger
@@ -121,7 +121,7 @@ actions:
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Dynamic Smart Matching (Expensive)
       - conditions:
           - condition: trigger
@@ -133,7 +133,7 @@ actions:
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Dynamic Trading
       - conditions:
           - condition: trigger
@@ -144,7 +144,7 @@ actions:
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Smart Charge Only
       - conditions:
           - condition: trigger
@@ -155,7 +155,7 @@ actions:
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Smart Discharge Only
       - conditions:
           - condition: trigger
@@ -167,7 +167,7 @@ actions:
         sequence:
           - action: rest_command.zendure_quick_discharge
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               outputLimit: >-
                 {{ states('input_number.zendure_setting_max_discharge_power') |
                 int }}
@@ -182,7 +182,7 @@ actions:
         sequence:
           - action: rest_command.zendure_quick_charge
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: >-
                 {{ states('input_number.zendure_setting_max_charge_power') | int
                 }}
@@ -214,7 +214,7 @@ actions:
         sequence:
           - action: rest_command.zendure_save_in_ram
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: logbook.log
             data:
               message: ⚠️Switch storage mode to RAM —
@@ -244,7 +244,7 @@ actions:
         sequence:
           - action: rest_command.zendure_full_standby
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: logbook.log
             data:
               message: >-
@@ -261,15 +261,14 @@ actions:
           - condition: or
             conditions:
               - condition: template
-                value_template: >
-                  {{ (states('sensor.zendure_total_electricity_level') | float)
-                  <
-                     states('sensor.zendure_minimum_electricity_level') | float }}
+                value_template: |
+                  {{ (states('sensor.zendure_total_state_of_charge') | float) <
+                     states('sensor.zendure_minimum_state_of_charge') | float }}
               - condition: template
                 value_template: >
-                  {{ (states('sensor.zendure_total_electricity_level') | float |
+                  {{ (states('sensor.zendure_total_state_of_charge') | float |
                   round(0) ==
-                      states('sensor.zendure_minimum_electricity_level') | float | round(0))
+                      states('sensor.zendure_minimum_state_of_charge') | float | round(0))
                      and
                      (states('sensor.zendure_set_charge_power') | float == 1200) }}
             alias: SOC does not match minimum configured SOC
@@ -308,6 +307,7 @@ actions:
                 value_template: |
                   {{ states('sensor.home_energy_meter_power') | float(0)
                      < states('input_number.zendure_setting_start_charging_at') | float(0) }}
+            enabled: false
           - condition: and
             conditions:
               - condition: state
@@ -320,20 +320,20 @@ actions:
                   - "off"
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: >
-                {% set soc = states('sensor.zendure_total_electricity_level') |
+                {% set soc = states('sensor.zendure_total_state_of_charge') |
                 float | round(0) %} {% set min_soc =
-                states('sensor.zendure_minimum_electricity_level') | float |
+                states('sensor.zendure_minimum_state_of_charge') | float |
                 round(0) %} {{ 1200 if soc < min_soc else 0 }}
             action: rest_command.zendure_x_charge
           - action: logbook.log
             data:
               message: >
                 ⚠️Battery SOC protection active — Power set to {% set soc =
-                states('sensor.zendure_total_electricity_level') | float |
+                states('sensor.zendure_total_state_of_charge') | float |
                   round(0) %} {% set min_soc =
-                  states('sensor.zendure_minimum_electricity_level') | float | round(0) %}
+                  states('sensor.zendure_minimum_state_of_charge') | float | round(0) %}
                   {{ 1200 if soc < min_soc else 0 }} watt —
               entity_id: input_select.zendure_operation_mode
               name: " "
@@ -359,7 +359,7 @@ actions:
                       - aansturing_trigger
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               instellingitem: chargeMaxLimit
               instellinginhoud: >-
                 {{ states('input_number.zendure_setting_max_charge_power') | int
@@ -395,7 +395,7 @@ actions:
                       - aansturing_trigger
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               instellingitem: inverseMaxPower
               instellinginhoud: >-
                 {{ states('input_number.zendure_setting_max_discharge_power') |
@@ -573,7 +573,7 @@ actions:
         sequence:
           - action: rest_command.zendure_quick_charge
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: >-
                 {{ states('input_number.zendure_setting_max_charge_power') | int
                 }}
@@ -616,7 +616,7 @@ actions:
         sequence:
           - action: rest_command.zendure_quick_discharge
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               outputLimit: >-
                 {{ states('input_number.zendure_setting_max_discharge_power') |
                 int }}
@@ -651,8 +651,8 @@ actions:
           - alias: Down to the minimum configured SOC
             condition: template
             value_template: |
-              {{ states('sensor.zendure_total_electricity_level') | float >
-               states('sensor.zendure_minimum_electricity_level') | float }}
+              {{ states('sensor.zendure_total_state_of_charge') | float >
+               states('sensor.zendure_minimum_state_of_charge') | float }}
           - condition: numeric_state
             entity_id: sensor.zendure_power
             above: -30
@@ -721,7 +721,7 @@ actions:
                   - "off"
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               outputLimit: >-
                 {% set factor = 0.75 %}  {% set cap =
                 states('input_number.zendure_setting_max_discharge_power') |
@@ -763,8 +763,8 @@ actions:
           - alias: Down to the minimum configured SOC
             condition: template
             value_template: |
-              {{ states('sensor.zendure_total_electricity_level') | float >
-               states('sensor.zendure_minimum_electricity_level') | float }}
+              {{ states('sensor.zendure_total_state_of_charge') | float >
+               states('sensor.zendure_minimum_state_of_charge') | float }}
           - alias: >-
               The new power to be set is different from the current battery
               power
@@ -823,7 +823,7 @@ actions:
                   - "off"
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               outputLimit: >-
                 {% set factor = 1.00 %}  {% set cap =
                 states('input_number.zendure_setting_max_discharge_power') |
@@ -863,9 +863,9 @@ actions:
               - Discharge Limit Reached
           - condition: template
             value_template: >
-              {{ states('sensor.zendure_total_electricity_level') | float |
+              {{ states('sensor.zendure_total_state_of_charge') | float |
               round(0) >=
-                 states('sensor.zendure_minimum_electricity_level') | float | round(0) }}
+                 states('sensor.zendure_minimum_state_of_charge') | float | round(0) }}
             alias: SOC is gelijk of groter dan de minimale SOC
           - alias: >-
               sensor.home_energy_meter_power kleiner dan
@@ -877,8 +877,8 @@ actions:
           - alias: Lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
-                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
-                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                    {{ states('sensor.zendure_total_state_of_charge') | float(0) < 
+                       states('sensor.zendure_maximum_state_of_charge') | float(0) }}
           - condition: numeric_state
             entity_id: sensor.zendure_power
             above: -30
@@ -931,7 +931,7 @@ actions:
                   - "off"
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: >-
                 {% set factor = 0.75 %} {% set cap =
                 states('input_number.zendure_setting_max_charge_power') |
@@ -971,9 +971,9 @@ actions:
               - Discharge Limit Reached
           - condition: template
             value_template: >
-              {{ states('sensor.zendure_total_electricity_level') | float |
+              {{ states('sensor.zendure_total_state_of_charge') | float |
               round(0) >=
-                 states('sensor.zendure_minimum_electricity_level') | float | round(0) }}
+                 states('sensor.zendure_minimum_state_of_charge') | float | round(0) }}
             alias: SOC is gelijk of groter dan de minimale SOC
           - alias: >-
               Nieuw in te stellen vermogen is anders dan huidig batterij
@@ -985,8 +985,8 @@ actions:
           - alias: Lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
-                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
-                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                    {{ states('sensor.zendure_total_state_of_charge') | float(0) < 
+                       states('sensor.zendure_maximum_state_of_charge') | float(0) }}
           - condition: template
             value_template: "{{ this.attributes.current == 0 }}"
           - condition: numeric_state
@@ -1023,7 +1023,7 @@ actions:
                   - "off"
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: >-
                 {% set factor = 1.00 %}{% set cap =
                 states('input_number.zendure_setting_max_charge_power') |
@@ -1078,7 +1078,7 @@ actions:
                  states('sensor.zendure_set_charge_power') | int }}
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: "{{ states('input_number.zendure_manual_power') | int | abs }}"
             action: rest_command.zendure_x_charge
           - action: logbook.log
@@ -1115,7 +1115,7 @@ actions:
                  states('sensor.zendure_set_discharge_power') | int }}
         sequence:
           - data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               outputLimit: "{{ states('input_number.zendure_manual_power') | int | abs }}"
             action: rest_command.zendure_x_discharge
           - action: logbook.log
@@ -1218,7 +1218,7 @@ actions:
         sequence:
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: logbook.log
             data:
               message: 💲Dynamic expensive/cheap period complete back to standby  —
@@ -1250,9 +1250,9 @@ actions:
               - alias: SOC 10% lower than maximum set SOC
                 condition: template
                 value_template: >
-                  {{ states('sensor.zendure_total_electricity_level') | float(0)
+                  {{ states('sensor.zendure_total_state_of_charge') | float(0)
                   <= 
-                     (states('sensor.zendure_maximum_electricity_level') | float(0) - 10) }}
+                     (states('sensor.zendure_maximum_state_of_charge') | float(0) - 10) }}
               - condition: state
                 entity_id: input_select.zendure_operation_mode
                 state:
@@ -1294,8 +1294,8 @@ actions:
           - alias: SOC lower than maximum set SOC
             condition: template
             value_template: |2-
-                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
-                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                    {{ states('sensor.zendure_total_state_of_charge') | float(0) < 
+                       states('sensor.zendure_maximum_state_of_charge') | float(0) }}
           - alias: >-
               sensor.dynamic_spread_indication_dsc higher or equal as
               input_number.dynamic_setting_minimal_spread
@@ -1315,7 +1315,7 @@ actions:
                 - input_boolean.dynamic_charging_running
           - action: rest_command.zendure_save_in_ram
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - delay:
               hours: 0
               minutes: 0
@@ -1323,7 +1323,7 @@ actions:
               milliseconds: 0
           - action: rest_command.zendure_quick_charge
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: >-
                 {{ states('input_number.zendure_setting_max_charge_power') | int
                 }}
@@ -1338,9 +1338,9 @@ actions:
                 trigger: state
               - trigger: template
                 value_template: >
-                  {{ states('sensor.zendure_total_electricity_level') | float(0)
+                  {{ states('sensor.zendure_total_state_of_charge') | float(0)
                   ==
-                     states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                     states('sensor.zendure_maximum_state_of_charge') | float(0) }}
                 alias: Maximale ingestelde SOC bereikt
               - trigger: state
                 entity_id:
@@ -1354,7 +1354,7 @@ actions:
             continue_on_timeout: false
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: input_boolean.turn_on
             data: {}
             target:
@@ -1409,8 +1409,8 @@ actions:
           - alias: SOC lower than maximum set SOC
             condition: template
             value_template: |2-
-                    {{ states('sensor.zendure_total_electricity_level') | float(0) < 
-                       states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                    {{ states('sensor.zendure_total_state_of_charge') | float(0) < 
+                       states('sensor.zendure_maximum_state_of_charge') | float(0) }}
           - alias: >-
               sensor.dynamic_spread_indication higher or equal as
               input_number.dynamic_setting_minimal_spread
@@ -1430,7 +1430,7 @@ actions:
                 - input_boolean.dynamic_charging_running
           - action: rest_command.zendure_save_in_ram
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - delay:
               hours: 0
               minutes: 0
@@ -1438,7 +1438,7 @@ actions:
               milliseconds: 0
           - action: rest_command.zendure_quick_charge
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               inputLimit: >-
                 {{ states('input_number.zendure_setting_max_charge_power') | int
                 }}
@@ -1453,9 +1453,9 @@ actions:
                 trigger: state
               - trigger: template
                 value_template: >
-                  {{ states('sensor.zendure_total_electricity_level') | float(0)
+                  {{ states('sensor.zendure_total_state_of_charge') | float(0)
                   ==
-                     states('sensor.zendure_maximum_electricity_level') | float(0) }}
+                     states('sensor.zendure_maximum_state_of_charge') | float(0) }}
                 alias: Maximale ingestelde SOC bereikt
               - trigger: state
                 entity_id:
@@ -1469,7 +1469,7 @@ actions:
             continue_on_timeout: false
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: input_boolean.turn_on
             data: {}
             target:
@@ -1514,8 +1514,8 @@ actions:
           - alias: Up to the minimum configured SOC
             condition: template
             value_template: |
-              {{ states('sensor.zendure_total_electricity_level') | float >
-               states('sensor.zendure_minimum_electricity_level') | float }}
+              {{ states('sensor.zendure_total_state_of_charge') | float >
+               states('sensor.zendure_minimum_state_of_charge') | float }}
           - condition: state
             entity_id: sensor.dynamic_highest_price_period
             state:
@@ -1539,7 +1539,7 @@ actions:
                 - input_boolean.dynamic_discharging_running
           - action: rest_command.zendure_save_in_ram
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - delay:
               hours: 0
               minutes: 0
@@ -1547,7 +1547,7 @@ actions:
               milliseconds: 0
           - action: rest_command.zendure_quick_discharge
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
               outputLimit: >-
                 {{ states('input_number.zendure_setting_max_discharge_power') |
                 int }}
@@ -1560,8 +1560,8 @@ actions:
               - alias: Tot minimale SOC
                 trigger: template
                 value_template: |-
-                  {{ states('sensor.zendure_total_electricity_level') | float <=
-                     states('sensor.zendure_minimum_electricity_level') | float }}
+                  {{ states('sensor.zendure_total_state_of_charge') | float <=
+                     states('sensor.zendure_minimum_state_of_charge') | float }}
               - entity_id:
                   - sensor.dynamic_highest_price_period
                 to:
@@ -1579,7 +1579,7 @@ actions:
             continue_on_timeout: false
           - action: rest_command.zendure_stop_with_everything
             data:
-              sn: "{{ states('sensor.zendure_serienumber') }}"
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: input_boolean.turn_off
             target:
               entity_id:
