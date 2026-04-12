@@ -175,7 +175,7 @@ views:
                   in_header: false
                   in_legend: false
               - entity: sensor.zendure_total_state_of_charge
-                name: Electricity Level
+                name: State Of Charge
                 statistics:
                   period: 5minute
                   type: max
@@ -242,7 +242,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "Electricity Level" || seriesName === "Home Energy Meter") return "";
+                    if(seriesName === "State Of Charge" || seriesName === "Home Energy Meter") return "";
                     return seriesName;
                   }
               markers:
@@ -354,7 +354,7 @@ views:
                   in_header: false
                   in_legend: false
               - entity: sensor.zendure_total_state_of_charge
-                name: Electricity Level
+                name: State Of Charge
                 statistics:
                   period: 5minute
                   type: max
@@ -421,7 +421,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "Electricity Level" || seriesName === "Home Energy Meter") return "";
+                    if(seriesName === "State Of Charge" || seriesName === "Home Energy Meter") return "";
                     return seriesName;
                   }
               markers:
