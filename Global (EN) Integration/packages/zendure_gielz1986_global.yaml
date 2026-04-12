@@ -1533,7 +1533,7 @@ rest:
             {% endfor %}
           {% endif %}
           {{ ns.sn_list | join('\n') }}
-        unique_id: zendure_battery_serinumbers
+        unique_id: zendure_battery_serial_numbers
         icon: mdi:identifier
 
       - name: "Zendure Battery 1 State Of Charge"
