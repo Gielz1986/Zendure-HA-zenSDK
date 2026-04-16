@@ -1,9 +1,12 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260412)
+description: Configuratie Versie (v20260416)
 triggers:
   - seconds: /5
     id: aansturing_trigger
     trigger: time_pattern
+  - id: hartslag_trigger
+    trigger: time_pattern
+    minutes: /1
   - at: "00:00:00"
     id: dynamisch_middernacht
     trigger: time
@@ -634,6 +637,67 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Huidig ontlaadvermogen corrigeren
+      - conditions:
+          - condition: trigger
+            id:
+              - hartslag_trigger
+        sequence:
+          - action: input_datetime.set_datetime
+            metadata: {}
+            target:
+              entity_id: >-
+                input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd
+            data:
+              datetime: "{{ now() }}"
+        alias: Automatisering Hartslag
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.p1_aansturing_vermogen
+            state:
+              - unavailable
+              - unknown
+            for:
+              hours: 0
+              minutes: 1
+              seconds: 0
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state:
+              - Dynamisch NOM
+              - Dynamisch NOM (Duur)
+              - Dynamisch Handelen + NOM
+              - Alleen slim opladen
+              - Alleen slim ontladen
+              - Nul op de meter
+          - condition: state
+            entity_id: input_boolean.dynamisch_laden_loopt
+            state:
+              - "off"
+          - condition: state
+            entity_id: input_boolean.dynamisch_ontladen_loopt
+            state:
+              - "off"
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.zendure_2400_ac_vermogen_aansturing
+                above: 0
+              - condition: numeric_state
+                entity_id: sensor.zendure_2400_ac_vermogen_aansturing
+                below: 0
+        sequence:
+          - action: rest_command.zendure_stop_met_alles
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - action: logbook.log
+            data:
+              message: ⛔P1 aansturing vermogen offline voor 1 minuut, noodstop —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Noodstop
   - alias: NOM Aansturing
     choose:
       - conditions:
@@ -724,6 +788,13 @@ actions:
                 entity_id: input_boolean.dynamisch_ontladen_loopt
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.p1_aansturing_vermogen
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -828,6 +899,13 @@ actions:
                 entity_id: input_boolean.dynamisch_ontladen_loopt
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.p1_aansturing_vermogen
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -938,6 +1016,13 @@ actions:
                 entity_id: input_boolean.dynamisch_ontladen_loopt
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.p1_aansturing_vermogen
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -1032,6 +1117,13 @@ actions:
                 entity_id: input_boolean.dynamisch_ontladen_loopt
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.p1_aansturing_vermogen
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
