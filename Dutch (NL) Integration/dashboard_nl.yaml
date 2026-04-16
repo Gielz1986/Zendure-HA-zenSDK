@@ -2478,40 +2478,48 @@ views:
             heading: Gekoppelde Zendure
             heading_style: title
           - type: markdown
+            text_only: true
+            content: >-
+              {% set product = states('sensor.zendure_2400_ac_productserie') %}
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/' %}
+
+              {% if last in ['unknown', 'unavailable', '', None] %}
+                <img src="{{ base }}Inactive.png" width="100">
+              {% else %}
+                {% set diff = as_timestamp(now()) - as_timestamp(last) %}
+
+                {% if diff >= 120 %}
+                  <img src="{{ base }}Inactive.png" width="100">
+                {% else %}
+
+                  {% if product == 'solarFlow2400AC' %}
+                    <img src="{{ base }}sf_2400_ac.png" width="100">
+                  {% elif product == 'solarFlow2400AC+' %}
+                    <img src="{{ base }}sf_2400_ac_plus.png" width="100">
+                  {% elif product == 'Hyper2000' %}
+                    <img src="{{ base }}hyper_2000.png" width="100">
+                  {% elif product == 'solarFlow2400Pro' %}
+                    <img src="{{ base }}sf_2400_pro.png" width="100">
+                  {% elif product == 'solarFlow1600AC+' %}
+                    <img src="{{ base }}sf_1600_ac_plus.png" width="100">
+                  {% elif product == 'solarFlow800Pro' %}
+                    <img src="{{ base }}sf_800_pro.png" width="100">
+                  {% elif product == 'solarFlow800Plus' %}
+                    <img src="{{ base }}sf_800_plus.png" width="100">
+                  {% else %}
+                    <img src="{{ base }}sf_2400_ac.png" width="100">
+                  {% endif %}
+
+                {% endif %}
+              {% endif %}
             grid_options:
               columns: 3
               rows: auto
-            text_only: true
-            content: >
-              {% set product = states('sensor.zendure_2400_ac_productserie') %}
-
-              {% if product == 'solarFlow2400AC' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
-              width="100">
-
-              {% elif product == 'solarFlow2400AC+' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac_plus.png"
-              width="100">
-
-              {% elif product == 'solarFlow2400Pro' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_pro.png"
-              width="100">
-
-              {% elif product == 'solarFlow1600AC+' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_1600_ac_plus.png"
-              width="100">
-
-              {% elif product == 'solarFlow800Pro' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_pro.png"
-              width="100">
-
-              {% elif product == 'solarFlow800Plus' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_plus.png"
-              width="100">
-
-              {% else %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
-              width="100"> {% endif %}
           - type: markdown
             content: >-
               {% set product = states('sensor.zendure_2400_ac_productserie') %}
@@ -2519,12 +2527,30 @@ views:
               elif product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {%
               elif product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {%
               elif product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {%
-              elif product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
-              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
-              **Onbekend** {% endif %} ({{
+              elif product == 'Hyper2000' %} **Hyper 2000** {% elif product ==
+              'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif product ==
+              'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
+              **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_totale_capaciteit') }} kWh)
 
               {{ states('sensor.zendure_2400_ac_serienummer') }}
+
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% if last not in ['unknown', 'unavailable', ''] %}
+                {% set diff = as_timestamp(now()) - as_timestamp(last) %}
+
+                **Automatisering Hartslag**  
+                {% if diff > 120 %}Automatisering Offline
+                {% else %} {{ as_timestamp(last) | timestamp_custom('%Y-%m-%d %H:%M') }} (laatste controle)
+                {% endif %}
+
+              {% else %}
+                **Verkeerde entiteiten controleer package**
+              {% endif %}
             grid_options:
               columns: 9
               rows: auto
@@ -2785,7 +2811,7 @@ views:
                 - input_select.zendure_2400_ac_modus_selecteren
             grid_options:
               columns: 12
-              rows: 15
+              rows: 16
             hours_to_show: 4
     cards: []
     dense_section_placement: false
