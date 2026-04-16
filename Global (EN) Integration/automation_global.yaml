@@ -1,9 +1,12 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260412)
+description: Configuration Version (v20260416)
 triggers:
   - seconds: /5
     id: aansturing_trigger
     trigger: time_pattern
+  - id: heartbeat_trigger
+    trigger: time_pattern
+    minutes: /1
   - at: "00:00:00"
     id: dynamisch_middernacht
     trigger: time
@@ -629,6 +632,66 @@ actions:
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: " Correct current discharge power"
+      - conditions:
+          - condition: trigger
+            id:
+              - heartbeat_trigger
+        sequence:
+          - action: input_datetime.set_datetime
+            metadata: {}
+            target:
+              entity_id: input_datetime.zendure_gielz_automation_last_time_executed
+            data:
+              datetime: "{{ now() }}"
+        alias: Automation Heartbeat
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.home_energy_meter_power
+            state:
+              - unavailable
+              - unknown
+            for:
+              hours: 0
+              minutes: 1
+              seconds: 0
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Dynamic Smart Matching
+              - Dynamic Smart Matching (Expensive)
+              - Dynamic Trading + Smart Matching
+              - Smart Charge Only
+              - Smart Discharge Only
+              - Smart Matching
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - "off"
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - "off"
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                above: 0
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                below: 0
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+          - action: logbook.log
+            data:
+              message: ⛔Home energy meter offline for 1 minute, emergency shutdown —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Emergency Shutdown
   - alias: Smart Matching Control
     choose:
       - conditions:
@@ -719,6 +782,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -821,6 +891,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -929,6 +1006,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -1021,6 +1105,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
