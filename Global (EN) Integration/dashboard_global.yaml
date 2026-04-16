@@ -2544,7 +2544,7 @@ views:
                 {% endif %}
 
               {% else %}
-                **Incorrect entities check package !**
+                **Incorrect entities check package**
               {% endif %}
             grid_options:
               columns: 9
