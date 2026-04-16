@@ -114,7 +114,7 @@ input_number:
   zendure_2400_ac_ontladen_starten_bij:
     name: Zendure 2400 AC Ontladen Starten Bij
     icon: mdi:battery-minus-variant
-    min: 100
+    min: 80
     max: 500
     step: 1
     mode: box
@@ -205,6 +205,13 @@ input_number:
     max: 96
     step: 1
     mode: box
+
+input_datetime:
+  zendure_gielz_automatisering_laatste_keer_uitgevoerd:
+    name: Zendure Gielz Automatisering Laatste Keer Uitgevoerd
+    icon: mdi:clock-time-eight-outline
+    has_date: true
+    has_time: true
 
 sensor:
   - platform: history_stats
@@ -332,7 +339,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260412"
+        state: "v20260416"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -407,6 +414,11 @@ template:
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
+        availability: >
+         {% set afwijkend = states('input_text.afwijkende_p1_sensor') %}
+         {% set afwijkend_valid = afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
+         {% set homewizard_valid = states('sensor.homewizard_p1_vermogen') not in ['unknown', 'unavailable', 'none'] %}
+           {{ afwijkend_valid or homewizard_valid }}
         state: >
          {% set afwijkend = states('input_text.afwijkende_p1_sensor') %}
          {% if afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
