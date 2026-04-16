@@ -114,7 +114,7 @@ input_number:
   zendure_setting_start_discharging_at:
     name: Zendure Start Discharging At
     icon: mdi:battery-minus-variant
-    min: 100
+    min: 80
     max: 500
     step: 1
     mode: box
@@ -205,6 +205,13 @@ input_number:
     max: 96
     step: 1
     mode: box
+
+input_datetime:
+  zendure_gielz_automation_last_time_executed:
+    name: Zendure Gielz Automation Last Time Executed
+    icon: mdi:clock-time-eight-outline
+    has_date: true
+    has_time: true
 
 sensor:
   - platform: history_stats
@@ -332,7 +339,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260412"
+        state: "v20260416"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -407,6 +414,11 @@ template:
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
+        availability: >
+         {% set afwijkend = states('input_text.home_energy_setting_meter_sensor') %}
+         {% set afwijkend_valid = afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
+         {% set homewizard_valid = states('sensor.homewizard_p1_power') not in ['unknown', 'unavailable', 'none'] %}
+           {{ afwijkend_valid or homewizard_valid }}
         state: >
          {% set afwijkend = states('input_text.home_energy_setting_meter_sensor') %}
          {% if afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
