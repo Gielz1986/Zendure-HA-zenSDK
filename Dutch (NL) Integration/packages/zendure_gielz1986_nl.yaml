@@ -49,6 +49,10 @@ input_boolean:
     name: PV Tonen Op Dashboard
     icon: mdi:solar-panel
 
+  zendure_2400_ac_soc_bescherming_uitgeschakeld:
+    name: Zendure 2400 AC SOC Bescherming Uitgeschakeld
+    icon: mdi:battery-heart-variant
+
 input_text:
   zendure_2400_ac_batterij_volgorde:
     name: Zendure 2400 AC Batterij Volgorde
@@ -206,6 +210,24 @@ input_number:
     step: 1
     mode: box
 
+  zendure_2400_ac_minimaal_toegestaan_laadpercentage:
+    name: Zendure 2400 AC Minimaal Toegestaan Laadpercentage
+    icon: mdi:percent-box
+    min: 5
+    max: 50
+    step: 1
+    unit_of_measurement: '%'
+    mode: box
+
+  zendure_2400_ac_maximaal_toegestaan_laadpercentage:
+    name: Zendure 2400 AC Maximaal Toegestaan Laadpercentage
+    icon: mdi:percent-box
+    min: 70
+    max: 100
+    step: 1
+    unit_of_measurement: '%'
+    mode: box
+
 input_datetime:
   zendure_gielz_automatisering_laatste_keer_uitgevoerd:
     name: Zendure Gielz Automatisering Laatste Keer Uitgevoerd
@@ -339,7 +361,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260416"
+        state: "v20260418"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -1368,10 +1390,9 @@ rest:
     sensor:
       - name: "Zendure 2400 AC PV Doorvoer"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
-          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set pv_active = (solar > 0) or (grid_off < 0) %}
           {% set states = {0: "Batterij", 2: "Huis"} %}
           {% set packState = value_json['properties']['pass'] | int %}
           {{ states.get(packState, "Onbekend") if pv_active else "PV Offline" }}
