@@ -49,6 +49,10 @@ input_boolean:
     name: Show PV On Dashboard
     icon: mdi:solar-panel
 
+  zendure_setting_soc_protection_disabled:
+    name: Zendure SOC Protection Disabled
+    icon: mdi:battery-heart-variant
+
 input_text:
   zendure_setting_battery_order:
     name: Zendure Battery Order
@@ -206,6 +210,24 @@ input_number:
     step: 1
     mode: box
 
+  zendure_setting_minimum_allowed_state_of_charge:
+    name: Zendure Minimum Allowed State Of Charge
+    icon: mdi:percent-box
+    min: 5
+    max: 50
+    step: 1
+    unit_of_measurement: '%'
+    mode: box
+
+  zendure_setting_maximum_allowed_state_of_charge:
+    name: Zendure Maximum Allowed State Of Charge
+    icon: mdi:percent-box
+    min: 70
+    max: 100
+    step: 1
+    unit_of_measurement: '%'
+    mode: box
+
 input_datetime:
   zendure_gielz_automation_last_time_executed:
     name: Zendure Gielz Automation Last Time Executed
@@ -339,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260416"
+        state: "v20260418"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1368,10 +1390,9 @@ rest:
     sensor:
       - name: "Zendure PV Passthrough"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
-          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set pv_active = (solar > 0) or (grid_off < 0) %}
           {% set states = {0: "Battery", 2: "Home"} %}
           {% set packState = value_json['properties']['pass'] | int %}
           {{ states.get(packState, "Onbekend") if pv_active else "PV Offline" }}
