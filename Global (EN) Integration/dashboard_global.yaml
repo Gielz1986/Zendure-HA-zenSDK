@@ -2241,7 +2241,7 @@ views:
                       in_header: false
                       in_legend: false
                   - entity: sensor.zendure_total_state_of_charge
-                    name: Electricity Level
+                    name: State Of Charge
                     statistics:
                       period: 5minute
                       type: max
@@ -2470,40 +2470,51 @@ views:
             heading: Connected Zendure
             heading_style: title
           - type: markdown
+            text_only: true
+            content: >-
+              {% set product = states('sensor.zendure_product_model') %}
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automation_last_time_executed')
+              %}
+
+              {% set base =
+              'https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/'
+              %}
+
+
+              {% if last in ['unknown', 'unavailable', '', None] %}
+                <img src="{{ base }}Inactive.png" width="100">
+              {% else %}
+                {% set diff = as_timestamp(now()) - as_timestamp(last) %}
+
+                {% if diff >= 120 %}
+                  <img src="{{ base }}Inactive.png" width="100">
+                {% else %}
+
+                  {% if product == 'solarFlow2400AC' %}
+                    <img src="{{ base }}sf_2400_ac.png" width="100">
+                  {% elif product == 'solarFlow2400AC+' %}
+                    <img src="{{ base }}sf_2400_ac_plus.png" width="100">
+                  {% elif product == 'Hyper2000' %}
+                    <img src="{{ base }}hyper_2000.png" width="100">
+                  {% elif product == 'solarFlow2400Pro' %}
+                    <img src="{{ base }}sf_2400_pro.png" width="100">
+                  {% elif product == 'solarFlow1600AC+' %}
+                    <img src="{{ base }}sf_1600_ac_plus.png" width="100">
+                  {% elif product == 'solarFlow800Pro' %}
+                    <img src="{{ base }}sf_800_pro.png" width="100">
+                  {% elif product == 'solarFlow800Plus' %}
+                    <img src="{{ base }}sf_800_plus.png" width="100">
+                  {% else %}
+                    <img src="{{ base }}sf_2400_ac.png" width="100">
+                  {% endif %}
+
+                {% endif %}
+              {% endif %}
             grid_options:
               columns: 3
               rows: auto
-            text_only: true
-            content: >
-              {% set product = states('sensor.zendure_product_model') %}
-
-              {% if product == 'solarFlow2400AC' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
-              width="100">
-
-              {% elif product == 'solarFlow2400AC+' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac_plus.png"
-              width="100">
-
-              {% elif product == 'solarFlow2400Pro' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_pro.png"
-              width="100">
-
-              {% elif product == 'solarFlow1600AC+' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_1600_ac_plus.png"
-              width="100">
-
-              {% elif product == 'solarFlow800Pro' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_pro.png"
-              width="100">
-
-              {% elif product == 'solarFlow800Plus' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_plus.png"
-              width="100">
-
-              {% else %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
-              width="100"> {% endif %}
           - type: markdown
             content: >-
               {% set product = states('sensor.zendure_product_model') %} {% if
@@ -2511,12 +2522,30 @@ views:
               product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {% elif
               product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {% elif
               product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {% elif
-              product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
-              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
-              **Onbekend** {% endif %} ({{
+              product == 'Hyper2000' %} **Hyper 2000** {% elif product ==
+              'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif product ==
+              'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
+              **Onbekend** {% endif %}({{
               states('sensor.zendure_total_capacity') }} kWh)
 
               {{ states('sensor.zendure_serial_number') }}
+
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automation_last_time_executed')
+              %}
+
+              {% if last not in ['unknown', 'unavailable', ''] %}
+                {% set diff = as_timestamp(now()) - as_timestamp(last) %}
+
+                **Automation Heartbeat**  
+                {% if diff > 120 %}Automation Offline
+                {% else %} {{ as_timestamp(last) | timestamp_custom('%Y-%m-%d %H:%M') }} (last checked)
+                {% endif %}
+
+              {% else %}
+                **Incorrect entities check package**
+              {% endif %}
             grid_options:
               columns: 9
               rows: auto
@@ -2622,6 +2651,35 @@ views:
         cards:
           - type: heading
             icon: ''
+            heading: Configuration (State Of Charge)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_minimum_state_of_charge
+                icon: mdi:api
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: false
+                entity: sensor.zendure_maximum_state_of_charge
+                icon: mdi:api
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: entities
+            entities:
+              - entity: input_boolean.zendure_setting_soc_protection_disabled
+                name: SOC Protection Disabled
+              - entity: input_number.zendure_setting_minimum_allowed_state_of_charge
+                name: Min. State Of Charge
+              - entity: input_number.zendure_setting_maximum_allowed_state_of_charge
+                name: Max. State Of Charge
+          - type: heading
+            icon: ''
             heading: Configuration (Optional)
             heading_style: title
           - type: markdown
@@ -2698,6 +2756,27 @@ views:
               - entity: input_boolean.dashboard_setting_show_help
               - entity: input_boolean.dashboard_setting_show_pv
               - entity: input_boolean.dashboard_setting_show_dynamic
+      - type: grid
+        cards:
+          - type: heading
+            heading: Logbook (last 4 hours)
+            heading_style: title
+            badges:
+              - type: button
+                icon: mdi:information
+                tap_action:
+                  action: navigate
+                  navigation_path: /logbook
+                color: '#01a180'
+                text: More
+          - type: logbook
+            target:
+              entity_id:
+                - input_select.zendure_operation_mode
+            grid_options:
+              columns: 12
+              rows: 12
+            hours_to_show: 4
           - type: heading
             icon: ''
             heading: Version
@@ -2757,27 +2836,6 @@ views:
               columns: 12
               rows: auto
             text_only: true
-      - type: grid
-        cards:
-          - type: heading
-            heading: Logbook (last 4 hours)
-            heading_style: title
-            badges:
-              - type: button
-                icon: mdi:information
-                tap_action:
-                  action: navigate
-                  navigation_path: /logbook
-                color: '#01a180'
-                text: More
-          - type: logbook
-            target:
-              entity_id:
-                - input_select.zendure_operation_mode
-            grid_options:
-              columns: 12
-              rows: 15
-            hours_to_show: 4
     cards: []
     dense_section_placement: false
   - type: sections
