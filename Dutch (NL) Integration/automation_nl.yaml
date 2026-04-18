@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260416)
+description: Configuratie Versie (v20260418)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -50,6 +50,14 @@ triggers:
     entity_id:
       - input_number.zendure_2400_ac_max_ontlaadvermogen
     id: systeem_instelling_maxontlaadvermogen
+  - trigger: state
+    entity_id:
+      - input_number.zendure_2400_ac_minimaal_toegestaan_laadpercentage
+    id: systeem_instelling_minsoc
+  - trigger: state
+    entity_id:
+      - input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage
+    id: systeem_instelling_maxsoc
   - trigger: state
     entity_id:
       - input_button.zendure_2400_ac_advies_instellingen_overnemen
@@ -260,6 +268,10 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
+          - condition: state
+            entity_id: input_boolean.zendure_2400_ac_soc_bescherming_uitgeschakeld
+            state:
+              - "off"
           - condition: or
             conditions:
               - condition: template
@@ -414,6 +426,82 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Maximaal ontlaadvermogen aanpassen
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_minsoc
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      states('sensor.zendure_2400_ac_minimale_laadpercentage') |
+                      float !=
+                      states('input_number.zendure_2400_ac_minimaal_toegestaan_laadpercentage')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              instellingitem: minSoc
+              instellinginhoud: >-
+                {{
+                (states('input_number.zendure_2400_ac_minimaal_toegestaan_laadpercentage')
+                | int(0) * 10) }}
+            action: rest_command.zendure_instelling
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Minimaal toegestaan laadpercentage aangepast naar {{
+                states('input_number.zendure_2400_ac_minimaal_toegestaan_laadpercentage')
+                | int }}% —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Minimaal toegestane laadpercentage aanpassen
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_maxsoc
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      states('sensor.zendure_2400_ac_maximale_laadpercentage') |
+                      float !=
+                      states('input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              instellingitem: socSet
+              instellinginhoud: >-
+                {{
+                (states('input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage')
+                | int(0) * 10) }}
+            action: rest_command.zendure_instelling
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Maximaal toegestaan laadpercentage aangepast naar {{
+                states('input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage')
+                | int }}% —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Maximaal toegestane laadpercentage aanpassen
       - conditions:
           - condition: trigger
             id:
