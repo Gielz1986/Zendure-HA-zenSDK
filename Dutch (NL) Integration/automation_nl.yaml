@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260418)
+description: Configuratie Versie (v20260419)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -556,6 +556,28 @@ actions:
               message: >-
                 ⚙️Advies instellingen overnemen — Oplaadmarge ingesteld op 50
                 watt en ontlaadmarge ingesteld op 5 watt — 
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_2400_ac_minimaal_toegestaan_laadpercentage
+            data:
+              value: 10
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id:
+                - >-
+                  input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage
+            data:
+              value: 100
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️Advies instellingen overnemen — Minimaal toegestaan
+                laadpercentage ingesteld op 10% en maximaal toegestaan
+                laadpercentage ingesteld op 100% — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Advies instellingen overnemen
