@@ -2670,6 +2670,31 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Help text</ha-alert>Set the minimum
+              and maximum allowed state of charge percentages here.
+
+
+              You can also disable the SOC protection of this integration. When
+              the battery drops below the minimum allowed charge level, it will
+              no longer be automatically recharged. The system will wait until
+              the BMS (Battery Management System) takes action.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_help
+                state: 'on'
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="error">Warning</ha-alert>The minimum allowed
+              state of charge is set below 10%. This is not recommended by
+              Zendure.
+            text_only: true
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_minimum_state_of_charge
+                below: 10
           - type: entities
             entities:
               - entity: input_boolean.zendure_setting_soc_protection_disabled
