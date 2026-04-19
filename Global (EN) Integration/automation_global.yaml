@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260418)
+description: Configuration Version (v20260419)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -551,6 +551,25 @@ actions:
               message: >-
                 ⚙️Set recommended settings — Charge buffer set to 50 watt and
                 discharge buffer set to 5 watt — 
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_setting_minimum_allowed_state_of_charge
+            data:
+              value: 10
+          - action: input_number.set_value
+            metadata: {}
+            data:
+              value: 100
+            target:
+              entity_id: input_number.zendure_setting_maximum_allowed_state_of_charge
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️Set recommended settings — Minimum allowed state of charge set
+                to 10% and maximum allowed state of charge set to 100% — 
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Set default preferred settings
