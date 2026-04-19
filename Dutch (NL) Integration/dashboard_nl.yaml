@@ -2679,6 +2679,32 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="error">Waarschuwing</ha-alert>Minimaal
+              toegestaan laadpercentage is ingesteld onder de 10% dit word
+              afgeraden door Zendure.
+            text_only: true
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_minimale_laadpercentage
+                below: 10
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
+              minimaal en maximaal toegestaan laadpercentage in.
+
+
+              Ook kun je de SOC bescherming van deze integratie uitschakelen.
+              Wanneer de batterij onder het minimaal toegestaan laadpercentage
+              zakt zal er niet meer automatisch bijgeladen worden. Er word
+              gewacht tot de BMS (batterij management systeem) zelf actie
+              onderneemt.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_boolean.zendure_2400_ac_soc_bescherming_uitgeschakeld
