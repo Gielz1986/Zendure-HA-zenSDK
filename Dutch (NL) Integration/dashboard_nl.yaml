@@ -2682,7 +2682,7 @@ views:
           - type: markdown
             content: >-
               <ha-alert alert-type="error">Waarschuwing</ha-alert>Minimaal
-              toegestaan laadpercentage is ingesteld onder de 10% dit word
+              toegestaan laadpercentage is ingesteld onder de 10% dit wordt
               afgeraden door Zendure.
             text_only: true
             visibility:
