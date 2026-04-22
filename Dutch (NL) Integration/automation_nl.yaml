@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260419)
+description: Configuratie Versie (v20260422)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -62,6 +62,10 @@ triggers:
     entity_id:
       - input_button.zendure_2400_ac_advies_instellingen_overnemen
     id: systeem_instelling_adviesinstellingen
+  - trigger: state
+    entity_id:
+      - input_text.zendure_2400_ac_ip_adres
+    id: systeem_instelling_zendure_ip
 conditions: []
 actions:
   - alias: Modus Selecteren
@@ -506,6 +510,7 @@ actions:
           - condition: trigger
             id:
               - systeem_instelling_adviesinstellingen
+              - systeem_instelling_zendure_ip
         sequence:
           - action: input_number.set_value
             metadata: {}
@@ -580,6 +585,13 @@ actions:
                 laadpercentage ingesteld op 100% — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
+          - action: input_text.set_value
+            data:
+              value: ""
+            target:
+              entity_id:
+                - input_text.dynamisch_handmatige_periode
+                - input_text.dynamisch_handmatige_periode_morgen
         alias: Advies instellingen overnemen
       - conditions:
           - condition: trigger
