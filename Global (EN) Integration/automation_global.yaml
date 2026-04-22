@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260419)
+description: Configuration Version (v20260422)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -62,6 +62,10 @@ triggers:
     entity_id:
       - input_button.zendure_setting_set_default_settings
     id: systeem_instelling_adviesinstellingen
+  - trigger: state
+    entity_id:
+      - input_text.zendure_setting_ip_address
+    id: systeem_instelling_zendure_ip
 conditions: []
 actions:
   - alias: Operation Mode
@@ -503,6 +507,7 @@ actions:
           - condition: trigger
             id:
               - systeem_instelling_adviesinstellingen
+              - systeem_instelling_zendure_ip
         sequence:
           - action: input_number.set_value
             metadata: {}
@@ -572,6 +577,13 @@ actions:
                 to 10% and maximum allowed state of charge set to 100% — 
               entity_id: input_select.zendure_operation_mode
               name: " "
+          - action: input_text.set_value
+            target:
+              entity_id:
+                - input_text.dynamic_manual_period
+                - input_text.dynamic_manual_period_tomorrow
+            data:
+              value: ""
         alias: Set default preferred settings
       - conditions:
           - condition: trigger
