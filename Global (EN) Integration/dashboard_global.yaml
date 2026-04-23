@@ -2553,7 +2553,17 @@ views:
             icon: ''
             heading: Configuration (Basic)
             heading_style: title
-            badges: []
+            badges:
+              - type: button
+                icon: mdi:mouse
+                tap_action:
+                  action: perform-action
+                  perform_action: input_button.press
+                  target:
+                    entity_id: input_button.zendure_setting_set_default_settings
+                  data: {}
+                text: Default settings
+                color: '#01a180'
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Help text</ha-alert>Enter the IP
@@ -2581,8 +2591,6 @@ views:
               - entity: input_text.homewizard_setting_p1_ip_address
               - entity: input_number.zendure_setting_standby_delay
                 name: Standby Delay
-              - entity: input_button.zendure_setting_set_default_settings
-                name: Set Default Settings
           - type: heading
             icon: ''
             heading: Configuration (Charging)
