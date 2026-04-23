@@ -1749,6 +1749,8 @@ views:
                     name: Battery 1 Temperature
                   - entity: sensor.zendure_battery_1_state_of_charge
                     name: Battery 1 State Of Charge
+                  - entity: sensor.zendure_battery_1_cell_balance_status
+                    name: Battery 1 Cell Balance
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1764,6 +1766,10 @@ views:
                     name: Battery 1 State Of Charge
                   - entity: sensor.zendure_battery_2_state_of_charge
                     name: Battery 2 State Of Charge
+                  - entity: sensor.zendure_battery_1_cell_balance_status
+                    name: Battery 1 Cell Balance
+                  - entity: sensor.zendure_battery_2_cell_balance_status
+                    name: Battery 2 Cell Balance
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1783,6 +1789,12 @@ views:
                     name: Battery 2 State Of Charge
                   - entity: sensor.zendure_battery_3_state_of_charge
                     name: Battery 3 State Of Charge
+                  - entity: sensor.zendure_battery_1_cell_balance_status
+                    name: Battery 1 Cell Balance
+                  - entity: sensor.zendure_battery_2_cell_balance_status
+                    name: Battery 2 Cell Balance
+                  - entity: sensor.zendure_battery_3_cell_balance_status
+                    name: Battery 3 Cell Balance
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1806,6 +1818,14 @@ views:
                     name: Battery 3 State Of Charge
                   - entity: sensor.zendure_battery_4_state_of_charge
                     name: Battery 4 State Of Charge
+                  - entity: sensor.zendure_battery_1_cell_balance_status
+                    name: Battery 1 Cell Balance
+                  - entity: sensor.zendure_battery_2_cell_balance_status
+                    name: Battery 2 Cell Balance
+                  - entity: sensor.zendure_battery_3_cell_balance_status
+                    name: Battery 3 Cell Balance
+                  - entity: sensor.zendure_battery_4_cell_balance_status
+                    name: Battery 4 Cell Balance
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1833,6 +1853,16 @@ views:
                     name: Battery 4 State Of Charge
                   - entity: sensor.zendure_battery_5_state_of_charge
                     name: Battery 5 State Of Charge
+                  - entity: sensor.zendure_battery_1_cell_balance_status
+                    name: Battery 1 Cell Balance
+                  - entity: sensor.zendure_battery_2_cell_balance_status
+                    name: Battery 2 Cell Balance
+                  - entity: sensor.zendure_battery_3_cell_balance_status
+                    name: Battery 3 Cell Balance
+                  - entity: sensor.zendure_battery_4_cell_balance_status
+                    name: Battery 4 Cell Balance
+                  - entity: sensor.zendure_battery_5_cell_balance_status
+                    name: Battery 5 Cell Balance
                 visibility:
                   - condition: state
                     entity: sensor.zendure_total_batteries
@@ -1864,6 +1894,18 @@ views:
                     name: Battery 5 State Of Charge
                   - entity: sensor.zendure_battery_6_state_of_charge
                     name: Battery 6 State Of Charge
+                  - entity: sensor.zendure_battery_1_cell_balance_status
+                    name: Battery 1 Cell Balance
+                  - entity: sensor.zendure_battery_2_cell_balance_status
+                    name: Battery 2 Cell Balance
+                  - entity: sensor.zendure_battery_3_cell_balance_status
+                    name: Battery 3 Cell Balance
+                  - entity: sensor.zendure_battery_4_cell_balance_status
+                    name: Battery 4 Cell Balance
+                  - entity: sensor.zendure_battery_5_cell_balance_status
+                    name: Battery 5 Cell Balance
+                  - entity: sensor.zendure_battery_6_cell_balance_status
+                    name: Battery 6 Cell Balance
                 visibility:
                   - condition: numeric_state
                     entity: sensor.zendure_total_batteries
