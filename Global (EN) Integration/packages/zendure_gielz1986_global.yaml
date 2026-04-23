@@ -1388,6 +1388,195 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_setting_ip_address') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure Battery 1 Cell Balance Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[0] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Perfect' if d<=20 else
+               'Good' if d<=40 else
+               'Monitor' if d<=60 else
+               'Warning' if d<=100 else
+               'Problem' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Perfect' if d<=20 else
+                 'Good' if d<=40 else
+                 'Monitor' if d<=60 else
+                 'Warning' if d<=100 else
+                 'Problem' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_battery_1_cell_balance_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure Battery 2 Cell Balance Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[1] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Perfect' if d<=20 else
+               'Good' if d<=40 else
+               'Monitor' if d<=60 else
+               'Warning' if d<=100 else
+               'Problem' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Perfect' if d<=20 else
+                 'Good' if d<=40 else
+                 'Monitor' if d<=60 else
+                 'Warning' if d<=100 else
+                 'Problem' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_battery_2_cell_balance_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure Battery 3 Cell Balance Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[2] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+
+            {{ 'Perfect' if d<=20 else
+               'Good' if d<=40 else
+               'Monitor' if d<=60 else
+               'Warning' if d<=100 else
+               'Problem' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Perfect' if d<=20 else
+                 'Good' if d<=40 else
+                 'Monitor' if d<=60 else
+                 'Warning' if d<=100 else
+                 'Problem' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_battery_3_cell_balance_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure Battery 4 Cell Balance Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[3] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Perfect' if d<=20 else
+               'Good' if d<=40 else
+               'Monitor' if d<=60 else
+               'Warning' if d<=100 else
+               'Problem' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+
+              {{ 'Perfect' if d<=20 else
+                 'Good' if d<=40 else
+                 'Monitor' if d<=60 else
+                 'Warning' if d<=100 else
+                 'Problem' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_battery_4_cell_balance_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure Battery 5 Cell Balance Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[4] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Perfect' if d<=20 else
+               'Good' if d<=40 else
+               'Monitor' if d<=60 else
+               'Warning' if d<=100 else
+               'Problem' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+
+              {{ 'Perfect' if d<=20 else
+                 'Good' if d<=40 else
+                 'Monitor' if d<=60 else
+                 'Warning' if d<=100 else
+                 'Problem' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_battery_5_cell_balance_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure Battery 6 Cell Balance Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[5] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Perfect' if d<=20 else
+               'Good' if d<=40 else
+               'Monitor' if d<=60 else
+               'Warning' if d<=100 else
+               'Problem' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Perfect' if d<=20 else
+                 'Good' if d<=40 else
+                 'Monitor' if d<=60 else
+                 'Warning' if d<=100 else
+                 'Problem' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_battery_6_cell_balance_status
+        icon: mdi:battery-heart-variant
+
       - name: "Zendure PV Passthrough"
         value_template: >
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
