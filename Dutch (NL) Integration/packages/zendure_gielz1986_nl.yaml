@@ -361,7 +361,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260422"
+        state: "v20260423"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -426,8 +426,8 @@ template:
         icon: mdi:swap-vertical-bold
         state_class: total_increasing
         state: >
-          {% set ontladen = states('sensor.zendure_2400_ac_relais_schakelingen_ontladen_vandaag') | int %}
-          {% set opladen = states('sensor.zendure_2400_ac_relais_schakelingen_opladen_vandaag') | int %}
+          {% set ontladen = states('sensor.zendure_2400_ac_relais_schakelingen_ontladen_vandaag') | int(0) %}
+          {% set opladen = states('sensor.zendure_2400_ac_relais_schakelingen_opladen_vandaag') | int(0) %}
           {% set totaal = ontladen + opladen - 1 %}
           {{ totaal if totaal > 0 else 0 }}
 
