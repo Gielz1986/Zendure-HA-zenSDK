@@ -2558,7 +2558,17 @@ views:
             icon: ''
             heading: Configuratie (Basis)
             heading_style: title
-            badges: []
+            badges:
+              - type: button
+                icon: mdi:mouse
+                tap_action:
+                  action: perform-action
+                  perform_action: input_button.press
+                  target:
+                    entity_id: input_button.zendure_2400_ac_advies_instellingen_overnemen
+                  data: {}
+                color: '#01a180'
+                text: Standaardinstellingen
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Vul hier het
@@ -2588,8 +2598,6 @@ views:
               - entity: input_text.homewizard_p1_ip_adres
               - entity: input_number.zendure_2400_ac_standby_vertraging
                 name: Standby Vertraging
-              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
-                name: Advies Instellingen Overnemen
           - type: heading
             icon: ''
             heading: Configuratie (Opladen)
