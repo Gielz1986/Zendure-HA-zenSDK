@@ -1388,6 +1388,195 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC Batterij 1 Celbalans Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[0] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Uitstekend' if d<=20 else
+               'Goed' if d<=40 else
+               'Monitoren' if d<=60 else
+               'Waarschuwing' if d<=100 else
+               'Kritiek' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Uitstekend' if d<=20 else
+                 'Goed' if d<=40 else
+                 'Monitoren' if d<=60 else
+                 'Waarschuwing' if d<=100 else
+                 'Kritiek' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_2400_ac_batterij_1_celbalans_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure 2400 AC Batterij 2 Celbalans Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[1] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Uitstekend' if d<=20 else
+               'Goed' if d<=40 else
+               'Monitoren' if d<=60 else
+               'Waarschuwing' if d<=100 else
+               'Kritiek' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Uitstekend' if d<=20 else
+                 'Goed' if d<=40 else
+                 'Monitoren' if d<=60 else
+                 'Waarschuwing' if d<=100 else
+                 'Kritiek' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_2400_ac_batterij_2_celbalans_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure 2400 AC Batterij 3 Celbalans Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[2] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+
+            {{ 'Uitstekend' if d<=20 else
+               'Goed' if d<=40 else
+               'Monitoren' if d<=60 else
+               'Waarschuwing' if d<=100 else
+               'Kritiek' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Uitstekend' if d<=20 else
+                 'Goed' if d<=40 else
+                 'Monitoren' if d<=60 else
+                 'Waarschuwing' if d<=100 else
+                 'Kritiek' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_2400_ac_batterij_3_celbalans_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure 2400 AC Batterij 4 Celbalans Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[3] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Uitstekend' if d<=20 else
+               'Goed' if d<=40 else
+               'Monitoren' if d<=60 else
+               'Waarschuwing' if d<=100 else
+               'Kritiek' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+
+              {{ 'Uitstekend' if d<=20 else
+                 'Goed' if d<=40 else
+                 'Monitoren' if d<=60 else
+                 'Waarschuwing' if d<=100 else
+                 'Kritiek' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_2400_ac_batterij_4_celbalans_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure 2400 AC Batterij 5 Celbalans Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[4] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Uitstekend' if d<=20 else
+               'Goed' if d<=40 else
+               'Monitoren' if d<=60 else
+               'Waarschuwing' if d<=100 else
+               'Kritiek' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+
+              {{ 'Uitstekend' if d<=20 else
+                 'Goed' if d<=40 else
+                 'Monitoren' if d<=60 else
+                 'Waarschuwing' if d<=100 else
+                 'Kritiek' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_2400_ac_batterij_5_celbalans_status
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure 2400 AC Batterij 6 Celbalans Status"
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+            {% set p = packdata[5] %}
+            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {{ 'Uitstekend' if d<=20 else
+               'Goed' if d<=40 else
+               'Monitoren' if d<=60 else
+               'Waarschuwing' if d<=100 else
+               'Kritiek' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {{ 'Uitstekend' if d<=20 else
+                 'Goed' if d<=40 else
+                 'Monitoren' if d<=60 else
+                 'Waarschuwing' if d<=100 else
+                 'Kritiek' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+        unique_id: zendure_2400_ac_batterij_6_celbalans_status
+        icon: mdi:battery-heart-variant
+
       - name: "Zendure 2400 AC PV Doorvoer"
         value_template: >
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
