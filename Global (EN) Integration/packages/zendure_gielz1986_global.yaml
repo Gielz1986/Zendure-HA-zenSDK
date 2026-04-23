@@ -1396,7 +1396,7 @@ rest:
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
             {% set p = packdata[0] %}
-            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {% set d = (p['maxVol'] - p['minVol']) %}
             {{ 'Perfect' if d<=20 else
                'Good' if d<=40 else
                'Monitor' if d<=60 else
@@ -1406,7 +1406,7 @@ rest:
             {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
-              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {% set d = (p['maxVol'] - p['minVol']) %}
               {{ 'Perfect' if d<=20 else
                  'Good' if d<=40 else
                  'Monitor' if d<=60 else
@@ -1427,7 +1427,7 @@ rest:
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
             {% set p = packdata[1] %}
-            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {% set d = (p['maxVol'] - p['minVol']) %}
             {{ 'Perfect' if d<=20 else
                'Good' if d<=40 else
                'Monitor' if d<=60 else
@@ -1437,7 +1437,7 @@ rest:
             {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
-              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {% set d = (p['maxVol'] - p['minVol']) %}
               {{ 'Perfect' if d<=20 else
                  'Good' if d<=40 else
                  'Monitor' if d<=60 else
@@ -1458,7 +1458,7 @@ rest:
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
             {% set p = packdata[2] %}
-            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {% set d = (p['maxVol'] - p['minVol']) %}
 
             {{ 'Perfect' if d<=20 else
                'Good' if d<=40 else
@@ -1469,7 +1469,7 @@ rest:
             {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
-              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {% set d = (p['maxVol'] - p['minVol']) %}
               {{ 'Perfect' if d<=20 else
                  'Good' if d<=40 else
                  'Monitor' if d<=60 else
@@ -1490,7 +1490,7 @@ rest:
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
             {% set p = packdata[3] %}
-            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {% set d = (p['maxVol'] - p['minVol']) %}
             {{ 'Perfect' if d<=20 else
                'Good' if d<=40 else
                'Monitor' if d<=60 else
@@ -1500,7 +1500,7 @@ rest:
             {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
-              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {% set d = (p['maxVol'] - p['minVol']) %}
 
               {{ 'Perfect' if d<=20 else
                  'Good' if d<=40 else
@@ -1522,7 +1522,7 @@ rest:
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
             {% set p = packdata[4] %}
-            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {% set d = (p['maxVol'] - p['minVol']) %}
             {{ 'Perfect' if d<=20 else
                'Good' if d<=40 else
                'Monitor' if d<=60 else
@@ -1532,7 +1532,7 @@ rest:
             {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
-              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {% set d = (p['maxVol'] - p['minVol']) %}
 
               {{ 'Perfect' if d<=20 else
                  'Good' if d<=40 else
@@ -1554,7 +1554,7 @@ rest:
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
             {% set p = packdata[5] %}
-            {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+            {% set d = (p['maxVol'] - p['minVol']) %}
             {{ 'Perfect' if d<=20 else
                'Good' if d<=40 else
                'Monitor' if d<=60 else
@@ -1564,7 +1564,7 @@ rest:
             {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
-              {% set d = (p['maxVol'] - p['minVol']) * 10 %}
+              {% set d = (p['maxVol'] - p['minVol']) %}
               {{ 'Perfect' if d<=20 else
                  'Good' if d<=40 else
                  'Monitor' if d<=60 else
