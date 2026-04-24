@@ -361,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260423"
+        state: "v20260424"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1400,22 +1400,18 @@ rest:
             {% set p = packdata[0] %}
             {% set d = p['maxVol'] - p['minVol'] %}
             {{ 'Excellent' if d <= 2 else
-               'Healthy' if d <= 3 else
-               'Normal' if d <= 5 else
-               'Balanced' if d <= 8 else
-               'Needs Rebalance' if d <= 10 else
-               'Out of Balance' }}
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
           {% else %}
             {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
               {% set d = p['maxVol'] - p['minVol'] %}
               {{ 'Excellent' if d <= 2 else
-                 'Healthy' if d <= 3 else
-                 'Normal' if d <= 5 else
-                 'Balanced' if d <= 8 else
-                 'Needs Rebalance' if d <= 10 else
-                 'Out of Balance' }}
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
             {% else %}
               unknown
             {% endif %}
@@ -1433,22 +1429,18 @@ rest:
             {% set p = packdata[1] %}
             {% set d = p['maxVol'] - p['minVol'] %}
             {{ 'Excellent' if d <= 2 else
-               'Healthy' if d <= 3 else
-               'Normal' if d <= 5 else
-               'Balanced' if d <= 8 else
-               'Needs Rebalance' if d <= 10 else
-               'Out of Balance' }}
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
           {% else %}
             {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
               {% set d = p['maxVol'] - p['minVol'] %}
               {{ 'Excellent' if d <= 2 else
-                 'Healthy' if d <= 3 else
-                 'Normal' if d <= 5 else
-                 'Balanced' if d <= 8 else
-                 'Needs Rebalance' if d <= 10 else
-                 'Out of Balance' }}
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
             {% else %}
               unknown
             {% endif %}
@@ -1466,22 +1458,18 @@ rest:
             {% set p = packdata[2] %}
             {% set d = p['maxVol'] - p['minVol'] %}
             {{ 'Excellent' if d <= 2 else
-               'Healthy' if d <= 3 else
-               'Normal' if d <= 5 else
-               'Balanced' if d <= 8 else
-               'Needs Rebalance' if d <= 10 else
-               'Out of Balance' }}
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
           {% else %}
             {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
               {% set d = p['maxVol'] - p['minVol'] %}
               {{ 'Excellent' if d <= 2 else
-                 'Healthy' if d <= 3 else
-                 'Normal' if d <= 5 else
-                 'Balanced' if d <= 8 else
-                 'Needs Rebalance' if d <= 10 else
-                 'Out of Balance' }}
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
             {% else %}
               unknown
             {% endif %}
@@ -1499,22 +1487,18 @@ rest:
             {% set p = packdata[3] %}
             {% set d = p['maxVol'] - p['minVol'] %}
             {{ 'Excellent' if d <= 2 else
-               'Healthy' if d <= 3 else
-               'Normal' if d <= 5 else
-               'Balanced' if d <= 8 else
-               'Needs Rebalance' if d <= 10 else
-               'Out of Balance' }}
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
           {% else %}
             {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
               {% set d = p['maxVol'] - p['minVol'] %}
               {{ 'Excellent' if d <= 2 else
-                 'Healthy' if d <= 3 else
-                 'Normal' if d <= 5 else
-                 'Balanced' if d <= 8 else
-                 'Needs Rebalance' if d <= 10 else
-                 'Out of Balance' }}
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
             {% else %}
               unknown
             {% endif %}
@@ -1532,22 +1516,18 @@ rest:
             {% set p = packdata[4] %}
             {% set d = p['maxVol'] - p['minVol'] %}
             {{ 'Excellent' if d <= 2 else
-               'Healthy' if d <= 3 else
-               'Normal' if d <= 5 else
-               'Balanced' if d <= 8 else
-               'Needs Rebalance' if d <= 10 else
-               'Out of Balance' }}
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
           {% else %}
             {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
               {% set d = p['maxVol'] - p['minVol'] %}
               {{ 'Excellent' if d <= 2 else
-                 'Healthy' if d <= 3 else
-                 'Normal' if d <= 5 else
-                 'Balanced' if d <= 8 else
-                 'Needs Rebalance' if d <= 10 else
-                 'Out of Balance' }}
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
             {% else %}
               unknown
             {% endif %}
@@ -1565,22 +1545,18 @@ rest:
             {% set p = packdata[5] %}
             {% set d = p['maxVol'] - p['minVol'] %}
             {{ 'Excellent' if d <= 2 else
-               'Healthy' if d <= 3 else
-               'Normal' if d <= 5 else
-               'Balanced' if d <= 8 else
-               'Needs Rebalance' if d <= 10 else
-               'Out of Balance' }}
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
           {% else %}
             {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
             {% if idx < packdata | length %}
               {% set p = packdata[idx] %}
               {% set d = p['maxVol'] - p['minVol'] %}
               {{ 'Excellent' if d <= 2 else
-                 'Healthy' if d <= 3 else
-                 'Normal' if d <= 5 else
-                 'Balanced' if d <= 8 else
-                 'Needs Rebalance' if d <= 10 else
-                 'Out of Balance' }}
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
             {% else %}
               unknown
             {% endif %}
