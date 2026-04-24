@@ -167,11 +167,11 @@ input_number:
 
   dynamic_setting_minimal_spread:
     name: Dynamic Minimal Spread
-    icon: mdi:percent-box
+    icon: mdi:cash
     min: 0
     max: 100
     step: 1
-    unit_of_measurement: '%'
+    unit_of_measurement: 'ct/kWh'
     mode: box
 
   dynamic_lowest_price_x_period:
@@ -553,7 +553,7 @@ template:
               0
             {% endif %}
           min_tomorrow: >-
-            {% set data = state_attr('sensor.dynamic_nordpool','raw_today') %}
+            {% set data = state_attr('sensor.dynamic_nordpool','raw_tomorrow') %}
             {% if data %}
             {{ data | map(attribute='value') | min | round(5) }}
             {% else %}
@@ -576,8 +576,8 @@ template:
 
       - name: "Dynamic Spread Indication"
         unique_id: dynamic_spread_indication
-        icon: mdi:percent-box
-        unit_of_measurement: "%"
+        icon: mdi:cash
+        unit_of_measurement: "ct/kWh"
         state: >
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
           {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
@@ -585,7 +585,7 @@ template:
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -650,8 +650,8 @@ template:
 
       - name: "Dynamic Spread Indication DSC"
         unique_id: dynamic_spread_indication_dsc
-        icon: mdi:percent-box
-        unit_of_measurement: "%"
+        icon: mdi:cash
+        unit_of_measurement: "ct/kWh"
         state: >
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
           {% set duurste = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
@@ -662,7 +662,7 @@ template:
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
             {% set avg_duur = dure_uren | map(attribute='value') | sum / dure_uren | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -727,8 +727,8 @@ template:
 
       - name: "Dynamic Spread Indication Tomorrow"
         unique_id: dynamic_spread_indication_tomorrow
-        icon: mdi:percent-box
-        unit_of_measurement: "%"
+        icon: mdi:cash
+        unit_of_measurement: "ct/kWh"
         state: >
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
           {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
@@ -736,7 +736,7 @@ template:
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -801,8 +801,8 @@ template:
 
       - name: "Dynamic Spread Indication DSC Tomorrow"
         unique_id: dynamic_spread_indication_dsc_tomorrow
-        icon: mdi:percent-box
-        unit_of_measurement: "%"
+        icon: mdi:cash
+        unit_of_measurement: "ct/kWh"
         state: >
           {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
           {% set duurste = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope_tomorrow') or [] %}
@@ -811,7 +811,7 @@ template:
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
             {% set avg_duur = dure_uren | map(attribute='value') | sum / dure_uren | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
