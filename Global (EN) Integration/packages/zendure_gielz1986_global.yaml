@@ -361,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260424"
+        state: "v20260424/2"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -619,7 +619,7 @@ template:
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -696,7 +696,7 @@ template:
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
             {% set avg_duur = dure_uren | map(attribute='value') | sum / dure_uren | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -770,7 +770,7 @@ template:
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -845,7 +845,7 @@ template:
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
             {% set avg_duur = dure_uren | map(attribute='value') | sum / dure_uren | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
