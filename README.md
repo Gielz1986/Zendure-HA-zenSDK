@@ -35,7 +35,7 @@ Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
 #### ℹ️ Required Hardware
 
 - Homewizard P1 (or another home energy meter that provides per-second data (+watt import / -watt export)).
-- One Solarflow 2400 (AC, AC+ or AC Pro) / Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) or Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ or Pro).
+- One Solarflow 2400 (AC, AC+ or AC Pro) / Solarflow 1600 AC+ / Solarflow 800 (Pro(2) or Plus) / Solarflow 3000 Mix AC+ / Solarflow 4000 Mix (AC+ or Pro).
 - Or two identical inverters combined with the [Node-RED proxy by Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
 ---
