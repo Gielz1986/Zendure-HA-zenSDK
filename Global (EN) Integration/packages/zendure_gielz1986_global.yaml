@@ -57,7 +57,7 @@ input_text:
   zendure_setting_battery_order:
     name: Zendure Battery Order
     icon: mdi:flip-vertical
-    max: 11
+    max: 44
     mode: text
 
   zendure_setting_ip_address:
@@ -100,7 +100,7 @@ input_number:
   zendure_setting_max_charge_power:
     name: Zendure Maximum Charge Power
     icon: mdi:format-vertical-align-top
-    min: 800
+    min: 400
     max: 7200
     step: 1
     mode: box
@@ -109,7 +109,7 @@ input_number:
   zendure_setting_max_discharge_power:
     name: Zendure Maximum Discharge Power
     icon: mdi:format-vertical-align-bottom
-    min: 800
+    min: 400
     max: 7200
     step: 1
     mode: box
@@ -128,7 +128,7 @@ input_number:
     name: Zendure Start Charging At
     icon: mdi:battery-plus-variant
     min: -1000
-    max: -100
+    max: -80
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -361,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260424/2"
+        state: "v20260501"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
