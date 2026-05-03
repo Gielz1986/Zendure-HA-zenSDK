@@ -2928,8 +2928,9 @@ views:
         cards:
           - type: markdown
             content: >
-              **{{ state_attr('sensor.github_zendure_ha_zensdk_gielz1986',
-              'tag_name')}}**
+              &nbsp;&nbsp;[![Laatste
+              release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Download&color=01a180&logo=github)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases/latest)
+
 
               {{ state_attr('sensor.github_zendure_ha_zensdk_gielz1986',
               'body')}}
