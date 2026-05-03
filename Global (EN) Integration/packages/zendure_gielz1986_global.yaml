@@ -361,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260501"
+        state: "v20260503"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -426,7 +426,7 @@ template:
         icon: mdi:swap-vertical-bold
         state_class: total_increasing
         state: >
-          {% set ontladen = states('sensor.zendure_relay_switches_charging_today') | int(0) %}
+          {% set ontladen = states('sensor.zendure_relay_switches_discharging_today') | int(0) %}
           {% set opladen = states('sensor.zendure_relay_switches_charging_today') | int(0) %}
           {% set totaal = ontladen + opladen - 1 %}
           {{ totaal if totaal > 0 else 0 }}
