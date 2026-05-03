@@ -1,9 +1,12 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260412)
+description: Configuration Version (v20260503)
 triggers:
   - seconds: /5
     id: aansturing_trigger
     trigger: time_pattern
+  - id: heartbeat_trigger
+    trigger: time_pattern
+    minutes: /1
   - at: "00:00:00"
     id: dynamisch_middernacht
     trigger: time
@@ -49,8 +52,20 @@ triggers:
     id: systeem_instelling_maxontlaadvermogen
   - trigger: state
     entity_id:
+      - input_number.zendure_setting_minimum_allowed_state_of_charge
+    id: system_setting_minsoc
+  - trigger: state
+    entity_id:
+      - input_number.zendure_setting_maximum_allowed_state_of_charge
+    id: system_setting_maxsoc
+  - trigger: state
+    entity_id:
       - input_button.zendure_setting_set_default_settings
     id: systeem_instelling_adviesinstellingen
+  - trigger: state
+    entity_id:
+      - input_text.zendure_setting_ip_address
+    id: systeem_instelling_zendure_ip
 conditions: []
 actions:
   - alias: Operation Mode
@@ -258,6 +273,10 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
+          - condition: state
+            entity_id: input_boolean.zendure_setting_soc_protection_disabled
+            state:
+              - "off"
           - condition: or
             conditions:
               - condition: template
@@ -345,6 +364,80 @@ actions:
                 conditions:
                   - condition: trigger
                     id:
+                      - system_setting_maxsoc
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ states('sensor.zendure_maximum_state_of_charge') |
+                      float !=
+                      states('input_number.zendure_setting_maximum_allowed_state_of_charge')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+              instellingitem: socSet
+              instellinginhoud: >-
+                {{
+                (states('input_number.zendure_setting_maximum_allowed_state_of_charge')
+                | int(0) * 10) }}
+            action: rest_command.zendure_setting
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Maximum allowed state of charge adjusted to {{
+                states('input_number.zendure_setting_maximum_allowed_state_of_charge')
+                | int }}% —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Adjust maximum allowed state of charge
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - system_setting_minsoc
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{ states('sensor.zendure_minimum_state_of_charge') |
+                      float !=
+                      states('input_number.zendure_setting_minimum_allowed_state_of_charge')
+                      | float }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+              instellingitem: minSoc
+              instellinginhoud: >-
+                {{
+                (states('input_number.zendure_setting_minimum_allowed_state_of_charge')
+                | int(0) * 10) }}
+            action: rest_command.zendure_setting
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️Minimum allowed state of charge adjusted to {{
+                states('input_number.zendure_setting_minimum_allowed_state_of_charge')
+                | int }}% —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Adjust minimum allowed state of charge
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
                       - systeem_instelling_maxoplaadvermogen
               - condition: and
                 conditions:
@@ -414,6 +507,7 @@ actions:
           - condition: trigger
             id:
               - systeem_instelling_adviesinstellingen
+              - systeem_instelling_zendure_ip
         sequence:
           - action: input_number.set_value
             metadata: {}
@@ -464,6 +558,32 @@ actions:
                 discharge buffer set to 5 watt — 
               entity_id: input_select.zendure_operation_mode
               name: " "
+          - action: input_number.set_value
+            metadata: {}
+            target:
+              entity_id: input_number.zendure_setting_minimum_allowed_state_of_charge
+            data:
+              value: 10
+          - action: input_number.set_value
+            metadata: {}
+            data:
+              value: 100
+            target:
+              entity_id: input_number.zendure_setting_maximum_allowed_state_of_charge
+          - action: logbook.log
+            data:
+              message: >-
+                ⚙️Set recommended settings — Minimum allowed state of charge set
+                to 10% and maximum allowed state of charge set to 100% — 
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+          - action: input_text.set_value
+            target:
+              entity_id:
+                - input_text.dynamic_manual_period
+                - input_text.dynamic_manual_period_tomorrow
+            data:
+              value: ""
         alias: Set default preferred settings
       - conditions:
           - condition: trigger
@@ -629,6 +749,66 @@ actions:
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: " Correct current discharge power"
+      - conditions:
+          - condition: trigger
+            id:
+              - heartbeat_trigger
+        sequence:
+          - action: input_datetime.set_datetime
+            metadata: {}
+            target:
+              entity_id: input_datetime.zendure_gielz_automation_last_time_executed
+            data:
+              datetime: "{{ now() }}"
+        alias: Automation Heartbeat
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: sensor.home_energy_meter_power
+            state:
+              - unavailable
+              - unknown
+            for:
+              hours: 0
+              minutes: 1
+              seconds: 0
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Dynamic Smart Matching
+              - Dynamic Smart Matching (Expensive)
+              - Dynamic Trading + Smart Matching
+              - Smart Charge Only
+              - Smart Discharge Only
+              - Smart Matching
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - "off"
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - "off"
+          - condition: or
+            conditions:
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                above: 0
+              - condition: numeric_state
+                entity_id: sensor.zendure_power
+                below: 0
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+          - action: logbook.log
+            data:
+              message: ⛔Home energy meter offline for 1 minute, emergency shutdown —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Emergency Shutdown
   - alias: Smart Matching Control
     choose:
       - conditions:
@@ -719,6 +899,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -821,6 +1008,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -929,6 +1123,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -1021,6 +1222,13 @@ actions:
                 entity_id: input_boolean.dynamic_discharging_running
                 state:
                   - "off"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: sensor.home_energy_meter_power
+                state:
+                  - unknown
+                  - unavailable
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"

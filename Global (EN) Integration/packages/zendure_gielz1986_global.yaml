@@ -49,11 +49,15 @@ input_boolean:
     name: Show PV On Dashboard
     icon: mdi:solar-panel
 
+  zendure_setting_soc_protection_disabled:
+    name: Zendure SOC Protection Disabled
+    icon: mdi:battery-heart-variant
+
 input_text:
   zendure_setting_battery_order:
     name: Zendure Battery Order
     icon: mdi:flip-vertical
-    max: 11
+    max: 44
     mode: text
 
   zendure_setting_ip_address:
@@ -96,7 +100,7 @@ input_number:
   zendure_setting_max_charge_power:
     name: Zendure Maximum Charge Power
     icon: mdi:format-vertical-align-top
-    min: 800
+    min: 400
     max: 7200
     step: 1
     mode: box
@@ -105,7 +109,7 @@ input_number:
   zendure_setting_max_discharge_power:
     name: Zendure Maximum Discharge Power
     icon: mdi:format-vertical-align-bottom
-    min: 800
+    min: 400
     max: 7200
     step: 1
     mode: box
@@ -114,7 +118,7 @@ input_number:
   zendure_setting_start_discharging_at:
     name: Zendure Start Discharging At
     icon: mdi:battery-minus-variant
-    min: 100
+    min: 80
     max: 500
     step: 1
     mode: box
@@ -124,7 +128,7 @@ input_number:
     name: Zendure Start Charging At
     icon: mdi:battery-plus-variant
     min: -1000
-    max: -100
+    max: -80
     step: 1
     mode: box
     unit_of_measurement: "W"
@@ -205,6 +209,31 @@ input_number:
     max: 96
     step: 1
     mode: box
+
+  zendure_setting_minimum_allowed_state_of_charge:
+    name: Zendure Minimum Allowed State Of Charge
+    icon: mdi:percent-box
+    min: 5
+    max: 50
+    step: 1
+    unit_of_measurement: '%'
+    mode: box
+
+  zendure_setting_maximum_allowed_state_of_charge:
+    name: Zendure Maximum Allowed State Of Charge
+    icon: mdi:percent-box
+    min: 70
+    max: 100
+    step: 1
+    unit_of_measurement: '%'
+    mode: box
+
+input_datetime:
+  zendure_gielz_automation_last_time_executed:
+    name: Zendure Gielz Automation Last Time Executed
+    icon: mdi:clock-time-eight-outline
+    has_date: true
+    has_time: true
 
 sensor:
   - platform: history_stats
@@ -332,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260412"
+        state: "v20260503"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -397,8 +426,8 @@ template:
         icon: mdi:swap-vertical-bold
         state_class: total_increasing
         state: >
-          {% set ontladen = states('sensor.zendure_relay_switches_charging_today') | int %}
-          {% set opladen = states('sensor.zendure_relay_switches_charging_today') | int %}
+          {% set ontladen = states('sensor.zendure_relay_switches_discharging_today') | int(0) %}
+          {% set opladen = states('sensor.zendure_relay_switches_charging_today') | int(0) %}
           {% set totaal = ontladen + opladen - 1 %}
           {{ totaal if totaal > 0 else 0 }}
 
@@ -407,6 +436,11 @@ template:
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
+        availability: >
+         {% set afwijkend = states('input_text.home_energy_setting_meter_sensor') %}
+         {% set afwijkend_valid = afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
+         {% set homewizard_valid = states('sensor.homewizard_p1_power') not in ['unknown', 'unavailable', 'none'] %}
+           {{ afwijkend_valid or homewizard_valid }}
         state: >
          {% set afwijkend = states('input_text.home_energy_setting_meter_sensor') %}
          {% if afwijkend | lower | regex_match('^sensor\\..+') and states(afwijkend) not in ['unknown', 'unavailable', 'none'] %}
@@ -585,7 +619,7 @@ template:
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -662,7 +696,7 @@ template:
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
             {% set avg_duur = dure_uren | map(attribute='value') | sum / dure_uren | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -736,7 +770,7 @@ template:
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -811,7 +845,7 @@ template:
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
             {% set avg_duur = dure_uren | map(attribute='value') | sum / dure_uren | count %}
-            {{ ((avg_duur - avg_goedkoop) / avg_goedkoop * 100) | round(1) }}
+            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
           {% else %}
             0
           {% endif %}
@@ -1354,12 +1388,185 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_setting_ip_address') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure Battery 1 Cell Balance Status"
+        unique_id: zendure_battery_1_cell_balance_status
+        icon: mdi:battery-heart-variant
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown','unavailable',''] %}
+            {% set p = packdata[0] %}
+            {% set d = p['maxVol'] - p['minVol'] %}
+            {{ 'Excellent' if d <= 2 else
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = p['maxVol'] - p['minVol'] %}
+              {{ 'Excellent' if d <= 2 else
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+
+      - name: "Zendure Battery 2 Cell Balance Status"
+        unique_id: zendure_battery_2_cell_balance_status
+        icon: mdi:battery-heart-variant
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown','unavailable',''] %}
+            {% set p = packdata[1] %}
+            {% set d = p['maxVol'] - p['minVol'] %}
+            {{ 'Excellent' if d <= 2 else
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = p['maxVol'] - p['minVol'] %}
+              {{ 'Excellent' if d <= 2 else
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+
+      - name: "Zendure Battery 3 Cell Balance Status"
+        unique_id: zendure_battery_3_cell_balance_status
+        icon: mdi:battery-heart-variant
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown','unavailable',''] %}
+            {% set p = packdata[2] %}
+            {% set d = p['maxVol'] - p['minVol'] %}
+            {{ 'Excellent' if d <= 2 else
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = p['maxVol'] - p['minVol'] %}
+              {{ 'Excellent' if d <= 2 else
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+
+      - name: "Zendure Battery 4 Cell Balance Status"
+        unique_id: zendure_battery_4_cell_balance_status
+        icon: mdi:battery-heart-variant
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown','unavailable',''] %}
+            {% set p = packdata[3] %}
+            {% set d = p['maxVol'] - p['minVol'] %}
+            {{ 'Excellent' if d <= 2 else
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = p['maxVol'] - p['minVol'] %}
+              {{ 'Excellent' if d <= 2 else
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+
+      - name: "Zendure Battery 5 Cell Balance Status"
+        unique_id: zendure_battery_5_cell_balance_status
+        icon: mdi:battery-heart-variant
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown','unavailable',''] %}
+            {% set p = packdata[4] %}
+            {% set d = p['maxVol'] - p['minVol'] %}
+            {{ 'Excellent' if d <= 2 else
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = p['maxVol'] - p['minVol'] %}
+              {{ 'Excellent' if d <= 2 else
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+
+      - name: "Zendure Battery 6 Cell Balance Status"
+        unique_id: zendure_battery_6_cell_balance_status
+        icon: mdi:battery-heart-variant
+        value_template: >
+          {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
+          {% set packdata = value_json['packData'] %}
+          {% if not packdata %}
+            unknown
+          {% elif volgorde_raw in ['unknown','unavailable',''] %}
+            {% set p = packdata[5] %}
+            {% set d = p['maxVol'] - p['minVol'] %}
+            {{ 'Excellent' if d <= 2 else
+               'Good' if d <= 5 else
+               'Slight Imbalance' if d <= 8 else
+               'Imbalanced' }}
+          {% else %}
+            {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
+            {% if idx < packdata | length %}
+              {% set p = packdata[idx] %}
+              {% set d = p['maxVol'] - p['minVol'] %}
+              {{ 'Excellent' if d <= 2 else
+                 'Good' if d <= 5 else
+                 'Slight Imbalance' if d <= 8 else
+                 'Imbalanced' }}
+            {% else %}
+              unknown
+            {% endif %}
+          {% endif %}
+
       - name: "Zendure PV Passthrough"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
-          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set pv_active = (solar > 0) or (grid_off < 0) %}
           {% set states = {0: "Battery", 2: "Home"} %}
           {% set packState = value_json['properties']['pass'] | int %}
           {{ states.get(packState, "Onbekend") if pv_active else "PV Offline" }}

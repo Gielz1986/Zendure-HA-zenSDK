@@ -1143,10 +1143,7 @@ views:
                     // Standaardkleur: #e0e0e3
                     let kleur = "rgba(224,224,227,1)";
 
-                    if (prijs < 0) {
-                      kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
-                    }
-                    else if (item.goedkoop === "ja") {
+                    if (item.goedkoop === "ja") {
                       kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
                     }
                     else if (item.duur === "ja") {
@@ -1293,10 +1290,8 @@ views:
                         // Standaardkleur: #e0e0e3
                         let kleur = "rgba(224,224,227,1)";
 
-                        if (prijs < 0) {
-                          kleur = verleden ? "rgba(93,173,226,0.15)" : "rgba(93,173,226,1)";
-                        }
-                        else if (item.goedkoop === "ja") {
+
+                        if (item.goedkoop === "ja") {
                           kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
                         }
                         else if (item.duur === "ja") {
@@ -1400,9 +1395,9 @@ views:
               - entity: sensor.zendure_2400_ac_batterijspanning
                 name: Batterijspanning
               - entity: sensor.zendure_2400_ac_minimale_laadpercentage
-                name: Minimale Laadpercentage
+                name: Min. Laadpercentage
               - entity: sensor.zendure_2400_ac_maximale_laadpercentage
-                name: Maximale Laadpercentage
+                name: Max. Laadpercentage
           - type: heading
             icon: ''
             heading: Relais Schakelingen
@@ -1757,6 +1752,8 @@ views:
                     name: Batterij 1 Temperatuur
                   - entity: sensor.zendure_2400_ac_batterij_1_laadpercentage
                     name: Batterij 1 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_1_celbalans_status
+                    name: Batterij 1 Celbalans
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
@@ -1772,6 +1769,10 @@ views:
                     name: Batterij 1 Laadpercentage
                   - entity: sensor.zendure_2400_ac_batterij_2_laadpercentage
                     name: Batterij 2 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_1_celbalans_status
+                    name: Batterij 1 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_2_celbalans_status
+                    name: Batterij 2 Celbalans
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
@@ -1791,6 +1792,12 @@ views:
                     name: Batterij 2 Laadpercentage
                   - entity: sensor.zendure_2400_ac_batterij_3_laadpercentage
                     name: Batterij 3 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_1_celbalans_status
+                    name: Batterij 1 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_2_celbalans_status
+                    name: Batterij 2 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_3_celbalans_status
+                    name: Batterij 3 Celbalans
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
@@ -1814,6 +1821,14 @@ views:
                     name: Batterij 3 Laadpercentage
                   - entity: sensor.zendure_2400_ac_batterij_4_laadpercentage
                     name: Batterij 4 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_1_celbalans_status
+                    name: Batterij 1 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_2_celbalans_status
+                    name: Batterij 2 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_3_celbalans_status
+                    name: Batterij 3 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_4_celbalans_status
+                    name: Batterij 4 Celbalans
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
@@ -1841,6 +1856,16 @@ views:
                     name: Batterij 4 Laadpercentage
                   - entity: sensor.zendure_2400_ac_batterij_5_laadpercentage
                     name: Batterij 5 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_1_celbalans_status
+                    name: Batterij 1 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_2_celbalans_status
+                    name: Batterij 2 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_3_celbalans_status
+                    name: Batterij 3 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_4_celbalans_status
+                    name: Batterij 4 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_5_celbalans_status
+                    name: Batterij 5 Celbalans
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
@@ -1872,6 +1897,18 @@ views:
                     name: Batterij 5 Laadpercentage
                   - entity: sensor.zendure_2400_ac_batterij_6_laadpercentage
                     name: Batterij 6 Laadpercentage
+                  - entity: sensor.zendure_2400_ac_batterij_1_celbalans_status
+                    name: Batterij 1 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_2_celbalans_status
+                    name: Batterij 2 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_3_celbalans_status
+                    name: Batterij 3 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_4_celbalans_status
+                    name: Batterij 4 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_5_celbalans_status
+                    name: Batterij 5 Celbalans
+                  - entity: sensor.zendure_2400_ac_batterij_6_celbalans_status
+                    name: Batterij 6 Celbalans
                 visibility:
                   - condition: numeric_state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
@@ -2478,40 +2515,48 @@ views:
             heading: Gekoppelde Zendure
             heading_style: title
           - type: markdown
+            text_only: true
+            content: >-
+              {% set product = states('sensor.zendure_2400_ac_productserie') %}
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/' %}
+
+              {% if last in ['unknown', 'unavailable', '', None] %}
+                <img src="{{ base }}Inactive.png" width="100">
+              {% else %}
+                {% set diff = as_timestamp(now()) - as_timestamp(last) %}
+
+                {% if diff >= 120 %}
+                  <img src="{{ base }}Inactive.png" width="100">
+                {% else %}
+
+                  {% if product == 'solarFlow2400AC' %}
+                    <img src="{{ base }}sf_2400_ac.png" width="100">
+                  {% elif product == 'solarFlow2400AC+' %}
+                    <img src="{{ base }}sf_2400_ac_plus.png" width="100">
+                  {% elif product == 'Hyper2000' %}
+                    <img src="{{ base }}hyper_2000.png" width="100">
+                  {% elif product == 'solarFlow2400Pro' %}
+                    <img src="{{ base }}sf_2400_pro.png" width="100">
+                  {% elif product == 'solarFlow1600AC+' %}
+                    <img src="{{ base }}sf_1600_ac_plus.png" width="100">
+                  {% elif product == 'solarFlow800Pro' %}
+                    <img src="{{ base }}sf_800_pro.png" width="100">
+                  {% elif product == 'solarFlow800Plus' %}
+                    <img src="{{ base }}sf_800_plus.png" width="100">
+                  {% else %}
+                    <img src="{{ base }}sf_2400_ac.png" width="100">
+                  {% endif %}
+
+                {% endif %}
+              {% endif %}
             grid_options:
               columns: 3
               rows: auto
-            text_only: true
-            content: >
-              {% set product = states('sensor.zendure_2400_ac_productserie') %}
-
-              {% if product == 'solarFlow2400AC' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
-              width="100">
-
-              {% elif product == 'solarFlow2400AC+' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac_plus.png"
-              width="100">
-
-              {% elif product == 'solarFlow2400Pro' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_pro.png"
-              width="100">
-
-              {% elif product == 'solarFlow1600AC+' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_1600_ac_plus.png"
-              width="100">
-
-              {% elif product == 'solarFlow800Pro' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_pro.png"
-              width="100">
-
-              {% elif product == 'solarFlow800Plus' %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_800_plus.png"
-              width="100">
-
-              {% else %} <img
-              src="https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/sf_2400_ac.png"
-              width="100"> {% endif %}
           - type: markdown
             content: >-
               {% set product = states('sensor.zendure_2400_ac_productserie') %}
@@ -2519,12 +2564,30 @@ views:
               elif product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {%
               elif product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {%
               elif product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {%
-              elif product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
-              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
-              **Onbekend** {% endif %} ({{
+              elif product == 'Hyper2000' %} **Hyper 2000** {% elif product ==
+              'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif product ==
+              'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
+              **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_totale_capaciteit') }} kWh)
 
               {{ states('sensor.zendure_2400_ac_serienummer') }}
+
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% if last not in ['unknown', 'unavailable', ''] %}
+                {% set diff = as_timestamp(now()) - as_timestamp(last) %}
+
+                **Automatisering Hartslag**  
+                {% if diff > 120 %}Automatisering Offline
+                {% else %} {{ as_timestamp(last) | timestamp_custom('%Y-%m-%d %H:%M') }} (laatste controle)
+                {% endif %}
+
+              {% else %}
+                **Verkeerde entiteiten controleer package**
+              {% endif %}
             grid_options:
               columns: 9
               rows: auto
@@ -2532,7 +2595,17 @@ views:
             icon: ''
             heading: Configuratie (Basis)
             heading_style: title
-            badges: []
+            badges:
+              - type: button
+                icon: mdi:mouse
+                tap_action:
+                  action: perform-action
+                  perform_action: input_button.press
+                  target:
+                    entity_id: input_button.zendure_2400_ac_advies_instellingen_overnemen
+                  data: {}
+                color: '#01a180'
+                text: Standaardinstellingen
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Vul hier het
@@ -2562,8 +2635,6 @@ views:
               - entity: input_text.homewizard_p1_ip_adres
               - entity: input_number.zendure_2400_ac_standby_vertraging
                 name: Standby Vertraging
-              - entity: input_button.zendure_2400_ac_advies_instellingen_overnemen
-                name: Advies Instellingen Overnemen
           - type: heading
             icon: ''
             heading: Configuratie (Opladen)
@@ -2632,6 +2703,63 @@ views:
                 name: Ontlaadmarge
       - type: grid
         cards:
+          - type: heading
+            icon: ''
+            heading_style: title
+            heading: Configuratie (Laadpercentage)
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_minimale_laadpercentage
+                icon: mdi:api
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+              - type: entity
+                show_state: true
+                show_icon: false
+                entity: sensor.zendure_2400_ac_maximale_laadpercentage
+                icon: mdi:api
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="error">Waarschuwing</ha-alert>Minimaal
+              toegestaan laadpercentage is ingesteld onder de 10% dit wordt
+              afgeraden door Zendure.
+            text_only: true
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_minimale_laadpercentage
+                below: 10
+          - type: markdown
+            content: >-
+              <ha-alert alert-type="info">Helptekst</ha-alert>Stel hier het
+              minimaal en maximaal toegestaan laadpercentage in.
+
+
+              Ook kun je de SOC bescherming van deze integratie uitschakelen.
+              Wanneer de batterij onder het minimaal toegestaan laadpercentage
+              zakt zal er niet meer automatisch bijgeladen worden. Er word
+              gewacht tot de BMS (batterij management systeem) zelf actie
+              onderneemt.
+            text_only: true
+            visibility:
+              - condition: state
+                entity: input_boolean.help_tonen_op_dashboard
+                state: 'on'
+          - type: entities
+            entities:
+              - entity: input_boolean.zendure_2400_ac_soc_bescherming_uitgeschakeld
+                name: SOC Bescherming Uitgeschakeld
+              - entity: >-
+                  input_number.zendure_2400_ac_minimaal_toegestaan_laadpercentage
+                name: Min. Laadpercentage
+              - entity: >-
+                  input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage
+                name: Max. Laadpercentage
           - type: heading
             icon: ''
             heading: Configuratie (Optioneel)
@@ -2707,6 +2835,27 @@ views:
               - entity: input_boolean.help_tonen_op_dashboard
               - entity: input_boolean.pv_tonen_op_dashboard
               - entity: input_boolean.dynamisch_tonen_op_dashboard
+      - type: grid
+        cards:
+          - type: heading
+            heading: Logboek (afgelopen 4 uur)
+            heading_style: title
+            badges:
+              - type: button
+                icon: mdi:information
+                tap_action:
+                  action: navigate
+                  navigation_path: /logbook
+                color: '#01a180'
+                text: Meer
+          - type: logbook
+            target:
+              entity_id:
+                - input_select.zendure_2400_ac_modus_selecteren
+            grid_options:
+              columns: 12
+              rows: 12
+            hours_to_show: 4
           - type: heading
             icon: ''
             heading: Versiebeheer
@@ -2766,27 +2915,6 @@ views:
               columns: 12
               rows: auto
             text_only: true
-      - type: grid
-        cards:
-          - type: heading
-            heading: Logboek (afgelopen 4 uur)
-            heading_style: title
-            badges:
-              - type: button
-                icon: mdi:information
-                tap_action:
-                  action: navigate
-                  navigation_path: /logbook
-                color: '#01a180'
-                text: Meer
-          - type: logbook
-            target:
-              entity_id:
-                - input_select.zendure_2400_ac_modus_selecteren
-            grid_options:
-              columns: 12
-              rows: 15
-            hours_to_show: 4
     cards: []
     dense_section_placement: false
   - type: sections
