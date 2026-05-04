@@ -361,7 +361,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260503"
+        state: "v20260504"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -587,7 +587,7 @@ template:
               0
             {% endif %}
           min_tomorrow: >-
-            {% set data = state_attr('sensor.dynamisch_nordpool','raw_today') %}
+            {% set data = state_attr('sensor.dynamisch_nordpool','raw_tomorrow') %}
             {% if data %}
             {{ data | map(attribute='value') | min | round(5) }}
             {% else %}
