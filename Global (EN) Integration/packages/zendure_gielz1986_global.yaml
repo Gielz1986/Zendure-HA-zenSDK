@@ -361,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260503"
+        state: "v20260504"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -587,7 +587,7 @@ template:
               0
             {% endif %}
           min_tomorrow: >-
-            {% set data = state_attr('sensor.dynamic_nordpool','raw_today') %}
+            {% set data = state_attr('sensor.dynamic_nordpool','raw_tomorrow') %}
             {% if data %}
             {{ data | map(attribute='value') | min | round(5) }}
             {% else %}
