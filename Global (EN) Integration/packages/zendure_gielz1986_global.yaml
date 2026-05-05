@@ -1268,6 +1268,7 @@ template:
         icon: mdi:lightning-bolt-circle
         state: >
           {% set laad = states('sensor.zendure_total_state_of_charge') | float(0) %}
+          {% set min_laad = states('sensor.zendure_minimum_state_of_charge') | float(0) %}
           {% set max_laad = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
           {% set totale_capaciteit = states('sensor.zendure_total_capacity') | float(0) %}
 
@@ -1936,8 +1937,8 @@ rest:
          {% set vermogen = states('sensor.zendure_power') | float(0) %}
          {% set energie = states('sensor.zendure_indication_available_energy') | float(0) %}
          {% if vermogen < 0 %}
+         {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
          {% if ontlaadvermogen_kw > 0 %}
-          {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
            {% set uren = energie / ontlaadvermogen_kw %}
            {% set total_minutes = (uren * 60) | int %}
            {% set hours = total_minutes // 60 %}
