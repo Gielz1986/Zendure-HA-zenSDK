@@ -1936,25 +1936,19 @@ rest:
         value_template: >
          {% set vermogen = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
          {% set energie = states('sensor.zendure_2400_ac_indicatie_beschikbare_energie') | float(0) %}
-         {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
-         {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
          {% if vermogen < 0 %}
-           {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
-           {% if ontlaadvermogen_kw > 0 %}
-             {% set uren = energie / ontlaadvermogen_kw %}
-             {% set total_minutes = (uren * 60) | int %}
-             {% set hours = total_minutes // 60 %}
-             {% set minutes = total_minutes % 60 %}
-             {{ hours }}u {{ minutes }}m
-           {% else %}
-             Onbekend
-           {% endif %}
+         {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
+         {% if ontlaadvermogen_kw > 0 %}
+           {% set uren = energie / ontlaadvermogen_kw %}
+           {% set total_minutes = (uren * 60) | int %}
+           {% set hours = total_minutes // 60 %}
+           {% set minutes = total_minutes % 60 %}
+           {{ hours }}u {{ minutes }}m
          {% else %}
-           {% if laad <= min_laad %}
-             Ontladen tot minimum
-           {% else %}
-             Niet aan het ontladen
-           {% endif %}
+           Onbekend
+         {% endif %}
+         {% else %}
+           Niet aan het ontladen
          {% endif %}
         icon: mdi:clock-time-eight-outline
         unique_id: zendure_2400_ac_resterende_ontlaad_tijd
@@ -1977,11 +1971,10 @@ rest:
              Onbekend
            {% endif %}
          {% else %}
-           {% if laad >= max_laad %}
-             Opgeladen tot maximum
-           {% else %}
-             Niet aan het opladen
-           {% endif %}
+           Onbekend
+         {% endif %}
+         {% else %}
+           Niet aan het opladen
          {% endif %}
         icon: mdi:clock-time-eight-outline
         unique_id: zendure_2400_ac_resterende_oplaad_tijd

@@ -1935,25 +1935,19 @@ rest:
         value_template: >
          {% set vermogen = states('sensor.zendure_power') | float(0) %}
          {% set energie = states('sensor.zendure_indication_available_energy') | float(0) %}
-         {% set laad = states('sensor.zendure_total_state_of_charge') | float(0) %}
-         {% set min_laad = states('sensor.zendure_minimum_state_of_charge') | float(0) %}
          {% if vermogen < 0 %}
-           {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
-           {% if ontlaadvermogen_kw > 0 %}
-             {% set uren = energie / ontlaadvermogen_kw %}
-             {% set total_minutes = (uren * 60) | int %}
-             {% set hours = total_minutes // 60 %}
-             {% set minutes = total_minutes % 60 %}
-             {{ hours }}h {{ minutes }}m
-           {% else %}
-             Unknown
-           {% endif %}
+         {% if ontlaadvermogen_kw > 0 %}
+          {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
+           {% set uren = energie / ontlaadvermogen_kw %}
+           {% set total_minutes = (uren * 60) | int %}
+           {% set hours = total_minutes // 60 %}
+           {% set minutes = total_minutes % 60 %}
+           {{ hours }}h {{ minutes }}m
          {% else %}
-           {% if laad <= min_laad %}
-             Charged to minimum
-           {% else %}
-             Not Discharging
-           {% endif %}
+           Unknown
+         {% endif %}
+         {% else %}
+           Not Discharging
          {% endif %}
         icon: mdi:clock-time-eight-outline
         unique_id: zendure_indication_remaining_discharge_time
@@ -1966,21 +1960,17 @@ rest:
          {% set max_laad = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
          {% if vermogen > 0 %}
            {% set oplaadvermogen_kw = vermogen / 1000 %}
-           {% if oplaadvermogen_kw > 0 %}
-             {% set uren = energie / oplaadvermogen_kw %}
-             {% set total_minutes = (uren * 60) | int %}
-             {% set hours = total_minutes // 60 %}
-             {% set minutes = total_minutes % 60 %}
-             {{ hours }}h {{ minutes }}m
-           {% else %}
-             Unknown
-           {% endif %}
+           {% set uren = energie / oplaadvermogen_kw %}
+           {% set total_minutes = (uren * 60) | int %}
+           {% set hours = total_minutes // 60 %}
+           {% set minutes = total_minutes % 60 %}
+           {{ hours }}h {{ minutes }}m
          {% else %}
-           {% if laad >= max_laad %}
-             Charged to maximum
-           {% else %}
-             Not Charging
-           {% endif %}
+         {% else %}
+           Unknown
+         {% endif %}
+         {% else %}
+           Not Charging
          {% endif %}
         icon: mdi:clock-time-four-outline
         unique_id: zendure_indication_remaining_charge_time

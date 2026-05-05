@@ -812,13 +812,6 @@ views:
           - type: entities
             show_header_toggle: false
             entities:
-              - entity: sensor.zendure_soc_limit_status
-                name: SOC-limit Status
-              - entity: sensor.zendure_indication_available_energy
-                name: Available Energy
-              - entity: sensor.zendure_indication_required_energy
-                name: Required Energy
-                secondary_info: none
               - entity: sensor.zendure_charging_mode
                 name: Charging Mode
               - type: conditional
@@ -827,10 +820,21 @@ views:
                     conditions:
                       - condition: state
                         entity: sensor.zendure_charging_mode
-                        state: Discharging
+                        state: Standby
+                row:
+                  entity: sensor.zendure_soc_limit_status
+                  name: SOC-limit Status
+              - entity: sensor.zendure_indication_available_energy
+                name: Available Energy
+              - entity: sensor.zendure_indication_required_energy
+                name: Required Energy
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
                       - condition: state
-                        entity: sensor.zendure_soc_limit_status
-                        state: Discharge Limit Reached
+                        entity: sensor.zendure_charging_mode
+                        state: Discharging
                 row:
                   entity: sensor.zendure_indication_remaining_discharge_time
                   name: Remaining Discharge Time
@@ -841,16 +845,29 @@ views:
                       - condition: state
                         entity: sensor.zendure_charging_mode
                         state: Charging
-                      - condition: state
-                        entity: sensor.zendure_soc_limit_status
-                        state: Charging Limit Reached
                 row:
                   entity: sensor.zendure_indication_remaining_charge_time
                   name: Remaining Charge Time
-              - entity: sensor.zendure_set_discharge_power
-                name: Discharge Power
-              - entity: sensor.zendure_set_charge_power
-                name: Charge Power
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: sensor.zendure_charging_mode
+                        state: Discharging
+                row:
+                  entity: sensor.zendure_set_discharge_power    
+                  name: Discharge Power
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: sensor.zendure_charging_mode
+                        state: Charging
+                row:
+                  entity: sensor.zendure_set_charge_power
+                  name: Charge Power
           - type: heading
             icon: ''
             heading: Zero Import
