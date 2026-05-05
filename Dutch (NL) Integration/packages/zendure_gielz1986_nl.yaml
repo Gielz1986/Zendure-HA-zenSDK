@@ -1331,6 +1331,73 @@ template:
               Export efficiëntie 24u gemiddelde
             {% endif %}
 
+      - name: "Zendure 2400 AC Indicatie Benodigde Energie"
+        unique_id: Zendure_2400_AC_Indicatie_Benodigde_Energie
+        unit_of_measurement: "kWh"
+        device_class: energy
+        icon: mdi:lightning-bolt-circle
+        state: >
+          {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+          {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
+          {% set totale_capaciteit = states('sensor.zendure_2400_ac_totale_capaciteit') | float(0) %}
+
+          {% set import_eff = states('sensor.zendure_2400_ac_efficientie_import_24u_gemiddelde') | float(0) %}
+          {% set rte_totaal = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+
+          {% set effectief_laad = [laad, max_laad] | min %}
+          {% set rte_import_equivalent = (rte_totaal / 100) ** 0.5 * 100 %}
+
+          {% if import_eff < 70 %}
+            {% set effectieve_eff = rte_import_equivalent %}
+          {% else %}
+            {% set effectieve_eff = import_eff %}
+          {% endif %}
+
+          {% set effectieve_eff = [effectieve_eff, 100] | min / 100 %}
+          {% set benodigd_percentage = max_laad - effectief_laad %}
+
+          {% if benodigd_percentage <= 0 %}
+            0
+          {% else %}
+            {{ (benodigd_percentage / 100 * totale_capaciteit / effectieve_eff) | round(2) }}
+          {% endif %}
+        attributes:
+          totale_capaciteit_kwh: >
+            {{ states('sensor.zendure_2400_ac_totale_capaciteit') }}
+          indicatie_benodigde_energie_(zonder_verlies): >
+            {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+            {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
+            {% set totale_capaciteit = states('sensor.zendure_2400_ac_totale_capaciteit') | float(0) %}
+
+            {% set effectief_laad = [laad, max_laad] | min %}
+            {% set benodigd_percentage = max_laad - effectief_laad %}
+
+            {% if benodigd_percentage <= 0 %}
+              0
+            {% else %}
+              {{ (benodigd_percentage / 100 * totale_capaciteit) | round(2) }}
+            {% endif %}
+          benodigd_percentage: >
+            {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+            {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
+            {{ ([max_laad - [laad, max_laad] | min, 0] | max) | round(1) }} %
+          gebruikte_import_efficiëntie: >
+            {% set import_eff = states('sensor.zendure_2400_ac_efficientie_import_24u_gemiddelde') | float(0) %}
+            {% set rte_totaal = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+            {% set rte_import_equivalent = (rte_totaal / 100) ** 0.5 * 100 %}
+            {% if import_eff < 70 %}
+              {{ rte_import_equivalent | round(1) }} %
+            {% else %}
+              {{ import_eff | round(1) }} %
+            {% endif %}
+          bron_import_efficiëntie: >
+            {% set import_eff = states('sensor.zendure_2400_ac_efficientie_import_24u_gemiddelde') | float(0) %}
+            {% if import_eff < 70 %}
+              RTE totaal (√RTE × 100)
+            {% else %}
+              Import efficiëntie 24u gemiddelde
+            {% endif %}
+
       - name: "Zendure 2400 AC RTE Totaal"
         unique_id: Zendure_2400_AC_RTE_Totaal
         unit_of_measurement: "%"
@@ -1869,22 +1936,55 @@ rest:
         value_template: >
          {% set vermogen = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
          {% set energie = states('sensor.zendure_2400_ac_indicatie_beschikbare_energie') | float(0) %}
+         {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+         {% set min_laad = states('sensor.zendure_2400_ac_minimale_laadpercentage') | float(0) %}
          {% if vermogen < 0 %}
-         {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
-         {% if ontlaadvermogen_kw > 0 %}
-           {% set uren = energie / ontlaadvermogen_kw %}
-           {% set total_minutes = (uren * 60) | int %}
-           {% set hours = total_minutes // 60 %}
-           {% set minutes = total_minutes % 60 %}
-           {{ hours }}u {{ minutes }}m
+           {% set ontlaadvermogen_kw = (vermogen | abs) / 1000 %}
+           {% if ontlaadvermogen_kw > 0 %}
+             {% set uren = energie / ontlaadvermogen_kw %}
+             {% set total_minutes = (uren * 60) | int %}
+             {% set hours = total_minutes // 60 %}
+             {% set minutes = total_minutes % 60 %}
+             {{ hours }}u {{ minutes }}m
+           {% else %}
+             Onbekend
+           {% endif %}
          {% else %}
-           Onbekend
-         {% endif %}
-         {% else %}
-           Niet aan het ontladen
+           {% if laad <= min_laad %}
+             Ontladen tot minimum
+           {% else %}
+             Niet aan het ontladen
+           {% endif %}
          {% endif %}
         icon: mdi:clock-time-eight-outline
         unique_id: zendure_2400_ac_resterende_ontlaad_tijd
+
+      - name: "Zendure 2400 AC Resterende Oplaad Tijd"
+        value_template: >
+         {% set vermogen = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+         {% set energie = states('sensor.zendure_2400_ac_indicatie_benodigde_energie') | float(0) %}
+         {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
+         {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
+         {% if vermogen > 0 %}
+           {% set oplaadvermogen_kw = vermogen / 1000 %}
+           {% if oplaadvermogen_kw > 0 %}
+             {% set uren = energie / oplaadvermogen_kw %}
+             {% set total_minutes = (uren * 60) | int %}
+             {% set hours = total_minutes // 60 %}
+             {% set minutes = total_minutes % 60 %}
+             {{ hours }}u {{ minutes }}m
+           {% else %}
+             Onbekend
+           {% endif %}
+         {% else %}
+           {% if laad >= max_laad %}
+             Opgeladen tot maximum
+           {% else %}
+             Niet aan het opladen
+           {% endif %}
+         {% endif %}
+        icon: mdi:clock-time-eight-outline
+        unique_id: zendure_2400_ac_resterende_oplaad_tijd
 
       - name: "Zendure 2400 AC Omvormer Temperatuur"
         value_template: >
