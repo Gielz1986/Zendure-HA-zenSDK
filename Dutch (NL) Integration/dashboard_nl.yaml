@@ -1432,7 +1432,6 @@ views:
                 name: Omvormer Max. Ontlaadvermogen
               - entity: sensor.zendure_2400_ac_opslagmodus
                 name: Opslagmodus
-                secondary_info: last-changed
               - entity: sensor.zendure_2400_ac_batterijspanning
                 name: Batterijspanning
               - entity: sensor.zendure_2400_ac_minimale_laadpercentage
