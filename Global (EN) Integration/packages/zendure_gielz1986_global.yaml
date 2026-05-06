@@ -361,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260504"
+        state: "v20260506"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -2167,19 +2167,19 @@ rest:
          {% set laad = states('sensor.zendure_total_state_of_charge') | float(0) %}
          {% set max_laad = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
          {% if vermogen > 0 %}
-           {% set oplaadvermogen_kw = vermogen / 1000 %}
-           {% set uren = energie / oplaadvermogen_kw %}
-           {% set total_minutes = (uren * 60) | int %}
-           {% set hours = total_minutes // 60 %}
-           {% set minutes = total_minutes % 60 %}
-           {{ hours }}h {{ minutes }}m
+          {% set oplaadvermogen_kw = vermogen / 1000 %}
+          {% if oplaadvermogen_kw > 0 and energie > 0 %}
+         {% set uren = energie / oplaadvermogen_kw %}
+         {% set total_minutes = (uren * 60) | int %}
+         {% set hours = total_minutes // 60 %}
+         {% set minutes = total_minutes % 60 %}
+         {{ hours }}h {{ minutes }}m
          {% else %}
-         {% else %}
-           Unknown
+          Unknown
          {% endif %}
          {% else %}
-           Not Charging
-         {% endif %}
+          Not Charging
+          {% endif %}
         icon: mdi:clock-time-four-outline
         unique_id: zendure_indication_remaining_charge_time
 
