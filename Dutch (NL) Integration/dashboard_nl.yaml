@@ -815,21 +815,62 @@ views:
           - type: entities
             show_header_toggle: false
             entities:
-              - entity: sensor.zendure_2400_ac_soc_limiet_status
-                name: SOC-limiet Status
-              - entity: sensor.zendure_2400_ac_indicatie_beschikbare_energie
-                name: Beschikbare Energie
-                secondary_info: none
-              - entity: sensor.zendure_2400_ac_resterende_ontlaad_tijd
-                name: Resterende Ontlaad Tijd
               - entity: sensor.zendure_2400_ac_modus
                 name: Modus
-                secondary_info: none
-              - entity: sensor.zendure_2400_ac_ingesteld_ontlaadvermogen
-                name: Ingesteld Ontlaadvermogen
-                icon: ''
-              - entity: sensor.zendure_2400_ac_ingesteld_oplaadvermogen
-                name: Ingesteld Oplaadvermogen
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: sensor.zendure_2400_ac_modus
+                        state: Standby
+                row:
+                  entity: sensor.zendure_2400_ac_soc_limiet_status
+                  name: SOC-limiet Status
+              - entity: sensor.zendure_2400_ac_indicatie_beschikbare_energie
+                name: Beschikbare Energie
+              - entity: sensor.zendure_2400_ac_indicatie_benodigde_energie
+                name: Benodigde Energie
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: sensor.zendure_2400_ac_modus
+                        state: Ontladen
+                row:
+                  entity: sensor.zendure_2400_ac_resterende_ontlaad_tijd
+                  name: Resterende Ontlaad Tijd
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: sensor.zendure_2400_ac_modus
+                        state: Opladen
+                row:
+                  entity: sensor.zendure_2400_ac_resterende_oplaad_tijd
+                  name: Resterende Oplaad Tijd
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: sensor.zendure_2400_ac_modus
+                        state: Ontladen
+                row:
+                  entity: sensor.zendure_2400_ac_ingesteld_ontlaadvermogen
+                  name: Ingesteld Ontlaadvermogen
+              - type: conditional
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity: sensor.zendure_2400_ac_modus
+                        state: Opladen
+                row:
+                  entity: sensor.zendure_2400_ac_ingesteld_oplaadvermogen
+                  name: Ingesteld Oplaadvermogen
           - type: heading
             icon: ''
             heading: Nul Import
