@@ -361,7 +361,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260504"
+        state: "v20260506"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -2167,22 +2167,19 @@ rest:
          {% set laad = states('sensor.zendure_2400_ac_laadpercentage') | float(0) %}
          {% set max_laad = states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(100) %}
          {% if vermogen > 0 %}
-           {% set oplaadvermogen_kw = vermogen / 1000 %}
-           {% if oplaadvermogen_kw > 0 %}
-             {% set uren = energie / oplaadvermogen_kw %}
-             {% set total_minutes = (uren * 60) | int %}
-             {% set hours = total_minutes // 60 %}
-             {% set minutes = total_minutes % 60 %}
-             {{ hours }}u {{ minutes }}m
-           {% else %}
-             Onbekend
-           {% endif %}
+          {% set oplaadvermogen_kw = vermogen / 1000 %}
+          {% if oplaadvermogen_kw > 0 and energie > 0 %}
+         {% set uren = energie / oplaadvermogen_kw %}
+         {% set total_minutes = (uren * 60) | int %}
+         {% set hours = total_minutes // 60 %}
+         {% set minutes = total_minutes % 60 %}
+         {{ hours }}u {{ minutes }}m
          {% else %}
-           Onbekend
+          Onbekend
          {% endif %}
          {% else %}
-           Niet aan het opladen
-         {% endif %}
+          Niet aan het opladen
+          {% endif %}
         icon: mdi:clock-time-eight-outline
         unique_id: zendure_2400_ac_resterende_oplaad_tijd
 
