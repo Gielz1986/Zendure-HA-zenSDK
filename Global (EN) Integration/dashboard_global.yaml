@@ -856,7 +856,7 @@ views:
                         entity: sensor.zendure_charging_mode
                         state: Discharging
                 row:
-                  entity: sensor.zendure_set_discharge_power    
+                  entity: sensor.zendure_set_discharge_power
                   name: Discharge Power
               - type: conditional
                 conditions:
