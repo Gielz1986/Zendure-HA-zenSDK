@@ -4,11 +4,9 @@
 [![Issue SLA](https://img.shields.io/badge/Gemiddelde%20Oplostijd-~7%20Dagen-brightgreen?style=for-the-badge&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
 
 ![Preview](Images/Dashboard-220326.gif) <br>
-<sub>
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/NL-%E2%80%90-Beschikbare-entiteiten">
 Ga naar de uitleg over alle entiteiten en het dashboard
 </a>
-</sub>
 
 <br>
 
@@ -58,8 +56,7 @@ homeassistant:
 
 
 ![Preview](Images/NL-Settings-060526.png) 
-
-<sub>*plug-n-play dashboard</sub>
+*plug-n-play dashboard
 
 <br>
 
