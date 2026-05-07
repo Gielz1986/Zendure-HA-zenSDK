@@ -1,16 +1,11 @@
 # Zendure Home Assistant Integration
-<img width="25" height="25" alt="image" src="https://github.com/user-attachments/assets/eae2adcb-fd59-42ae-90cc-dd957630b667" /> **English (Global)**  &nbsp;&nbsp;&nbsp;  <img width="25" height="25" alt="image" src="https://github.com/user-attachments/assets/b39b5d97-5fe7-412d-9640-95e601dcac89" /> **[Dutch (NL)](README.nl.md)**
-
 [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Current%20Version&&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
-[![Open Issues](https://img.shields.io/github/issues/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Issues&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
-[![Issue SLA](https://img.shields.io/badge/Average%20Resolution%20Time-~7%20Days-brightgreen?style=for-the-badge&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/issues)
-
-![Preview](Images/Global-Dashboard-300326.gif) <br>
-<sub>
+ [![English 🌍 Global](https://img.shields.io/badge/English-Global-blue?style=for-the-badge)](README.md) [![Dutch 🇳🇱 NL](https://img.shields.io/badge/Dutch-NL-orange?style=for-the-badge)](README.nl.md)<br><br>
+![Preview](Images/Global-Dashboard-300326.gif)
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities">
 Go to the explanation of all entities and the dashboard
 </a>
-</sub>
+
 
 <br>
 
@@ -61,7 +56,7 @@ homeassistant:
 ---
 
 ![Preview](Images/Global-Settings-060526.png)  
-<sub>*plug-n-play dashboard*</sub>
+*plug-n-play dashboard*
 
 <br>
 
