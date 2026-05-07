@@ -71,12 +71,12 @@ homeassistant:
 | `zendure_2400_ac_standby_vertraging` | **(Instellingsadvies: 15 minuten) 5-30 minuten** – Geef hier aan hoe snel de omvormer 100% in standby gaat bij 0 activiteit. Dit voorkomt sluipverbruik van +/- 19 watt. | 
 | `zendure_2400_ac_advies_instellingen_overnemen` | Zodra de batterij draait kun je met deze knop de onderstaande instellingsadviezen direct overnemen. | 
 | **Configuratie (Opladen)** |**Informatie**|  
-| `zendure_2400_ac_max_oplaadvermogen`    | **800 t/m 2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt.  |  
-| `zendure_2400_ac_opladen_starten_bij` | **(Instellingsadvies: -300 watt) -1000 t/m -100 watt** – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge.  | 
+| `zendure_2400_ac_max_oplaadvermogen`    | **400 t/m 2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag laden. Bij meerdere omvormers via Node-RED kan dit tot 7200 watt.  |  
+| `zendure_2400_ac_opladen_starten_bij` | **(Instellingsadvies: -300 watt) -1000 t/m -80 watt** – hier geef je aan wanneer de batterij exact begint met opladen. Daarna balanceert de batterij naar 0 - de extra oplaadmarge.  | 
 | `zendure_2400_ac_oplaadmarge` | **(Instellingsadvies: 50 watt) 0 t/m 250 watt** – Geef hier aan hoeveel minder je wilt meenemen tijdens opladen. Als je wat minder wilt opladen, in de zomer met voldoende opwek zou je dit zelfs op 200 kunnen zetten om import overdag 100% te voorkomen. (Zendure zelf hanteert hier 50 watt in HEMS).  | 
 | **Configuratie (Ontladen)** |**Informatie**|  
-| `zendure_2400_ac_max_ontlaadvermogen`    | **800 t/m 2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 4800 watt. |  
-| `zendure_2400_ac_ontladen_starten_bij` | **(Instellingsadvies: 100 watt) 100 t/m 500 watt** – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra ontlaadmarge. | 
+| `zendure_2400_ac_max_ontlaadvermogen`    | **400 t/m 2400 watt** – Geef hier aan met hoeveel vermogen hij maximaal mag ontladen. Bij meerdere omvormers via Node-RED kan dit tot 7200 watt. |  
+| `zendure_2400_ac_ontladen_starten_bij` | **(Instellingsadvies: 100 watt) 80 t/m 500 watt** – hier geef je aan wanneer de batterij exact begint met ontladen. Daarna balanceert de batterij naar 0 - de extra ontlaadmarge. | 
 | `zendure_2400_ac_ontlaadmarge` | **(Instellingsadvies: 5 watt) 0 t/m 250 watt** – Geef hier aan hoeveel je extra wilt meenemen tijdens ontladen. Als je wat meer wilt ontladen dan noodzakelijk is. |
 | **Configuratie (Laadpercentage)** |**Informatie**|  
 | `zendure_2400_ac_soc_bescherming_uitgeschakeld`    | Vink dit aan om de dubbele SOC bescherming uit te schakelen. Wanneer de batterij onder het minimaal toegestaan laadpercentage zakt zal er niet meer automatisch bijgeladen worden. Er word gewacht tot de BMS (batterij management systeem) zelf actie onderneemt. |  
