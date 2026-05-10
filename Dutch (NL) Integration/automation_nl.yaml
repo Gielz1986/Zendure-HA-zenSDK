@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260509)
+description: Configuratie Versie (v20260510)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1580,12 +1580,16 @@ actions:
               - entity_id: sensor.dynamisch_goedkoopste_periode
                 to: Nee
                 trigger: state
-              - trigger: template
+              - alias: Maximale ingestelde SOC bereikt
+                trigger: template
                 value_template: >
                   {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
                   ==
                      states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
-                alias: Maximale ingestelde SOC bereikt
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - trigger: state
                 entity_id:
                   - input_select.zendure_2400_ac_modus_selecteren
@@ -1599,9 +1603,11 @@ actions:
           - action: rest_command.zendure_stop_met_alles
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
-          - entity_id: input_boolean.dynamisch_recent_geladen
+          - alias: input_boolean.dynamisch_recent_geladen aanzetten
             action: input_boolean.turn_on
-            alias: input_boolean.dynamisch_recent_geladen aanzetten
+            data: {}
+            target:
+              entity_id: input_boolean.dynamisch_recent_geladen
           - action: input_boolean.turn_off
             target:
               entity_id:
@@ -1694,12 +1700,16 @@ actions:
               - entity_id: sensor.dynamisch_goedkoopste_periode
                 to: Nee
                 trigger: state
-              - trigger: template
+              - alias: Maximale ingestelde SOC bereikt
+                trigger: template
                 value_template: >
                   {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
                   ==
                      states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
-                alias: Maximale ingestelde SOC bereikt
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - trigger: state
                 entity_id:
                   - input_select.zendure_2400_ac_modus_selecteren
@@ -1805,6 +1815,10 @@ actions:
                 value_template: |-
                   {{ states('sensor.zendure_2400_ac_laadpercentage') | float <=
                      states('sensor.zendure_2400_ac_minimale_laadpercentage') | float }}
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - entity_id:
                   - sensor.dynamisch_duurste_periode
                 to:
