@@ -619,7 +619,11 @@ template:
           {% if goedkoop | count > 0 and duur | count > 0 %}
             {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
             {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
-            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
+            {% if avg_goedkoop == 0 %}
+              0
+            {% else %}
+              {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
+            {% endif %}            
           {% else %}
             0
           {% endif %}
@@ -696,7 +700,11 @@ template:
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
             {% set avg_duur = dure_uren | map(attribute='value') | sum / dure_uren | count %}
-            {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
+            {% if avg_goedkoop == 0 %}
+              0
+            {% else %}
+              {{ ((avg_duur - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
+            {% endif %}
           {% else %}
             0
           {% endif %}
