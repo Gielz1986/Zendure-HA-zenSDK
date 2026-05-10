@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260509)
+description: Configuration Version (v20260510)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1556,12 +1556,16 @@ actions:
               - entity_id: sensor.dynamic_lowest_price_period
                 to: "No"
                 trigger: state
-              - trigger: template
+              - alias: Maximale ingestelde SOC bereikt
+                trigger: template
                 value_template: >
                   {{ states('sensor.zendure_total_state_of_charge') | float(0)
                   ==
                      states('sensor.zendure_maximum_state_of_charge') | float(0) }}
-                alias: Maximale ingestelde SOC bereikt
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - trigger: state
                 entity_id:
                   - input_select.zendure_operation_mode
@@ -1671,12 +1675,16 @@ actions:
               - entity_id: sensor.dynamic_lowest_price_period
                 to: "No"
                 trigger: state
-              - trigger: template
+              - alias: Maximale ingestelde SOC bereikt
+                trigger: template
                 value_template: >
                   {{ states('sensor.zendure_total_state_of_charge') | float(0)
                   ==
                      states('sensor.zendure_maximum_state_of_charge') | float(0) }}
-                alias: Maximale ingestelde SOC bereikt
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - trigger: state
                 entity_id:
                   - input_select.zendure_operation_mode
@@ -1782,6 +1790,10 @@ actions:
                 value_template: |-
                   {{ states('sensor.zendure_total_state_of_charge') | float <=
                      states('sensor.zendure_minimum_state_of_charge') | float }}
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - entity_id:
                   - sensor.dynamic_highest_price_period
                 to:
