@@ -644,7 +644,7 @@ actions:
                 status off —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamic charging/discharging check
+        alias: Dynamic charging check
       - conditions:
           - condition: trigger
             id:
