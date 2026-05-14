@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260510)
+description: Configuration Version (v20260514)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -589,78 +589,59 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: or
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Smart Discharge Only
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Smart Charge Only
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Manual
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Smart Matching
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Quick Discharge
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Quick Discharge
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Standby
-              - condition: and
-                conditions:
-                  - condition: state
-                    entity_id: sensor.dynamic_lowest_price_period
-                    state:
-                      - "No"
-                    for:
-                      hours: 0
-                      minutes: 0
-                      seconds: 10
-                  - condition: state
-                    entity_id: sensor.dynamic_highest_price_period
-                    state:
-                      - "No"
-                    for:
-                      hours: 0
-                      minutes: 0
-                      seconds: 10
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - "on"
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - "on"
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - "on"
+          - condition: state
+            entity_id: sensor.dynamic_highest_price_period
+            state:
+              - "No"
+            for:
+              hours: 0
+              minutes: 0
+              seconds: 30
         sequence:
           - action: input_boolean.turn_off
             target:
               entity_id:
-                - input_boolean.dynamic_charging_running
                 - input_boolean.dynamic_discharging_running
             data: {}
           - action: logbook.log
             data:
               message: >-
-                ⚠️Dynamic charging/discharging running status is incorrect.
-                Corrected to status off —
+                ⚠️Dynamic discharging running status is incorrect. Corrected to
+                status off —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Dynamic discharging check
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - "on"
+          - condition: state
+            entity_id: sensor.dynamic_lowest_price_period
+            state:
+              - "No"
+            for:
+              hours: 0
+              minutes: 0
+              seconds: 30
+        sequence:
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+            data: {}
+          - action: logbook.log
+            data:
+              message: >-
+                ⚠️Dynamic charging running status is incorrect. Corrected to
+                status off —
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Dynamic charging/discharging check
