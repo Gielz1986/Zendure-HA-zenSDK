@@ -1810,6 +1810,180 @@ rest:
           {{ ns.sn_list | join('\n') }}
         unique_id: Zendure_2400_AC_Batterij_Serienummers
         icon: mdi:identifier
+        
+      - name: "Zendure 2400 AC Batterij 1 Capaciteit"
+        unique_id: "Zendure_2400_AC_Batterij_1_Capaciteit"
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        value_template: >
+            {% set mapping = {
+              5: 2.88,
+              70: 1.92,
+              300: 1.92,
+              350: 2.88,
+              500: 2.40
+            } %}
+            {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+            {% set packs = value_json.packData %}
+            {% if not packs %}
+              unknown
+            {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+              {% set type = packs[0].packType | int %}
+              {{ mapping[type] if type in mapping else 'unknown' }}
+            {% else %}
+              {% set idx = (volgorde_raw.split(';')[0] | int) - 1 %}
+              {% if idx < packs | length %}
+                {% set type = packs[idx].packType | int %}
+                {{ mapping[type] if type in mapping else 'unknown' }}
+              {% else %}
+                unknown
+              {% endif %}
+            {% endif %}
+
+      - name: "Zendure 2400 AC Batterij 2 Capaciteit"
+        unique_id: "Zendure_2400_AC_Batterij_2_Capaciteit"
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        value_template: >
+            {% set mapping = {
+              5: 2.88,
+              70: 1.92,
+              300: 1.92,
+              350: 2.88,
+              500: 2.40
+            } %}
+            {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+            {% set packs = value_json.packData %}
+            {% if not packs %}
+              unknown
+            {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+              {% set type = packs[0].packType | int %}
+              {{ mapping[type] if type in mapping else 'unknown' }}
+            {% else %}
+              {% set idx = (volgorde_raw.split(';')[1] | int) - 1 %}
+              {% if idx < packs | length %}
+                {% set type = packs[idx].packType | int %}
+                {{ mapping[type] if type in mapping else 'unknown' }}
+              {% else %}
+                unknown
+              {% endif %}
+            {% endif %}
+
+      - name: "Zendure 2400 AC Batterij 3 Capaciteit"
+        unique_id: "Zendure_2400_AC_Batterij_3_Capaciteit"
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        value_template: >
+            {% set mapping = {
+              5: 2.88,
+              70: 1.92,
+              300: 1.92,
+              350: 2.88,
+              500: 2.40
+            } %}
+            {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+            {% set packs = value_json.packData %}
+            {% if not packs %}
+              unknown
+            {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+              {% set type = packs[0].packType | int %}
+              {{ mapping[type] if type in mapping else 'unknown' }}
+            {% else %}
+              {% set idx = (volgorde_raw.split(';')[2] | int) - 1 %}
+              {% if idx < packs | length %}
+                {% set type = packs[idx].packType | int %}
+                {{ mapping[type] if type in mapping else 'unknown' }}
+              {% else %}
+                unknown
+              {% endif %}
+            {% endif %}
+
+      - name: "Zendure 2400 AC Batterij 4 Capaciteit"
+        unique_id: "Zendure_2400_AC_Batterij_4_Capaciteit"
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        value_template: >
+            {% set mapping = {
+              5: 2.88,
+              70: 1.92,
+              300: 1.92,
+              350: 2.88,
+              500: 2.40
+            } %}
+            {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+            {% set packs = value_json.packData %}
+            {% if not packs %}
+              unknown
+            {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+              {% set type = packs[0].packType | int %}
+              {{ mapping[type] if type in mapping else 'unknown' }}
+            {% else %}
+              {% set idx = (volgorde_raw.split(';')[3] | int) - 1 %}
+              {% if idx < packs | length %}
+                {% set type = packs[idx].packType | int %}
+                {{ mapping[type] if type in mapping else 'unknown' }}
+              {% else %}
+                unknown
+              {% endif %}
+            {% endif %}
+
+      - name: "Zendure 2400 AC Batterij 5 Capaciteit"
+        unique_id: "Zendure_2400_AC_Batterij_5_Capaciteit"
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        value_template: >
+            {% set mapping = {
+              5: 2.88,
+              70: 1.92,
+              300: 1.92,
+              350: 2.88,
+              500: 2.40
+            } %}
+            {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+            {% set packs = value_json.packData %}
+            {% if not packs %}
+              unknown
+            {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+              {% set type = packs[0].packType | int %}
+              {{ mapping[type] if type in mapping else 'unknown' }}
+            {% else %}
+              {% set idx = (volgorde_raw.split(';')[4] | int) - 1 %}
+              {% if idx < packs | length %}
+                {% set type = packs[idx].packType | int %}
+                {{ mapping[type] if type in mapping else 'unknown' }}
+              {% else %}
+                unknown
+              {% endif %}
+            {% endif %}
+            
+      - name: "Zendure 2400 AC Batterij 6 Capaciteit"
+        unique_id: "Zendure_2400_AC_Batterij_6_Capaciteit"
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        value_template: >
+            {% set mapping = {
+              5: 2.88,
+              70: 1.92,
+              300: 1.92,
+              350: 2.88,
+              500: 2.40
+            } %}
+            {% set volgorde_raw = states('input_text.zendure_2400_ac_batterij_volgorde') %}
+            {% set packs = value_json.packData %}
+            {% if not packs %}
+              unknown
+            {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
+              {% set type = packs[0].packType | int %}
+              {{ mapping[type] if type in mapping else 'unknown' }}
+            {% else %}
+              {% set idx = (volgorde_raw.split(';')[5] | int) - 1 %}
+              {% if idx < packs | length %}
+                {% set type = packs[idx].packType | int %}
+                {{ mapping[type] if type in mapping else 'unknown' }}
+              {% else %}
+                unknown
+              {% endif %}
+            {% endif %}            
 
       - name: "Zendure 2400 AC Batterij 1 Laadpercentage"
         value_template: >
