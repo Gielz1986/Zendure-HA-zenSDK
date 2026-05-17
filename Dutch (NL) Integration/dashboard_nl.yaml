@@ -2631,6 +2631,306 @@ views:
             grid_options:
               columns: 9
               rows: auto
+          - type: markdown
+            text_only: true
+            content: >+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_1_capaciteit') %} 
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://raw.githubusercontent.com/twoenter/Zendure-HA-zenSDK/refs/heads/twoenter-feature-update/Devices/' %}
+
+
+              {% if product == '0.92' %}
+                <img src="{{ base }}1kWh.png" width="100">
+              {% elif product == '1.92' %}
+                <img src="{{ base }}2kWh.png" width="100">
+              {% elif product == '2.88' %}
+                <img src="{{ base }}3kWh.png" width="100">
+              {% endif %}
+
+            grid_options:
+              columns: 3
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_1_capaciteit
+                above: 0
+          - type: markdown
+            content: >-
+              **Batterij 1**
+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_1_capaciteit') %} {% if
+              product == '2.88' %} **AB3000** {% elif product == '1.92' %}
+              **AB2000** {% elif product == '0.92' %} **AB1000** {% else %}
+              **Onbekend** {% endif %}({{
+              states('sensor.zendure_2400_ac_batterij_1_capaciteit') }} kWh)
+
+              {{
+              states('sensor.zendure_2400_ac_batterij_serienummers').split('\n')[0]
+              }}
+            grid_options:
+              columns: 9
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_1_capaciteit
+                above: 0
+          - type: markdown
+            text_only: true
+            content: >+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_2_capaciteit') %} 
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://raw.githubusercontent.com/twoenter/Zendure-HA-zenSDK/refs/heads/twoenter-feature-update/Devices/' %}
+
+
+              {% if product == '0.92' %}
+                <img src="{{ base }}1kWh.png" width="100">
+              {% elif product == '1.92' %}
+                <img src="{{ base }}2kWh.png" width="100">
+              {% elif product == '2.88' %}
+                <img src="{{ base }}3kWh.png" width="100">
+              {% endif %}
+
+            grid_options:
+              columns: 3
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_2_capaciteit
+                above: 0
+          - type: markdown
+            content: >-
+              **Batterij 2**
+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_2_capaciteit') %} {% if
+              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
+              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              **Onbekend** {% endif %}({{
+              states('sensor.zendure_2400_ac_batterij_2_capaciteit') }} kWh)
+
+              {{
+              states('sensor.zendure_2400_ac_batterij_serienummers').split('\n')[1]
+              }}
+            grid_options:
+              columns: 9
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_2_capaciteit
+                above: 0
+          - type: markdown
+            text_only: true
+            content: >+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_3_capaciteit') %} 
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://raw.githubusercontent.com/twoenter/Zendure-HA-zenSDK/refs/heads/twoenter-feature-update/Devices/' %}
+
+
+              {% if product == '0.92' %}
+                <img src="{{ base }}1kWh.png" width="100">
+              {% elif product == '1.92' %}
+                <img src="{{ base }}2kWh.png" width="100">
+              {% elif product == '2.88' %}
+                <img src="{{ base }}3kWh.png" width="100">
+              {% endif %}
+
+            grid_options:
+              columns: 3
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_3_capaciteit
+                above: 0
+          - type: markdown
+            content: >-
+              **Batterij 3**
+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_3_capaciteit') %} {% if
+              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
+              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              **Onbekend** {% endif %}({{
+              states('sensor.zendure_2400_ac_batterij_3_capaciteit') }} kWh)
+
+              {{
+              states('sensor.zendure_2400_ac_batterij_serienummers').split('\n')[2]
+              }}
+            grid_options:
+              columns: 9
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_3_capaciteit
+                above: 0
+          - type: markdown
+            text_only: true
+            content: >+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_4_capaciteit') %} 
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://raw.githubusercontent.com/twoenter/Zendure-HA-zenSDK/refs/heads/twoenter-feature-update/Devices/' %}
+
+
+              {% if product == '0.92' %}
+                <img src="{{ base }}1kWh.png" width="100">
+              {% elif product == '1.92' %}
+                <img src="{{ base }}2kWh.png" width="100">
+              {% elif product == '2.88' %}
+                <img src="{{ base }}3kWh.png" width="100">
+              {% endif %}
+
+            grid_options:
+              columns: 3
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_3_capaciteit
+                above: 0
+          - type: markdown
+            content: >-
+              **Batterij 4**
+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_4_capaciteit') %} {% if
+              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
+              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              **Onbekend** {% endif %}({{
+              states('sensor.zendure_2400_ac_batterij_4_capaciteit') }} kWh)
+
+              {{
+              states('sensor.zendure_2400_ac_batterij_serienummers').split('\n')[3]
+              }}
+            grid_options:
+              columns: 9
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_4_capaciteit
+                above: 0
+          - type: markdown
+            text_only: true
+            content: >+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_5_capaciteit') %} 
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://raw.githubusercontent.com/twoenter/Zendure-HA-zenSDK/refs/heads/twoenter-feature-update/Devices/' %}
+
+
+              {% if product == '0.92' %}
+                <img src="{{ base }}1kWh.png" width="100">
+              {% elif product == '1.92' %}
+                <img src="{{ base }}2kWh.png" width="100">
+              {% elif product == '2.88' %}
+                <img src="{{ base }}3kWh.png" width="100">
+              {% endif %}
+
+            grid_options:
+              columns: 3
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_3_capaciteit
+                above: 0
+          - type: markdown
+            content: >-
+              **Batterij 5**
+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_5_capaciteit') %} {% if
+              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
+              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              **Onbekend** {% endif %}({{
+              states('sensor.zendure_2400_ac_batterij_5_capaciteit') }} kWh)
+
+              {{
+              states('sensor.zendure_2400_ac_batterij_serienummers').split('\n')[4]
+              }}
+            grid_options:
+              columns: 9
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_4_capaciteit
+                above: 0
+          - type: markdown
+            text_only: true
+            content: >+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_6_capaciteit') %} 
+
+              {% set last =
+              states('input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd')
+              %}
+
+              {% set base =
+                'https://raw.githubusercontent.com/twoenter/Zendure-HA-zenSDK/refs/heads/twoenter-feature-update/Devices/' %}
+
+
+              {% if product == '0.92' %}
+                <img src="{{ base }}1kWh.png" width="100">
+              {% elif product == '1.92' %}
+                <img src="{{ base }}2kWh.png" width="100">
+              {% elif product == '2.88' %}
+                <img src="{{ base }}3kWh.png" width="100">
+              {% endif %}
+
+            grid_options:
+              columns: 3
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_3_capaciteit
+                above: 0
+          - type: markdown
+            content: >-
+              **Batterij 6**
+
+              {% set product =
+              states('sensor.zendure_2400_ac_batterij_6_capaciteit') %} {% if
+              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
+              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              **Onbekend** {% endif %}({{
+              states('sensor.zendure_2400_ac_batterij_6_capaciteit') }} kWh)
+
+              {{
+              states('sensor.zendure_2400_ac_batterij_serienummers').split('\n')[5]
+              }}
+            grid_options:
+              columns: 9
+              rows: auto
+            visibility:
+              - condition: numeric_state
+                entity: sensor.zendure_2400_ac_batterij_4_capaciteit
+                above: 0
           - type: heading
             icon: ''
             heading: Configuratie (Basis)
