@@ -2716,8 +2716,8 @@ views:
 
               {% set product =
               states('sensor.zendure_2400_ac_batterij_2_capaciteit') %} {% if
-              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
-              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              product == '2.88' %} **AB3000** {% elif product == '1.92' %}
+              **AB2000** {% elif product == '0.92' %} **AB1000** {% else %}
               **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_batterij_2_capaciteit') }} kWh)
 
@@ -2766,8 +2766,8 @@ views:
 
               {% set product =
               states('sensor.zendure_2400_ac_batterij_3_capaciteit') %} {% if
-              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
-              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              product == '2.88' %} **AB3000** {% elif product == '1.92' %}
+              **AB2000** {% elif product == '0.92' %} **AB1000** {% else %}
               **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_batterij_3_capaciteit') }} kWh)
 
@@ -2816,8 +2816,8 @@ views:
 
               {% set product =
               states('sensor.zendure_2400_ac_batterij_4_capaciteit') %} {% if
-              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
-              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              product == '2.88' %} **AB3000** {% elif product == '1.92' %}
+              **AB2000** {% elif product == '0.92' %} **AB1000** {% else %}
               **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_batterij_4_capaciteit') }} kWh)
 
@@ -2866,8 +2866,8 @@ views:
 
               {% set product =
               states('sensor.zendure_2400_ac_batterij_5_capaciteit') %} {% if
-              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
-              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              product == '2.88' %} **AB3000** {% elif product == '1.92' %}
+              **AB2000** {% elif product == '0.92' %} **AB1000** {% else %}
               **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_batterij_5_capaciteit') }} kWh)
 
@@ -2916,8 +2916,8 @@ views:
 
               {% set product =
               states('sensor.zendure_2400_ac_batterij_6_capaciteit') %} {% if
-              product == '2.88' %} **AB3000x/L** {% elif product == '1.92' %}
-              **AB2000s/x** {% elif product == '0.92' %} **AB1000s** {% else %}
+              product == '2.88' %} **AB3000** {% elif product == '1.92' %}
+              **AB2000** {% elif product == '0.92' %} **AB1000** {% else %}
               **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_batterij_6_capaciteit') }} kWh)
 
