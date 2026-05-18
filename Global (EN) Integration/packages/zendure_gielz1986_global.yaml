@@ -361,7 +361,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260515"
+        state: "v20260518"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1212,15 +1212,16 @@ template:
               []
             {% endif %}
           duurste_na_eerste_goedkope: >
-            {% set prijzen = state_attr('sensor.dynamic_lowest_price_period','raw_today') %}
-            {% set goedkope = (prijzen or [])
+            {% set prijzen = state_attr('sensor.dynamic_lowest_price_period','raw_today') or [] %}
+            {% set goedkope = prijzen
               | selectattr('goedkoop','eq','Yes')
               | map(attribute='start')
               | map('as_datetime')
+              | select('!=', None)
               | sort
               | list %}
-            {% if prijzen and goedkope | length > 0 %}
-              {% set eerste_goedkoop = goedkope | first %}
+            {% set eerste_goedkoop = goedkope | first if goedkope else none %}
+            {% if prijzen and eerste_goedkoop %}
               [
               {% for uur in prijzen
                 if uur.duur == 'Yes'
@@ -1238,16 +1239,18 @@ template:
             {% else %}
               []
             {% endif %}
+
           duurste_na_eerste_goedkope_tomorrow: >
-            {% set prijzen = state_attr('sensor.dynamic_lowest_price_period','raw_tomorrow') %}
-            {% set goedkope = (prijzen or [])
+            {% set prijzen = state_attr('sensor.dynamic_lowest_price_period','raw_tomorrow') or [] %}
+            {% set goedkope = prijzen
               | selectattr('goedkoop','eq','Yes')
               | map(attribute='start')
               | map('as_datetime')
+              | select('!=', None)
               | sort
               | list %}
-            {% if prijzen and goedkope | length > 0 %}
-              {% set eerste_goedkoop = goedkope | first %}
+            {% set eerste_goedkoop = goedkope | first if goedkope else none %}
+            {% if prijzen and eerste_goedkoop %}
               [
               {% for uur in prijzen
                 if uur.duur == 'Yes'
