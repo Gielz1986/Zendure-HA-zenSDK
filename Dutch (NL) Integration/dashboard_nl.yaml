@@ -1424,6 +1424,8 @@ views:
                 name: Error
               - entity: sensor.zendure_2400_ac_offgrid_modus
                 name: Offgrid Modus
+              - entity: sensor.zendure_2400_ac_pv_export_modus
+                name: PV Export Modus
               - entity: sensor.zendure_2400_ac_kalibreren
                 name: Kalibreren
               - entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
@@ -2602,11 +2604,14 @@ views:
               {% set product = states('sensor.zendure_2400_ac_productserie') %}
               {% if product == 'solarFlow2400AC' %} **Solarflow 2400 AC** {%
               elif product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {%
-              elif product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {%
-              elif product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {%
-              elif product == 'Hyper2000' %} **Hyper 2000** {% elif product ==
-              'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif product ==
-              'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
+              elif product == 'solarFlow4000AC+' %} **SolarFlow 4000 Mix AC+**
+              {% elif product == 'solarFlow4000Pro' %} **SolarFlow 4000 Mix
+              Pro** {% elif product == 'solarFlow3000AC+' %} **SolarFlow 3000
+              Mix AC+** {% elif product == 'solarFlow2400Pro' %} **Solarflow
+              2400 Pro** {% elif product == 'solarFlow1600AC+' %} **Solarflow
+              1600 AC+** {% elif product == 'Hyper2000' %} **Hyper 2000** {%
+              elif product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
+              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
               **Onbekend** {% endif %}({{
               states('sensor.zendure_2400_ac_totale_capaciteit') }} kWh)
 
@@ -2800,6 +2805,23 @@ views:
               - entity: >-
                   input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage
                 name: Max. Laadpercentage
+          - type: heading
+            icon: ''
+            heading: Configuratie (PV)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_2400_ac_pv_export_modus
+                icon: mdi:api
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: entities
+            entities:
+              - entity: input_boolean.zendure_2400_ac_pv_export_uitgeschakeld
+                name: PV Export Uitgeschakeld
           - type: heading
             icon: ''
             heading: Configuratie (Optioneel)
