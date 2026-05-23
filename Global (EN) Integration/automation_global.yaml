@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260518)
+description: Configuration Version (v20260523)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -66,6 +66,10 @@ triggers:
     entity_id:
       - input_text.zendure_setting_ip_address
     id: systeem_instelling_zendure_ip
+  - trigger: state
+    entity_id:
+      - input_boolean.zendure_setting_pv_export_disabled
+    id: system_setting_pvexport
 conditions: []
 actions:
   - alias: Operation Mode
@@ -790,6 +794,45 @@ actions:
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Emergency Shutdown
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - system_setting_pvexport
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      is_state('input_boolean.zendure_setting_pv_export_disabled',
+                      'on')
+                         != is_state('sensor.zendure_pv_export_mode', 'Forbidden') }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+              instellingitem: gridReverse
+              instellinginhoud: >-
+                {{ 2 if
+                is_state('input_boolean.zendure_setting_pv_export_disabled',
+                'on')
+                   else 1 }}
+            action: rest_command.zendure_setting
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️PV export adjusted to {{ "forbidden" if
+                is_state('input_boolean.zendure_setting_pv_export_disabled',
+                  'on')
+                     else "allowed" }} —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: adjust PV export
   - alias: Smart Matching Control
     choose:
       - conditions:
