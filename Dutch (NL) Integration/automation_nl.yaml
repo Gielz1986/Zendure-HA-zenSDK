@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260518)
+description: Configuratie Versie (v20260523)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -66,6 +66,10 @@ triggers:
     entity_id:
       - input_text.zendure_2400_ac_ip_adres
     id: systeem_instelling_zendure_ip
+  - trigger: state
+    entity_id:
+      - input_boolean.zendure_2400_ac_pv_export_uitgeschakeld
+    id: systeem_instelling_pvexport
 conditions: []
 actions:
   - alias: Modus Selecteren
@@ -801,6 +805,45 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: Noodstop
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - systeem_instelling_pvexport
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      is_state('input_boolean.zendure_2400_ac_pv_export_uitgeschakeld',
+                      'on')
+                         != is_state('sensor.zendure_2400_ac_pv_export_modus', 'Verboden') }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              instellingitem: gridReverse
+              instellinginhoud: >-
+                {{ 2 if
+                is_state('input_boolean.zendure_2400_ac_pv_export_uitgeschakeld',
+                'on')
+                   else 1 }}
+            action: rest_command.zendure_instelling
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️PV export aangepast naar {{ "verboden" if
+                is_state('input_boolean.zendure_2400_ac_pv_export_uitgeschakeld',
+                  'on')
+                     else "toegestaan" }} —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: PV export aanpassen
   - alias: NOM Aansturing
     choose:
       - conditions:
