@@ -1419,6 +1419,8 @@ views:
                 name: Error
               - entity: sensor.zendure_offgrid_mode
                 name: Offgrid Mode
+              - entity: sensor.zendure_pv_export_mode
+                name: PV Export Mode
               - entity: sensor.zendure_calibrating
                 name: Calibrating
               - entity: sensor.zendure_inverter_max_charge_power
@@ -2600,13 +2602,16 @@ views:
               {% set product = states('sensor.zendure_product_model') %} {% if
               product == 'solarFlow2400AC' %} **Solarflow 2400 AC** {% elif
               product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {% elif
-              product == 'solarFlow2400Pro' %} **Solarflow 2400 Pro** {% elif
-              product == 'solarFlow1600AC+' %} **Solarflow 1600 AC+** {% elif
-              product == 'Hyper2000' %} **Hyper 2000** {% elif product ==
-              'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif product ==
-              'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
-              **Onbekend** {% endif %}({{
-              states('sensor.zendure_total_capacity') }} kWh)
+              product == 'solarFlow4000AC+' %} **SolarFlow 4000 Mix AC+** {%
+              elif product == 'solarFlow4000Pro' %} **SolarFlow 4000 Mix Pro**
+              {% elif product == 'solarFlow3000AC+' %} **SolarFlow 3000 Mix
+              AC+** {% elif product == 'solarFlow2400Pro' %} **Solarflow 2400
+              Pro** {% elif product == 'solarFlow1600AC+' %} **Solarflow 1600
+              AC+** {% elif product == 'Hyper2000' %} **Hyper 2000** {% elif
+              product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
+              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
+              **Unknown** {% endif %}({{ states('sensor.zendure_total_capacity')
+              }} kWh)
 
               {{ states('sensor.zendure_serial_number') }}
 
@@ -2791,6 +2796,23 @@ views:
                 name: Min. State Of Charge
               - entity: input_number.zendure_setting_maximum_allowed_state_of_charge
                 name: Max. State Of Charge
+          - type: heading
+            icon: ''
+            heading: Configuration (PV)
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.zendure_pv_export_mode
+                icon: mdi:api
+                color: '#01a180'
+                tap_action:
+                  action: more-info
+          - type: entities
+            entities:
+              - entity: input_boolean.zendure_setting_pv_export_disabled
+                name: PV Export Disabled
           - type: heading
             icon: ''
             heading: Configuration (Optional)
