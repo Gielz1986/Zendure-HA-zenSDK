@@ -1,6 +1,6 @@
 #  Zendure Home Assistant Integratie
 
-![Preview](Images/Dashboard-220326.gif) <br>
+![Preview](Images/NL-Dashboard-290526.gif) <br>
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/NL-%E2%80%90-Beschikbare-entiteiten">
 Ga naar de uitleg over alle entiteiten en het dashboard
 </a>
