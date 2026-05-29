@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260507)
+description: Configuration Version (v20260529)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -66,6 +66,10 @@ triggers:
     entity_id:
       - input_text.zendure_setting_ip_address
     id: systeem_instelling_zendure_ip
+  - trigger: state
+    entity_id:
+      - input_boolean.zendure_setting_pv_export_disabled
+    id: system_setting_pvexport
 conditions: []
 actions:
   - alias: Operation Mode
@@ -589,81 +593,62 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: or
-            conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Smart Discharge Only
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Smart Charge Only
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Manual
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Smart Matching
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Quick Discharge
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Quick Discharge
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Standby
-              - condition: and
-                conditions:
-                  - condition: state
-                    entity_id: sensor.dynamic_lowest_price_period
-                    state:
-                      - "No"
-                    for:
-                      hours: 0
-                      minutes: 0
-                      seconds: 10
-                  - condition: state
-                    entity_id: sensor.dynamic_highest_price_period
-                    state:
-                      - "No"
-                    for:
-                      hours: 0
-                      minutes: 0
-                      seconds: 10
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - "on"
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - "on"
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - "on"
+          - condition: state
+            entity_id: sensor.dynamic_highest_price_period
+            state:
+              - "No"
+            for:
+              hours: 0
+              minutes: 0
+              seconds: 30
         sequence:
           - action: input_boolean.turn_off
             target:
               entity_id:
-                - input_boolean.dynamic_charging_running
                 - input_boolean.dynamic_discharging_running
             data: {}
           - action: logbook.log
             data:
               message: >-
-                ⚠️Dynamic charging/discharging running status is incorrect.
-                Corrected to status off —
+                ⚠️Dynamic discharging running status is incorrect. Corrected to
+                status off —
               entity_id: input_select.zendure_operation_mode
               name: " "
-        alias: Dynamic charging/discharging check
+        alias: Dynamic discharging check
+      - conditions:
+          - condition: trigger
+            id:
+              - aansturing_trigger
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - "on"
+          - condition: state
+            entity_id: sensor.dynamic_lowest_price_period
+            state:
+              - "No"
+            for:
+              hours: 0
+              minutes: 0
+              seconds: 30
+        sequence:
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+            data: {}
+          - action: logbook.log
+            data:
+              message: >-
+                ⚠️Dynamic charging running status is incorrect. Corrected to
+                status off —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Dynamic charging check
       - conditions:
           - condition: trigger
             id:
@@ -809,6 +794,45 @@ actions:
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: Emergency Shutdown
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: and
+                conditions:
+                  - condition: trigger
+                    id:
+                      - system_setting_pvexport
+              - condition: and
+                conditions:
+                  - condition: template
+                    value_template: >-
+                      {{
+                      is_state('input_boolean.zendure_setting_pv_export_disabled',
+                      'on')
+                         != is_state('sensor.zendure_pv_export_mode', 'Forbidden') }}
+                  - condition: trigger
+                    id:
+                      - aansturing_trigger
+        sequence:
+          - data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+              instellingitem: gridReverse
+              instellinginhoud: >-
+                {{ 2 if
+                is_state('input_boolean.zendure_setting_pv_export_disabled',
+                'on')
+                   else 1 }}
+            action: rest_command.zendure_setting
+          - action: logbook.log
+            data:
+              message: >
+                ⚙️PV export adjusted to {{ "forbidden" if
+                is_state('input_boolean.zendure_setting_pv_export_disabled',
+                  'on')
+                     else "allowed" }} —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: adjust PV export
   - alias: Smart Matching Control
     choose:
       - conditions:
@@ -1055,12 +1079,6 @@ actions:
               - Normal Operation
               - unknown
               - Discharge Limit Reached
-          - condition: template
-            value_template: >
-              {{ states('sensor.zendure_total_state_of_charge') | float |
-              round(0) >=
-                 states('sensor.zendure_minimum_state_of_charge') | float | round(0) }}
-            alias: SOC is gelijk of groter dan de minimale SOC
           - alias: >-
               sensor.home_energy_meter_power kleiner dan
               input_number.zendure_2400_ac_start_opladen_bij
@@ -1077,6 +1095,18 @@ actions:
             entity_id: sensor.zendure_power
             above: -30
             below: 30
+          - condition: or
+            conditions:
+              - condition: template
+                value_template: >
+                  {{ states('sensor.zendure_total_state_of_charge') | float |
+                  round(0) >=
+                     states('sensor.zendure_minimum_state_of_charge') | float | round(0) }}
+                alias: SOC is gelijk of groter dan de minimale SOC
+              - condition: state
+                entity_id: input_boolean.zendure_setting_soc_protection_disabled
+                state:
+                  - "on"
           - condition: or
             conditions:
               - condition: state
@@ -1170,12 +1200,6 @@ actions:
               - Normal Operation
               - unknown
               - Discharge Limit Reached
-          - condition: template
-            value_template: >
-              {{ states('sensor.zendure_total_state_of_charge') | float |
-              round(0) >=
-                 states('sensor.zendure_minimum_state_of_charge') | float | round(0) }}
-            alias: SOC is gelijk of groter dan de minimale SOC
           - alias: >-
               Nieuw in te stellen vermogen is anders dan huidig batterij
               vermogen
@@ -1193,6 +1217,18 @@ actions:
           - condition: numeric_state
             entity_id: sensor.zendure_power
             above: 0
+          - condition: or
+            conditions:
+              - condition: template
+                value_template: >
+                  {{ states('sensor.zendure_total_state_of_charge') | float |
+                  round(0) >=
+                     states('sensor.zendure_minimum_state_of_charge') | float | round(0) }}
+                alias: SOC is gelijk of groter dan de minimale SOC
+              - condition: state
+                entity_id: input_boolean.zendure_setting_soc_protection_disabled
+                state:
+                  - "on"
           - condition: or
             conditions:
               - condition: state
@@ -1544,12 +1580,16 @@ actions:
               - entity_id: sensor.dynamic_lowest_price_period
                 to: "No"
                 trigger: state
-              - trigger: template
+              - alias: Maximale ingestelde SOC bereikt
+                trigger: template
                 value_template: >
                   {{ states('sensor.zendure_total_state_of_charge') | float(0)
                   ==
                      states('sensor.zendure_maximum_state_of_charge') | float(0) }}
-                alias: Maximale ingestelde SOC bereikt
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - trigger: state
                 entity_id:
                   - input_select.zendure_operation_mode
@@ -1659,12 +1699,16 @@ actions:
               - entity_id: sensor.dynamic_lowest_price_period
                 to: "No"
                 trigger: state
-              - trigger: template
+              - alias: Maximale ingestelde SOC bereikt
+                trigger: template
                 value_template: >
                   {{ states('sensor.zendure_total_state_of_charge') | float(0)
                   ==
                      states('sensor.zendure_maximum_state_of_charge') | float(0) }}
-                alias: Maximale ingestelde SOC bereikt
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - trigger: state
                 entity_id:
                   - input_select.zendure_operation_mode
@@ -1770,6 +1814,10 @@ actions:
                 value_template: |-
                   {{ states('sensor.zendure_total_state_of_charge') | float <=
                      states('sensor.zendure_minimum_state_of_charge') | float }}
+                for:
+                  hours: 0
+                  minutes: 0
+                  seconds: 15
               - entity_id:
                   - sensor.dynamic_highest_price_period
                 to:

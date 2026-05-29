@@ -53,6 +53,10 @@ input_boolean:
     name: Zendure 2400 AC SOC Bescherming Uitgeschakeld
     icon: mdi:battery-heart-variant
 
+  zendure_2400_ac_pv_export_uitgeschakeld:
+    name: Zendure 2400 AC PV Export Uitgeschakeld
+    icon: mdi:solar-panel
+
 input_text:
   zendure_2400_ac_batterij_volgorde:
     name: Zendure 2400 AC Batterij Volgorde
@@ -361,7 +365,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260507"
+        state: "v20260529"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -1212,14 +1216,16 @@ template:
               []
             {% endif %}
           duurste_na_eerste_goedkope: >
-            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode','raw_today') %}
-            {% if prijzen %}
-              {% set eerste_goedkoop = prijzen
-                | selectattr('goedkoop','eq','ja')
-                | map(attribute='start')
-                | map('as_datetime')
-                | sort
-                | first %}
+            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode','raw_today') or [] %}
+            {% set goedkope = prijzen
+              | selectattr('goedkoop','eq','ja')
+              | map(attribute='start')
+              | map('as_datetime')
+              | select('!=', None)
+              | sort
+              | list %}
+            {% set eerste_goedkoop = goedkope | first if goedkope else none %}
+            {% if prijzen and eerste_goedkoop %}
               [
               {% for uur in prijzen
                 if uur.duur == 'ja'
@@ -1238,15 +1244,16 @@ template:
               []
             {% endif %}
           duurste_na_eerste_goedkope_morgen: >
-            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode','raw_tomorrow') %}
-
-            {% if prijzen %}
-              {% set eerste_goedkoop = prijzen
-                | selectattr('goedkoop','eq','ja')
-                | map(attribute='start')
-                | map('as_datetime')
-                | sort
-                | first %}
+            {% set prijzen = state_attr('sensor.dynamisch_goedkoopste_periode','raw_tomorrow') or [] %}
+            {% set goedkope = prijzen
+              | selectattr('goedkoop','eq','ja')
+              | map(attribute='start')
+              | map('as_datetime')
+              | select('!=', None)
+              | sort
+              | list %}
+            {% set eerste_goedkoop = goedkope | first if goedkope else none %}
+            {% if prijzen and eerste_goedkoop %}
               [
               {% for uur in prijzen
                 if uur.duur == 'ja'
@@ -1455,6 +1462,14 @@ rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"
     scan_interval: 1
     sensor:
+      - name: "Zendure 2400 AC PV Export Modus"
+        unique_id: zendure_2400_ac_pv_export_modus
+        icon: mdi:solar-panel
+        value_template: >
+          {% set states = {1: "Toegestaan", 2: "Verboden"} %}
+          {% set packState = value_json.get('properties', {}).get('gridReverse', 2) | int %}
+          {{ states.get(packState, "Onbekend") }}
+
       - name: "Zendure 2400 AC Batterij 1 Celbalans Status"
         unique_id: zendure_2400_ac_batterij_1_celbalans_status
         icon: mdi:battery-heart-variant
@@ -1734,13 +1749,20 @@ rest:
         unit_of_measurement: "kWh"
         icon: mdi:flip-vertical
         value_template: >
-          {% set mapping = {
-            5: 2.88,
-            70: 1.92,
-            300: 1.92,
-            350: 2.88,
-            500: 2.40
-          } %}
+          {% set product = value_json.product %}
+          {% if product in ["solarFlow4000AC+", "solarFlow4000Pro", "solarFlow3000AC+"] %}
+            {% set mapping = {
+              70: 8.00
+            } %}
+          {% else %}
+            {% set mapping = {
+              5: 2.88,
+              70: 1.92,
+              300: 1.92,
+              350: 2.88,
+              500: 2.40
+            } %}
+          {% endif %}
           {% set packs = value_json.packData %}
           {% if packs %}
             {% set ns = namespace(total=0) %}
