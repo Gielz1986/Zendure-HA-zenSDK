@@ -1,7 +1,7 @@
 # Zendure Home Assistant Integration
 [![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Current%20Version&&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
  [![English 🌍 Global](https://img.shields.io/badge/English-Global-blue?style=for-the-badge)](README.md) [![Dutch 🇳🇱 NL](https://img.shields.io/badge/Dutch-NL-orange?style=for-the-badge)](README.nl.md)<br><br>
-![Preview](Images/Global-Dashboard-300326.gif)
+![Preview](Images/Global-Dashboard-290526.gif)
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities">
 Go to the explanation of all entities and the dashboard
 </a>
