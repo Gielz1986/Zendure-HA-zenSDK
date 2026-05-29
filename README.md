@@ -55,7 +55,7 @@ homeassistant:
 
 ---
 
-![Preview](Images/Global-Settings-060526.png)  
+![Preview](Images/Global-Settings-290526.png)  
 *plug-n-play dashboard
 
 <br>
