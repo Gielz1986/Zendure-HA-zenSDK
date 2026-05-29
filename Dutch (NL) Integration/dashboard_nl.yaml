@@ -916,18 +916,25 @@ views:
               start: month
               offset: '-1month'
             cache: false
-            apex_config:
-              yaxis:
-                - decimalsInFloat: 0
+            yaxis:
+              - min: ~200
+                apex_config:
                   tickAmount: 4
-                  min: 0
-                  max: 24
+                  decimalsInFloat: 0
                   labels:
                     show: true
                     style:
                       colors: >-
                         color-mix(in srgb, var(--primary-text-color) 75%,
                         transparent)
+            apex_config:
+              yaxis:
+                labels:
+                  show: true
+                  style:
+                    colors: >-
+                      color-mix(in srgb, var(--primary-text-color) 75%,
+                      transparent)
               tooltip:
                 x:
                   format: d/MM
