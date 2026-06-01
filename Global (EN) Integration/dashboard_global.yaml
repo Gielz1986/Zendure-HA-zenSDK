@@ -2561,9 +2561,8 @@ views:
           - type: markdown
             text_only: true
             content: >-
-              {% set product = states('sensor.zendure_product_model') %}
-
-              {% set last =
+              {% set product = states('sensor.zendure_product_model') %} {% set
+              last =
               states('input_datetime.zendure_gielz_automation_last_time_executed')
               %}
 
@@ -2571,54 +2570,57 @@ views:
               'https://cdn.jsdelivr.net/gh/Gielz1986/Zendure-HA-zenSDK@main/Devices/'
               %}
 
+              {% set images = {
+                'solarFlow2400AC': 'V2_SF_2400_AC.png',
+                'solarFlow2400AC+': 'V2_SF_2400_AC_Plus_Pro.png',
+                'Hyper2000': 'V2_Hyper_2000.png',
+                'solarFlow2400Pro': 'V2_SF_2400_AC_Plus_Pro.png',
+                'solarFlow1600AC+': 'V2_SF_1600_AC_Plus.png',
+                'solarFlow800Pro': 'V2_SF_800_Pro.png',
+                'solarFlow800Pro2': 'V2_SF_800_Pro.png',
+                'solarFlow4000AC+': 'V2_SF_3000_4000_Mix.png',
+                'solarFlow4000Pro': 'V2_SF_3000_4000_Mix.png',
+                'solarFlow3000AC+': 'V2_SF_3000_4000_Mix.png',
+                'solarFlow800Plus': 'V2_SF_800_Plus.png'
+              } %}
 
               {% if last in ['unknown', 'unavailable', '', None] %}
-                <img src="{{ base }}Inactive.png" width="100">
+                {% set img = 'Inactive.png' %}
               {% else %}
                 {% set diff = as_timestamp(now()) - as_timestamp(last) %}
-
                 {% if diff >= 120 %}
-                  <img src="{{ base }}Inactive.png" width="100">
+                  {% set img = 'Inactive.png' %}
                 {% else %}
-
-                  {% if product == 'solarFlow2400AC' %}
-                    <img src="{{ base }}sf_2400_ac.png" width="100">
-                  {% elif product == 'solarFlow2400AC+' %}
-                    <img src="{{ base }}sf_2400_ac_plus.png" width="100">
-                  {% elif product == 'Hyper2000' %}
-                    <img src="{{ base }}hyper_2000.png" width="100">
-                  {% elif product == 'solarFlow2400Pro' %}
-                    <img src="{{ base }}sf_2400_pro.png" width="100">
-                  {% elif product == 'solarFlow1600AC+' %}
-                    <img src="{{ base }}sf_1600_ac_plus.png" width="100">
-                  {% elif product == 'solarFlow800Pro' %}
-                    <img src="{{ base }}sf_800_pro.png" width="100">
-                  {% elif product == 'solarFlow800Plus' %}
-                    <img src="{{ base }}sf_800_plus.png" width="100">
-                  {% else %}
-                    <img src="{{ base }}sf_2400_ac.png" width="100">
-                  {% endif %}
-
+                  {% set img = images.get(product, 'sf_2400_ac.png') %}
                 {% endif %}
               {% endif %}
+
+              <img src="{{ base ~ img }}">
             grid_options:
               columns: 3
               rows: auto
           - type: markdown
             content: >-
-              {% set product = states('sensor.zendure_product_model') %} {% if
-              product == 'solarFlow2400AC' %} **Solarflow 2400 AC** {% elif
-              product == 'solarFlow2400AC+' %} **Solarflow 2400 AC+** {% elif
-              product == 'solarFlow4000AC+' %} **SolarFlow 4000 Mix AC+** {%
-              elif product == 'solarFlow4000Pro' %} **SolarFlow 4000 Mix Pro**
-              {% elif product == 'solarFlow3000AC+' %} **SolarFlow 3000 Mix
-              AC+** {% elif product == 'solarFlow2400Pro' %} **Solarflow 2400
-              Pro** {% elif product == 'solarFlow1600AC+' %} **Solarflow 1600
-              AC+** {% elif product == 'Hyper2000' %} **Hyper 2000** {% elif
-              product == 'solarFlow800Pro' %} **Solarflow 800 Pro** {% elif
-              product == 'solarFlow800Plus' %} **Solarflow 800 Plus** {% else %}
-              **Unknown** {% endif %}({{ states('sensor.zendure_total_capacity')
-              }} kWh)
+              {% set product = states('sensor.zendure_product_model') %}
+
+
+              {% set names = {
+                'solarFlow2400AC': 'Solarflow 2400 AC',
+                'solarFlow2400AC+': 'Solarflow 2400 AC+',
+                'solarFlow4000AC+': 'SolarFlow 4000 Mix AC+',
+                'solarFlow4000Pro': 'SolarFlow 4000 Mix Pro',
+                'solarFlow3000AC+': 'SolarFlow 3000 Mix AC+',
+                'solarFlow2400Pro': 'Solarflow 2400 Pro',
+                'solarFlow1600AC+': 'Solarflow 1600 AC+',
+                'Hyper2000': 'Hyper 2000',
+                'solarFlow800Pro': 'Solarflow 800 Pro',
+                'solarFlow800Pro2': 'Solarflow 800 Pro 2',
+                'solarFlow800Plus': 'Solarflow 800 Plus'
+              } %}
+
+
+              **{{ names.get(product, 'Unknown') }}** ({{
+              states('sensor.zendure_total_capacity') }} kWh)  
 
               {{ states('sensor.zendure_serial_number') }}
 
@@ -2627,16 +2629,26 @@ views:
               states('input_datetime.zendure_gielz_automation_last_time_executed')
               %}
 
-              {% if last not in ['unknown', 'unavailable', ''] %}
-                {% set diff = as_timestamp(now()) - as_timestamp(last) %}
 
-                **Automation Heartbeat**  
-                {% if diff > 120 %}Automation Offline
-                {% else %} {{ as_timestamp(last) | timestamp_custom('%Y-%m-%d %H:%M') }} (last checked)
-                {% endif %}
+              {% if last not in ['unknown', 'unavailable', '', None] %}
+
+              {% set diff = as_timestamp(now()) - as_timestamp(last) %}
+
+
+              **Automation Heartbeat**  
+
+              {% if diff > 120 %} Automation Offline
+
+              {% else %} {{ as_timestamp(last) | timestamp_custom('%Y-%m-%d
+              %H:%M') }} (last checked)
+
+              {% endif %}
+
 
               {% else %}
-                **Incorrect entities check package**
+
+              **Incorrect entities check package**
+
               {% endif %}
             grid_options:
               columns: 9
