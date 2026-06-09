@@ -685,6 +685,18 @@ template:
             {% else %}
               n.v.t.
             {% endif %}
+          netto_spread: >
+            {% set uren = state_attr('sensor.dynamisch_goedkoopste_periode', 'raw_today') or [] %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+            {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+            {% if goedkoop | count > 0 and duur | count > 0 %}
+              {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
+              {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
+              {% set factor = states('sensor.dynamisch_rte_effectief') | float(1.0) %}
+              {{ ((avg_duur * factor - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
+            {% else %}
+              0
+            {% endif %}
 
       - name: "Dynamisch Spread Indicatie NOM"
         unique_id: dynamisch_spread_indicatie_NOM
@@ -761,6 +773,19 @@ template:
               €{{ '%.4f' % (d[1:] | float - g[1:] | float) }}
             {% else %}
               n.v.t.
+            {% endif %}
+          netto_spread: >
+            {% set uren = state_attr('sensor.dynamisch_goedkoopste_periode', 'raw_today') or [] %}
+            {% set duurste = state_attr('sensor.dynamisch_goedkoopste_periode', 'duurste_na_eerste_goedkope') or [] %}
+            {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+            {% set duur = duurste | list %}
+            {% if goedkoop | count > 0 and duur | count > 0 %}
+              {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
+              {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
+              {% set factor = states('sensor.dynamisch_rte_effectief') | float(1.0) %}
+              {{ ((avg_duur * factor - avg_goedkoop) / (avg_goedkoop | abs) * 100) | round(1) }}
+            {% else %}
+              0
             {% endif %}
 
       - name: "Dynamisch Spread Indicatie Morgen"
@@ -1457,6 +1482,24 @@ template:
           {% else %}
             0
           {% endif %}
+
+      - name: "Dynamisch RTE Effectief"
+        unique_id: dynamisch_rte_effectief
+        icon: mdi:battery-sync
+        state: >
+          {% set r = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+          {{ ((r / 100) if 50 <= r <= 100 else 1.0) | round(4) }}
+        attributes:
+          rte_totaal_percentage: >
+            {% set r = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+            {{ r }}
+          correctie_actief: >
+            {% set r = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+            {{ 50 <= r <= 100 }}
+          break_even_spread_pct: >
+            {% set r = states('sensor.zendure_2400_ac_rte_totaal') | float(0) %}
+            {% set f = (r / 100) if 50 <= r <= 100 else 1.0 %}
+            {{ ((1 / f - 1) * 100) | round(1) }}
 
 rest:
   - resource_template: "http://{{ states('input_text.zendure_2400_ac_ip_adres') }}/properties/report"

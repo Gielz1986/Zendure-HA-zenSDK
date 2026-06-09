@@ -1571,6 +1571,23 @@ actions:
             value_template: >-
               {{ states('sensor.dynamisch_spread_indicatie_nom') | float >=
               states('input_number.dynamisch_minimale_spread') | float }}
+          - alias: >-
+              RTE break-even: gem. dure periode x RTE moet hoger zijn dan de gem.
+              goedkope inkoopprijs (blokkeert laden bij een verlieslatende cyclus)
+            condition: template
+            value_template: >-
+              {% set uren = state_attr('sensor.dynamisch_goedkoopste_periode', 'raw_today') or [] %}
+              {% set duurste = state_attr('sensor.dynamisch_goedkoopste_periode', 'duurste_na_eerste_goedkope') or [] %}
+              {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+              {% set duur = duurste | list %}
+              {% if goedkoop | count > 0 and duur | count > 0 %}
+              {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
+              {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
+              {% set factor = states('sensor.dynamisch_rte_effectief') | float(1.0) %}
+              {{ (avg_duur * factor - avg_goedkoop) > 0 }}
+              {% else %}
+              true
+              {% endif %}
           - condition: state
             entity_id: input_boolean.dynamisch_laden_loopt
             state:
@@ -1691,6 +1708,22 @@ actions:
             value_template: >-
               {{ states('sensor.dynamisch_spread_indicatie') | float >=
               states('input_number.dynamisch_minimale_spread') | float }}
+          - alias: >-
+              RTE break-even: gem. dure periode x RTE moet hoger zijn dan de gem.
+              goedkope inkoopprijs (blokkeert laden bij een verlieslatende cyclus)
+            condition: template
+            value_template: >-
+              {% set uren = state_attr('sensor.dynamisch_goedkoopste_periode', 'raw_today') or [] %}
+              {% set goedkoop = uren | selectattr('goedkoop','equalto','ja') | list %}
+              {% set duur = uren | selectattr('duur','equalto','ja') | list %}
+              {% if goedkoop | count > 0 and duur | count > 0 %}
+              {% set avg_goedkoop = goedkoop | map(attribute='value') | sum / goedkoop | count %}
+              {% set avg_duur = duur | map(attribute='value') | sum / duur | count %}
+              {% set factor = states('sensor.dynamisch_rte_effectief') | float(1.0) %}
+              {{ (avg_duur * factor - avg_goedkoop) > 0 }}
+              {% else %}
+              true
+              {% endif %}
           - condition: state
             entity_id: input_boolean.dynamisch_laden_loopt
             state:
