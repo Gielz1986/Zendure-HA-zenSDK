@@ -365,7 +365,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260605"
+        state: "v20260612"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1760,6 +1760,7 @@ rest:
               5: 2.88,
               70: 1.92,
               300: 1.92,
+              250: 0.96,
               350: 2.88,
               500: 2.40
             } %}
