@@ -11,6 +11,9 @@ Ga naar de uitleg over alle entiteiten en het dashboard
 
 Gebaseerd op de zenSDK RESTful API voor Home Assistant. Deze package maakt lokaal verbinding met één **Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) of Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ of Pro)**. Perfect voor iedereen die zijn batterij **100% lokaal** en volledig onder eigen controle wil draaien in Home Assistant. Inmiddels zijn er **11 voorgeprogrammeerde modussen**  — van heerlijk NOMen op basis van de grote vuurbal tot energieboer spelen met dynamisch handelen voor een paar stuivers.
 
+> [!TIP]
+> Voor deze integratie zijn diverse uitbreidingen beschikbaar, waaronder ondersteuning voor meerdere omvormers en oudere modellen zoals de SolarFlow Hyper 2000. Zie [Integratie add-ons](#-optioneel-integratie-add-ons) voor een volledig overzicht.
+
 Vind je dit project nuttig en wil je verdere ontwikkeling supporten? <br>
 Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐.
 
@@ -25,7 +28,7 @@ Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐
 
 - Homewizard P1 (of een andere P1/CT-meter die data per seconden levert (+watt afname / -watt teruglevering).
 - één Solarflow 2400 (AC, AC+ of AC Pro) / Solarflow 1600 AC+ / Solarflow 800 (Pro(2) of Plus) / Solarflow 3000 Mix AC+ / Solarflow 4000 Mix (AC+ of Pro).
-- Of twee dezelfde omvormers in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
+- Of meerdere dezelfde omvormers in combinatie met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy)
 
 ---
 
