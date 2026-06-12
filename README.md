@@ -13,7 +13,7 @@ Go to the explanation of all entities and the dashboard
 
 Based on the zenSDK RESTful API for Home Assistant. This package connects locally to one Zendure Solarflow 2400 (AC, AC+ or AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) or Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ or Pro). Perfect for anyone who wants to run their battery **100% local** in Home Assistant. There are now **11 preconfigured modes** — from relaxed solar-based usage to acting like an energy trader with dynamic pricing for a few extra cents.
 
-Several integration add-ons are also available, including support for multiple inverters and older models such as the SolarFlow Hyper 2000. See [🔃 Optional Integration Add-ons](#-optional-integration-add-ons) for a complete overview.
+Several integration add-ons are also available, including support for multiple inverters and older models such as the SolarFlow Hyper 2000. See [Add-ons](#-optional-integration-add-ons) for a complete overview.
 
 Do you find this project useful and want to support further development?  
 Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
