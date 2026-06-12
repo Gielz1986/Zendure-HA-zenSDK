@@ -11,11 +11,9 @@ Go to the explanation of all entities and the dashboard
 
 **Get your battery running locally in Home Assistant in just 2️⃣ simple steps.**
 
-Based on the zenSDK RESTful API for Home Assistant. This package connects locally to one Zendure Solarflow 2400 (AC, AC+ or AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) or Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ or Pro). Perfect for anyone who wants to run their battery **100% local** in Home Assistant.
+Based on the zenSDK RESTful API for Home Assistant. This package connects locally to one Zendure Solarflow 2400 (AC, AC+ or AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) or Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ or Pro). Perfect for anyone who wants to run their battery **100% local** in Home Assistant. There are now **11 preconfigured modes** — from relaxed solar-based usage to acting like an energy trader with dynamic pricing for a few extra cents.
 
-There are now **11 preconfigured modes** — from relaxed solar-based usage to acting like an energy trader with dynamic pricing for a few extra cents.
-
-Do you have multiple inverters? Then you can expand this with the [Node-RED proxy by Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). This proxy ensures everything in this automation works seamlessly together, allowing multiple identical inverters to be controlled intelligently with optimal power distribution.
+Several integration add-ons are also available, including support for multiple inverters and older models such as the SolarFlow Hyper 2000. See [🔃 Optional Integration Add-ons](#-optional-integration-add-ons) for a complete overview.
 
 Do you find this project useful and want to support further development?  
 Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
@@ -145,3 +143,13 @@ You can now also directly use a fully plug-n-play dashboard:
 9. [Go to the WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities) for explanation of all entities.
 
 ![Preview](Images/Global-Plug-N-Play-Dashboard.gif)
+
+---
+
+## 🔃 (Optional) Integration add-ons
+
+Several users have created additional code to integrate directly with this integration. They are listed below."
+
+| Extra Add-ons | Information |
+|-|-|
+| [Node-RED proxy](https://github.com/gast777/Zendure-zenSDK-proxy) from [@gast777](https://github.com/gast777) | Do you have multiple inverters? Then you can expand this with this Node-RED proxy. This proxy ensures everything in this automation works seamlessly together, allowing multiple identical inverters to be controlled intelligently with optimal power distribution.  |
