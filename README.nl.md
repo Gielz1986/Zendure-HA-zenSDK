@@ -9,9 +9,7 @@ Ga naar de uitleg over alle entiteiten en het dashboard
 
 **Om in slechts 2️⃣ simpele stappen je batterij volledig lokaal werkend te krijgen in Home Assistant.**
 
-Gebaseerd op de zenSDK RESTful API voor Home Assistant. Deze package maakt lokaal verbinding met één Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) of Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ of Pro). Perfect voor iedereen die zijn batterij **100% lokaal en volledig onder eigen controle** wil draaien in Home Assistant. Inmiddels zijn er **11 voorgeprogrammeerde modussen**  — van heerlijk NOMen op basis van de grote vuurbal tot energieboer spelen met dynamisch handelen voor een paar stuivers.
-
-Heb je de smaak te pakken en meerdere omvormers staan? Dan kun je dit uitbreiden met de [Node-RED proxy van Gast777](https://github.com/gast777/Zendure-zenSDK-proxy). Met deze proxy zorgt Node-RED ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.
+Gebaseerd op de zenSDK RESTful API voor Home Assistant. Deze package maakt lokaal verbinding met één **Zendure Solarflow 2400 (AC, AC+ of AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) of Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ of Pro)**. Perfect voor iedereen die zijn batterij **100% lokaal** en volledig onder eigen controle wil draaien in Home Assistant. Inmiddels zijn er **11 voorgeprogrammeerde modussen**  — van heerlijk NOMen op basis van de grote vuurbal tot energieboer spelen met dynamisch handelen voor een paar stuivers.
 
 Vind je dit project nuttig en wil je verdere ontwikkeling supporten? <br>
 Trakteer mij op een kopje koffie ☕️ en volg deze GitHub repository ⭐⭐⭐.
@@ -90,7 +88,7 @@ homeassistant:
 | `pv_tonen_op_dashboard` | Vink dit aan om de verbonden (offgrid/mppt) PV te tonen op het dashboard.  |  
 | `dynamisch_tonen_op_dashboard` | Vink dit aan om de dynamische sturing te tonen op het dashboard.  |  
 
-<br>
+---
 
 ## 2️⃣ Zendure zenSDK (Gielz) automatisering
 De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwerkt. Kies uit 11 verschillende modi om hem precies zo te laten werken als jij wilt. Heb je bij het bovenstaande geen namen aangepast dan is het een kwestie van deze nieuwe automatisering aanmaken.
@@ -101,10 +99,9 @@ De motor van alles: hij laadt slim op, ontlaadt slim, en zorgt dat alles samenwe
 4. Sla op, en start de automatisering.
 
 ![Preview](Images/Automation1.gif)   
-
 ![Preview](Images/Automation2.gif) 
 
-<br>
+---
 
 ## ✅ Batterij mag aan de slag
 Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan alleen een dure decoratie met kabels.
@@ -114,14 +111,15 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 4. Kies hier je gewenste modus om de **Zendure zenSDK (Gielz) automatisering** te activeren.
 5. De batterij zal nu aan de slag gaan.
 
-![Preview](Images/Modus-16022026.gif) <br>
+![Preview](Images/Modus-16022026.gif)
+
 <sub>
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/NL-%E2%80%90-Modussen">
 Ga naar de uitleg over alle verschillende modussen
 </a>
 </sub>
 
-<br>
+---
 
 ## 🔃 (Optioneel) Plug-N-Play Dashboard
 Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
@@ -137,3 +135,13 @@ Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in geb
 9. [Ga naar de WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/NL-%E2%80%90-Beschikbare-entiteiten) om uitleg te krijgen over alle entiteiten.
 
 ![Preview](Images/Plug-N-Play-Dashboard.gif) 
+
+---
+
+## 🔃 (Optioneel) Integratie add-ons
+
+Diverse gebruikers hebben aanvullende code ontwikkeld die direct met deze integratie werkt. Hieronder staan deze vermeld.
+
+| Extra Add-ons | Informatie |
+|-|-|
+| [Node-RED proxy](https://github.com/gast777/Zendure-zenSDK-proxy) van [@gast777](https://github.com/gast777) | Heb je meerdere omvormers staan? Dan kun je dit uitbreiden met deze Node-RED proxy. Deze proxy zorgt ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.  |
