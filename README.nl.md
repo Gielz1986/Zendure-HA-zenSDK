@@ -115,11 +115,10 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 
 ![Preview](Images/Modus-16022026.gif)
 
-<sub>
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/NL-%E2%80%90-Modussen">
 Ga naar de uitleg over alle verschillende modussen
 </a>
-</sub>
+
 
 ---
 
