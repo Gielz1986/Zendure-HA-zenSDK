@@ -148,3 +148,4 @@ Diverse gebruikers hebben aanvullende code ontwikkeld die direct met deze integr
 | Extra Add-ons | Informatie |
 |-|-|
 | [Node-RED proxy](https://github.com/gast777/Zendure-zenSDK-proxy) van [@gast777](https://github.com/gast777) | Heb je meerdere omvormers staan? Dan kun je dit uitbreiden met deze Node-RED proxy. Deze proxy zorgt ervoor dat alles binnen deze automatisering naadloos samenwerkt, waardoor meerdere identieke omvormers slim worden aangestuurd met een optimale vermogensverdeling.  |
+| [Node-RED proxy (Hyper 2000)](https://github.com/twoenter/Zendure-zenSDK-Hyper-proxy) van [@twoenter](https://github.com/twoenter) | Heb je een SolarFlow Hyper 2000? Dan kun je deze add-on gebruiken om Zendure Home Assistant (MQTT/Cloud) via een Node-RED-proxy te koppelen en gebruik te maken van alle functies van deze integratie. |
