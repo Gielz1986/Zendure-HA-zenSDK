@@ -1,5 +1,6 @@
 # Zendure Home Assistant Integration
-[![Release](https://img.shields.io/github/v/release/Gielz1986/Zendure-HA-zenSDK?style=for-the-badge&label=Current%20Version&&labelColor=029c7b&color=0d2e2b)](https://github.com/Gielz1986/Zendure-HA-zenSDK/releases)
+Choose your preferred language
+
  [![English 🌍 Global](https://img.shields.io/badge/English-Global-blue?style=for-the-badge)](README.md) [![Dutch 🇳🇱 NL](https://img.shields.io/badge/Dutch-NL-orange?style=for-the-badge)](README.nl.md)<br><br>
 ![Preview](Images/Global-Dashboard-290526.gif)
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Available-entities">
@@ -13,8 +14,7 @@ Go to the explanation of all entities and the dashboard
 
 Based on the zenSDK RESTful API for Home Assistant. This package connects locally to one **Zendure Solarflow 2400 (AC, AC+ or AC Pro) / Zendure Solarflow 1600 AC+ / Zendure Solarflow 800 (Pro(2) or Plus) / Zendure Solarflow 3000 Mix AC+ / Zendure Solarflow 4000 Mix (AC+ or Pro)**. Perfect for anyone who wants to run their battery **100% local** in Home Assistant. There are now **11 preconfigured modes** — from relaxed solar-based usage to acting like an energy trader with dynamic pricing for a few extra cents.
 
-> [!TIP]
-> Several integration add-ons are also available, including support for multiple inverters and older models such as the SolarFlow Hyper 2000. See [Integration add-ons](#-optional-integration-add-ons) for a complete overview.
+Several integration add-ons are also available, including support for multiple inverters and older models such as the SolarFlow Hyper 2000. See [Integration add-ons](#-optional-integration-add-ons) for a complete overview.
 
 Do you find this project useful and want to support further development?  
 Buy me a coffee ☕️ and follow this GitHub repository ⭐⭐⭐.
