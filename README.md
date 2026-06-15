@@ -120,12 +120,10 @@ The moment has arrived: time for your battery to prove it’s more than just an 
 4. The battery will with the desired operation mode.
 
 ![Preview](Images/Mode-290326.gif)  
-
-<sub>
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-%E2%80%90-Operation-modes">
 Go to the explanation of all modes
 </a>
-</sub>
+
 
 ---
 
