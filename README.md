@@ -149,8 +149,9 @@ You can now also directly use a fully plug-n-play dashboard:
 
 ## 🔃 (Optional) Integration add-ons
 
-Several users have created additional code to integrate directly with this integration. They are listed below."
+Several users have created additional code to integrate directly with this integration. They are listed below.
 
 | Extra Add-ons | Information |
 |-|-|
 | [Node-RED proxy](https://github.com/gast777/Zendure-zenSDK-proxy) from [@gast777](https://github.com/gast777) | Do you have multiple inverters? Then you can expand this with this Node-RED proxy. This proxy ensures everything in this automation works seamlessly together, allowing multiple identical inverters to be controlled intelligently with optimal power distribution.  |
+| [Node-RED proxy (Hyper 2000)](https://github.com/twoenter/Zendure-zenSDK-Hyper-proxy) from [@twoenter](https://github.com/twoenter) | Do you have a SolarFlow Hyper 2000? Then you can use this add-on to connect Zendure Home Assistant (MQTT/Cloud) through a Node-RED proxy and gain access to all the features of this integration. |
