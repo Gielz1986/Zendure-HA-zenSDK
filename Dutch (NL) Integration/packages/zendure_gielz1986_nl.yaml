@@ -365,7 +365,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260612"
+        state: "v20260615"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -2137,6 +2137,15 @@ rest:
             {% endif %}
           {% endif %}
         unique_id: Zendure_2400_AC_Vermogen_Aansturing
+        icon: >
+          {% set power = states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) %}
+          {% if power > 0 %}
+            mdi:battery-plus-variant
+          {% elif power < 0 %}
+            mdi:battery-minus-variant
+          {% else %}
+            mdi:battery-outline
+          {% endif %}
         unit_of_measurement: "W"
         state_class: measurement
         device_class: power
