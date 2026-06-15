@@ -113,8 +113,7 @@ Het moment is aangebroken: de batterij mag nu bewijzen dat hij meer is dan allee
 4. Kies hier je gewenste modus om de **Zendure zenSDK (Gielz) automatisering** te activeren.
 5. De batterij zal nu aan de slag gaan.
 
-![Preview](Images/Modus-16022026.gif)
-
+![Preview](Images/Modus-16022026.gif)  
 <a href="https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/NL-%E2%80%90-Modussen">
 Ga naar de uitleg over alle verschillende modussen
 </a>
