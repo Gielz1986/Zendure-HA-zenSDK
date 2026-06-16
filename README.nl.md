@@ -48,6 +48,7 @@ homeassistant:
 
 5. Herstart Home Assistant.
 6. Optioneel kun je nu het plug-n-play dashboard aanmaken [Ga naar Plug-N-Play Dashboard](#-optioneel-plug-n-play-dashboard). Of vul nu bij de onderstaande entiteiten in Home Assistant de juiste gegevens in en herstart Home Assistant nogmaals.
+7. Ga naar [deel 2](#2️⃣-zendure-zensdk-gielz-automatisering) zodat je niet alleen data kunt uitlezen maar ook de batterij kunt aansturen met een enkele automatisering.
 
 ---
 
