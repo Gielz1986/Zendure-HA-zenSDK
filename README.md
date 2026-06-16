@@ -51,6 +51,8 @@ homeassistant:
 
 5. Restart Home Assistant.
 6. Optionally create the plug-n-play dashboard [Go to Plug-N-Play Dashboard](#-optional-plug-n-play-dashboard). Or fill in the entities below in Home Assistant and restart again.
+7. Go to [step 2](#-zendure-zensdk-gielz-automation) to not only read data but also use the battery with an single automation.
+
 
 ---
 
