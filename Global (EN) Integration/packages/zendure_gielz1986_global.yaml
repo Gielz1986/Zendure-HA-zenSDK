@@ -365,7 +365,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260617"
+        state: "v20260618"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1795,7 +1795,7 @@ rest:
 
       - name: "Zendure SOC-limit Status"
         value_template: >
-          {% set states = {0: "Normal Operation", 1: "Charging Limit Reached", 2: "Discharge Limit Reached"} %}
+          {% set states = {0: "Normal Operation", 1: "Charging Limit Reached", 2: "Discharge Limit Reached", 16: "Normal Operation", 17: "Charging Limit Reached", 18: "Discharge Limit Reached"} %}
           {% set packState = value_json['properties']['socLimit'] | int %}
           {{ states.get(packState, "Onbekend") }}
         unique_id: zendure_soc_limit_status
