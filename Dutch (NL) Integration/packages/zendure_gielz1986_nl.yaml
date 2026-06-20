@@ -365,7 +365,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260618"
+        state: "v20260620"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -1467,7 +1467,7 @@ rest:
         icon: mdi:solar-panel
         value_template: >
           {% set states = {1: "Toegestaan", 2: "Verboden"} %}
-          {% set packState = value_json.get('properties', {}).get('gridReverse', 2) | int %}
+          {% set packState = value_json.get('properties', {}).get('gridReverse', 0) | int %}
           {{ states.get(packState, "Onbekend") }}
 
       - name: "Zendure 2400 AC Batterij 1 Celbalans Status"
