@@ -1468,7 +1468,7 @@ rest:
         icon: mdi:solar-panel
         value_template: >
           {% set states = {1: "Allow", 2: "Forbidden"} %}
-          {% set packState = value_json.get('properties', {}).get('gridReverse', 2) | int %}
+          {% set packState = value_json.get('properties', {}).get('gridReverse', 0) | int %}
           {{ states.get(packState, "Onbekend") }}
 
       - name: "Zendure Battery 1 Cell Balance Status"
