@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260617)
+description: Configuration Version (v20260620)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1081,7 +1081,7 @@ actions:
               - Discharge Limit Reached
           - alias: >-
               sensor.home_energy_meter_power kleiner dan
-              input_number.zendure_2400_ac_start_opladen_bij
+              input_number.zendure_setting_start_charging_at
             condition: template
             value_template: |
               {{ states('sensor.home_energy_meter_power') | float(0)
