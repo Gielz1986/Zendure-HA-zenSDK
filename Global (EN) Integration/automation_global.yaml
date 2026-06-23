@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260620)
+description: Configuration Version (v20260623)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1600,6 +1600,11 @@ actions:
                 entity_id:
                   - sensor.dynamic_spread_indication_dsc
             continue_on_timeout: false
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+            data: {}
           - action: rest_command.zendure_stop_with_everything
             data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -1607,11 +1612,6 @@ actions:
             data: {}
             target:
               entity_id: input_boolean.dynamic_recently_charged
-          - action: input_boolean.turn_off
-            target:
-              entity_id:
-                - input_boolean.dynamic_charging_running
-            data: {}
           - action: logbook.log
             data:
               message: 💲Dynamic Smart Matching cheap charging complete   —
@@ -1719,6 +1719,11 @@ actions:
                 entity_id:
                   - sensor.dynamic_spread_indication
             continue_on_timeout: false
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamic_charging_running
+            data: {}
           - action: rest_command.zendure_stop_with_everything
             data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -1726,11 +1731,6 @@ actions:
             data: {}
             target:
               entity_id: input_boolean.dynamic_recently_charged
-          - action: input_boolean.turn_off
-            target:
-              entity_id:
-                - input_boolean.dynamic_charging_running
-            data: {}
           - action: logbook.log
             data:
               message: 💲Dynamic cheap charging complete  —
@@ -1833,14 +1833,14 @@ actions:
                 entity_id:
                   - sensor.dynamic_spread_indication
             continue_on_timeout: false
-          - action: rest_command.zendure_stop_with_everything
-            data:
-              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: input_boolean.turn_off
             target:
               entity_id:
                 - input_boolean.dynamic_discharging_running
             data: {}
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
           - action: logbook.log
             data:
               message: 💲Dynamic expensive discharge complete  —
