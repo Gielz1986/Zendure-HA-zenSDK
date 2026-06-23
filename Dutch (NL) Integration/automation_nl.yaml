@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260620)
+description: Configuratie Versie (v20260623)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1624,6 +1624,11 @@ actions:
                 entity_id:
                   - sensor.dynamisch_spread_indicatie_nom
             continue_on_timeout: false
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamisch_laden_loopt
+            data: {}
           - action: rest_command.zendure_stop_met_alles
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -1632,11 +1637,6 @@ actions:
             data: {}
             target:
               entity_id: input_boolean.dynamisch_recent_geladen
-          - action: input_boolean.turn_off
-            target:
-              entity_id:
-                - input_boolean.dynamisch_laden_loopt
-            data: {}
           - action: logbook.log
             data:
               message: 💲Dynamisch NOM goedkoop laden voltooid  —
@@ -1744,6 +1744,11 @@ actions:
                 entity_id:
                   - sensor.dynamisch_spread_indicatie
             continue_on_timeout: false
+          - action: input_boolean.turn_off
+            target:
+              entity_id:
+                - input_boolean.dynamisch_laden_loopt
+            data: {}
           - action: rest_command.zendure_stop_met_alles
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
@@ -1751,11 +1756,6 @@ actions:
             data: {}
             target:
               entity_id: input_boolean.dynamisch_recent_geladen
-          - action: input_boolean.turn_off
-            target:
-              entity_id:
-                - input_boolean.dynamisch_laden_loopt
-            data: {}
           - action: logbook.log
             data:
               message: 💲Dynamisch goedkoop laden voltooid  —
@@ -1858,14 +1858,14 @@ actions:
                 entity_id:
                   - sensor.dynamisch_spread_indicatie
             continue_on_timeout: false
-          - action: rest_command.zendure_stop_met_alles
-            data:
-              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
           - action: input_boolean.turn_off
             target:
               entity_id:
                 - input_boolean.dynamisch_ontladen_loopt
             data: {}
+          - action: rest_command.zendure_stop_met_alles
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
           - action: logbook.log
             data:
               message: 💲Dynamisch duur ontladen voltooid  —
