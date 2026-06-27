@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260623)
+description: Configuration Version (v20260627)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -154,6 +154,18 @@ actions:
             data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
         alias: Dynamic Trading
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state:
+              - Dynamic Trading + Smart Matching
+        sequence:
+          - action: rest_command.zendure_stop_with_everything
+            data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+        alias: Dynamic Trading + Smart Matching
       - conditions:
           - condition: trigger
             id: modus_trigger
@@ -316,6 +328,10 @@ actions:
                 entity_id: input_select.zendure_operation_mode
                 state:
                   - Dynamic Smart Matching (Expensive)
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading + Smart Matching
           - condition: or
             conditions:
               - condition: sun
