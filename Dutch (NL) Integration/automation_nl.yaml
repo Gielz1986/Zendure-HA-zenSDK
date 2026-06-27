@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260623)
+description: Configuratie Versie (v20260627)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -153,6 +153,18 @@ actions:
             data:
               sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
         alias: Dynamisch Handelen
+      - conditions:
+          - condition: trigger
+            id: modus_trigger
+          - condition: state
+            entity_id: input_select.zendure_2400_ac_modus_selecteren
+            state:
+              - Dynamisch Handelen + NOM
+        sequence:
+          - action: rest_command.zendure_stop_met_alles
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+        alias: Dynamisch Handelen + NOM
       - conditions:
           - condition: trigger
             id: modus_trigger
@@ -315,6 +327,10 @@ actions:
                 entity_id: input_select.zendure_2400_ac_modus_selecteren
                 state:
                   - Dynamisch NOM (Duur)
+              - condition: state
+                entity_id: input_select.zendure_2400_ac_modus_selecteren
+                state:
+                  - Dynamisch Handelen + NOM
           - condition: or
             conditions:
               - condition: sun
