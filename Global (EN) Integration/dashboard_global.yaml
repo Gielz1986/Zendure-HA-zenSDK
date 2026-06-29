@@ -449,10 +449,10 @@ views:
                 name: Battery
                 group_by:
                   func: avg
-                  duration: 1sec
+                  duration: 5sec
                 type: area
                 transform: return -x;
-                offset: '-1s'
+                offset: '-5s'
                 stroke_width: 2
                 opacity: 0.35
                 extend_to: now
@@ -496,10 +496,10 @@ views:
                   offset_in_name: false
               - entity: sensor.home_energy_meter_target
                 name: Home Energy Meter
-                offset: '-1s'
+                offset: '-5s'
                 group_by:
                   func: avg
-                  duration: 1sec
+                  duration: 5sec
                 type: area
                 stroke_width: 0
                 opacity: 0.3
