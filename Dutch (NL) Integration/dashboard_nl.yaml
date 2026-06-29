@@ -438,7 +438,7 @@ views:
               color_threshold: true
             cache: false
             stacked: true
-            update_interval: 1sec
+            update_interval: 5sec
             header:
               show: true
               show_states: true
@@ -449,10 +449,10 @@ views:
                 name: Batterij
                 group_by:
                   func: avg
-                  duration: 1sec
+                  duration: 5sec
                 type: area
                 transform: return -x;
-                offset: '-1s'
+                offset: '-5s'
                 stroke_width: 2
                 opacity: 0.35
                 extend_to: now
@@ -496,10 +496,10 @@ views:
                   offset_in_name: false
               - entity: sensor.p1_nom_doel
                 name: Energiemeter
-                offset: '-1s'
+                offset: '-5s'
                 group_by:
                   func: avg
-                  duration: 1sec
+                  duration: 5sec
                 type: area
                 stroke_width: 0
                 opacity: 0.3
