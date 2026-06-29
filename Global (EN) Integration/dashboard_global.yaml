@@ -173,7 +173,7 @@ views:
                 show:
                   in_brush: true
                   in_header: false
-                  in_legend: false
+                  in_legend: true
               - entity: sensor.zendure_total_state_of_charge
                 name: State Of Charge
                 statistics:
@@ -242,7 +242,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "State Of Charge" || seriesName === "Home Energy Meter") return "";
+                    if(seriesName === "State Of Charge" || seriesName === "Leeg") return "";
                     return seriesName;
                   }
               markers:
@@ -352,7 +352,7 @@ views:
                 show:
                   in_brush: true
                   in_header: false
-                  in_legend: false
+                  in_legend: true
               - entity: sensor.zendure_total_state_of_charge
                 name: State Of Charge
                 statistics:
@@ -421,7 +421,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "State Of Charge" || seriesName === "Home Energy Meter") return "";
+                    if(seriesName === "State Of Charge" || seriesName === "Leeg") return "";
                     return seriesName;
                   }
               markers:
@@ -449,10 +449,10 @@ views:
                 name: Battery
                 group_by:
                   func: avg
-                  duration: 5sec
+                  duration: 1sec
                 type: area
                 transform: return -x;
-                offset: '-5s'
+                offset: '-1s'
                 stroke_width: 2
                 opacity: 0.35
                 extend_to: now
@@ -496,10 +496,10 @@ views:
                   offset_in_name: false
               - entity: sensor.home_energy_meter_target
                 name: Home Energy Meter
-                offset: '-5s'
+                offset: '-1s'
                 group_by:
                   func: avg
-                  duration: 5sec
+                  duration: 1sec
                 type: area
                 stroke_width: 0
                 opacity: 0.3
@@ -509,35 +509,8 @@ views:
                 yaxis_id: energy
                 show:
                   in_header: false
-                  in_legend: false
-              - entity: input_number.zendure_setting_start_discharging_at
-                name: Start discharging
-                type: line
-                stroke_width: 2
-                color: var(--accent-color)
-                opacity: 1
-                stroke_dash: 2
-                curve: stepline
-                extend_to: now
-                float_precision: 0
-                yaxis_id: energy
-                show:
-                  hidden_by_default: true
-                  in_header: false
-              - entity: input_number.zendure_setting_start_charging_at
-                name: Start charging
-                type: line
-                stroke_width: 2
-                color: var(--accent-color)
-                opacity: 1
-                stroke_dash: 2
-                curve: stepline
-                extend_to: now
-                float_precision: 0
-                yaxis_id: energy
-                show:
-                  hidden_by_default: true
-                  in_header: false
+                  in_legend: true
+                  offset_in_name: false
             apex_config:
               toolbar:
                 show: true
@@ -587,7 +560,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "Leeg" || seriesName === "Home Energy Meter (-5s)") return "";
+                    if(seriesName === "Leeg" || seriesName === "Leeg") return "";
                     return seriesName;
                   }
               markers:
