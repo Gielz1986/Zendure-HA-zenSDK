@@ -158,7 +158,7 @@ views:
                   in_header: false
                   in_legend: true
               - entity: sensor.p1_nom_doel
-                name: P1 (NOM Doel)
+                name: Energiemeter
                 statistics:
                   period: 5minute
                   type: mean
@@ -173,7 +173,7 @@ views:
                 show:
                   in_brush: true
                   in_header: false
-                  in_legend: false
+                  in_legend: true
               - entity: sensor.zendure_2400_ac_laadpercentage
                 name: Laadpercentage
                 statistics:
@@ -242,7 +242,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "Laadpercentage" || seriesName === "P1 (NOM Doel)") return "";
+                    if(seriesName === "Laadpercentage" || seriesName === "Leeg") return "";
                     return seriesName;
                   }
               markers:
@@ -337,7 +337,7 @@ views:
                   in_header: false
                   in_legend: true
               - entity: sensor.p1_nom_doel
-                name: P1 (NOM Doel)
+                name: Energiemeter
                 statistics:
                   period: 5minute
                   type: mean
@@ -352,7 +352,7 @@ views:
                 show:
                   in_brush: true
                   in_header: false
-                  in_legend: false
+                  in_legend: true
               - entity: sensor.zendure_2400_ac_laadpercentage
                 name: Laadpercentage
                 statistics:
@@ -421,7 +421,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "Laadpercentage" || seriesName === "P1 (NOM Doel)") return "";
+                    if(seriesName === "Laadpercentage" || seriesName === "Leeg") return "";
                     return seriesName;
                   }
               markers:
@@ -438,7 +438,7 @@ views:
               color_threshold: true
             cache: false
             stacked: true
-            update_interval: 5sec
+            update_interval: 1sec
             header:
               show: true
               show_states: true
@@ -449,10 +449,10 @@ views:
                 name: Batterij
                 group_by:
                   func: avg
-                  duration: 5sec
+                  duration: 1sec
                 type: area
                 transform: return -x;
-                offset: '-5s'
+                offset: '-1s'
                 stroke_width: 2
                 opacity: 0.35
                 extend_to: now
@@ -495,11 +495,11 @@ views:
                   in_legend: true
                   offset_in_name: false
               - entity: sensor.p1_nom_doel
-                name: P1 (NOM Doel)
-                offset: '-5s'
+                name: Energiemeter
+                offset: '-1s'
                 group_by:
                   func: avg
-                  duration: 5sec
+                  duration: 1sec
                 type: area
                 stroke_width: 0
                 opacity: 0.3
@@ -509,35 +509,8 @@ views:
                 yaxis_id: energy
                 show:
                   in_header: false
-                  in_legend: false
-              - entity: input_number.zendure_2400_ac_ontladen_starten_bij
-                name: Start ontladen
-                type: line
-                stroke_width: 2
-                color: var(--accent-color)
-                opacity: 1
-                stroke_dash: 2
-                curve: stepline
-                extend_to: now
-                float_precision: 0
-                yaxis_id: energy
-                show:
-                  hidden_by_default: true
-                  in_header: false
-              - entity: input_number.zendure_2400_ac_opladen_starten_bij
-                name: Start opladen
-                type: line
-                stroke_width: 2
-                color: var(--accent-color)
-                opacity: 1
-                stroke_dash: 2
-                curve: stepline
-                extend_to: now
-                float_precision: 0
-                yaxis_id: energy
-                show:
-                  hidden_by_default: true
-                  in_header: false
+                  in_legend: true
+                  offset_in_name: false
             apex_config:
               toolbar:
                 show: true
@@ -587,7 +560,7 @@ views:
                 formatter: |
                   EVAL:function(seriesName, opts) {
                     // filter series die niet in de legenda moeten
-                    if(seriesName === "Leeg" || seriesName === "P1 (NOM Doel) (-5s)") return "";
+                    if(seriesName === "Leeg" || seriesName === "Leeg") return "";
                     return seriesName;
                   }
               markers:
