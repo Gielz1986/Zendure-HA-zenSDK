@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260627)
+description: Configuratie Versie (v20260702)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1624,7 +1624,7 @@ actions:
                 trigger: template
                 value_template: >
                   {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
-                  ==
+                  >=
                      states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
                 for:
                   hours: 0
@@ -1744,7 +1744,7 @@ actions:
                 trigger: template
                 value_template: >
                   {{ states('sensor.zendure_2400_ac_laadpercentage') | float(0)
-                  ==
+                  >=
                      states('sensor.zendure_2400_ac_maximale_laadpercentage') | float(0) }}
                 for:
                   hours: 0
