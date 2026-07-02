@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260627)
+description: Configuration Version (v20260702)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -1600,7 +1600,7 @@ actions:
                 trigger: template
                 value_template: >
                   {{ states('sensor.zendure_total_state_of_charge') | float(0)
-                  ==
+                  >=
                      states('sensor.zendure_maximum_state_of_charge') | float(0) }}
                 for:
                   hours: 0
@@ -1719,7 +1719,7 @@ actions:
                 trigger: template
                 value_template: >
                   {{ states('sensor.zendure_total_state_of_charge') | float(0)
-                  ==
+                  >=
                      states('sensor.zendure_maximum_state_of_charge') | float(0) }}
                 for:
                   hours: 0
