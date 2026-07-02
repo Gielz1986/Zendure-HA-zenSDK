@@ -1145,9 +1145,16 @@ views:
                   in_header: false
                   legend_value: false
                   extremas: false
-                data_generator: |
+                data_generator: >
                   const data = entity.attributes.raw_today;
+
                   if (!data) return [];
+
+
+                  const correctie =
+                  parseFloat(hass.states['input_number.dynamisch_export_correctie'].state
+                  || 0);
+
 
                   return data.map((item, index) => {
                     const tijdStart = new Date(item.start).getTime();
@@ -1158,7 +1165,12 @@ views:
                                           : 3600000);
                     const tijdEind = tijdStart + duration;
 
-                    const prijs = item.value;
+                    let prijs = item.value;
+
+                    if (item.duur === "ja") {
+                      prijs = prijs - correctie;
+                    }
+
                     const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
 
                     // Standaardkleur: #e0e0e3
@@ -1221,117 +1233,125 @@ views:
                 after: '13:30:00'
                 before: '24:00:00'
             badges: []
-          - type: horizontal-stack
-            cards:
-              - type: custom:apexcharts-card
-                update_interval: 1sec
-                graph_span: 24h
-                apex_config:
-                  noData:
-                    text: Vanaf 14:00 zijn de prijzen van morgen bekend.
-                  markers:
-                    size: 0
-                    hover:
-                      size: 0
-                  plotOptions:
-                    bar:
-                      columnWidth: 90%
-                  tooltip:
-                    enabledOnSeries:
-                      - 0
-                    followCursor: true
-                    shared: true
-                    intersect: false
-                    enabled: true
-                    x:
-                      format: HH:mm
-                      show: false
-                    'y':
-                      formatter: |
-                        EVAL: (val) => `${val.toFixed(3)} €/kWh`
-                  grid:
-                    show: true
-                    borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
-                    strokeDashArray: 0
-                    padding:
-                      top: -10
-                  chart:
-                    height: 150px
-                    stacked: true
-                    stackOnlyBar: true
-                  yaxis:
-                    - title:
-                        text: ''
-                      decimalsInFloat: 2
-                      forceNiceScale: true
-                      labels:
-                        style:
-                          colors: >-
-                            color-mix(in srgb, var(--primary-text-color) 75%,
-                            transparent)
-                  xaxis:
-                    labels:
-                      show: false
-                    axisTicks:
-                      show: false
-                    axisBorder:
-                      color: >-
-                        color-mix(in srgb, var(--divider-color) 50%,
+          - type: custom:apexcharts-card
+            update_interval: 1sec
+            graph_span: 24h
+            apex_config:
+              noData:
+                text: Vanaf 14:00 zijn de prijzen van morgen bekend.
+              markers:
+                size: 0
+                hover:
+                  size: 0
+              plotOptions:
+                bar:
+                  columnWidth: 90%
+              tooltip:
+                enabledOnSeries:
+                  - 0
+                followCursor: true
+                shared: true
+                intersect: false
+                enabled: true
+                x:
+                  format: HH:mm
+                  show: false
+                'y':
+                  formatter: |
+                    EVAL: (val) => `${val.toFixed(3)} €/kWh`
+              grid:
+                show: true
+                borderColor: color-mix(in srgb, var(--divider-color) 50%, transparent)
+                strokeDashArray: 0
+                padding:
+                  top: -10
+              chart:
+                height: 150px
+                stacked: true
+                stackOnlyBar: true
+              yaxis:
+                - title:
+                    text: ''
+                  decimalsInFloat: 2
+                  forceNiceScale: true
+                  labels:
+                    style:
+                      colors: >-
+                        color-mix(in srgb, var(--primary-text-color) 75%,
                         transparent)
-                  legend:
-                    show: false
-                span:
-                  start: day
-                  offset: +1d
-                series:
-                  - entity: sensor.dynamisch_goedkoopste_periode
-                    name: Morgen
-                    type: column
-                    float_precision: 3
-                    color: '#e0e0e3'
-                    show:
-                      in_header: false
-                      legend_value: false
-                    data_generator: |
-                      const data = entity.attributes.raw_tomorrow;
-                      if (!data) return [];
+              xaxis:
+                labels:
+                  show: false
+                axisTicks:
+                  show: false
+                axisBorder:
+                  color: color-mix(in srgb, var(--divider-color) 50%, transparent)
+              legend:
+                show: false
+            span:
+              start: day
+              offset: +1d
+            series:
+              - entity: sensor.dynamisch_goedkoopste_periode
+                name: Morgen
+                type: column
+                float_precision: 3
+                color: '#e0e0e3'
+                show:
+                  in_header: false
+                  legend_value: false
+                data_generator: >
+                  const data = entity.attributes.raw_tomorrow;
 
-                      return data.map((item, index) => {
-                        const tijdStart = new Date(item.start).getTime();
-                        const duration = item.duration
-                                          ? item.duration * 1000
-                                          : (data[index + 1]
-                                              ? new Date(data[index + 1].start).getTime() - tijdStart
-                                              : 3600000);
-                        const tijdEind = tijdStart + duration;
-
-                        const prijs = item.value;
-                        const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
-
-                        // Standaardkleur: #e0e0e3
-                        let kleur = "rgba(224,224,227,1)";
+                  if (!data) return [];
 
 
-                        if (item.goedkoop === "ja") {
-                          kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
-                        }
-                        else if (item.duur === "ja") {
-                          kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
-                        }
-                        else {
-                          kleur = verleden ? "rgba(162,162,163,0.15)" : "rgba(162,162,163,1)";
-                        }
+                  const correctie =
+                  parseFloat(hass.states['input_number.dynamisch_export_correctie'].state
+                  || 0);
 
-                        return {
-                          x: tijdStart,
-                          y: prijs,
-                          fillColor: kleur
-                        };
-                      });
-                visibility:
-                  - condition: time
-                    after: '13:30:00'
-                    before: '24:00:00'
+
+                  return data.map((item, index) => {
+                    const tijdStart = new Date(item.start).getTime();
+                    const duration = item.duration
+                                      ? item.duration * 1000
+                                      : (data[index + 1]
+                                          ? new Date(data[index + 1].start).getTime() - tijdStart
+                                          : 3600000);
+                    const tijdEind = tijdStart + duration;
+
+                    let prijs = item.value;
+
+                    if (item.duur === "ja") {
+                      prijs = prijs - correctie;
+                    }
+
+                    const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
+
+                    // Standaardkleur: #e0e0e3
+                    let kleur = "rgba(224,224,227,1)";
+
+
+                    if (item.goedkoop === "ja") {
+                      kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
+                    }
+                    else if (item.duur === "ja") {
+                      kleur = verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,1)";
+                    }
+                    else {
+                      kleur = verleden ? "rgba(162,162,163,0.15)" : "rgba(162,162,163,1)";
+                    }
+
+                    return {
+                      x: tijdStart,
+                      y: prijs,
+                      fillColor: kleur
+                    };
+                  });
+            visibility:
+              - condition: time
+                after: '13:30:00'
+                before: '24:00:00'
           - type: horizontal-stack
             cards:
               - type: tile
@@ -2869,6 +2889,8 @@ views:
           - type: entities
             entities:
               - entity: input_text.dynamisch_nordpool_sensor
+              - entity: input_number.dynamisch_export_correctie
+                name: Export Correctie
               - entity: input_number.dynamisch_minimale_spread
                 name: Minimale Spread
               - entity: input_boolean.dynamisch_15_minuten
