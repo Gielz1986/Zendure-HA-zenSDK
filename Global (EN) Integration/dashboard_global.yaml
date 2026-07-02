@@ -1141,9 +1141,16 @@ views:
                   in_header: false
                   legend_value: false
                   extremas: false
-                data_generator: |
+                data_generator: >
                   const data = entity.attributes.raw_today;
+
                   if (!data) return [];
+
+
+                  const correction =
+                  parseFloat(hass.states['input_number.dynamic_export_correction'].state
+                  || 0);
+
 
                   return data.map((item, index) => {
                     const tijdStart = new Date(item.start).getTime();
@@ -1154,7 +1161,12 @@ views:
                                           : 3600000);
                     const tijdEind = tijdStart + duration;
 
-                    const prijs = item.value;
+                    let prijs = item.value;
+
+                    if (item.duur === "Yes") {
+                      prijs = prijs - correction;
+                    }
+
                     const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
 
                     // Standaardkleur: #e0e0e3
@@ -1288,9 +1300,16 @@ views:
                     show:
                       in_header: false
                       legend_value: false
-                    data_generator: |
+                    data_generator: >
                       const data = entity.attributes.raw_tomorrow;
+
                       if (!data) return [];
+
+
+                      const correction =
+                      parseFloat(hass.states['input_number.dynamic_export_correction'].state
+                      || 0);
+
 
                       return data.map((item, index) => {
                         const tijdStart = new Date(item.start).getTime();
@@ -1301,7 +1320,12 @@ views:
                                               : 3600000);
                         const tijdEind = tijdStart + duration;
 
-                        const prijs = item.value;
+                        let prijs = item.value;
+
+                        if (item.duur === "Yes") {
+                          prijs = prijs - correction;
+                        }
+
                         const verleden = Date.now() >= tijdEind;  // alleen volledig verlopen blokken
 
                         // Standaardkleur: #e0e0e3
@@ -2860,6 +2884,8 @@ views:
           - type: entities
             entities:
               - entity: input_text.dynamic_setting_nordpool_sensor
+              - entity: input_number.dynamic_export_correction
+                name: Export Correction
               - entity: input_number.dynamic_setting_minimal_spread
                 name: Minimal Spread
               - entity: input_boolean.dynamic_setting_15_minute_interval
