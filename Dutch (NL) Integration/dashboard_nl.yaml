@@ -2833,10 +2833,18 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: more-info
+            visibility:
+              - condition: state
+                entity: input_boolean.pv_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_boolean.zendure_2400_ac_pv_export_uitgeschakeld
                 name: PV Export Uitgeschakeld
+            visibility:
+              - condition: state
+                entity: input_boolean.pv_tonen_op_dashboard
+                state: 'on'
           - type: heading
             icon: ''
             heading: Configuratie (Optioneel)
@@ -2871,6 +2879,10 @@ views:
             heading: Configuratie (Dynamisch)
             heading_style: title
             badges: []
+            visibility:
+              - condition: state
+                entity: input_boolean.dynamisch_tonen_op_dashboard
+                state: 'on'
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Heb je een
@@ -2886,6 +2898,9 @@ views:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
                 state: 'on'
+              - condition: state
+                entity: input_boolean.dynamisch_tonen_op_dashboard
+                state: 'on'
           - type: entities
             entities:
               - entity: input_text.dynamisch_nordpool_sensor
@@ -2895,6 +2910,10 @@ views:
                 name: Minimale Spread
               - entity: input_boolean.dynamisch_15_minuten
                 name: 15 Minuten Tarieven Actief
+            visibility:
+              - condition: state
+                entity: input_boolean.dynamisch_tonen_op_dashboard
+                state: 'on'
           - type: heading
             icon: ''
             heading_style: title
