@@ -2825,10 +2825,18 @@ views:
                 color: '#01a180'
                 tap_action:
                   action: more-info
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_pv
+                state: 'on'
           - type: entities
             entities:
               - entity: input_boolean.zendure_setting_pv_export_disabled
                 name: PV Export Disabled
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_pv
+                state: 'on'
           - type: heading
             icon: ''
             heading: Configuration (Optional)
@@ -2864,6 +2872,10 @@ views:
             heading: Configuration (Dynamic)
             heading_style: title
             badges: []
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_dynamic
+                state: 'on'
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Help text</ha-alert>If you have a
@@ -2880,6 +2892,9 @@ views:
               - condition: state
                 entity: input_boolean.dashboard_setting_show_help
                 state: 'on'
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_dynamic
+                state: 'on'
             text_only: true
           - type: entities
             entities:
@@ -2890,6 +2905,10 @@ views:
                 name: Minimal Spread
               - entity: input_boolean.dynamic_setting_15_minute_interval
                 name: 15 Minute Interval
+            visibility:
+              - condition: state
+                entity: input_boolean.dashboard_setting_show_dynamic
+                state: 'on'
           - type: heading
             icon: ''
             heading_style: title
