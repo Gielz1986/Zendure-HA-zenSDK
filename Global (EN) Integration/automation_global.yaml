@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20260702)
+description: Configuration Version (v20260703)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -849,6 +849,37 @@ actions:
               entity_id: input_select.zendure_operation_mode
               name: " "
         alias: adjust PV export
+      - conditions:
+          - condition: state
+            entity_id: sensor.zendure_offgrid_mode
+            state:
+              - Eco
+              - Normal
+          - condition: numeric_state
+            entity_id: sensor.zendure_power_offgrid_outlet_1
+            above: 0
+          - condition: state
+            entity_id: sensor.zendure_storage_mode
+            state:
+              - RAM Memory
+          - condition: template
+            value_template: |-
+              {{ states('sensor.zendure_power_offgrid_outlet_1') | float(0) ==
+                 (states('sensor.zendure_power') | float(0) | abs) }}
+          - condition: state
+            entity_id: sensor.zendure_charging_mode
+            state:
+              - Discharging
+        sequence:
+          - action: rest_command.zendure_full_standby
+            data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+          - action: logbook.log
+            data:
+              message: ⚠️Activate AC passthrough for offgrid —
+              entity_id: input_select.zendure_operation_mode
+              name: " "
+        alias: Activate AC passthrough for offgrid
   - alias: Smart Matching Control
     choose:
       - conditions:
