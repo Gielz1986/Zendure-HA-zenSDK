@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20260702)
+description: Configuratie Versie (v20260703)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -860,6 +860,38 @@ actions:
               entity_id: input_select.zendure_2400_ac_modus_selecteren
               name: " "
         alias: PV export aanpassen
+      - conditions:
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_offgrid_modus
+            state:
+              - Eco
+              - Normaal
+          - condition: numeric_state
+            entity_id: sensor.zendure_2400_ac_vermogen_offgrid_stopcontact_1
+            above: 0
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_opslagmodus
+            state:
+              - Opslaan in RAM
+          - condition: template
+            value_template: >-
+              {{ states('sensor.zendure_2400_ac_vermogen_offgrid_stopcontact_1')
+              | float(0) ==
+                 (states('sensor.zendure_2400_ac_vermogen_aansturing') | float(0) | abs) }}
+          - condition: state
+            entity_id: sensor.zendure_2400_ac_modus
+            state:
+              - Ontladen
+        sequence:
+          - action: rest_command.zendure_standby
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+          - action: logbook.log
+            data:
+              message: ⚠️Activeer AC doorvoer voor offgrid —
+              entity_id: input_select.zendure_2400_ac_modus_selecteren
+              name: " "
+        alias: Activeer AC doorvoer voor offgrid
   - alias: NOM Aansturing
     choose:
       - conditions:
