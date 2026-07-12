@@ -87,6 +87,7 @@ homeassistant:
 | `zendure_setting_battery_order` | **e.g. 1;5;3;4;2** – Manually define battery order based on serial numbers and physical stacking. |
 | **Configuration (Dynamic)** | **Information** |
 | `dynamic_setting_nordpool_sensor` | **e.g. sensor.nordpool_kwh_nl_eur_3_09_0** – Your Nordpool (HACS) sensor. |
+| `dynamic_export_correction` | Specify how many cents should be subtracted during export. This value is used in the spread calculation. |
 | `dynamic_setting_minimal_spread` | **e.g. 25%** – Minimum price spread before dynamic charging/discharging activates. |
 | `dynamic_setting_15_minute_interval` | Enable this if you want to use 15-minute intervals. |
 | **Configuration (Dashboard)** | **Information** |
