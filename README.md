@@ -56,9 +56,10 @@ homeassistant:
 
 ---
 
-![Preview](Images/Global-Settings-290526.png)  
+<img alt="image" src="https://github.com/user-attachments/assets/c3dc867f-6022-4d12-8926-0e593f411856" />
 *plug-n-play dashboard
 
+<br>
 <br>
 
 | Explanation per configuration item | |
