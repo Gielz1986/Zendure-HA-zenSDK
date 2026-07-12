@@ -53,9 +53,10 @@ homeassistant:
 ---
 
 
-![Preview](Images/Instellingen-290526.png) 
+<img  alt="image" src="https://github.com/user-attachments/assets/c395c122-3bc4-4969-99f1-28dbabf89a77" />
 *plug-n-play dashboard
 
+<br>
 <br>
 
 | Uitleg per configuratie item | |  
