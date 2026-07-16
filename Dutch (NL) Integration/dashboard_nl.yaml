@@ -7,7 +7,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading_style: title
             badges:
               - type: entity
@@ -16,14 +16,14 @@ views:
                 entity: sensor.zendure_2400_ac_vermogen_aansturing
                 tap_action:
                   action: more-info
-                color: '#01a180'
+                color: "#01a180"
               - type: entity
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_vermogen_offgrid_stopcontact_1
                 tap_action:
                   action: more-info
-                color: '#01a180'
+                color: "#01a180"
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_offgrid_modus
@@ -35,7 +35,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_laadpercentage
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
               - type: entity
@@ -43,7 +43,7 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
                 icon: mdi:swap-vertical-bold
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
             heading: Batterij
@@ -58,7 +58,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_select.zendure_2400_ac_modus_selecteren
@@ -103,7 +103,7 @@ views:
             header:
               show: true
               show_states: true
-              title: ''
+              title: ""
             graph_span: 1d
             span:
               start: day
@@ -119,7 +119,7 @@ views:
                 stroke_width: 2
                 opacity: 0.35
                 extend_to: now
-                color: '#01a180'
+                color: "#01a180"
                 float_precision: 0
                 color_threshold:
                   - value: -2000
@@ -167,7 +167,7 @@ views:
                 stroke_width: 0
                 opacity: 0.3
                 extend_to: now
-                color: '#c0c0c2'
+                color: "#c0c0c2"
                 float_precision: 0
                 yaxis_id: energy
                 show:
@@ -207,7 +207,7 @@ views:
                   color: color-mix(in srgb, var(--divider-color) 50%, transparent)
               yaxis:
                 - title:
-                    text: ''
+                    text: ""
                   decimalsInFloat: 0
                   labels:
                     style:
@@ -282,7 +282,7 @@ views:
             header:
               show: true
               show_states: true
-              title: ''
+              title: ""
             graph_span: 1d
             span:
               start: day
@@ -298,7 +298,7 @@ views:
                 stroke_width: 2
                 opacity: 0.35
                 extend_to: now
-                color: '#01a180'
+                color: "#01a180"
                 float_precision: 0
                 color_threshold:
                   - value: -2000
@@ -346,7 +346,7 @@ views:
                 stroke_width: 0
                 opacity: 0.3
                 extend_to: now
-                color: '#c0c0c2'
+                color: "#c0c0c2"
                 float_precision: 0
                 yaxis_id: energy
                 show:
@@ -386,7 +386,7 @@ views:
                   color: color-mix(in srgb, var(--divider-color) 50%, transparent)
               yaxis:
                 - title:
-                    text: ''
+                    text: ""
                   decimalsInFloat: 0
                   labels:
                     style:
@@ -442,7 +442,7 @@ views:
             header:
               show: true
               show_states: true
-              title: ''
+              title: ""
             graph_span: 10min
             series:
               - entity: sensor.zendure_2400_ac_vermogen_aansturing
@@ -452,11 +452,11 @@ views:
                   duration: 5sec
                 type: area
                 transform: return -x;
-                offset: '-5s'
+                offset: "-5s"
                 stroke_width: 2
                 opacity: 0.35
                 extend_to: now
-                color: '#01a180'
+                color: "#01a180"
                 float_precision: 0
                 color_threshold:
                   - value: -2000
@@ -496,7 +496,7 @@ views:
                   offset_in_name: false
               - entity: sensor.p1_nom_doel
                 name: Energiemeter
-                offset: '-5s'
+                offset: "-5s"
                 group_by:
                   func: avg
                   duration: 5sec
@@ -504,7 +504,7 @@ views:
                 stroke_width: 0
                 opacity: 0.3
                 extend_to: now
-                color: '#c0c0c2'
+                color: "#c0c0c2"
                 float_precision: 0
                 yaxis_id: energy
                 show:
@@ -536,7 +536,7 @@ views:
                   color: color-mix(in srgb, var(--divider-color) 50%, transparent)
               yaxis:
                 - title:
-                    text: ''
+                    text: ""
                   decimalsInFloat: 0
                   labels:
                     style:
@@ -568,7 +568,7 @@ views:
                 hover:
                   size: 0
           - type: heading
-            icon: ''
+            icon: ""
             heading: PV
             heading_style: title
             badges:
@@ -613,7 +613,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.pv_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -643,7 +643,7 @@ views:
             header:
               show: true
               show_states: true
-              title: ''
+              title: ""
             graph_span: 1d
             span:
               start: day
@@ -692,7 +692,7 @@ views:
                 opacity: 0
                 stroke_width: 0
                 extend_to: now
-                color: '#01a180'
+                color: "#01a180"
                 float_precision: 0
                 yaxis_id: energy
                 show:
@@ -709,7 +709,7 @@ views:
                 opacity: 0.35
                 stroke_width: 0
                 extend_to: now
-                color: '#c0c0c2'
+                color: "#c0c0c2"
                 float_precision: 0
                 yaxis_id: energy
                 show:
@@ -733,7 +733,7 @@ views:
               yaxis:
                 - min: 0
                   title:
-                    text: ''
+                    text: ""
                   decimalsInFloat: 0
                   labels:
                     style:
@@ -765,11 +765,11 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.pv_tonen_op_dashboard
-                state: 'on'
+                state: "on"
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading_style: title
             heading: Aansturing
             badges:
@@ -781,7 +781,7 @@ views:
                 state_content:
                   - name
                   - state
-                color: '#01a180'
+                color: "#01a180"
                 icon: mdi:home
                 tap_action:
                   action: more-info
@@ -845,7 +845,7 @@ views:
                   entity: sensor.zendure_2400_ac_ingesteld_oplaadvermogen
                   name: Ingesteld Oplaadvermogen
           - type: heading
-            icon: ''
+            icon: ""
             heading: Nul Import
             heading_style: title
             badges:
@@ -853,7 +853,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.p1_nul_import_duur_vandaag
-                color: '#01a180'
+                color: "#01a180"
                 icon: mdi:leaf
                 tap_action:
                   action: more-info
@@ -877,17 +877,17 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
             header:
               show: true
-              title: ''
+              title: ""
             graph_span: 2month
             span:
               start: month
-              offset: '-1month'
+              offset: "-1month"
             cache: false
             yaxis:
               - min: ~200
@@ -912,7 +912,7 @@ views:
                 x:
                   format: d/MM
                   show: false
-                'y':
+                "y":
                   formatter: |
                     EVAL:function(value) {
                       const h = Math.floor(value);
@@ -950,12 +950,12 @@ views:
                   type: max
                   align: start
                 type: column
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
                   in_legend: false
           - type: heading
-            icon: ''
+            icon: ""
             heading_style: title
             heading: Import | Export
             badges:
@@ -967,18 +967,18 @@ views:
                 state_content:
                   - name
                   - state
-                color: '#01a180'
+                color: "#01a180"
                 icon: mdi:percent
                 tap_action:
                   action: more-info
           - type: custom:apexcharts-card
             header:
               show: true
-              title: ''
+              title: ""
             graph_span: 24month
             span:
               start: month
-              offset: '-23month'
+              offset: "-23month"
             cache: false
             apex_config:
               yaxis:
@@ -1019,7 +1019,7 @@ views:
                   type: change
                   align: start
                 type: column
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
               - entity: sensor.zendure_2400_ac_energie_export
@@ -1029,7 +1029,7 @@ views:
                   type: change
                   align: start
                 type: column
-                color: '#a2a2a3'
+                color: "#a2a2a3"
                 show:
                   in_header: false
           - type: entities
@@ -1041,7 +1041,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading: Dynamisch Vandaag
             heading_style: title
             badges:
@@ -1049,7 +1049,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.dynamisch_nordpool
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
               - type: entity
@@ -1057,7 +1057,7 @@ views:
                 show_icon: true
                 entity: sensor.dynamisch_goedkoopste_periode
                 icon: mdi:arrow-down-bold
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
                 visibility:
@@ -1070,7 +1070,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.dynamisch_duurste_periode
-                color: '#c53b2c'
+                color: "#c53b2c"
                 icon: mdi:arrow-up-bold
                 tap_action:
                   action: more-info
@@ -1101,7 +1101,7 @@ views:
                 x:
                   format: HH:mm
                   show: false
-                'y':
+                "y":
                   formatter: |
                     EVAL: (val) => `${val.toFixed(3)} €/kWh`
               grid:
@@ -1116,7 +1116,7 @@ views:
                 stackOnlyBar: true
               yaxis:
                 - title:
-                    text: ''
+                    text: ""
                   decimalsInFloat: 2
                   forceNiceScale: true
                   labels:
@@ -1140,7 +1140,7 @@ views:
                 name: Vandaag
                 type: column
                 float_precision: 3
-                color: '#e0e0e3'
+                color: "#e0e0e3"
                 show:
                   in_header: false
                   legend_value: false
@@ -1225,13 +1225,13 @@ views:
               - entity: input_text.dynamisch_handmatige_periode
                 name: Handmatige Periodes
           - type: heading
-            icon: ''
+            icon: ""
             heading: Dynamisch Morgen
             heading_style: title
             visibility:
               - condition: time
-                after: '13:30:00'
-                before: '24:00:00'
+                after: "13:30:00"
+                before: "24:00:00"
             badges: []
           - type: custom:apexcharts-card
             update_interval: 1sec
@@ -1256,7 +1256,7 @@ views:
                 x:
                   format: HH:mm
                   show: false
-                'y':
+                "y":
                   formatter: |
                     EVAL: (val) => `${val.toFixed(3)} €/kWh`
               grid:
@@ -1271,7 +1271,7 @@ views:
                 stackOnlyBar: true
               yaxis:
                 - title:
-                    text: ''
+                    text: ""
                   decimalsInFloat: 2
                   forceNiceScale: true
                   labels:
@@ -1296,7 +1296,7 @@ views:
                 name: Morgen
                 type: column
                 float_precision: 3
-                color: '#e0e0e3'
+                color: "#e0e0e3"
                 show:
                   in_header: false
                   legend_value: false
@@ -1350,8 +1350,8 @@ views:
                   });
             visibility:
               - condition: time
-                after: '13:30:00'
-                before: '24:00:00'
+                after: "13:30:00"
+                before: "24:00:00"
           - type: horizontal-stack
             cards:
               - type: tile
@@ -1378,8 +1378,8 @@ views:
                 features_position: bottom
             visibility:
               - condition: time
-                after: '13:30:00'
-                before: '24:00:00'
+                after: "13:30:00"
+                before: "24:00:00"
           - type: entities
             entities:
               - entity: input_number.dynamisch_goedkoopste_x_periode_morgen
@@ -1390,12 +1390,12 @@ views:
                 name: Handmatige Periodes Morgen
             visibility:
               - condition: time
-                after: '13:30:00'
-                before: '24:00:00'
+                after: "13:30:00"
+                before: "24:00:00"
         visibility:
           - condition: state
             entity: input_boolean.dynamisch_tonen_op_dashboard
-            state: 'on'
+            state: "on"
     cards: []
     icon: mdi:battery
     dense_section_placement: false
@@ -1408,7 +1408,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading_style: title
             heading: Globaal
           - type: entities
@@ -1441,7 +1441,7 @@ views:
               - entity: sensor.zendure_2400_ac_maximale_laadpercentage
                 name: Max. Laadpercentage
           - type: heading
-            icon: ''
+            icon: ""
             heading: Relais Schakelingen
             heading_style: title
             badges:
@@ -1449,7 +1449,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
-                color: '#01a180'
+                color: "#01a180"
                 name: Vandaag
                 state_content:
                   - name
@@ -1471,21 +1471,21 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: custom:apexcharts-card
             stacked: true
             header:
               show: true
-              title: ''
+              title: ""
             graph_span: 2month
             span:
               start: month
-              offset: '-1month'
+              offset: "-1month"
             cache: false
             apex_config:
               annotations:
                 yaxis:
-                  - 'y': 100
+                  - "y": 100
                     borderColor: var(--accent-color)
                     strokeDashArray: 4
                     borderWidth: 2
@@ -1521,13 +1521,13 @@ views:
             series:
               - entity: sensor.zendure_2400_ac_relais_schakelingen_opladen_vandaag
                 name: Relais Schakelingen Opladen
-                transform: 'return x > 0 ? x - 1 : 0;'
+                transform: "return x > 0 ? x - 1 : 0;"
                 statistics:
                   period: day
                   type: max
                   align: middle
                 type: column
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
                   extremas: false
@@ -1538,12 +1538,12 @@ views:
                   type: max
                   align: middle
                 type: column
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
                   extremas: false
           - type: heading
-            icon: ''
+            icon: ""
             heading: Kalibraties
             heading_style: title
             badges:
@@ -1551,14 +1551,14 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_laatste_kalibratie
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
               - type: entity
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_laatste_kalibratie_dagen
-                color: '#01a180'
+                color: "#01a180"
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Het aantal
@@ -1574,7 +1574,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -1582,11 +1582,11 @@ views:
             stacked: true
             header:
               show: true
-              title: ''
+              title: ""
             graph_span: 2month
             span:
               start: month
-              offset: '-1month'
+              offset: "-1month"
             cache: false
             apex_config:
               yaxis:
@@ -1604,7 +1604,7 @@ views:
                 x:
                   format: d/MM
                   show: false
-                'y':
+                "y":
                   formatter: |
                     function(value, { seriesIndex, w }) {
                       const name = w.globals.seriesNames[seriesIndex];
@@ -1640,7 +1640,7 @@ views:
                   type: max
                   align: middle
                 type: column
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
                   extremas: false
@@ -1653,14 +1653,14 @@ views:
                   type: max
                   align: middle
                 type: column
-                color: '#a2a2a3'
+                color: "#a2a2a3"
                 show:
                   in_header: false
                   extremas: false
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading: Omvormer Temperatuur
             heading_style: title
             badges:
@@ -1668,7 +1668,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_omvormer_temperatuur
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
           - type: markdown
@@ -1681,14 +1681,14 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
               color_threshold: true
             header:
               show: true
-              title: ''
+              title: ""
             graph_span: 1day
             span:
               start: day
@@ -1701,7 +1701,7 @@ views:
                   size: 0
               annotations:
                 yaxis:
-                  - 'y': 55
+                  - "y": 55
                     borderColor: var(--accent-color)
                     strokeDashArray: 4
                     borderWidth: 2
@@ -1749,7 +1749,7 @@ views:
                   type: max
                   align: start
                 type: area
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
                 color_threshold:
@@ -1782,7 +1782,7 @@ views:
                   in_header: false
                   in_legend: false
           - type: heading
-            icon: ''
+            icon: ""
             heading: Per Batterij
             heading_style: title
           - type: horizontal-stack
@@ -1799,7 +1799,7 @@ views:
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
-                    state: '1'
+                    state: "1"
               - type: entities
                 show_header_toggle: false
                 entities:
@@ -1818,7 +1818,7 @@ views:
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
-                    state: '2'
+                    state: "2"
               - type: entities
                 show_header_toggle: false
                 entities:
@@ -1843,7 +1843,7 @@ views:
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
-                    state: '3'
+                    state: "3"
               - type: entities
                 show_header_toggle: false
                 entities:
@@ -1874,7 +1874,7 @@ views:
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
-                    state: '4'
+                    state: "4"
               - type: entities
                 show_header_toggle: false
                 entities:
@@ -1911,7 +1911,7 @@ views:
                 visibility:
                   - condition: state
                     entity: sensor.zendure_2400_ac_aantal_batterijen
-                    state: '5'
+                    state: "5"
               - type: entities
                 show_header_toggle: false
                 entities:
@@ -1958,7 +1958,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading: Efficiëntie Import (Indicatief)
             heading_style: title
             badges: []
@@ -1973,7 +1973,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -1981,7 +1981,7 @@ views:
             update_interval: 5min
             header:
               show: true
-              title: ''
+              title: ""
             graph_span: 1day
             span:
               start: day
@@ -2035,7 +2035,7 @@ views:
                   type: mean
                   align: start
                 type: area
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
                 color_threshold:
@@ -2060,7 +2060,7 @@ views:
                 opacity: 0
                 extend_to: now
                 transform: return Math.max(0, x);
-                color: '#e4e4e7'
+                color: "#e4e4e7"
                 show:
                   in_header: false
           - type: entities
@@ -2072,7 +2072,7 @@ views:
               - entity: sensor.zendure_2400_ac_efficientie_import_24u_gemiddelde
                 name: Efficientie Import (24u gemiddelde)
           - type: heading
-            icon: ''
+            icon: ""
             heading: Efficiëntie Export (Indicatief)
             heading_style: title
           - type: markdown
@@ -2086,7 +2086,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: custom:apexcharts-card
             experimental:
               hidden_by_default: true
@@ -2094,7 +2094,7 @@ views:
             update_interval: 5min
             header:
               show: true
-              title: ''
+              title: ""
             graph_span: 1day
             span:
               start: day
@@ -2148,7 +2148,7 @@ views:
                   type: mean
                   align: start
                 type: area
-                color: '#01a180'
+                color: "#01a180"
                 show:
                   in_header: false
                 color_threshold:
@@ -2173,7 +2173,7 @@ views:
                 opacity: 0
                 extend_to: now
                 transform: return Math.max(0, -x);
-                color: '#e4e4e7'
+                color: "#e4e4e7"
                 show:
                   in_header: false
           - type: entities
@@ -2194,7 +2194,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading_style: title
             badges:
               - type: entity
@@ -2203,12 +2203,12 @@ views:
                 entity: sensor.zendure_2400_ac_vermogen_aansturing
                 tap_action:
                   action: more-info
-                color: '#01a180'
+                color: "#01a180"
               - type: entity
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_laadpercentage
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
               - type: entity
@@ -2216,7 +2216,7 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_relais_schakelingen_totaal_vandaag
                 icon: mdi:swap-vertical-bold
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
             heading: Batterij (7 dagen)
@@ -2255,10 +2255,10 @@ views:
                 header:
                   show: true
                   show_states: true
-                  title: ''
+                  title: ""
                 graph_span: 8d
                 span:
-                  offset: '-7d'
+                  offset: "-7d"
                   start: day
                 series:
                   - entity: sensor.zendure_2400_ac_vermogen_aansturing
@@ -2272,7 +2272,7 @@ views:
                     stroke_width: 2
                     opacity: 0.35
                     extend_to: now
-                    color: '#01a180'
+                    color: "#01a180"
                     float_precision: 0
                     color_threshold:
                       - value: -2000
@@ -2320,7 +2320,7 @@ views:
                     stroke_width: 0
                     opacity: 0.3
                     extend_to: now
-                    color: '#c0c0c2'
+                    color: "#c0c0c2"
                     float_precision: 0
                     yaxis_id: energy
                     show:
@@ -2362,7 +2362,7 @@ views:
                         transparent)
                   yaxis:
                     - title:
-                        text: ''
+                        text: ""
                       decimalsInFloat: 0
                       labels:
                         style:
@@ -2397,7 +2397,7 @@ views:
               columns: 36
               rows: auto
           - type: heading
-            icon: ''
+            icon: ""
             heading: Omvormer Temperatuur (7 dagen)
             heading_style: title
             badges:
@@ -2405,7 +2405,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_omvormer_temperatuur
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
           - type: vertical-stack
@@ -2442,10 +2442,10 @@ views:
                       height: 100
                 header:
                   show: true
-                  title: ''
+                  title: ""
                 graph_span: 8day
                 span:
-                  offset: '-7d'
+                  offset: "-7d"
                   start: day
                 stacked: true
                 cache: false
@@ -2456,7 +2456,7 @@ views:
                       size: 0
                   annotations:
                     yaxis:
-                      - 'y': 55
+                      - "y": 55
                         borderColor: var(--accent-color)
                         strokeDashArray: 4
                         borderWidth: 2
@@ -2506,7 +2506,7 @@ views:
                       type: max
                       align: start
                     type: area
-                    color: '#01a180'
+                    color: "#01a180"
                     show:
                       in_header: false
                       in_brush: true
@@ -2553,7 +2553,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading: Gekoppelde Zendure
             heading_style: title
           - type: markdown
@@ -2576,9 +2576,9 @@ views:
                 'solarFlow1600AC+': 'V2_SF_1600_AC_Plus.png',
                 'solarFlow800Pro': 'V2_SF_800_Pro.png',
                 'solarFlow800Pro2': 'V2_SF_800_Pro.png',
-                'solarFlow4000AC+': 'V2_SF_3000_4000_Mix.png',
-                'solarFlow4000Pro': 'V2_SF_3000_4000_Mix.png',
-                'solarFlow3000AC+': 'V2_SF_3000_4000_Mix.png',
+                'solarFlow4000MixAC+': 'V2_SF_3000_4000_Mix.png',
+                'solarFlow4000MixPro': 'V2_SF_3000_4000_Mix.png',
+                'solarFlow3000MixAC+': 'V2_SF_3000_4000_Mix.png',
                 'solarFlow800Plus': 'V2_SF_800_Plus.png'
               } %}
 
@@ -2620,7 +2620,7 @@ views:
               **{{ names.get(product, 'Onbekend') }}** ({{
               states('sensor.zendure_2400_ac_totale_capaciteit') }} kWh)  
 
-              {{ states('sensor.zendure_2400_ac_serienummer') }}
+              {{ states('sensor.zendure_2400_ac_serienumme') }}
 
 
               {% set last =
@@ -2652,7 +2652,7 @@ views:
               columns: 9
               rows: auto
           - type: heading
-            icon: ''
+            icon: ""
             heading: Configuratie (Basis)
             heading_style: title
             badges:
@@ -2664,7 +2664,7 @@ views:
                   target:
                     entity_id: input_button.zendure_2400_ac_advies_instellingen_overnemen
                   data: {}
-                color: '#01a180'
+                color: "#01a180"
                 text: Standaardinstellingen
           - type: markdown
             content: >-
@@ -2688,7 +2688,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_text.zendure_2400_ac_ip_adres
@@ -2696,7 +2696,7 @@ views:
               - entity: input_number.zendure_2400_ac_standby_vertraging
                 name: Standby Vertraging
           - type: heading
-            icon: ''
+            icon: ""
             heading: Configuratie (Opladen)
             heading_style: title
             badges:
@@ -2705,7 +2705,7 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
                 icon: mdi:api
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
           - type: markdown
@@ -2719,7 +2719,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_number.zendure_2400_ac_max_oplaadvermogen
@@ -2729,7 +2729,7 @@ views:
               - entity: input_number.zendure_2400_ac_oplaadmarge
                 name: Oplaadmarge
           - type: heading
-            icon: ''
+            icon: ""
             heading: Configuratie (Ontladen)
             heading_style: title
             badges:
@@ -2737,7 +2737,7 @@ views:
                 show_state: true
                 show_icon: true
                 entity: sensor.zendure_2400_ac_omvormer_max_ontlaadvermogen
-                color: '#01a180'
+                color: "#01a180"
                 icon: mdi:api
                 tap_action:
                   action: more-info
@@ -2752,7 +2752,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_number.zendure_2400_ac_max_ontlaadvermogen
@@ -2764,7 +2764,7 @@ views:
       - type: grid
         cards:
           - type: heading
-            icon: ''
+            icon: ""
             heading_style: title
             heading: Configuratie (Laadpercentage)
             badges:
@@ -2773,7 +2773,7 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_minimale_laadpercentage
                 icon: mdi:api
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
               - type: entity
@@ -2781,7 +2781,7 @@ views:
                 show_icon: false
                 entity: sensor.zendure_2400_ac_maximale_laadpercentage
                 icon: mdi:api
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
           - type: markdown
@@ -2809,7 +2809,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_boolean.zendure_2400_ac_soc_bescherming_uitgeschakeld
@@ -2821,7 +2821,7 @@ views:
                   input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage
                 name: Max. Laadpercentage
           - type: heading
-            icon: ''
+            icon: ""
             heading: Configuratie (PV)
             heading_style: title
             badges:
@@ -2830,13 +2830,13 @@ views:
                 show_icon: true
                 entity: sensor.zendure_2400_ac_pv_export_modus
                 icon: mdi:api
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: more-info
             visibility:
               - condition: state
                 entity: input_boolean.pv_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_boolean.zendure_2400_ac_pv_export_uitgeschakeld
@@ -2844,9 +2844,9 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.pv_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: heading
-            icon: ''
+            icon: ""
             heading: Configuratie (Optioneel)
             heading_style: title
           - type: markdown
@@ -2868,21 +2868,21 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_text.afwijkende_p1_sensor
               - entity: input_text.zendure_2400_ac_batterij_volgorde
                 name: Batterij Volgorde
           - type: heading
-            icon: ''
+            icon: ""
             heading: Configuratie (Dynamisch)
             heading_style: title
             badges: []
             visibility:
               - condition: state
                 entity: input_boolean.dynamisch_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: markdown
             content: >-
               <ha-alert alert-type="info">Helptekst</ha-alert>Heb je een
@@ -2897,10 +2897,10 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
               - condition: state
                 entity: input_boolean.dynamisch_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_text.dynamisch_nordpool_sensor
@@ -2913,9 +2913,9 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.dynamisch_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: heading
-            icon: ''
+            icon: ""
             heading_style: title
             heading: Configuratie (Dashboard)
           - type: markdown
@@ -2927,7 +2927,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: input_boolean.help_tonen_op_dashboard
@@ -2944,7 +2944,7 @@ views:
                 tap_action:
                   action: navigate
                   navigation_path: /logbook
-                color: '#01a180'
+                color: "#01a180"
                 text: Meer
           - type: logbook
             target:
@@ -2955,14 +2955,14 @@ views:
               rows: 12
             hours_to_show: 4
           - type: heading
-            icon: ''
+            icon: ""
             heading: Versiebeheer
             heading_style: title
             badges:
               - type: button
                 icon: mdi:information
                 text: Toon laatste releasenotes
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: navigate
                   navigation_path: releasenotes
@@ -2971,14 +2971,14 @@ views:
                 entity: sensor.zendure_ha_zensdk_github_releasecheck
                 state_not: Pre-release actief
           - type: heading
-            icon: ''
+            icon: ""
             heading: Versiebeheer
             heading_style: title
             badges:
               - type: button
                 icon: mdi:information
                 text: Toon pre-releasenotes
-                color: '#01a180'
+                color: "#01a180"
                 tap_action:
                   action: url
                   url_path: https://github.com/Gielz1986/Zendure-HA-zenSDK/pulls
@@ -2996,7 +2996,7 @@ views:
             visibility:
               - condition: state
                 entity: input_boolean.help_tonen_op_dashboard
-                state: 'on'
+                state: "on"
           - type: entities
             entities:
               - entity: sensor.zendure_2400_ac_configuratie_versie
