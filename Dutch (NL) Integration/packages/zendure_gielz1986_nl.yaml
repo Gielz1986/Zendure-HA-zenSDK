@@ -374,7 +374,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260712"
+        state: "v20260716"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -1773,7 +1773,7 @@ rest:
         icon: mdi:flip-vertical
         value_template: >
           {% set product = value_json.product %}
-          {% if product in ["solarFlow4000AC+", "solarFlow4000Pro", "solarFlow3000AC+"] %}
+          {% if product in ["solarFlow4000MixAC+", "solarFlow4000MixPro", "solarFlow3000MixAC+"] %}
             {% set mapping = {
               70: 8.00
             } %}
