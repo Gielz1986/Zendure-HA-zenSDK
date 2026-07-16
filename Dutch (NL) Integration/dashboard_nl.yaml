@@ -2605,9 +2605,9 @@ views:
               {% set names = {
                 'solarFlow2400AC': 'Solarflow 2400 AC',
                 'solarFlow2400AC+': 'Solarflow 2400 AC+',
-                'solarFlow4000AC+': 'SolarFlow 4000 Mix AC+',
-                'solarFlow4000Pro': 'SolarFlow 4000 Mix Pro',
-                'solarFlow3000AC+': 'SolarFlow 3000 Mix AC+',
+                'solarFlow4000MixAC+': 'SolarFlow 4000 Mix AC+',
+                'solarFlow4000MixPro': 'SolarFlow 4000 Mix Pro',
+                'solarFlow3000MixAC+': 'SolarFlow 3000 Mix AC+',
                 'solarFlow2400Pro': 'Solarflow 2400 Pro',
                 'solarFlow1600AC+': 'Solarflow 1600 AC+',
                 'Hyper2000': 'Hyper 2000',
