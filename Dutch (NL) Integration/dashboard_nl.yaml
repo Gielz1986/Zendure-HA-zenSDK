@@ -2620,7 +2620,7 @@ views:
               **{{ names.get(product, 'Onbekend') }}** ({{
               states('sensor.zendure_2400_ac_totale_capaciteit') }} kWh)  
 
-              {{ states('sensor.zendure_2400_ac_serienumme') }}
+              {{ states('sensor.zendure_2400_ac_serienummer') }}
 
 
               {% set last =
