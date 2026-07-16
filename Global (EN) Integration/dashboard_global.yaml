@@ -2619,7 +2619,7 @@ views:
               **{{ names.get(product, 'Unknown') }}** ({{
               states('sensor.zendure_total_capacity') }} kWh)  
 
-              {{ states('sensor.zendure_serial_numbe') }}
+              {{ states('sensor.zendure_serial_number') }}
 
 
               {% set last =
