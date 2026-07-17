@@ -1029,7 +1029,7 @@ actions:
             condition: template
             value_template: |-
               {% set factor = 1.00 %} {% set cap =
-                states('input_number.zendure_setting_max_discharge_power') | float(0) %} {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %} {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} {% set zendure = states('sensor.zendure_power') | float(0) %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_set_discharge_power') | int(0) %} {{ huidig != target }}
+                states('input_number.zendure_setting_max_discharge_power') | float(0) %} {% set correctie = -1 * (states('input_number.zendure_setting_discharge_buffer') | float(0)) %} {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} {% set zendure = states('sensor.zendure_power') | float(0) %} {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [ [totaal, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_set_discharge_power') | int(0) %} {{ (huidig - target) | abs > 30 }}
           - condition: numeric_state
             entity_id: sensor.zendure_power
             below: 0
@@ -1086,6 +1086,12 @@ actions:
                 state:
                   - unknown
                   - unavailable
+          - alias: Setpoint settled for 15s before rebalancing (anti-oscillation)
+            condition: template
+            value_template: >-
+              {{ states.sensor.zendure_set_discharge_power is not none and
+              (now() - states.sensor.zendure_set_discharge_power.last_changed).total_seconds()
+              > 15 }}
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"
@@ -1253,7 +1259,7 @@ actions:
             condition: template
             value_template: |-
               {% set factor = 1.00 %} {% set cap =
-                states('input_number.zendure_setting_max_charge_power') | float(0) %} {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %} {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} {% set zendure = states('sensor.zendure_power') | float(0) %} {% set verschil = (zendure - p1 - correctie_export) * factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_set_charge_power') | int(0) %} {{ huidig != target }}
+                states('input_number.zendure_setting_max_charge_power') | float(0) %} {% set correctie_export = states('input_number.zendure_setting_charge_buffer') | float(0) %} {% set p1 = states('sensor.home_energy_meter_power') | float(0) %} {% set zendure = states('sensor.zendure_power') | float(0) %} {% set verschil = (zendure - p1 - correctie_export) * factor %} {% set beperkt = [ [verschil, 0] | max, cap ] | min %} {% set target = beperkt | int %} {% set huidig = states('sensor.zendure_set_charge_power') | int(0) %} {{ (huidig - target) | abs > 30 }}
           - alias: Lager dan maximaal ingestelde SOC
             condition: template
             value_template: |2-
@@ -1312,6 +1318,12 @@ actions:
                 state:
                   - unknown
                   - unavailable
+          - alias: Setpoint settled for 15s before rebalancing (anti-oscillation)
+            condition: template
+            value_template: >-
+              {{ states.sensor.zendure_set_charge_power is not none and
+              (now() - states.sensor.zendure_set_charge_power.last_changed).total_seconds()
+              > 15 }}
         sequence:
           - data:
               sn: "{{ states('sensor.zendure_serial_number') }}"

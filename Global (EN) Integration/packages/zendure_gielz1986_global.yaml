@@ -2329,14 +2329,14 @@ rest:
 
 ####### END - Place here your Node-RED sensors from https://github.com/gast777/Zendure-zenSDK-proxy - END #######
 
-  - resource_template: "http://{{ states('input_text.homewizard_setting_p1_ip_address') }}/api/v1/data"
-    scan_interval: 1
-    sensor:
-      - name: "Homewizard P1 Power"
-        value_template: "{{ value_json.active_power_w | float }}"
-        unique_id: homewizard_p1_power
-        unit_of_measurement: "W"
-        device_class: power
+  # - resource_template: "http://{{ states('input_text.homewizard_setting_p1_ip_address') }}/api/v1/data"
+  #   scan_interval: 1
+  #   sensor:
+  #     - name: "Homewizard P1 Power"
+  #       value_template: "{{ value_json.active_power_w | float }}"
+  #       unique_id: homewizard_p1_power
+  #       unit_of_measurement: "W"
+  #       device_class: power
 
 rest_command:
   zendure_save_in_ram:
