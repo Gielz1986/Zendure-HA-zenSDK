@@ -374,7 +374,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20260716"
+        state: "v20260817"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1492,14 +1492,14 @@ rest:
         value_template: >
           {% set states = {1: "Allow", 2: "Forbidden"} %}
           {% set packState = value_json.get('properties', {}).get('gridReverse', 0) | int %}
-          {{ states.get(packState, "Onbekend") }}
+          {{ states.get(packState, "Unknown") }}
 
       - name: "Zendure Battery 1 Cell Balance Status"
         unique_id: zendure_battery_1_cell_balance_status
         icon: mdi:battery-heart-variant
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown','unavailable',''] %}
@@ -1528,7 +1528,7 @@ rest:
         icon: mdi:battery-heart-variant
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown','unavailable',''] %}
@@ -1557,7 +1557,7 @@ rest:
         icon: mdi:battery-heart-variant
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown','unavailable',''] %}
@@ -1586,7 +1586,7 @@ rest:
         icon: mdi:battery-heart-variant
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown','unavailable',''] %}
@@ -1615,7 +1615,7 @@ rest:
         icon: mdi:battery-heart-variant
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown','unavailable',''] %}
@@ -1644,7 +1644,7 @@ rest:
         icon: mdi:battery-heart-variant
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown','unavailable',''] %}
@@ -1836,7 +1836,7 @@ rest:
       - name: "Zendure Battery Serial Numbers"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% set ns = namespace(sn_list=[]) %}
           {% if not packdata %}
             unknown
@@ -1860,7 +1860,7 @@ rest:
       - name: "Zendure Battery 1 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
@@ -1877,7 +1877,7 @@ rest:
       - name: "Zendure Battery 2 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
@@ -1894,7 +1894,7 @@ rest:
       - name: "Zendure Battery 3 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
@@ -1911,7 +1911,7 @@ rest:
       - name: "Zendure Battery 4 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
@@ -1928,7 +1928,7 @@ rest:
       - name: "Zendure Battery 5 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
@@ -1945,7 +1945,7 @@ rest:
       - name: "Zendure Battery 6 State Of Charge"
         value_template: >
           {% set volgorde_raw = states('input_text.zendure_setting_battery_order') %}
-          {% set packdata = value_json['packData'] %}
+          {% set packdata = value_json.get('packData', []) %}
           {% if not packdata %}
             unknown
           {% elif volgorde_raw in ['unknown', 'unavailable', ''] %}
