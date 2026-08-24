@@ -10,6 +10,9 @@ triggers:
   - at: "00:00:00"
     id: dynamisch_middernacht
     trigger: time
+  - at: "23:59:30"
+    id: dynamisch_voor_middernacht
+    trigger: time
   - entity_id:
       - input_select.zendure_2400_ac_modus_selecteren
     id: modus_trigger
@@ -612,6 +615,7 @@ actions:
               entity_id:
                 - input_text.dynamisch_handmatige_periode
                 - input_text.dynamisch_handmatige_periode_morgen
+                - input_text.dynamisch_handmatige_periode_volgende
         alias: Advies instellingen overnemen
       - conditions:
           - condition: trigger
@@ -1441,6 +1445,24 @@ actions:
       - conditions:
           - condition: trigger
             id:
+              - dynamisch_voor_middernacht
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamisch_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamisch_nordpool_sensor is gevuld
+        sequence:
+          - alias: Bewaar berekende handmatige periode voor morgen
+            target:
+              entity_id: input_text.dynamisch_handmatige_periode_volgende
+            data:
+              value: "{% set berekend = states('sensor.dynamisch_handmatige_periode_volgende_dag') %}{{ '' if berekend in ['unknown', 'unavailable'] else berekend[:255] }}"
+            action: input_text.set_value
+        alias: Berekende handmatige periode voor de volgende dag bewaren
+      - conditions:
+          - condition: trigger
+            id:
               - dynamisch_middernacht
           - condition: template
             value_template: >-
@@ -1469,11 +1491,17 @@ actions:
             target:
               entity_id: input_text.dynamisch_handmatige_periode
             data:
-              value: "{{ states('input_text.dynamisch_handmatige_periode_morgen') }}"
+              value: "{% set berekend = states('input_text.dynamisch_handmatige_periode_volgende') %}{% set morgen = states('input_text.dynamisch_handmatige_periode_morgen') %}{{ berekend if berekend not in ['unknown', 'unavailable', ''] else ('' if morgen in ['unknown', 'unavailable'] else morgen) }}"
             action: input_text.set_value
           - alias: Reset handmatige periode van morgen
             target:
               entity_id: input_text.dynamisch_handmatige_periode_morgen
+            data:
+              value: ""
+            action: input_text.set_value
+          - alias: Reset berekende handmatige periode
+            target:
+              entity_id: input_text.dynamisch_handmatige_periode_volgende
             data:
               value: ""
             action: input_text.set_value

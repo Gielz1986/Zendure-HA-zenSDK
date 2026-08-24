@@ -1318,7 +1318,7 @@ views:
 
                     let prijs = item.value;
 
-                    if (item.duur === "Yes") {
+                    if (item.duur === "Yes" || item.overdracht === "D") {
                       prijs = prijs - correction;
                     }
 
@@ -1327,7 +1327,13 @@ views:
                     // Standaardkleur: #e0e0e3
                     let kleur = "rgba(224,224,227,1)";
 
-                    if (item.goedkoop === "Yes") {
+                    if (item.overdracht === "G") {
+                      kleur = verleden ? "rgba(79,195,168,0.15)" : "rgba(79,195,168,1)";
+                    }
+                    else if (item.overdracht === "D") {
+                      kleur = verleden ? "rgba(224,128,116,0.15)" : "rgba(224,128,116,1)";
+                    }
+                    else if (item.goedkoop === "Yes") {
                       kleur = verleden ? "rgba(1,161,128,0.15)" : "rgba(1,161,128,1)";
                     }
                     else if (item.duur === "Yes") {
@@ -1383,6 +1389,13 @@ views:
                 name: Highest Price Periods Tomorrow
               - entity: input_text.dynamic_manual_period_tomorrow
                 name: Manual Periods Tomorrow
+              - type: conditional
+                conditions:
+                  - entity: sensor.dynamic_next_day_manual_period
+                    state_not: ""
+                row:
+                  entity: sensor.dynamic_next_day_manual_period
+                  name: Manual Periods For Tomorrow (calculated)
             visibility:
               - condition: time
                 after: "13:30:00"

@@ -131,6 +131,65 @@ Go to the explanation of all modes
 
 ---
 
+## 🕘 Dynamic Manual Periods
+
+In the dynamic modes the automation searches for the cheapest and the most expensive periods of the day. A period is one hour, or 15 minutes when **Dynamic 15 Minute Interval** is switched on. With **Dynamic Manual Period** (`input_text.dynamic_manual_period`) and **Dynamic Manual Period Tomorrow** (`input_text.dynamic_manual_period_tomorrow`) you steer that search yourself. Entries are separated by `;`, times are written as `HH:MM`, and the input is not case sensitive.
+
+### 1. Fixed periods — replaces the automatic search
+
+| Example | Meaning |
+|-|-|
+| `G11:00` | 11:00 is a cheap period |
+| `D12:00` | 12:00 is an expensive period |
+| `G11:00-13:00` | 11:00 up to and including 13:00 are cheap periods |
+| `G11:00;D12:00;G15:00` | a combination of single periods |
+
+As soon as one fixed entry is present, the automatic search is switched off completely for that day: only the periods you listed yourself are used.
+
+### 2. Modifiers `+` and `-` — adjusts the automatic search
+
+Put `+` or `-` in front of an entry to change the calculated result instead of replacing it.
+
+| Example | Meaning |
+|-|-|
+| `+D02:00` | mark 02:00 as expensive as well |
+| `+G18:00-20:00` | mark 18:00 up to and including 20:00 as cheap as well |
+| `-G03:00` | remove 03:00 from the cheap periods |
+| `-D14:00-16:00` | remove 14:00 up to and including 16:00 from the expensive periods |
+
+A `+` always wins: a period that was calculated as cheap becomes expensive with `+D`, and the other way round. A `-` only removes a period of the type you mention, so `-G` on a period that is in fact expensive does nothing. Modifiers are applied in the order in which you write them, and they also work together with fixed periods.
+
+### 3. Search windows `Z`, `ZG` and `ZD`
+
+By default the search runs over the day itself. With a search window you decide where the automation is allowed to look. A search window always uses a time **range** (single periods are not allowed) and has to be placed at the beginning of the text field. Several windows may be combined; the automation then searches in all of them.
+
+| Example | Meaning |
+|-|-|
+| `Z10:00-16:00` | search cheap *and* expensive periods between 10:00 and 16:00 |
+| `ZG22:00-06:00` | search cheap periods from 22:00 until 06:00 the next day |
+| `ZD14:00-13:00` | search expensive periods from 14:00 until 13:00 the next day |
+| `+Z10:00-13:00` | search from 10:00 today until 13:00 tomorrow |
+
+The window runs into the next day when the end time is smaller than or equal to the start time, or when you put a `+` in front of the window. That is what makes it possible to find the real night peak, which otherwise falls apart at midnight. As long as tomorrow's prices have not been published yet — and always for **Dynamic Manual Period Tomorrow** — the search simply stops at the end of the available prices.
+
+Add `V` (*vast*, fixed) to keep a window when the settings of tomorrow move into today at midnight, for example `ZD14:00-13:00V`.
+
+> Search windows only steer the automatic search. If the same field also contains a fixed period (chapter 1) the automatic search is off, and the window has no effect.
+
+**Dynamic Spread Indication DSC** follows the window. It compares the cheap periods of the plan against the expensive periods that come *after* the first cheap one, and counts the periods a multi-day window picked up on the next day as well; those are shown with a `(+1)` suffix. Expensive periods lying before the first cheap period stay excluded — that is what this sensor measures, and it is the value the dynamic charging automation checks against **Dynamic Minimal Spread**.
+
+### 4. What happens at midnight
+
+Shortly before midnight the automation calculates the manual period for the new day and shows it in **Dynamic Next Day Manual Period**. At 00:00 that value is written into **Dynamic Manual Period**:
+
+* the entries of **Dynamic Manual Period Tomorrow** are taken over;
+* a window marked with `V` in today's field is kept and replaces the window of the same type (`Z`, `ZG` or `ZD`) that came from tomorrow;
+* every period of tomorrow that was selected by today's multi-day search window is added as a modifier, for example `+G00:00-02:00;+D09:00`, so that a plan made across midnight is really carried out.
+
+Those carried periods are drawn on the **Dynamic Tomorrow** chart in a lighter tone of the same colour, because they come from today's plan and not from tomorrow's own calculation. A period claimed by both is drawn in the lighter tone: today's window is what actually ends up in the field at midnight.
+
+---
+
 ## 🔃 (Optional) Plug-N-Play Dashboard
 
 You can now also directly use a fully plug-n-play dashboard:

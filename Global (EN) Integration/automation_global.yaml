@@ -10,6 +10,9 @@ triggers:
   - at: "00:00:00"
     id: dynamisch_middernacht
     trigger: time
+  - at: "23:59:30"
+    id: dynamisch_voor_middernacht
+    trigger: time
   - entity_id:
       - input_select.zendure_operation_mode
     id: modus_trigger
@@ -602,6 +605,7 @@ actions:
               entity_id:
                 - input_text.dynamic_manual_period
                 - input_text.dynamic_manual_period_tomorrow
+                - input_text.dynamic_manual_period_next
             data:
               value: ""
         alias: Set default preferred settings
@@ -1417,6 +1421,24 @@ actions:
       - conditions:
           - condition: trigger
             id:
+              - dynamisch_voor_middernacht
+          - condition: template
+            value_template: >-
+              {{
+              states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
+              }}
+            alias: input_text.dynamic_setting_nordpool_sensor is gevuld
+        sequence:
+          - alias: Store calculated manual period for tomorrow
+            target:
+              entity_id: input_text.dynamic_manual_period_next
+            data:
+              value: "{% set berekend = states('sensor.dynamic_next_day_manual_period') %}{{ '' if berekend in ['unknown', 'unavailable'] else berekend[:255] }}"
+            action: input_text.set_value
+        alias: Store the calculated dynamic manual period for the next day
+      - conditions:
+          - condition: trigger
+            id:
               - dynamisch_middernacht
           - condition: template
             value_template: >-
@@ -1446,11 +1468,17 @@ actions:
             target:
               entity_id: input_text.dynamic_manual_period
             data:
-              value: "{{ states('input_text.dynamic_manual_period_tomorrow') }}"
+              value: "{% set berekend = states('input_text.dynamic_manual_period_next') %}{% set morgen = states('input_text.dynamic_manual_period_tomorrow') %}{{ berekend if berekend not in ['unknown', 'unavailable', ''] else ('' if morgen in ['unknown', 'unavailable'] else morgen) }}"
             action: input_text.set_value
           - alias: Reset handmatige periode van morgen
             target:
               entity_id: input_text.dynamic_manual_period_tomorrow
+            data:
+              value: ""
+            action: input_text.set_value
+          - alias: Reset calculated manual period
+            target:
+              entity_id: input_text.dynamic_manual_period_next
             data:
               value: ""
             action: input_text.set_value

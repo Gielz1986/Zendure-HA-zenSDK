@@ -124,6 +124,65 @@ Ga naar de uitleg over alle verschillende modussen
 
 ---
 
+## 🕘 Dynamische handmatige periodes
+
+In de dynamische modussen zoekt de automatisering naar de goedkoopste en de duurste periodes van de dag. Een periode is één uur, of 15 minuten wanneer **Dynamisch 15 Minuten** aanstaat. Met **Dynamisch Handmatige Periode** (`input_text.dynamisch_handmatige_periode`) en **Dynamisch Handmatige Periode Morgen** (`input_text.dynamisch_handmatige_periode_morgen`) stuur je die zoekopdracht zelf. Onderdelen worden gescheiden door `;`, tijden schrijf je als `UU:MM` en hoofdletters maken niet uit.
+
+### 1. Vaste periodes — vervangt de automatische berekening
+
+| Voorbeeld | Betekenis |
+|-|-|
+| `G11:00` | 11:00 is een goedkope periode |
+| `D12:00` | 12:00 is een dure periode |
+| `G11:00-13:00` | 11:00 tot en met 13:00 zijn goedkope periodes |
+| `G11:00;D12:00;G15:00` | een combinatie van losse periodes |
+
+Zodra er één vaste periode in het veld staat, wordt de automatische berekening voor die dag volledig uitgezet: alleen de periodes die je zelf hebt opgegeven worden gebruikt.
+
+### 2. Aanpassingen `+` en `-` — past de automatische berekening aan
+
+Zet `+` of `-` vóór een onderdeel om het berekende resultaat aan te passen in plaats van te vervangen.
+
+| Voorbeeld | Betekenis |
+|-|-|
+| `+D02:00` | markeer 02:00 óók als duur |
+| `+G18:00-20:00` | markeer 18:00 tot en met 20:00 óók als goedkoop |
+| `-G03:00` | haal 03:00 weg bij de goedkope periodes |
+| `-D14:00-16:00` | haal 14:00 tot en met 16:00 weg bij de dure periodes |
+
+Een `+` wint altijd: een periode die als goedkoop berekend was, wordt met `+D` duur, en andersom. Een `-` verwijdert alleen een periode van het type dat je noemt, dus `-G` op een periode die in werkelijkheid duur is doet niets. Aanpassingen worden verwerkt in de volgorde waarin je ze opschrijft en werken ook samen met vaste periodes.
+
+### 3. Zoekvensters `Z`, `ZG` en `ZD`
+
+Standaard zoekt de automatisering binnen de dag zelf. Met een zoekvenster bepaal je waar er gezocht mag worden. Een zoekvenster gebruikt altijd een **tijdbereik** (losse periodes mogen niet) en moet vooraan in het tekstveld staan. Meerdere vensters mogen gecombineerd worden; er wordt dan in alle vensters gezocht.
+
+| Voorbeeld | Betekenis |
+|-|-|
+| `Z10:00-16:00` | zoek goedkope *én* dure periodes tussen 10:00 en 16:00 |
+| `ZG22:00-06:00` | zoek goedkope periodes van 22:00 tot 06:00 de volgende dag |
+| `ZD14:00-13:00` | zoek dure periodes van 14:00 tot 13:00 de volgende dag |
+| `+Z10:00-13:00` | zoek van vandaag 10:00 tot morgen 13:00 |
+
+Het venster loopt door naar de volgende dag wanneer de eindtijd kleiner is dan of gelijk is aan de begintijd, of wanneer je een `+` vóór het venster zet. Daarmee is het mogelijk om de echte nachtpiek te vinden, die anders om middernacht in tweeën valt. Zolang de prijzen van morgen nog niet bekend zijn — en altijd bij **Dynamisch Handmatige Periode Morgen** — stopt het zoeken gewoon bij het einde van de beschikbare prijzen.
+
+Zet er een `V` (vast) achter om een venster te behouden wanneer om middernacht de instellingen van morgen naar vandaag gaan, bijvoorbeeld `ZD14:00-13:00V`.
+
+> Zoekvensters sturen alleen de automatische berekening. Staat er in hetzelfde veld ook een vaste periode (hoofdstuk 1), dan staat de berekening uit en heeft het venster geen effect.
+
+**Dynamisch Spread Indicatie NOM** volgt het venster. De sensor vergelijkt de goedkope periodes van het plan met de dure periodes die *na* de eerste goedkope periode liggen, en telt daarbij ook de periodes mee die een meerdaags venster op de volgende dag heeft gekozen; die krijgen het achtervoegsel `(+1)`. Dure periodes vóór de eerste goedkope periode blijven buiten beschouwing — dat is nu juist wat deze sensor meet, en het is de waarde waarop de dynamische laadautomatisering controleert tegen **Dynamisch Minimale Spread**.
+
+### 4. Wat er om middernacht gebeurt
+
+Vlak vóór middernacht berekent de automatisering de handmatige periode voor de nieuwe dag en toont die in **Dynamisch Handmatige Periode Volgende Dag**. Om 00:00 wordt die waarde in **Dynamisch Handmatige Periode** gezet:
+
+* de onderdelen van **Dynamisch Handmatige Periode Morgen** worden overgenomen;
+* een venster met `V` uit het veld van vandaag blijft staan en vervangt het venster van hetzelfde type (`Z`, `ZG` of `ZD`) dat van morgen komt;
+* elke periode van morgen die door het meerdaagse zoekvenster van vandaag gekozen is, wordt als aanpassing toegevoegd, bijvoorbeeld `+G00:00-02:00;+D09:00`, zodat een plan dat over middernacht heen gemaakt is ook echt uitgevoerd wordt.
+
+Die overgedragen periodes worden op de grafiek **Dynamisch Morgen** in een lichtere tint van dezelfde kleur getekend, omdat ze uit het plan van vandaag komen en niet uit de eigen berekening van morgen. Een periode die door beide gekozen is, krijgt de lichtere tint: het venster van vandaag is wat om middernacht daadwerkelijk in het veld terechtkomt.
+
+---
+
 ## 🔃 (Optioneel) Plug-N-Play Dashboard
 Vanaf nu is het ook mogelijk om direct een volledig plug-n-play dashboard in gebruik te nemen.
 

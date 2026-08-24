@@ -91,13 +91,19 @@ input_text:
   dynamic_manual_period:
     name: Dynamic Manual Period
     icon: mdi:view-grid
-    max: 250
+    max: 255
     mode: text
 
   dynamic_manual_period_tomorrow:
     name: Dynamic Manual Period Tomorrow
     icon: mdi:view-grid
-    max: 250
+    max: 255
+    mode: text
+
+  dynamic_manual_period_next:
+    name: Dynamic Manual Period Next Day
+    icon: mdi:view-grid-outline
+    max: 255
     mode: text
 
 input_number:
@@ -621,6 +627,279 @@ template:
               0
             {% endif %}
 
+      - name: "Dynamic Period Planning"
+        unique_id: dynamic_period_planning
+        icon: mdi:calendar-clock
+        state: >-
+          {{ 'Yes' if state_attr('sensor.dynamic_nordpool', 'raw_today') else 'No' }}
+        attributes:
+          selection: >-
+            {%- macro zen_parse(txt) -%}
+              {%- set ns = namespace(items=[]) -%}
+              {%- for deel in txt.split(';') -%}
+                {%- set t = deel | trim | replace(' ', '') | upper -%}
+                {%- if t | length > 0 -%}
+                  {%- if t | regex_match('^\+?Z[GD]?[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}V?$') -%}
+                    {%- set plus = t[0] == '+' -%}
+                    {%- set b1 = t[1:] if plus else t -%}
+                    {%- set vast = b1[-1] == 'V' -%}
+                    {%- set b2 = b1[:-1] if vast else b1 -%}
+                    {%- set kind = b2[1] if b2[1] in ['G', 'D'] else 'B' -%}
+                    {%- set rng = (b2[1:] if kind == 'B' else b2[2:]).split('-') -%}
+                    {%- set a = '%02d:%s' % (rng[0].split(':')[0] | int, rng[0].split(':')[1]) -%}
+                    {%- set b = '%02d:%s' % (rng[1].split(':')[0] | int, rng[1].split(':')[1]) -%}
+                    {%- set ns.items = ns.items + [{'k': 'z', 'kind': kind, 'a': a, 'b': b, 'nd': (plus or b <= a), 'vast': vast, 'tok': t}] -%}
+                  {%- elif t | regex_match('^[+-][GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') -%}
+                    {%- set rng = t[2:].split('-') -%}
+                    {%- set a = '%02d:%s' % (rng[0].split(':')[0] | int, rng[0].split(':')[1]) -%}
+                    {%- set b = ('%02d:%s' % (rng[1].split(':')[0] | int, rng[1].split(':')[1])) if rng | count > 1 else none -%}
+                    {%- set ns.items = ns.items + [{'k': 'm', 'sign': t[0], 'type': t[1], 'a': a, 'b': b, 'tok': t}] -%}
+                  {%- elif t | regex_match('^[GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') -%}
+                    {%- set rng = t[1:].split('-') -%}
+                    {%- set a = '%02d:%s' % (rng[0].split(':')[0] | int, rng[0].split(':')[1]) -%}
+                    {%- set b = ('%02d:%s' % (rng[1].split(':')[0] | int, rng[1].split(':')[1])) if rng | count > 1 else none -%}
+                    {%- set ns.items = ns.items + [{'k': 'a', 'type': t[0], 'a': a, 'b': b, 'tok': t}] -%}
+                  {%- else -%}
+                    {%- set ns.items = ns.items + [{'k': 'x', 'tok': t}] -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {{- ns.items | to_json -}}
+            {%- endmacro -%}
+            {%- macro zen_plan(eigen, extra, P, n_g, n_d, slot_delta) -%}
+              {%- if eigen | count == 0 -%}
+                {{- {'g': [], 'd': []} | to_json -}}
+              {%- else -%}
+                {%- set basis = eigen[0].start | as_datetime -%}
+                {%- set tz = basis.tzinfo -%}
+                {%- set dag = basis.strftime('%Y-%m-%d') -%}
+                {%- set alle = eigen + extra -%}
+                {%- set ns = namespace(g=[], d=[]) -%}
+                {%- set vaste = P | selectattr('k', 'eq', 'a') | list -%}
+                {%- if vaste | count > 0 -%}
+                  {%- for it in vaste -%}
+                    {%- set s_dt = strptime(dag ~ ' ' ~ it.a, '%Y-%m-%d %H:%M').replace(tzinfo=tz) -%}
+                    {%- if it.b -%}
+                      {%- set e0 = strptime(dag ~ ' ' ~ it.b, '%Y-%m-%d %H:%M').replace(tzinfo=tz) -%}
+                      {%- set e_dt = (e0 + timedelta(days=1) if e0 <= s_dt else e0) + timedelta(seconds=1) -%}
+                    {%- else -%}
+                      {%- set e_dt = s_dt + slot_delta -%}
+                    {%- endif -%}
+                    {%- for u in eigen -%}
+                      {%- if (u.start | as_datetime) < e_dt and (u.end | as_datetime) > s_dt -%}
+                        {%- if it.type == 'G' -%}
+                          {%- set ns.g = ns.g + [u.start] -%}
+                        {%- else -%}
+                          {%- set ns.d = ns.d + [u.start] -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endfor -%}
+                  {%- set ns.g = ns.g | unique | list -%}
+                  {%- set ns.d = ns.d | unique | list -%}
+                {%- else -%}
+                  {%- set zoek = P | selectattr('k', 'eq', 'z') | list -%}
+                  {%- for soort in ['G', 'D'] -%}
+                    {%- set vensters = zoek | selectattr('kind', 'in', ['B', soort]) | list -%}
+                    {%- set pool = namespace(l=[]) -%}
+                    {%- if vensters | count > 0 -%}
+                      {%- for u in alle -%}
+                        {%- set us = u.start | as_datetime -%}
+                        {%- set raak = namespace(v=false) -%}
+                        {%- for w in vensters -%}
+                          {%- set ws = strptime(dag ~ ' ' ~ w.a, '%Y-%m-%d %H:%M').replace(tzinfo=tz) -%}
+                          {%- set w0 = strptime(dag ~ ' ' ~ w.b, '%Y-%m-%d %H:%M').replace(tzinfo=tz) -%}
+                          {%- set we = w0 + timedelta(days=1) if w.nd else w0 -%}
+                          {%- if us >= ws and us < we -%}
+                            {%- set raak.v = true -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                        {%- if raak.v -%}
+                          {%- set pool.l = pool.l + [u] -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- set pool.l = eigen | list -%}
+                    {%- endif -%}
+                    {%- set gesorteerd = pool.l | sort(attribute='value') | list -%}
+                    {%- if soort == 'G' -%}
+                      {%- set ns.g = (gesorteerd[:n_g] | map(attribute='start') | list) if n_g > 0 else [] -%}
+                    {%- else -%}
+                      {%- set ns.d = (gesorteerd[-n_d:] | map(attribute='start') | list) if n_d > 0 else [] -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+                {%- for it in P if it.k == 'm' -%}
+                  {%- set s_dt = strptime(dag ~ ' ' ~ it.a, '%Y-%m-%d %H:%M').replace(tzinfo=tz) -%}
+                  {%- if it.b -%}
+                    {%- set e0 = strptime(dag ~ ' ' ~ it.b, '%Y-%m-%d %H:%M').replace(tzinfo=tz) -%}
+                    {%- set e_dt = (e0 + timedelta(days=1) if e0 <= s_dt else e0) + timedelta(seconds=1) -%}
+                  {%- else -%}
+                    {%- set e_dt = s_dt + slot_delta -%}
+                  {%- endif -%}
+                  {%- set tr = namespace(l=[]) -%}
+                  {%- for u in eigen -%}
+                    {%- if (u.start | as_datetime) < e_dt and (u.end | as_datetime) > s_dt -%}
+                      {%- set tr.l = tr.l + [u.start] -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if it.sign == '+' -%}
+                    {%- if it.type == 'G' -%}
+                      {%- set ns.g = (ns.g + tr.l) | unique | list -%}
+                      {%- set ns.d = ns.d | reject('in', tr.l) | list -%}
+                    {%- else -%}
+                      {%- set ns.d = (ns.d + tr.l) | unique | list -%}
+                      {%- set ns.g = ns.g | reject('in', tr.l) | list -%}
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- if it.type == 'G' -%}
+                      {%- set ns.g = ns.g | reject('in', tr.l) | list -%}
+                    {%- else -%}
+                      {%- set ns.d = ns.d | reject('in', tr.l) | list -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {{- {'g': ns.g, 'd': ns.d} | to_json -}}
+              {%- endif -%}
+            {%- endmacro -%}
+            {%- set kwartier = is_state('input_boolean.dynamic_setting_15_minute_interval', 'on') -%}
+            {%- set slot_delta = timedelta(minutes=15) if kwartier else timedelta(hours=1) -%}
+            {%- set vandaag = state_attr('sensor.dynamic_nordpool', 'raw_today') or [] -%}
+            {%- set morgen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') or [] -%}
+            {%- set tv = states('input_text.dynamic_manual_period') -%}
+            {%- set tm = states('input_text.dynamic_manual_period_tomorrow') -%}
+            {%- set tv = '' if tv in ['unknown', 'unavailable'] else tv -%}
+            {%- set tm = '' if tm in ['unknown', 'unavailable'] else tm -%}
+            {%- set plan_v = zen_plan(vandaag, morgen, zen_parse(tv) | from_json,
+                states('input_number.dynamic_lowest_price_x_period') | int(0), states('input_number.dynamic_highest_price_x_period') | int(0), slot_delta) | from_json -%}
+            {%- set plan_m = zen_plan(morgen, [], zen_parse(tm) | from_json,
+                states('input_number.dynamic_lowest_price_x_period_tomorrow') | int(0), states('input_number.dynamic_highest_price_x_period_tomorrow') | int(0), slot_delta) | from_json -%}
+            {%- set vs = vandaag | map(attribute='start') | list -%}
+            {{- {'tg': plan_v.g | select('in', vs) | list,
+                 'td': plan_v.d | select('in', vs) | list,
+                 'cg': plan_v.g | reject('in', vs) | list,
+                 'cd': plan_v.d | reject('in', vs) | list,
+                 'mg': plan_m.g,
+                 'md': plan_m.d} | to_json -}}
+
+      - name: "Dynamic Next Day Manual Period"
+        unique_id: dynamic_next_day_manual_period
+        icon: mdi:calendar-arrow-right
+        state: >-
+          {%- macro zen_parse(txt) -%}
+            {%- set ns = namespace(items=[]) -%}
+            {%- for deel in txt.split(';') -%}
+              {%- set t = deel | trim | replace(' ', '') | upper -%}
+              {%- if t | length > 0 -%}
+                {%- if t | regex_match('^\+?Z[GD]?[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}V?$') -%}
+                  {%- set plus = t[0] == '+' -%}
+                  {%- set b1 = t[1:] if plus else t -%}
+                  {%- set vast = b1[-1] == 'V' -%}
+                  {%- set b2 = b1[:-1] if vast else b1 -%}
+                  {%- set kind = b2[1] if b2[1] in ['G', 'D'] else 'B' -%}
+                  {%- set rng = (b2[1:] if kind == 'B' else b2[2:]).split('-') -%}
+                  {%- set a = '%02d:%s' % (rng[0].split(':')[0] | int, rng[0].split(':')[1]) -%}
+                  {%- set b = '%02d:%s' % (rng[1].split(':')[0] | int, rng[1].split(':')[1]) -%}
+                  {%- set ns.items = ns.items + [{'k': 'z', 'kind': kind, 'a': a, 'b': b, 'nd': (plus or b <= a), 'vast': vast, 'tok': t}] -%}
+                {%- elif t | regex_match('^[+-][GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') -%}
+                  {%- set rng = t[2:].split('-') -%}
+                  {%- set a = '%02d:%s' % (rng[0].split(':')[0] | int, rng[0].split(':')[1]) -%}
+                  {%- set b = ('%02d:%s' % (rng[1].split(':')[0] | int, rng[1].split(':')[1])) if rng | count > 1 else none -%}
+                  {%- set ns.items = ns.items + [{'k': 'm', 'sign': t[0], 'type': t[1], 'a': a, 'b': b, 'tok': t}] -%}
+                {%- elif t | regex_match('^[GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') -%}
+                  {%- set rng = t[1:].split('-') -%}
+                  {%- set a = '%02d:%s' % (rng[0].split(':')[0] | int, rng[0].split(':')[1]) -%}
+                  {%- set b = ('%02d:%s' % (rng[1].split(':')[0] | int, rng[1].split(':')[1])) if rng | count > 1 else none -%}
+                  {%- set ns.items = ns.items + [{'k': 'a', 'type': t[0], 'a': a, 'b': b, 'tok': t}] -%}
+                {%- else -%}
+                  {%- set ns.items = ns.items + [{'k': 'x', 'tok': t}] -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {{- ns.items | to_json -}}
+          {%- endmacro -%}
+          {%- macro zen_overdracht(morgen, cg, cd, ns) -%}
+            {%- set g = namespace(type='', first='', last='', end='') -%}
+            {%- for u in morgen | sort(attribute='start') -%}
+              {%- set soort = 'G' if u.start in cg else ('D' if u.start in cd else '') -%}
+              {%- if soort != '' and g.type == soort and g.end == u.start -%}
+                {%- set g.last = u.start -%}
+                {%- set g.end = u.end -%}
+              {%- else -%}
+                {%- if g.type != '' -%}
+                  {%- set ns.tok = ns.tok + ['+' ~ g.type ~ g.first[11:16] ~ ('' if g.first == g.last else '-' ~ g.last[11:16])] -%}
+                {%- endif -%}
+                {%- set g.type = soort -%}
+                {%- set g.first = u.start -%}
+                {%- set g.last = u.start -%}
+                {%- set g.end = u.end -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if g.type != '' -%}
+              {%- set ns.tok = ns.tok + ['+' ~ g.type ~ g.first[11:16] ~ ('' if g.first == g.last else '-' ~ g.last[11:16])] -%}
+            {%- endif -%}
+          {%- endmacro -%}
+          {%- set morgen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') or [] -%}
+          {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+          {%- set tv = states('input_text.dynamic_manual_period') -%}
+          {%- set tm = states('input_text.dynamic_manual_period_tomorrow') -%}
+          {%- set tv = '' if tv in ['unknown', 'unavailable'] else tv -%}
+          {%- set tm = '' if tm in ['unknown', 'unavailable'] else tm -%}
+          {%- set pv = zen_parse(tv) | from_json -%}
+          {%- set pm = zen_parse(tm) | from_json -%}
+          {%- set vast = pv | selectattr('k', 'eq', 'z') | selectattr('vast') | list -%}
+          {%- set vaste_soorten = vast | map(attribute='kind') | list -%}
+          {%- set ns = namespace(tok=[]) -%}
+          {%- for it in vast -%}
+            {%- set ns.tok = ns.tok + [it.tok] -%}
+          {%- endfor -%}
+          {%- for it in pm if it.k == 'z' and it.kind not in vaste_soorten -%}
+            {%- set ns.tok = ns.tok + [it.tok] -%}
+          {%- endfor -%}
+          {%- for it in pm if it.k in ['a', 'x'] -%}
+            {%- set ns.tok = ns.tok + [it.tok] -%}
+          {%- endfor -%}
+          {{- zen_overdracht(morgen, sel.get('cg', []), sel.get('cd', []), ns) -}}
+          {%- for it in pm if it.k == 'm' -%}
+            {%- set ns.tok = ns.tok + [it.tok] -%}
+          {%- endfor -%}
+          {%- set res = namespace(s='') -%}
+          {%- for t in ns.tok -%}
+            {%- set kandidaat = res.s ~ (';' if res.s | length > 0 else '') ~ t -%}
+            {%- if kandidaat | length <= 255 -%}
+              {%- set res.s = kandidaat -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {{- res.s -}}
+        attributes:
+          carry_periods: >-
+            {%- macro zen_overdracht(morgen, cg, cd, ns) -%}
+              {%- set g = namespace(type='', first='', last='', end='') -%}
+              {%- for u in morgen | sort(attribute='start') -%}
+                {%- set soort = 'G' if u.start in cg else ('D' if u.start in cd else '') -%}
+                {%- if soort != '' and g.type == soort and g.end == u.start -%}
+                  {%- set g.last = u.start -%}
+                  {%- set g.end = u.end -%}
+                {%- else -%}
+                  {%- if g.type != '' -%}
+                    {%- set ns.tok = ns.tok + ['+' ~ g.type ~ g.first[11:16] ~ ('' if g.first == g.last else '-' ~ g.last[11:16])] -%}
+                  {%- endif -%}
+                  {%- set g.type = soort -%}
+                  {%- set g.first = u.start -%}
+                  {%- set g.last = u.start -%}
+                  {%- set g.end = u.end -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if g.type != '' -%}
+                {%- set ns.tok = ns.tok + ['+' ~ g.type ~ g.first[11:16] ~ ('' if g.first == g.last else '-' ~ g.last[11:16])] -%}
+              {%- endif -%}
+            {%- endmacro -%}
+            {%- set morgen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') or [] -%}
+            {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+            {%- set ns = namespace(tok=[]) -%}
+            {{- zen_overdracht(morgen, sel.get('cg', []), sel.get('cd', []), ns) -}}
+            {{- ns.tok | join(';') -}}
+
       - name: "Dynamic Spread Indication"
         unique_id: dynamic_spread_indication
         icon: mdi:percent-box
@@ -639,7 +918,15 @@ template:
           {% endif %}
         attributes:
           manual_periods: >
-            {% if states('input_text.dynamic_manual_period') | length > 0 %}
+            {% set txt = states('input_text.dynamic_manual_period') %}
+            {% set txt = '' if txt in ['unknown', 'unavailable'] else txt %}
+            {% set nsv = namespace(vast=false) %}
+            {% for deel in txt.split(';') %}
+              {% if (deel | trim | replace(' ', '') | upper) | regex_match('^[GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') %}
+                {% set nsv.vast = true %}
+              {% endif %}
+            {% endfor %}
+            {% if nsv.vast %}
               n.v.t.
             {% else %}
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
@@ -707,11 +994,8 @@ template:
         icon: mdi:percent-box
         unit_of_measurement: "%"
         state: >
-          {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-          {% set duurste = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
-
-          {% set goedkope_uren = uren | selectattr('goedkoop','equalto','Yes') | list %}
-          {% set dure_uren = duurste | list %}
+          {% set goedkope_uren = state_attr('sensor.dynamic_lowest_price_period', 'goedkope_in_venster') or [] %}
+          {% set dure_uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
 
           {% if goedkope_uren | count > 0 and dure_uren | count > 0 %}
             {% set avg_goedkoop = goedkope_uren | map(attribute='value') | sum / goedkope_uren | count %}
@@ -722,7 +1006,15 @@ template:
           {% endif %}
         attributes:
           manual_periods: >
-            {% if states('input_text.dynamic_manual_period') | length > 0 %}
+            {% set txt = states('input_text.dynamic_manual_period') %}
+            {% set txt = '' if txt in ['unknown', 'unavailable'] else txt %}
+            {% set nsv = namespace(vast=false) %}
+            {% for deel in txt.split(';') %}
+              {% if (deel | trim | replace(' ', '') | upper) | regex_match('^[GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') %}
+                {% set nsv.vast = true %}
+              {% endif %}
+            {% endfor %}
+            {% if nsv.vast %}
               n.v.t.
             {% else %}
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
@@ -737,26 +1029,28 @@ template:
               {{ ns.result | join(';') }}
             {% endif %}
           lowest_price_periods: >
-            {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | sort(attribute='start') | list %}
+            {% set vandaag = state_attr('sensor.dynamic_nordpool', 'raw_today') or [] %}
+            {% set basisdag = (vandaag | first).start[:10] if vandaag | count > 0 else '' %}
+            {% set goedkoop = (state_attr('sensor.dynamic_lowest_price_period', 'goedkope_in_venster') or []) | sort(attribute='start') | list %}
             [
             {% for uur in goedkoop %}
-              "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
+              "{{ (uur.start | as_datetime).strftime('%H:%M') }}{{ ' (+1)' if basisdag != '' and uur.start[:10] != basisdag else '' }} - €{{ '%.4f' | format(uur.value) }}"
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
           highest_price_periods: >
-            {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
-            {% set duur = uren | sort(attribute='value', reverse=true) | list %}
+            {% set vandaag = state_attr('sensor.dynamic_nordpool', 'raw_today') or [] %}
+            {% set basisdag = (vandaag | first).start[:10] if vandaag | count > 0 else '' %}
+            {% set duur = state_attr('sensor.dynamic_lowest_price_period', 'duurste_na_eerste_goedkope') or [] %}
+            {% set duur = duur | sort(attribute='value', reverse=true) | list %}
             [
             {% for uur in duur %}
-              "{{ (uur.start | as_datetime).strftime('%H:%M') }} - €{{ '%.4f' | format(uur.value) }}"
+              "{{ (uur.start | as_datetime).strftime('%H:%M') }}{{ ' (+1)' if basisdag != '' and uur.start[:10] != basisdag else '' }} - €{{ '%.4f' | format(uur.value) }}"
               {% if not loop.last %}, {% endif %}
             {% endfor %}
             ]
           average_lowest_price: >
-            {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') or [] %}
-            {% set goedkoop = uren | selectattr('goedkoop','equalto','Yes') | list %}
+            {% set goedkoop = state_attr('sensor.dynamic_lowest_price_period', 'goedkope_in_venster') or [] %}
             {% if goedkoop | count > 0 %}
               €{{ '%.4f' % (goedkoop | map(attribute='value') | sum / goedkoop | count) }}
             {% else %}
@@ -797,7 +1091,15 @@ template:
           {% endif %}
         attributes:
           manual_periods: >
-            {% if states('input_text.dynamic_manual_period_tomorrow') | length > 0 %}
+            {% set txt = states('input_text.dynamic_manual_period_tomorrow') %}
+            {% set txt = '' if txt in ['unknown', 'unavailable'] else txt %}
+            {% set nsv = namespace(vast=false) %}
+            {% for deel in txt.split(';') %}
+              {% if (deel | trim | replace(' ', '') | upper) | regex_match('^[GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') %}
+                {% set nsv.vast = true %}
+              {% endif %}
+            {% endfor %}
+            {% if nsv.vast %}
               n.v.t.
             {% else %}
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
@@ -878,7 +1180,15 @@ template:
           {% endif %}
         attributes:
           manual_periods: >
-            {% if states('input_text.dynamic_manual_period_tomorrow') | length > 0 %}
+            {% set txt = states('input_text.dynamic_manual_period_tomorrow') %}
+            {% set txt = '' if txt in ['unknown', 'unavailable'] else txt %}
+            {% set nsv = namespace(vast=false) %}
+            {% for deel in txt.split(';') %}
+              {% if (deel | trim | replace(' ', '') | upper) | regex_match('^[GD][0-9]{1,2}:[0-9]{2}(-[0-9]{1,2}:[0-9]{2})?$') %}
+                {% set nsv.vast = true %}
+              {% endif %}
+            {% endfor %}
+            {% if nsv.vast %}
               n.v.t.
             {% else %}
               {% set uren = state_attr('sensor.dynamic_lowest_price_period', 'raw_tomorrow') or [] %}
@@ -938,363 +1248,137 @@ template:
       - name: "Dynamic Highest Price Period"
         unique_id: dynamic_highest_price_period
         icon: mdi:progress-clock
-        state: >
-          {% set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_today') %}
-          {% set handmatige = states('input_text.dynamic_manual_period') %}
-          {% set aantal_duur = states('input_number.dynamic_highest_price_x_period') | int %}
-          {% set kwartier = is_state('input_boolean.dynamic_setting_15_minute_interval', 'on') %}
-          {% set default_delta = timedelta(minutes=15) if kwartier else timedelta(hours=1) %}
-          {% if prijzen is iterable %}
-            {% set ns = namespace(dure_starttijden=[]) %}
-            {% if handmatige | length > 0 %}
-              {% for item in handmatige.split(';') %}
-                {% if item[0] == 'D' %}
-                  {% set tijden = item[1:] %}
-                  {% if '-' in tijden %}
-                    {% set start_str = tijden.split('-')[0] %}
-                    {% set eind_str = tijden.split('-')[1] %}
-                    {% set range_block = True %}
-                  {% else %}
-                    {% set start_str = tijden %}
-                    {% set range_block = False %}
-                  {% endif %}
-                  {% for uur in prijzen %}
-                    {% set dt_start = uur.start | as_datetime %}
-                    {% set dt_end = uur.end | as_datetime %}
-                    {% set dag = dt_start.strftime('%Y-%m-%d') %}
-                    {% set tz = dt_start.tzinfo %}
-                    {% set start_dt = strptime(dag ~ ' ' ~ start_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                    {% if range_block %}
-                      {% set eind_dt = strptime(dag ~ ' ' ~ eind_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                      {% if eind_dt <= start_dt %}
-                        {% set eind_dt = eind_dt + timedelta(days=1) %}
-                      {% endif %}
-                      {% set eind_dt = eind_dt + timedelta(seconds=1) %}
-                    {% else %}
-                      {% set eind_dt = start_dt + default_delta %}
-                    {% endif %}
-                    {% if dt_start < eind_dt and dt_end > start_dt %}
-                      {% set ns.dure_starttijden = ns.dure_starttijden + [uur.start] %}
-                    {% endif %}
-                  {% endfor %}
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              {% set prijzen_sorted = prijzen | sort(attribute='value') %}
-              {% if aantal_duur > 0 %}
-                {% set ns.dure_starttijden = prijzen_sorted[-aantal_duur:] | map(attribute='start') | list %}
-              {% else %}
-                {% set ns.dure_starttijden = [] %}
-              {% endif %}
-            {% endif %}
-            {% set nu = now().astimezone() %}
-            {% set actief = prijzen
-              | selectattr('start', 'in', ns.dure_starttijden)
+        state: >-
+          {%- set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_today') -%}
+          {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+          {%- if prijzen is iterable -%}
+            {%- set gekozen = sel.get('td', []) -%}
+            {%- set nu = now().astimezone() -%}
+            {%- set actief = prijzen
+              | selectattr('start', 'in', gekozen)
               | selectattr('start', 'le', nu.isoformat())
               | selectattr('end', 'gt', nu.isoformat())
-              | list %}
-            {{ 'Yes' if actief | length > 0 else 'No' }}
-          {% else %}
-            Onbekend
-          {% endif %}
+              | list -%}
+            {{- 'Yes' if actief | length > 0 else 'No' -}}
+          {%- else -%}
+            {{- 'Onbekend' -}}
+          {%- endif -%}
         attributes:
-          raw_today: >
-            {% set prijzen = state_attr('sensor.dynamic_lowest_price_period', 'raw_today') %}
-            {% set handmatige = states('input_text.dynamic_manual_period') %}
-            {% set aantal_goedkoop = states('input_number.dynamic_lowest_price_x_period') | int %}
-            {% set aantal_duur = states('input_number.dynamic_highest_price_x_period') | int %}
-            {% if prijzen is iterable %}
-              {% set ns = namespace(goede_starttijden=[], dure_starttijden=[]) %}
-              {% if handmatige | length > 0 %}
-                {% for item in handmatige.split(';') %}
-                  {% set type = item[0] %}
-                  {% set tijden = item[1:] %}
-                  {% for uur in prijzen %}
-                    {% if uur.start[11:16] == tijden %}
-                      {% if type == 'G' %}
-                        {% set ns.goede_starttijden = ns.goede_starttijden + [uur.start] %}
-                      {% elif type == 'D' %}
-                        {% set ns.dure_starttijden = ns.dure_starttijden + [uur.start] %}
-                      {% endif %}
-                    {% endif %}
-                  {% endfor %}
-                {% endfor %}
-              {% else %}
-                {% set prijzen_sorted = prijzen | sort(attribute='value') %}
-                {% set ns.goede_starttijden = prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | list %}
-                {% if aantal_duur > 0 %}
-                  {% set ns.dure_starttijden = prijzen_sorted[-aantal_duur:] | map(attribute='start') | list %}
-                {% else %}
-                  {% set ns.dure_starttijden = [] %}
-                {% endif %}
-              {% endif %}
-              [
-              {% for uur in prijzen %}
-                {
-                  "start": "{{ uur.start }}",
-                  "end": "{{ uur.end }}",
-                  "value": {{ uur.value }},
-                  "goedkoop": "{{ 'Yes' if uur.start in ns.goede_starttijden else 'No' }}",
-                  "duur": "{{ 'Yes' if uur.start in ns.dure_starttijden else 'No' }}"
-                }{% if not loop.last %},{% endif %}
-              {% endfor %}
-              ]
-            {% else %}
-              []
-            {% endif %}
+          raw_today: >-
+            {%- set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_today') or [] -%}
+            {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+            {%- set g = sel.get('tg', []) -%}
+            {%- set d = sel.get('td', []) -%}
+            {%- set ns = namespace(l=[]) -%}
+            {%- for uur in prijzen -%}
+              {%- set ns.l = ns.l + [{'start': uur.start, 'end': uur.end, 'value': uur.value,
+                  'goedkoop': ('Yes' if uur.start in g else 'No'),
+                  'duur': ('Yes' if uur.start in d else 'No')}] -%}
+            {%- endfor -%}
+            {{- ns.l | to_json -}}
 
       - name: "Dynamic Lowest Price Period"
         unique_id: dynamic_lowest_price_period
         icon: mdi:progress-clock
-        state: >
-          {% set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_today') %}
-          {% set handmatige = states('input_text.dynamic_manual_period') %}
-          {% set aantal_goedkoop = states('input_number.dynamic_lowest_price_x_period') | int %}
-          {% set kwartier = is_state('input_boolean.dynamic_setting_15_minute_interval', 'on') %}
-          {% set default_delta = timedelta(minutes=15) if kwartier else timedelta(hours=1) %}
-          {% if prijzen is iterable %}
-            {% set ns = namespace(goedkope_starttijden=[]) %}
-            {% if handmatige | length > 0 %}
-              {% for item in handmatige.split(';') %}
-                {% if item[0] == 'G' %}
-                  {% set tijden = item[1:] %}
-                  {% if '-' in tijden %}
-                    {% set start_str = tijden.split('-')[0] %}
-                    {% set eind_str = tijden.split('-')[1] %}
-                    {% set range_block = True %}
-                  {% else %}
-                    {% set start_str = tijden %}
-                    {% set range_block = False %}
-                  {% endif %}
-                  {% for uur in prijzen %}
-                    {% set dt_start = uur.start | as_datetime %}
-                    {% set dt_end = uur.end | as_datetime %}
-                    {% set dag = dt_start.strftime('%Y-%m-%d') %}
-                    {% set tz = dt_start.tzinfo %}
-                    {% set start_dt = strptime(dag ~ ' ' ~ start_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                    {% if range_block %}
-                      {% set eind_dt = strptime(dag ~ ' ' ~ eind_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                      {% if eind_dt <= start_dt %}
-                        {% set eind_dt = eind_dt + timedelta(days=1) %}
-                      {% endif %}
-                      {% set eind_dt = eind_dt + timedelta(seconds=1) %}
-                    {% else %}
-                      {% set eind_dt = start_dt + default_delta %}
-                    {% endif %}
-                    {% if dt_start < eind_dt and dt_end > start_dt %}
-                      {% set ns.goedkope_starttijden = ns.goedkope_starttijden + [uur.start] %}
-                    {% endif %}
-                  {% endfor %}
-                {% endif %}
-              {% endfor %}
-            {% else %}
-              {% set prijzen_sorted = prijzen | sort(attribute='value') %}
-              {% set ns.goedkope_starttijden = prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | list %}
-            {% endif %}
-            {% set nu = now().astimezone() %}
-            {% set in_goedkoop_blok = prijzen
-              | selectattr('start', 'in', ns.goedkope_starttijden)
+        state: >-
+          {%- set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_today') -%}
+          {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+          {%- if prijzen is iterable -%}
+            {%- set gekozen = sel.get('tg', []) -%}
+            {%- set nu = now().astimezone() -%}
+            {%- set actief = prijzen
+              | selectattr('start', 'in', gekozen)
               | selectattr('start', 'le', nu.isoformat())
               | selectattr('end', 'gt', nu.isoformat())
-              | list %}
-            {{ 'Yes' if in_goedkoop_blok | length > 0 else 'No' }}
-          {% else %}
-            Onbekend
-          {% endif %}
+              | list -%}
+            {{- 'Yes' if actief | length > 0 else 'No' -}}
+          {%- else -%}
+            {{- 'Onbekend' -}}
+          {%- endif -%}
         attributes:
-          raw_today: >
-            {% set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_today') %}
-            {% set handmatige = states('input_text.dynamic_manual_period') %}
-            {% set aantal_goedkoop = states('input_number.dynamic_lowest_price_x_period') | int %}
-            {% set aantal_duur = states('input_number.dynamic_highest_price_x_period') | int %}
-            {% set kwartier = is_state('input_boolean.dynamic_setting_15_minute_interval', 'on') %}
-            {% set default_delta = timedelta(minutes=15) if kwartier else timedelta(hours=1) %}
-            {% if prijzen is iterable %}
-              {% set ns = namespace(goedkope_starttijden=[], dure_starttijden=[]) %}
-              {% if handmatige | length > 0 %}
-                {% for item in handmatige.split(';') %}
-                  {% set type = item[0] %}
-                  {% set tijden = item[1:] %}
-                  {% if '-' in tijden %}
-                    {% set start_str = tijden.split('-')[0] %}
-                    {% set eind_str = tijden.split('-')[1] %}
-                    {% set range_block = True %}
-                  {% else %}
-                    {% set start_str = tijden %}
-                    {% set range_block = False %}
-                  {% endif %}
-                  {% for uur in prijzen %}
-                    {% set dt_start = uur.start | as_datetime %}
-                    {% set dt_end = uur.end | as_datetime %}
-                    {% set dag = dt_start.strftime('%Y-%m-%d') %}
-                    {% set tz = dt_start.tzinfo %}
-                    {% set start_dt = strptime(dag ~ ' ' ~ start_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                    {% if range_block %}
-                      {% set eind_dt = strptime(dag ~ ' ' ~ eind_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                      {% if eind_dt <= start_dt %}
-                        {% set eind_dt = eind_dt + timedelta(days=1) %}
-                      {% endif %}
-                      {% set eind_dt = eind_dt + timedelta(seconds=1) %}
-                    {% else %}
-                      {% set eind_dt = start_dt + default_delta %}
-                    {% endif %}
-                    {% if dt_start < eind_dt and dt_end > start_dt %}
-                      {% if type == 'G' %}
-                        {% set ns.goedkope_starttijden = ns.goedkope_starttijden + [uur.start] %}
-                      {% elif type == 'D' %}
-                        {% set ns.dure_starttijden = ns.dure_starttijden + [uur.start] %}
-                      {% endif %}
-                    {% endif %}
-                  {% endfor %}
-                {% endfor %}
-              {% else %}
-                {% set prijzen_sorted = prijzen | sort(attribute='value') %}
-                {% set ns.goedkope_starttijden = prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | list %}
-                {% if aantal_duur > 0 %}
-                  {% set ns.dure_starttijden = prijzen_sorted[-aantal_duur:] | map(attribute='start') | list %}
-                {% else %}
-                  {% set ns.dure_starttijden = [] %}
-                {% endif %}
-              {% endif %}
-              [
-              {% for uur in prijzen %}
-                {
-                  "start": "{{ uur.start }}",
-                  "end": "{{ uur.end }}",
-                  "value": {{ uur.value }},
-                  "goedkoop": "{{ 'Yes' if uur.start in ns.goedkope_starttijden else 'No' }}",
-                  "duur": "{{ 'Yes' if uur.start in ns.dure_starttijden else 'No' }}"
-                }{% if not loop.last %},{% endif %}
-              {% endfor %}
-              ]
-            {% else %}
-              []
-            {% endif %}
-          raw_tomorrow: >
-            {% set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') %}
-            {% set handmatige = states('input_text.dynamic_manual_period_tomorrow') %}
-            {% set aantal_goedkoop = states('input_number.dynamic_lowest_price_x_period_tomorrow') | int %}
-            {% set aantal_duur = states('input_number.dynamic_highest_price_x_period_tomorrow') | int %}
-            {% set kwartier = is_state('input_boolean.dynamic_setting_15_minute_interval', 'on') %}
-            {% set default_delta = timedelta(minutes=15) if kwartier else timedelta(hours=1) %}
-            {% if prijzen is iterable %}
-              {% set ns = namespace(goedkope_starttijden=[], dure_starttijden=[]) %}
-              {% if handmatige | length > 0 %}
-                {% for item in handmatige.split(';') %}
-                  {% set type = item[0] %}
-                  {% set tijden = item[1:] %}
-                  {% if '-' in tijden %}
-                    {% set start_str = tijden.split('-')[0] %}
-                    {% set eind_str = tijden.split('-')[1] %}
-                    {% set range_block = True %}
-                  {% else %}
-                    {% set start_str = tijden %}
-                    {% set range_block = False %}
-                  {% endif %}
-                  {% for uur in prijzen %}
-                    {% set dt_start = uur.start | as_datetime %}
-                    {% set dt_end = uur.end | as_datetime %}
-                    {% set dag = dt_start.strftime('%Y-%m-%d') %}
-                    {% set tz = dt_start.tzinfo %}
-                    {% set start_dt = strptime(dag ~ ' ' ~ start_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                    {% if range_block %}
-                      {% set eind_dt = strptime(dag ~ ' ' ~ eind_str, '%Y-%m-%d %H:%M').replace(tzinfo=tz) %}
-                      {% if eind_dt <= start_dt %}
-                        {% set eind_dt = eind_dt + timedelta(days=1) %}
-                      {% endif %}
-                      {% set eind_dt = eind_dt + timedelta(seconds=1) %}
-                    {% else %}
-                      {% set eind_dt = start_dt + default_delta %}
-                    {% endif %}
-                    {% if dt_start < eind_dt and dt_end > start_dt %}
-                      {% if type == 'G' %}
-                        {% set ns.goedkope_starttijden = ns.goedkope_starttijden + [uur.start] %}
-                      {% elif type == 'D' %}
-                        {% set ns.dure_starttijden = ns.dure_starttijden + [uur.start] %}
-                      {% endif %}
-                    {% endif %}
-                  {% endfor %}
-                {% endfor %}
-              {% else %}
-                {% set prijzen_sorted = prijzen | sort(attribute='value') %}
-                {% set ns.goedkope_starttijden = prijzen_sorted[:aantal_goedkoop] | map(attribute='start') | list %}
-                {% if aantal_duur > 0 %}
-                  {% set ns.dure_starttijden = prijzen_sorted[-aantal_duur:] | map(attribute='start') | list %}
-                {% else %}
-                  {% set ns.dure_starttijden = [] %}
-                {% endif %}
-              {% endif %}
-              [
-              {% for uur in prijzen %}
-                {
-                  "start": "{{ uur.start }}",
-                  "end": "{{ uur.end }}",
-                  "value": {{ uur.value }},
-                  "goedkoop": "{{ 'Yes' if uur.start in ns.goedkope_starttijden else 'No' }}",
-                  "duur": "{{ 'Yes' if uur.start in ns.dure_starttijden else 'No' }}"
-                }{% if not loop.last %},{% endif %}
-              {% endfor %}
-              ]
-            {% else %}
-              []
-            {% endif %}
-          duurste_na_eerste_goedkope: >
-            {% set prijzen = state_attr('sensor.dynamic_lowest_price_period','raw_today') or [] %}
-            {% set goedkope = prijzen
-              | selectattr('goedkoop','eq','Yes')
+          raw_today: >-
+            {%- set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_today') or [] -%}
+            {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+            {%- set g = sel.get('tg', []) -%}
+            {%- set d = sel.get('td', []) -%}
+            {%- set ns = namespace(l=[]) -%}
+            {%- for uur in prijzen -%}
+              {%- set ns.l = ns.l + [{'start': uur.start, 'end': uur.end, 'value': uur.value,
+                  'goedkoop': ('Yes' if uur.start in g else 'No'),
+                  'duur': ('Yes' if uur.start in d else 'No')}] -%}
+            {%- endfor -%}
+            {{- ns.l | to_json -}}
+          raw_tomorrow: >-
+            {%- set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') or [] -%}
+            {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+            {%- set g = sel.get('mg', []) -%}
+            {%- set d = sel.get('md', []) -%}
+            {%- set cg = sel.get('cg', []) -%}
+            {%- set cd = sel.get('cd', []) -%}
+            {%- set ns = namespace(l=[]) -%}
+            {%- for uur in prijzen -%}
+              {%- set ns.l = ns.l + [{'start': uur.start, 'end': uur.end, 'value': uur.value,
+                  'goedkoop': ('Yes' if uur.start in g else 'No'),
+                  'duur': ('Yes' if uur.start in d else 'No'),
+                  'overdracht': ('G' if uur.start in cg else ('D' if uur.start in cd else ''))}] -%}
+            {%- endfor -%}
+            {{- ns.l | to_json -}}
+          goedkope_in_venster: >-
+            {%- set vandaag = state_attr('sensor.dynamic_nordpool', 'raw_today') or [] -%}
+            {%- set morgen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') or [] -%}
+            {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+            {%- set g = sel.get('tg', []) + sel.get('cg', []) -%}
+            {%- set d = sel.get('td', []) + sel.get('cd', []) -%}
+            {%- set ns = namespace(l=[]) -%}
+            {%- for uur in vandaag + morgen if uur.start in g -%}
+              {%- set ns.l = ns.l + [{'start': uur.start, 'end': uur.end, 'value': uur.value,
+                  'goedkoop': 'Yes', 'duur': ('Yes' if uur.start in d else 'No')}] -%}
+            {%- endfor -%}
+            {{- ns.l | to_json -}}
+          duurste_na_eerste_goedkope: >-
+            {%- set vandaag = state_attr('sensor.dynamic_nordpool', 'raw_today') or [] -%}
+            {%- set morgen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') or [] -%}
+            {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+            {%- set g = sel.get('tg', []) + sel.get('cg', []) -%}
+            {%- set d = sel.get('td', []) + sel.get('cd', []) -%}
+            {%- set venster = vandaag + morgen -%}
+            {%- set goedkope = venster
+              | selectattr('start', 'in', g)
               | map(attribute='start')
               | map('as_datetime')
               | select('!=', None)
               | sort
-              | list %}
-            {% set eerste_goedkoop = goedkope | first if goedkope else none %}
-            {% if prijzen and eerste_goedkoop %}
-              [
-              {% for uur in prijzen
-                if uur.duur == 'Yes'
-                and (uur.start | as_datetime > eerste_goedkoop)
-              %}
-                {
-                  "start": "{{ uur.start }}",
-                  "end": "{{ uur.end }}",
-                  "value": {{ uur.value }},
-                  "goedkoop": "{{ uur.goedkoop }}",
-                  "duur": "Yes"
-                }{% if not loop.last %},{% endif %}
-              {% endfor %}
-              ]
-            {% else %}
-              []
-            {% endif %}
-
-          duurste_na_eerste_goedkope_tomorrow: >
-            {% set prijzen = state_attr('sensor.dynamic_lowest_price_period','raw_tomorrow') or [] %}
-            {% set goedkope = prijzen
-              | selectattr('goedkoop','eq','Yes')
+              | list -%}
+            {%- set eerste_goedkoop = goedkope | first if goedkope else none -%}
+            {%- set ns = namespace(l=[]) -%}
+            {%- if eerste_goedkoop -%}
+              {%- for uur in venster if uur.start in d and (uur.start | as_datetime) > eerste_goedkoop -%}
+                {%- set ns.l = ns.l + [{'start': uur.start, 'end': uur.end, 'value': uur.value,
+                    'goedkoop': ('Yes' if uur.start in g else 'No'), 'duur': 'Yes'}] -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {{- ns.l | to_json -}}
+          duurste_na_eerste_goedkope_tomorrow: >-
+            {%- set prijzen = state_attr('sensor.dynamic_nordpool', 'raw_tomorrow') or [] -%}
+            {%- set sel = state_attr('sensor.dynamic_period_planning', 'selection') or {} -%}
+            {%- set g = sel.get('mg', []) -%}
+            {%- set d = sel.get('md', []) -%}
+            {%- set goedkope = prijzen
+              | selectattr('start', 'in', g)
               | map(attribute='start')
               | map('as_datetime')
               | select('!=', None)
               | sort
-              | list %}
-            {% set eerste_goedkoop = goedkope | first if goedkope else none %}
-            {% if prijzen and eerste_goedkoop %}
-              [
-              {% for uur in prijzen
-                if uur.duur == 'Yes'
-                and (uur.start | as_datetime > eerste_goedkoop)
-              %}
-                {
-                  "start": "{{ uur.start }}",
-                  "end": "{{ uur.end }}",
-                  "value": {{ uur.value }},
-                  "goedkoop": "{{ uur.goedkoop }}",
-                  "duur": "Yes"
-                }{% if not loop.last %},{% endif %}
-              {% endfor %}
-              ]
-            {% else %}
-              []
-            {% endif %}
+              | list -%}
+            {%- set eerste_goedkoop = goedkope | first if goedkope else none -%}
+            {%- set ns = namespace(l=[]) -%}
+            {%- if prijzen and eerste_goedkoop -%}
+              {%- for uur in prijzen if uur.start in d and (uur.start | as_datetime) > eerste_goedkoop -%}
+                {%- set ns.l = ns.l + [{'start': uur.start, 'end': uur.end, 'value': uur.value,
+                    'goedkoop': ('Yes' if uur.start in g else 'No'), 'duur': 'Yes'}] -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {{- ns.l | to_json -}}
 
       - name: "Zendure Export Efficiency"
         unique_id: zendure_export_efficiency
