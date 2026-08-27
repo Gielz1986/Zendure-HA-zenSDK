@@ -2659,6 +2659,11 @@ views:
                   target:
                     entity_id: input_button.zendure_setting_set_default_settings
                   data: {}
+                  confirmation:
+                    title: "Restore default settings ?"
+                    text: "Your current settings will be lost and replaced by the default settings. Are you sure?"
+                    confirm_text: "Restore"
+                    dismiss_text: "Cancel"
                 text: Default settings
                 color: "#01a180"
           - type: markdown

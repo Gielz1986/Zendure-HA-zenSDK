@@ -2664,6 +2664,11 @@ views:
                   target:
                     entity_id: input_button.zendure_2400_ac_advies_instellingen_overnemen
                   data: {}
+                  confirmation:
+                    title: "Standaardinstellingen herstellen ?"
+                    text: "Je huidige instellingen gaan verloren en worden vervangen door de standaardinstellingen. Weet je het zeker ?"
+                    confirm_text: "Herstellen"
+                    dismiss_text: "Annuleren"
                 color: "#01a180"
                 text: Standaardinstellingen
           - type: markdown
