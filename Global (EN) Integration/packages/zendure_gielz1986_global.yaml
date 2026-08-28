@@ -167,7 +167,7 @@ input_number:
   zendure_setting_discharge_buffer:
     name: Zendure Discharge Buffer
     icon: mdi:arrow-expand-vertical
-    min: 0
+    min: -100
     max: 250
     step: 1
     mode: box

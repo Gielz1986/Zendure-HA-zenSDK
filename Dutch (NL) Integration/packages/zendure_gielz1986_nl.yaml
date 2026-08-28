@@ -167,7 +167,7 @@ input_number:
   zendure_2400_ac_ontlaadmarge:
     name: Zendure 2400 AC Ontlaadmarge
     icon: mdi:arrow-expand-vertical
-    min: 0
+    min: -100
     max: 250
     step: 1
     mode: box
