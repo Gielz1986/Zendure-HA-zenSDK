@@ -336,7 +336,7 @@ sensor:
 utility_meter:
   zendure_pv_import_daily:
     source: sensor.zendure_pv_import
-    unique_id: utility_meter.zendure_pv_import_daily
+    unique_id: zendure_pv_import_daily
     name: Zendure PV Import Daily
     cycle: daily
 
