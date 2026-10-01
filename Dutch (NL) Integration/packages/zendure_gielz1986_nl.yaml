@@ -526,8 +526,8 @@ template:
                 {% if use_15_min %}
                   {% for item in raw %}
                     {
-                      "start": "{{ item.start.isoformat() }}",
-                      "end": "{{ item.end.isoformat() }}",
+                      "start": "{{ as_datetime(item.start).isoformat() }}",
+                      "end": "{{ as_datetime(item.end).isoformat() }}",
                       "value": {{ item.value }}
                     }{% if not loop.last %},{% endif %}
                   {% endfor %}
@@ -567,8 +567,8 @@ template:
                 {% if use_15_min %}
                   {% for item in raw %}
                     {
-                      "start": "{{ item.start.isoformat() }}",
-                      "end": "{{ item.end.isoformat() }}",
+                      "start": "{{ as_datetime(item.start).isoformat() }}",
+                      "end": "{{ as_datetime(item.end).isoformat() }}",
                       "value": {{ item.value }}
                     }{% if not loop.last %},{% endif %}
                   {% endfor %}
