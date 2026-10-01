@@ -1,0 +1,696 @@
+# ============================================================================
+# Zendure Fleet — coordinator for 2× SolarFlow 800 Plus
+#
+# Unit 1: driven by the UNMODIFIED Gielz1986 zenSDK package (fast regulator,
+#         5s loop, regulates P1 toward 0 within its 0..800W envelope).
+# Unit 2: driven by this file. Architecture:
+#
+#   sensor.zendure2_target_power   ONE desired-state function covering EVERY
+#                                  mode (standby/quick/manual/dynamic windows/
+#                                  smart matching), with hysteresis and a
+#                                  contract interlock. If this is 0, unit 2
+#                                  must be idle — no exceptions.
+#   script.zendure2_apply          ONE shared writer. Stop-before-reverse,
+#                                  write deadband, flash→RAM handling, and a
+#                                  re-check of both gates (enabled + dry run)
+#                                  immediately before every REST write — all
+#                                  branches inherit all of it.
+#   automation zendure2_slow_loop  The ONLY path that may INCREASE unit-2
+#                                  power in smart-matching modes (20s cadence).
+#   automation zendure2_fast_reconcile  Immediate reconciliation on every mode/
+#                                  flag/manual/enable/contract edge and on
+#                                  meter breach (fast shed, slow add).
+#   automation zendure2_neutralize Kill switch / dry-run interlock: stops an
+#                                  ACTIVE command the moment either gate flips.
+#
+# Vendor entities consumed (the "contract", checked by the watchdog below):
+#   input_select.zendure_operation_mode
+#   input_boolean.dynamic_charging_running / dynamic_discharging_running
+#   input_number.zendure_setting_* (max powers, start thresholds, standby delay)
+#   input_number.zendure_manual_power, input_number.dynamic_setting_minimal_spread
+#   sensor.home_energy_meter_power, sensor.zendure_power,
+#   sensor.zendure_total_state_of_charge, sensor.zendure_minimum/maximum_state_of_charge,
+#   sensor.zendure_soc_limit_status, sensor.zendure_total_capacity,
+#   sensor.dynamic_highest_price_period, sensor.dynamic_spread_indication
+# If the contract binary_sensor is off, the target is forced to 0 and the fast
+# reconciler stops unit 2: contract failure ⇒ unit 2 idles (benign failure).
+# ============================================================================
+
+input_boolean:
+  zendure2_dry_run:
+    name: Zendure2 Dry Run
+    icon: mdi:test-tube
+    # Observe mode: the target is computed and every would-be action is
+    # logged, but no REST write is sent. Turning this ON while unit 2 is
+    # actively commanded triggers the neutralizer (one final stop write).
+    # NOTE: HA creates input_booleans as OFF and `initial:` would re-force the
+    # value on every restart (silently disabling live control in production),
+    # so dry run cannot literally default to ON. Safe bring-up is guaranteed
+    # by zendure2_enabled instead (also OFF on creation; nothing is written
+    # while it is off). Bring-up order: turn dry_run ON first, then enabled ON.
+
+  zendure2_mirror_quick_modes:
+    name: Zendure2 Mirror Quick Modes
+    icon: mdi:content-duplicate
+    # OFF (default): Quick Charge / Quick Discharge drive unit 1 only —
+    # existing automations that set these modes (e.g. a morning sweep set up
+    # for a single battery) keep their original single-unit semantics.
+    # ON: unit 2 joins quick modes at its cap (fleet-wide 1600W quick action).
+
+input_number:
+  zendure2_loop_interval_s:
+    name: Zendure2 Loop Interval
+    icon: mdi:timer-outline
+    min: 20
+    max: 120
+    step: 5
+    mode: box
+    unit_of_measurement: "s"
+    # Cadence of the slow (baseload-add) loop. Floor of 20s keeps a 4×
+    # timescale gap to the vendor's 5s loop; fresh installs start at the floor.
+
+  zendure2_write_deadband_w:
+    name: Zendure2 Write Deadband
+    icon: mdi:arrow-collapse-vertical
+    min: 25
+    max: 200
+    step: 5
+    mode: box
+    unit_of_measurement: "W"
+    # Minimum |target − applied| before a new limit is written to unit 2.
+    # Fresh installs start at the 25W floor.
+
+  zendure2_shed_threshold_w:
+    name: Zendure2 Shed Threshold
+    icon: mdi:transmission-tower-export
+    min: 100
+    max: 1000
+    step: 25
+    mode: box
+    unit_of_measurement: "W"
+    # Fast-shed trigger: if the meter shows more than this much export (or
+    # import while unit 2 charges) for 5s in a smart-matching mode, unit 2 is
+    # reconciled immediately instead of waiting for the slow loop.
+    # Recommended: 200. Fresh installs start at 100 (more sensitive = safer).
+
+  zendure_fleet_soc_lead_band:
+    name: Zendure Fleet SoC Lead Band
+    icon: mdi:arrow-expand-vertical
+    min: 2
+    max: 25
+    step: 1
+    mode: box
+    unit_of_measurement: "%"
+    # Recommended: 8. Below the single-unit limit, unit 1 serves alone unless
+    # unit 2's SoC advantage exceeds this band. Hysteresis: once unit 2 leads,
+    # it keeps the lead until the advantage drops below half the band.
+
+  zendure_fleet_single_unit_limit:
+    name: Zendure Fleet Single Unit Limit
+    icon: mdi:numeric-1-box
+    min: 100
+    max: 800
+    step: 25
+    mode: box
+    unit_of_measurement: "W"
+    # Recommended: 700. Fleet power below this runs on one unit; above it the
+    # load is split SoC-weighted. Hysteresis: once both units are engaged, the
+    # split persists until demand drops 150W below this limit.
+
+template:
+  - binary_sensor:
+      # Control interlock + update canary: every vendor entity the coordinator
+      # reads for CONTROL decisions. When off, sensor.zendure2_target_power is
+      # forced to 0 and the fast reconciler stops unit 2 (benign failure).
+      - name: "Zendure Fleet Vendor Contract OK"
+        unique_id: zendure_fleet_vendor_contract_ok
+        icon: mdi:handshake
+        state: >
+          {% set required = [
+            'input_select.zendure_operation_mode',
+            'input_boolean.dynamic_charging_running',
+            'input_boolean.dynamic_discharging_running',
+            'input_number.zendure_setting_max_charge_power',
+            'input_number.zendure_setting_max_discharge_power',
+            'input_number.zendure_setting_start_discharging_at',
+            'input_number.zendure_setting_start_charging_at',
+            'input_number.zendure_setting_standby_delay',
+            'input_number.zendure_manual_power',
+            'input_number.dynamic_setting_minimal_spread',
+            'sensor.home_energy_meter_power',
+            'sensor.zendure_power',
+            'sensor.zendure_total_state_of_charge',
+            'sensor.zendure_minimum_state_of_charge',
+            'sensor.zendure_maximum_state_of_charge',
+            'sensor.zendure_soc_limit_status',
+            'sensor.zendure_total_capacity',
+            'sensor.dynamic_highest_price_period',
+            'sensor.dynamic_spread_indication',
+          ] %}
+          {{ required | select('has_value') | list | count == required | count }}
+        attributes:
+          missing: >
+            {% set required = [
+              'input_select.zendure_operation_mode',
+              'input_boolean.dynamic_charging_running',
+              'input_boolean.dynamic_discharging_running',
+              'input_number.zendure_setting_max_charge_power',
+              'input_number.zendure_setting_max_discharge_power',
+              'input_number.zendure_setting_start_discharging_at',
+              'input_number.zendure_setting_start_charging_at',
+              'input_number.zendure_setting_standby_delay',
+              'input_number.zendure_manual_power',
+              'input_number.dynamic_setting_minimal_spread',
+              'sensor.home_energy_meter_power',
+              'sensor.zendure_power',
+              'sensor.zendure_total_state_of_charge',
+              'sensor.zendure_minimum_state_of_charge',
+              'sensor.zendure_maximum_state_of_charge',
+              'sensor.zendure_soc_limit_status',
+              'sensor.zendure_total_capacity',
+              'sensor.dynamic_highest_price_period',
+              'sensor.dynamic_spread_indication',
+            ] %}
+            {{ required | reject('has_value') | list }}
+
+  - sensor:
+      # ---------------- Fleet aggregates ----------------
+      - name: "Zendure Fleet Power"
+        unique_id: zendure_fleet_power
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        state: >
+          {{ (states('sensor.zendure_power') | float(0)
+            + states('sensor.zendure2_power') | float(0)) | round(0) }}
+        icon: mdi:home-battery
+
+      - name: "Zendure Fleet State Of Charge"
+        unique_id: zendure_fleet_state_of_charge
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        state: >
+          {% set c1 = states('sensor.zendure_total_capacity') | float(1.92) %}
+          {% set c2 = states('sensor.zendure2_total_capacity') | float(1.92) %}
+          {% set s1 = states('sensor.zendure_total_state_of_charge') | float(0) %}
+          {% set s2 = states('sensor.zendure2_state_of_charge') | float(0) %}
+          {{ ((c1 * s1 + c2 * s2) / (c1 + c2)) | round(1) if (c1 + c2) > 0 else 0 }}
+
+      - name: "Zendure Fleet Capacity"
+        unique_id: zendure_fleet_capacity
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        state: >
+          {{ (states('sensor.zendure_total_capacity') | float(1.92)
+            + states('sensor.zendure2_total_capacity') | float(1.92)) | round(2) }}
+
+      # Usable energy above each unit's OWN configured minimum SoC.
+      - name: "Zendure Fleet Available Energy"
+        unique_id: zendure_fleet_available_energy
+        unit_of_measurement: "kWh"
+        icon: mdi:battery-arrow-down
+        state: >
+          {% set min1 = states('sensor.zendure_minimum_state_of_charge') | float(10) %}
+          {% set min2 = states('sensor.zendure2_minimum_state_of_charge') | float(min1) %}
+          {% set c1 = states('sensor.zendure_total_capacity') | float(1.92) %}
+          {% set c2 = states('sensor.zendure2_total_capacity') | float(1.92) %}
+          {% set s1 = states('sensor.zendure_total_state_of_charge') | float(0) %}
+          {% set s2 = states('sensor.zendure2_state_of_charge') | float(0) %}
+          {{ ((c1 * [s1 - min1, 0] | max + c2 * [s2 - min2, 0] | max) / 100) | round(2) }}
+
+      # Room left up to each unit's OWN configured maximum SoC.
+      - name: "Zendure Fleet Required Energy"
+        unique_id: zendure_fleet_required_energy
+        unit_of_measurement: "kWh"
+        icon: mdi:battery-arrow-up
+        state: >
+          {% set max1 = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
+          {% set max2 = states('sensor.zendure2_maximum_state_of_charge') | float(max1) %}
+          {% set c1 = states('sensor.zendure_total_capacity') | float(1.92) %}
+          {% set c2 = states('sensor.zendure2_total_capacity') | float(1.92) %}
+          {% set s1 = states('sensor.zendure_total_state_of_charge') | float(0) %}
+          {% set s2 = states('sensor.zendure2_state_of_charge') | float(0) %}
+          {{ ((c1 * [max1 - s1, 0] | max + c2 * [max2 - s2, 0] | max) / 100) | round(2) }}
+
+      # ---------------- The brain ----------------
+      # Unit 2's complete desired power for EVERY mode. Signed: + = charge,
+      # − = discharge, 0 = idle. Properties:
+      #   * 0 whenever the layer is disabled or the vendor contract is broken.
+      #   * Dynamic window flags take precedence over the mode (an ineligible
+      #     window yields 0, which the fast reconciler turns into a stop —
+      #     unit 2 can never keep running in the wrong direction into a window).
+      #   * Smart-matching split: fleet_target = (z1 + z2) − P1 is an absolute
+      #     setpoint; unit 2's share is SoC-weighted using each unit's OWN
+      #     min/max SoC; unit-1 capability is clamped to
+      #     min(vendor helper, device-reported inverter limit, 800) so a
+      #     misconfigured vendor helper cannot skew the split.
+      #   * Hysteresis via self-reference (prev value): the two-unit split
+      #     engages above the single-unit limit and releases 150W below it;
+      #     a SoC lead engages at the full band and releases at half the band.
+      - name: "Zendure2 Target Power"
+        unique_id: zendure2_target_power
+        unit_of_measurement: "W"
+        state_class: measurement
+        icon: mdi:bullseye-arrow
+        state: >
+          {% if is_state('input_boolean.zendure2_enabled', 'off')
+             or not is_state('binary_sensor.zendure_fleet_vendor_contract_ok', 'on')
+             or not has_value('sensor.zendure2_state_of_charge') %}
+            0
+          {% else %}
+            {% set mode = states('input_select.zendure_operation_mode') %}
+            {% set soc2 = states('sensor.zendure2_state_of_charge') | float(50) %}
+            {% set min2 = states('sensor.zendure2_minimum_state_of_charge') | float(10) %}
+            {% set max2 = states('sensor.zendure2_maximum_state_of_charge') | float(100) %}
+            {% set status2 = states('sensor.zendure2_soc_limit_status') %}
+            {% set can2c = soc2 < max2 and status2 != 'Charging Limit Reached' %}
+            {% set can2d = soc2 > min2 and status2 != 'Discharge Limit Reached' %}
+            {% set cap2c = [states('input_number.zendure2_setting_max_charge_power') | float(800), 800] | min %}
+            {% set cap2d = [states('input_number.zendure2_setting_max_discharge_power') | float(800), 800] | min %}
+            {% if mode == 'Standby' %}
+              0
+            {% elif is_state('input_boolean.dynamic_charging_running', 'on') %}
+              {{ (cap2c | int) if can2c else 0 }}
+            {% elif is_state('input_boolean.dynamic_discharging_running', 'on') %}
+              {{ (-cap2d | int) if can2d else 0 }}
+            {% elif mode == 'Quick Charge' %}
+              {{ (cap2c | int) if can2c and is_state('input_boolean.zendure2_mirror_quick_modes', 'on') else 0 }}
+            {% elif mode == 'Quick Discharge' %}
+              {{ (-cap2d | int) if can2d and is_state('input_boolean.zendure2_mirror_quick_modes', 'on') else 0 }}
+            {% elif mode == 'Manual' %}
+              {% set manual = states('input_number.zendure_manual_power') | int(0) %}
+              {% set cap = cap2c if manual > 0 else cap2d %}
+              {% set ov = [[manual | abs - 800, 0] | max, cap] | min | int %}
+              {% if ov <= 0 %}
+                0
+              {% elif manual > 0 %}
+                {{ ov if can2c else 0 }}
+              {% else %}
+                {{ -ov if can2d else 0 }}
+              {% endif %}
+            {% elif mode in ['Smart Matching', 'Smart Discharge Only', 'Smart Charge Only',
+                             'Dynamic Smart Matching', 'Dynamic Smart Matching (Expensive)',
+                             'Dynamic Trading + Smart Matching'] %}
+              {% set discharge_modes = ['Smart Matching', 'Smart Discharge Only',
+                                        'Dynamic Smart Matching', 'Dynamic Trading + Smart Matching'] %}
+              {% set charge_modes = ['Smart Matching', 'Smart Charge Only',
+                                     'Dynamic Smart Matching', 'Dynamic Smart Matching (Expensive)',
+                                     'Dynamic Trading + Smart Matching'] %}
+              {% set expensive_ok = mode == 'Dynamic Smart Matching (Expensive)'
+                 and is_state('sensor.dynamic_highest_price_period', 'Yes')
+                 and states('sensor.dynamic_spread_indication') | float(0)
+                     >= states('input_number.dynamic_setting_minimal_spread') | float(0) %}
+              {% set can_discharge = mode in discharge_modes or expensive_ok %}
+              {% set can_charge = mode in charge_modes %}
+              {% set p1 = states('sensor.home_energy_meter_power') | float(0) %}
+              {% set z1 = states('sensor.zendure_power') | float(0) %}
+              {% set z2 = states('sensor.zendure2_power') | float(0) %}
+              {% set fleet = (z1 + z2 - p1) | round(0) %}
+              {% set prev = states('sensor.zendure2_target_power') | int(0) %}
+              {% set soc1 = states('sensor.zendure_total_state_of_charge') | float(50) %}
+              {% set min1 = states('sensor.zendure_minimum_state_of_charge') | float(10) %}
+              {% set max1 = states('sensor.zendure_maximum_state_of_charge') | float(100) %}
+              {% set status1 = states('sensor.zendure_soc_limit_status') %}
+              {% set band = states('input_number.zendure_fleet_soc_lead_band') | float(8) %}
+              {% set single = states('input_number.zendure_fleet_single_unit_limit') | float(700) %}
+              {% set cap1d = [states('input_number.zendure_setting_max_discharge_power') | float(800),
+                              states('sensor.zendure_inverter_max_discharge_power') | float(800), 800] | min %}
+              {% set cap1c = [states('input_number.zendure_setting_max_charge_power') | float(800),
+                              states('sensor.zendure_inverter_max_charge_power') | float(800), 800] | min %}
+              {% set start_dis = states('input_number.zendure_setting_start_discharging_at') | float(80) %}
+              {% set start_chg = states('input_number.zendure_setting_start_charging_at') | float(-80) | abs %}
+              {% if fleet <= -start_dis and can_discharge %}
+                {% set d = -fleet %}
+                {% set u1 = soc1 > min1 and status1 != 'Discharge Limit Reached' %}
+                {% if not can2d %}
+                  0
+                {% elif not u1 %}
+                  {{ -([d, cap2d] | min) | int }}
+                {% else %}
+                  {% set two_unit = prev < 0 and z1 < -30 %}
+                  {% set engage = (single - 150) if two_unit else single %}
+                  {% if d > engage %}
+                    {% set w1 = [soc1 - min1, 1] | max %}
+                    {% set w2 = [soc2 - min2, 1] | max %}
+                    {% set s2 = d * w2 / (w1 + w2) %}
+                    {% set s1 = [d - s2, cap1d] | min %}
+                    {% set s2 = [[d - s1, cap2d] | min, 0] | max %}
+                    {{ -(s2 | int) }}
+                  {% else %}
+                    {% set lead_band = (band / 2) if prev < 0 else band %}
+                    {{ -([d, cap2d] | min) | int if soc2 > soc1 + lead_band else 0 }}
+                  {% endif %}
+                {% endif %}
+              {% elif fleet >= start_chg and can_charge %}
+                {% set c = fleet %}
+                {% set u1 = soc1 < max1 and status1 != 'Charging Limit Reached' %}
+                {% if not can2c %}
+                  0
+                {% elif not u1 %}
+                  {{ ([c, cap2c] | min) | int }}
+                {% else %}
+                  {% set two_unit = prev > 0 and z1 > 30 %}
+                  {% set engage = (single - 150) if two_unit else single %}
+                  {% if c > engage %}
+                    {% set w1 = [max1 - soc1, 1] | max %}
+                    {% set w2 = [max2 - soc2, 1] | max %}
+                    {% set s2 = c * w2 / (w1 + w2) %}
+                    {% set s1 = [c - s2, cap1c] | min %}
+                    {% set s2 = [[c - s1, cap2c] | min, 0] | max %}
+                    {{ s2 | int }}
+                  {% else %}
+                    {% set lead_band = (band / 2) if prev > 0 else band %}
+                    {{ ([c, cap2c] | min) | int if soc2 < soc1 - lead_band else 0 }}
+                  {% endif %}
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% endif %}
+
+script:
+  # The ONLY code path that writes charge/discharge/stop commands to unit 2.
+  # Both gates are checked here (and re-checked after any delay), so every
+  # caller inherits the interlocks and stop-before-reverse.
+  zendure2_apply:
+    alias: Zendure2 Apply Target
+    mode: single
+    max_exceeded: silent
+    fields:
+      allow_increase:
+        description: May this invocation increase |unit-2 power| or start a new direction? (false = shed/stop only)
+      immediate:
+        description: Edge/safety invocation — a stop may be sent without the 30s release hold.
+    sequence:
+      - variables:
+          sn2: "{{ states('sensor.zendure2_serial_number') }}"
+          target: "{{ states('sensor.zendure2_target_power') | int(0) }}"
+          applied: "{{ states('sensor.zendure2_applied_power') | int(0) }}"
+          deadband: "{{ states('input_number.zendure2_write_deadband_w') | float(25) }}"
+          inc_ok: "{{ allow_increase | default(false) }}"
+          imm: "{{ immediate | default(false) }}"
+          change_needed: >
+            {{ (applied != 0 and target != 0 and (applied > 0) != (target > 0))
+               or (target != 0 and (target - applied) | abs > deadband)
+               or (target == 0 and applied != 0) }}
+      - condition: template
+        value_template: "{{ sn2 not in ['unknown', 'unavailable', ''] }}"
+      - if:
+          - condition: state
+            entity_id: input_boolean.zendure2_dry_run
+            state: "on"
+        then:
+          - if:
+              - condition: template
+                value_template: "{{ change_needed }}"
+            then:
+              - action: logbook.log
+                data:
+                  message: >-
+                    🧪 DRY RUN — would set unit 2 to {{ target }} W
+                    (applied: {{ applied }} W, allow_increase: {{ inc_ok }},
+                    fleet: {{ states('sensor.zendure_fleet_power') }} W,
+                    P1: {{ states('sensor.home_energy_meter_power') }} W) —
+                  entity_id: input_boolean.zendure2_dry_run
+                  name: " "
+          - stop: "Dry run active — no write sent"
+      - condition: state
+        entity_id: input_boolean.zendure2_enabled
+        state: "on"
+      - choose:
+          # Direction flip: always pass through stop first. The new direction
+          # is applied by a later invocation (fast tick or slow loop), giving
+          # the relay a settling gap. All callers inherit this.
+          - conditions:
+              - condition: template
+                value_template: "{{ applied != 0 and target != 0 and (applied > 0) != (target > 0) }}"
+            sequence:
+              - action: rest_command.zendure2_stop
+                data:
+                  sn: "{{ sn2 }}"
+          # Charge write. An increase (or engage from 0) requires inc_ok;
+          # reducing an active charge is always allowed (fast shed).
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ target > 0 and (target - applied) | abs > deadband
+                     and (inc_ok or (applied > 0 and target < applied)) }}
+            sequence:
+              - if:
+                  - condition: state
+                    entity_id: sensor.zendure2_storage_mode
+                    state: Flash Memory
+                then:
+                  - action: rest_command.zendure2_save_in_ram
+                    data:
+                      sn: "{{ sn2 }}"
+                  - delay:
+                      seconds: 3
+              # Gate re-check: mandatory after the possible delay above.
+              - condition: state
+                entity_id: input_boolean.zendure2_enabled
+                state: "on"
+              - condition: state
+                entity_id: input_boolean.zendure2_dry_run
+                state: "off"
+              - action: rest_command.zendure2_charge
+                data:
+                  sn: "{{ sn2 }}"
+                  inputLimit: "{{ target }}"
+          # Discharge write, same rules (reduce always allowed).
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ target < 0 and (target - applied) | abs > deadband
+                     and (inc_ok or (applied < 0 and target > applied)) }}
+            sequence:
+              - if:
+                  - condition: state
+                    entity_id: sensor.zendure2_storage_mode
+                    state: Flash Memory
+                then:
+                  - action: rest_command.zendure2_save_in_ram
+                    data:
+                      sn: "{{ sn2 }}"
+                  - delay:
+                      seconds: 3
+              - condition: state
+                entity_id: input_boolean.zendure2_enabled
+                state: "on"
+              - condition: state
+                entity_id: input_boolean.zendure2_dry_run
+                state: "off"
+              - action: rest_command.zendure2_discharge
+                data:
+                  sn: "{{ sn2 }}"
+                  outputLimit: "{{ -target }}"
+          # Stop. Edge/safety invocations stop immediately; the slow loop only
+          # releases after the target has held 0 for 30s (anti-flap hold).
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ target == 0 and applied != 0
+                     and (imm or (states.sensor.zendure2_target_power is not none
+                          and (now() - states.sensor.zendure2_target_power.last_changed).total_seconds() >= 30)) }}
+            sequence:
+              - action: rest_command.zendure2_stop
+                data:
+                  sn: "{{ sn2 }}"
+
+automation:
+  # --------------------------------------------------------------------------
+  # SLOW LOOP — the only path that may increase |unit-2 power| in
+  # smart-matching modes. Ticks every 5s, runs once per zendure2_loop_interval_s
+  # (gated on its own last_triggered; time_pattern can't template).
+  # --------------------------------------------------------------------------
+  - id: zendure2_slow_loop
+    alias: Zendure2 Slow Loop (baseload add)
+    mode: single
+    max_exceeded: silent
+    triggers:
+      - trigger: time_pattern
+        seconds: /5
+    conditions:
+      - condition: template
+        value_template: >
+          {{ this.attributes.last_triggered is none
+             or (now() - this.attributes.last_triggered).total_seconds()
+                >= states('input_number.zendure2_loop_interval_s') | float(20) - 2 }}
+      - condition: state
+        entity_id: input_boolean.zendure2_enabled
+        state: "on"
+      - condition: state
+        entity_id: input_select.zendure_operation_mode
+        state:
+          - Smart Matching
+          - Smart Discharge Only
+          - Smart Charge Only
+          - Dynamic Smart Matching
+          - Dynamic Smart Matching (Expensive)
+          - Dynamic Trading + Smart Matching
+      - condition: state
+        entity_id: input_boolean.dynamic_charging_running
+        state: "off"
+      - condition: state
+        entity_id: input_boolean.dynamic_discharging_running
+        state: "off"
+    actions:
+      - action: script.zendure2_apply
+        data:
+          allow_increase: true
+          immediate: false
+
+  # --------------------------------------------------------------------------
+  # FAST RECONCILE — immediate full-state reconciliation on every relevant
+  # edge, plus fast shed on meter breach, plus a 15s heartbeat for non-smart
+  # contexts (quick/manual/dynamic windows — also completes stop-before-reverse
+  # sequences there). In smart contexts it may only shed/stop, never add.
+  # --------------------------------------------------------------------------
+  - id: zendure2_fast_reconcile
+    alias: Zendure2 Fast Reconcile (edges + shed)
+    mode: queued
+    max: 10
+    max_exceeded: silent
+    triggers:
+      - trigger: state
+        entity_id: input_select.zendure_operation_mode
+        id: mode
+      - trigger: state
+        entity_id: input_boolean.dynamic_charging_running
+        id: flag_charge
+      - trigger: state
+        entity_id: input_boolean.dynamic_discharging_running
+        id: flag_discharge
+      - trigger: state
+        entity_id: input_number.zendure_manual_power
+        id: manual
+      - trigger: state
+        entity_id: input_boolean.zendure2_enabled
+        to: "on"
+        id: enabled_on
+      - trigger: state
+        entity_id: input_boolean.zendure2_dry_run
+        to: "off"
+        id: dryrun_off
+      - trigger: state
+        entity_id: binary_sensor.zendure_fleet_vendor_contract_ok
+        to: "off"
+        id: contract_off
+      - trigger: template
+        value_template: >
+          {{ states('sensor.home_energy_meter_power') | float(0)
+             < -(states('input_number.zendure2_shed_threshold_w') | float(100)) }}
+        for:
+          seconds: 5
+        id: export_breach
+      - trigger: template
+        value_template: >
+          {{ states('sensor.home_energy_meter_power') | float(0)
+             > states('input_number.zendure2_shed_threshold_w') | float(100) }}
+        for:
+          seconds: 5
+        id: import_breach
+      - trigger: time_pattern
+        seconds: /15
+        id: nonsmart_tick
+    conditions:
+      - condition: state
+        entity_id: input_boolean.zendure2_enabled
+        state: "on"
+      - condition: template
+        value_template: >
+          {% set smart_ctx = states('input_select.zendure_operation_mode') in
+             ['Smart Matching', 'Smart Discharge Only', 'Smart Charge Only',
+              'Dynamic Smart Matching', 'Dynamic Smart Matching (Expensive)',
+              'Dynamic Trading + Smart Matching']
+             and is_state('input_boolean.dynamic_charging_running', 'off')
+             and is_state('input_boolean.dynamic_discharging_running', 'off') %}
+          {% if trigger.id in ['export_breach', 'import_breach'] %}
+            {{ smart_ctx }}
+          {% elif trigger.id == 'nonsmart_tick' %}
+            {{ not smart_ctx }}
+          {% else %}
+            true
+          {% endif %}
+    actions:
+      - action: script.zendure2_apply
+        data:
+          # In a smart context the slow loop owns additions; the fast path may
+          # only shed/stop there. Everywhere else (quick/manual/windows) the
+          # fast path applies the full desired state.
+          allow_increase: >
+            {{ not (states('input_select.zendure_operation_mode') in
+               ['Smart Matching', 'Smart Discharge Only', 'Smart Charge Only',
+                'Dynamic Smart Matching', 'Dynamic Smart Matching (Expensive)',
+                'Dynamic Trading + Smart Matching']
+               and is_state('input_boolean.dynamic_charging_running', 'off')
+               and is_state('input_boolean.dynamic_discharging_running', 'off')) }}
+          immediate: true
+
+  # --------------------------------------------------------------------------
+  # NEUTRALIZER — the kill switch and dry run are interlocks, not just
+  # conditions: flipping either while unit 2 is actively commanded sends one
+  # immediate stop (deliberately bypassing the dry-run write suppression).
+  # --------------------------------------------------------------------------
+  - id: zendure2_neutralize
+    alias: Zendure2 Neutralize (kill switch / dry run)
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: input_boolean.zendure2_enabled
+        to: "off"
+      - trigger: state
+        entity_id: input_boolean.zendure2_dry_run
+        to: "on"
+    conditions:
+      - condition: template
+        value_template: "{{ states('sensor.zendure2_serial_number') not in ['unknown', 'unavailable', ''] }}"
+      - condition: template
+        value_template: >
+          {{ states('sensor.zendure2_applied_power') | int(0) != 0
+             or states('sensor.zendure2_power') | float(0) | abs > 30 }}
+    actions:
+      - action: rest_command.zendure2_stop
+        data:
+          sn: "{{ states('sensor.zendure2_serial_number') }}"
+      - action: logbook.log
+        data:
+          message: >-
+            🛑 Unit 2 neutralized ({{ trigger.entity_id }} →
+            {{ trigger.to_state.state }}) — stop sent —
+          entity_id: "{{ trigger.entity_id }}"
+          name: " "
+
+  # Safety net: unit 2 unreachable or vendor contract broken → warn once.
+  - id: zendure_fleet_watchdog
+    alias: Zendure Fleet Watchdog
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.zendure_fleet_vendor_contract_ok
+        to: "off"
+        for:
+          minutes: 5
+      - trigger: state
+        entity_id: sensor.zendure2_power
+        to: unavailable
+        for:
+          minutes: 5
+    conditions:
+      - condition: state
+        entity_id: input_boolean.zendure2_enabled
+        state: "on"
+    actions:
+      - action: persistent_notification.create
+        data:
+          title: Zendure Fleet
+          message: >
+            Coordinator input missing: {{ trigger.entity_id }} is {{ trigger.to_state.state }}.
+            Unit 2 is being held idle (contract interlock). Check unit 2
+            connectivity or (after a Gielz update) the vendor entity names
+            listed in zendure_fleet.yaml; the contract sensor's `missing`
+            attribute names the culprit.

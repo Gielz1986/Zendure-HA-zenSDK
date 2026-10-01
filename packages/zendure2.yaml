@@ -1,0 +1,333 @@
+# ============================================================================
+# Zendure2 — device I/O for the second SolarFlow 800 Plus
+# Companion to the unmodified Gielz1986 zenSDK package (v20260824).
+# This file contains ONLY unit-2 hardware access: helpers, REST sensors,
+# REST commands and device-local housekeeping. Control logic lives in
+# zendure_fleet.yaml.
+# ============================================================================
+
+input_text:
+  zendure2_setting_ip_address:
+    name: Zendure2 IP-address
+    icon: mdi:ip
+    max: 50
+    mode: text
+
+input_boolean:
+  zendure2_enabled:
+    name: Zendure2 Enabled
+    icon: mdi:battery-plus
+    # Kill switch: off = no automation in this layer ever writes to unit 2.
+    # No `initial:` on purpose — HA creates input_booleans as OFF, so a fresh
+    # install behaves exactly like the single-battery setup until explicitly
+    # enabled, and the setting survives restarts once turned on.
+
+input_number:
+  zendure2_setting_max_charge_power:
+    name: Zendure2 Maximum Charge Power
+    icon: mdi:format-vertical-align-top
+    min: 0
+    max: 800
+    step: 10
+    mode: box
+    unit_of_measurement: "W"
+
+  zendure2_setting_max_discharge_power:
+    name: Zendure2 Maximum Discharge Power
+    icon: mdi:format-vertical-align-bottom
+    min: 0
+    max: 800
+    step: 10
+    mode: box
+    unit_of_measurement: "W"
+
+rest:
+  - resource_template: "http://{{ states('input_text.zendure2_setting_ip_address') }}/properties/report"
+    scan_interval: 5
+    sensor:
+      - name: "Zendure2 Serial Number"
+        unique_id: zendure2_serial_number
+        value_template: "{{ value_json.sn }}"
+        icon: mdi:identifier
+
+      - name: "Zendure2 State Of Charge"
+        unique_id: zendure2_state_of_charge
+        value_template: "{{ value_json['properties']['electricLevel'] }}"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+
+      - name: "Zendure2 Minimum State Of Charge"
+        unique_id: zendure2_minimum_state_of_charge
+        value_template: "{{ (value_json['properties']['minSoc'] | int / 10) | int }}"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:battery-low
+
+      - name: "Zendure2 Maximum State Of Charge"
+        unique_id: zendure2_maximum_state_of_charge
+        value_template: "{{ (value_json['properties']['socSet'] | int / 10) | int }}"
+        device_class: battery
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:battery-high
+
+      - name: "Zendure2 SOC-limit Status"
+        unique_id: zendure2_soc_limit_status
+        value_template: >
+          {% set states = {0: "Normal Operation", 1: "Charging Limit Reached", 2: "Discharge Limit Reached", 16: "Normal Operation", 17: "Charging Limit Reached", 18: "Discharge Limit Reached"} %}
+          {% set packState = value_json['properties']['socLimit'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        icon: mdi:battery-medium
+
+      - name: "Zendure2 AC Mode"
+        unique_id: zendure2_ac_mode
+        value_template: "{{ value_json['properties']['acMode'] | int }}"
+        icon: mdi:swap-vertical-bold
+
+      - name: "Zendure2 Set Discharge Power"
+        unique_id: zendure2_set_discharge_power
+        value_template: "{{ value_json['properties']['outputLimit'] }}"
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure2 Set Charge Power"
+        unique_id: zendure2_set_charge_power
+        value_template: "{{ value_json['properties']['inputLimit'] }}"
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+      - name: "Zendure2 Storage Mode"
+        unique_id: zendure2_storage_mode
+        value_template: >
+          {% set states = {1: "RAM Memory", 0: "Flash Memory"} %}
+          {% set packState = value_json['properties']['smartMode'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        icon: mdi:floppy
+
+      - name: "Zendure2 Calibrating"
+        unique_id: zendure2_calibrating
+        value_template: >
+          {% set states = {0: "No", 1: "Yes"} %}
+          {% set packState = value_json['properties']['socStatus'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        icon: mdi:battery-heart-variant
+
+      - name: "Zendure2 Error"
+        unique_id: zendure2_error
+        value_template: >
+          {% set states = {0: "No Notifications", 1: "Check Zendure APP"} %}
+          {% set packState = value_json['properties']['is_error'] | int %}
+          {{ states.get(packState, "Onbekend") }}
+        icon: mdi:battery-alert
+
+      - name: "Zendure2 Total Capacity"
+        unique_id: zendure2_total_capacity
+        unit_of_measurement: "kWh"
+        icon: mdi:flip-vertical
+        value_template: >
+          {% set mapping = {5: 2.88, 70: 1.92, 300: 1.92, 250: 0.96, 350: 2.88, 500: 2.40} %}
+          {% set packs = value_json.packData %}
+          {% if packs %}
+            {% set ns = namespace(total=0) %}
+            {% for pack in packs %}
+              {% set type = pack.packType | int %}
+              {% if type in mapping %}
+                {% set ns.total = ns.total + mapping[type] %}
+              {% endif %}
+            {% endfor %}
+            {{ ns.total | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+
+      # Signed battery power, same convention and formula as the vendor's
+      # sensor.zendure_power: positive = charging, negative = discharging.
+      - name: "Zendure2 Power"
+        unique_id: zendure2_power
+        value_template: >
+          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
+          {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
+          {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
+          {% set pass = value_json['properties']['pass'] | int %}
+          {% set ac_mode = value_json['properties']['acMode'] | int %}
+          {% if not pv_active %}
+            {% set opladen = value_json['properties']['outputPackPower'] | float(0) %}
+            {% set ontladen = - (value_json['properties']['packInputPower'] | float(0)) %}
+            {{ opladen if opladen != 0 else ontladen }}
+          {% else %}
+            {% set opladen = value_json['properties']['gridInputPower'] | float(0) %}
+            {% set opladen_vol = value_json['properties']['outputPackPower'] | float(0) %}
+            {% set ontladen = - (value_json['properties']['outputHomePower'] | float(0)) %}
+            {% if pass == 2 %}
+              {% set result = opladen_vol %}
+            {% elif opladen != 0 %}
+              {% set result = opladen %}
+            {% else %}
+              {% set result = ontladen %}
+            {% endif %}
+            {% if ac_mode == 1 and result < 0 %}
+              0
+            {% else %}
+              {{ result }}
+            {% endif %}
+          {% endif %}
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+
+template:
+  - sensor:
+      - name: "Zendure2 Charging Mode"
+        unique_id: zendure2_charging_mode
+        state: >
+          {% set power = states('sensor.zendure2_power') | float(0) %}
+          {% if power > 0 %}
+            Charging
+          {% elif power < 0 %}
+            Discharging
+          {% else %}
+            Standby
+          {% endif %}
+        icon: mdi:battery-sync
+
+      # What the device is currently commanded to do, signed like zendure2_power.
+      # Used by the coordinator to decide whether a new write is needed.
+      - name: "Zendure2 Applied Power"
+        unique_id: zendure2_applied_power
+        unit_of_measurement: "W"
+        state_class: measurement
+        device_class: power
+        state: >
+          {% set m = states('sensor.zendure2_ac_mode') | int(0) %}
+          {% if m == 1 %}
+            {{ states('sensor.zendure2_set_charge_power') | int(0) }}
+          {% elif m == 2 %}
+            {{ -(states('sensor.zendure2_set_discharge_power') | int(0)) }}
+          {% else %}
+            0
+          {% endif %}
+
+rest_command:
+  zendure2_charge:
+    url: http://{{ states('input_text.zendure2_setting_ip_address') }}/properties/write
+    method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 1, "inputLimit": {{inputLimit}} }}'
+
+  zendure2_discharge:
+    url: http://{{ states('input_text.zendure2_setting_ip_address') }}/properties/write
+    method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
+    payload: '{"sn":"{{sn}}","properties":{"acMode": 2, "outputLimit": {{outputLimit}} }}'
+
+  zendure2_stop:
+    url: http://{{ states('input_text.zendure2_setting_ip_address') }}/properties/write
+    method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
+    payload: '{"sn":"{{sn}}","properties":{"outputLimit": 0, "inputLimit": 0 }}'
+
+  zendure2_full_standby:
+    url: http://{{ states('input_text.zendure2_setting_ip_address') }}/properties/write
+    method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
+    payload: '{"sn":"{{sn}}","properties":{"smartMode": 0, "outputLimit": 0, "inputLimit": 0 }}'
+
+  zendure2_save_in_ram:
+    url: http://{{ states('input_text.zendure2_setting_ip_address') }}/properties/write
+    method: POST
+    headers:
+      Content-Type: application/json
+      Content-Encoding: identity
+    payload: '{"sn":"{{sn}}","properties":{"smartMode": 1 }}'
+
+automation:
+  # Mirror of the vendor's "switch storage mode to RAM" guard, for unit 2.
+  # Frequent limit writes must land in RAM, not flash.
+  - id: zendure2_ram_guard
+    alias: Zendure2 RAM Guard
+    mode: single
+    max_exceeded: silent
+    triggers:
+      - trigger: time_pattern
+        seconds: /30
+    conditions:
+      - condition: state
+        entity_id: input_boolean.zendure2_enabled
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.zendure2_dry_run
+        state: "off"
+      - condition: state
+        entity_id: sensor.zendure2_storage_mode
+        state: Flash Memory
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: input_select.zendure_operation_mode
+            state: Standby
+      - condition: or
+        conditions:
+          - condition: numeric_state
+            entity_id: sensor.zendure2_power
+            above: 100
+          - condition: numeric_state
+            entity_id: sensor.zendure2_power
+            below: 0
+          - condition: template
+            value_template: "{{ states('sensor.zendure2_target_power') | int(0) != 0 }}"
+    actions:
+      - action: rest_command.zendure2_save_in_ram
+        data:
+          sn: "{{ states('sensor.zendure2_serial_number') }}"
+
+  # Mirror of the vendor's idle standby: after X minutes doing nothing,
+  # drop unit 2 into full standby (flash mode, limits 0).
+  - id: zendure2_idle_standby
+    alias: Zendure2 Standby After Inactivity
+    mode: single
+    max_exceeded: silent
+    triggers:
+      - trigger: time_pattern
+        minutes: /1
+    conditions:
+      - condition: state
+        entity_id: input_boolean.zendure2_enabled
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.zendure2_dry_run
+        state: "off"
+      - condition: state
+        entity_id: sensor.zendure2_storage_mode
+        state: RAM Memory
+      - condition: state
+        entity_id: sensor.zendure2_charging_mode
+        state: Standby
+        for:
+          minutes: "{{ states('input_number.zendure_setting_standby_delay') | int(5) }}"
+      - condition: state
+        entity_id: sensor.zendure2_calibrating
+        state: "No"
+      - condition: template
+        value_template: "{{ states('sensor.zendure2_target_power') | int(0) == 0 }}"
+    actions:
+      - action: rest_command.zendure2_full_standby
+        data:
+          sn: "{{ states('sensor.zendure2_serial_number') }}"
+      - action: logbook.log
+        data:
+          message: 💤 Zendure2 inactive, going into full standby —
+          entity_id: input_boolean.zendure2_enabled
+          name: " "
