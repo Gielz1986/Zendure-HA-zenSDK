@@ -1424,8 +1424,13 @@ views:
                 name: Error
               - entity: sensor.zendure_2400_ac_offgrid_modus
                 name: Offgrid Modus
-              - entity: sensor.zendure_2400_ac_pv_export_modus
-                name: PV Export Modus
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.pv_tonen_op_dashboard
+                    state: 'on'
+                row:
+                  entity: sensor.zendure_2400_ac_pv_export_modus
+                  name: PV Export Modus
               - entity: sensor.zendure_2400_ac_kalibreren
                 name: Kalibreren
               - entity: sensor.zendure_2400_ac_omvormer_max_oplaadvermogen
