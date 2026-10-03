@@ -1419,8 +1419,13 @@ views:
                 name: Error
               - entity: sensor.zendure_offgrid_mode
                 name: Offgrid Mode
-              - entity: sensor.zendure_pv_export_mode
-                name: PV Export Mode
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.dashboard_setting_show_pv
+                    state: 'on'
+                row:
+                  entity: sensor.zendure_pv_export_mode
+                  name: PV Export Mode
               - entity: sensor.zendure_calibrating
                 name: Calibrating
               - entity: sensor.zendure_inverter_max_charge_power
