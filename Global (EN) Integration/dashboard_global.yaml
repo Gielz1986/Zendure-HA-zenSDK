@@ -2183,7 +2183,7 @@ views:
   - type: sections
     max_columns: 3
     path: geschiedenis
-    title: Geschiedenis
+    title: History
     icon: mdi:history
     sections:
       - type: grid
