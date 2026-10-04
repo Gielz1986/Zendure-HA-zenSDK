@@ -1220,7 +1220,7 @@ views:
 
                     return {
                       x: tijdStart,
-                      y: item.duur === "Yes" ? correction : 0,
+                      y: ["ja", "yes"].includes(String(item.duur).toLowerCase()) ? correction : 0,
                       fillColor: verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,0.45)"
                     };
                   });
@@ -1411,7 +1411,7 @@ views:
 
                     return {
                       x: tijdStart,
-                      y: item.duur === "Yes" ? correction : 0,
+                      y: ["ja", "yes"].includes(String(item.duur).toLowerCase()) ? correction : 0,
                       fillColor: verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,0.45)"
                     };
                   });
