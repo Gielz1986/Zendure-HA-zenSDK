@@ -336,7 +336,7 @@ sensor:
 utility_meter:
   zendure_2400_ac_pv_import_dagelijks:
     source: sensor.zendure_2400_ac_pv_import
-    unique_id: utility_meter.zendure_2400_ac_pv_import_dagelijks
+    unique_id: zendure_2400_ac_pv_import_dagelijks
     name: Zendure 2400 AC PV Import Dagelijks
     cycle: daily
 
