@@ -167,7 +167,7 @@ input_number:
   zendure_2400_ac_ontlaadmarge:
     name: Zendure 2400 AC Ontlaadmarge
     icon: mdi:arrow-expand-vertical
-    min: 0
+    min: -100
     max: 250
     step: 1
     mode: box
@@ -374,7 +374,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20260824"
+        state: "v20261007"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -1782,6 +1782,7 @@ rest:
               5: 2.88,
               70: 1.92,
               250: 0.96,
+              240: 1.92,
               300: 1.92,
               350: 2.88,
               500: 2.40
