@@ -346,17 +346,14 @@ actions:
                 value_template: |
                   {{ states('sensor.home_energy_meter_power') | float(0)
                      < states('input_number.zendure_setting_start_charging_at') | float(0) }}
-            enabled: true
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - 'off'
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - 'off'
         sequence:
           - data:
               sn: '{{ states(''sensor.zendure_serial_number'') }}'
@@ -380,11 +377,9 @@ actions:
       - conditions:
           - condition: or
             conditions:
-              - condition: and
-                conditions:
-                  - condition: trigger
-                    id:
-                      - system_setting_maxsoc
+              - condition: trigger
+                id:
+                  - system_setting_maxsoc
               - condition: and
                 conditions:
                   - condition: template
@@ -417,11 +412,9 @@ actions:
       - conditions:
           - condition: or
             conditions:
-              - condition: and
-                conditions:
-                  - condition: trigger
-                    id:
-                      - system_setting_minsoc
+              - condition: trigger
+                id:
+                  - system_setting_minsoc
               - condition: and
                 conditions:
                   - condition: template
@@ -454,11 +447,9 @@ actions:
       - conditions:
           - condition: or
             conditions:
-              - condition: and
-                conditions:
-                  - condition: trigger
-                    id:
-                      - systeem_instelling_maxoplaadvermogen
+              - condition: trigger
+                id:
+                  - systeem_instelling_maxoplaadvermogen
               - condition: and
                 conditions:
                   - condition: template
@@ -490,11 +481,9 @@ actions:
       - conditions:
           - condition: or
             conditions:
-              - condition: and
-                conditions:
-                  - condition: trigger
-                    id:
-                      - systeem_instelling_maxontlaadvermogen
+              - condition: trigger
+                id:
+                  - systeem_instelling_maxontlaadvermogen
               - condition: and
                 conditions:
                   - condition: template
@@ -822,11 +811,9 @@ actions:
       - conditions:
           - condition: or
             conditions:
-              - condition: and
-                conditions:
-                  - condition: trigger
-                    id:
-                      - system_setting_pvexport
+              - condition: trigger
+                id:
+                  - system_setting_pvexport
               - condition: and
                 conditions:
                   - condition: template
@@ -935,22 +922,20 @@ actions:
                 state: Standby
           - condition: or
             conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state: Smart Matching
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state: Smart Discharge Only
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Dynamic Smart Matching
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Dynamic Trading + Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Discharge Only
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading + Smart Matching
               - condition: and
                 conditions:
                   - condition: state
@@ -969,16 +954,14 @@ actions:
                       {{ states('sensor.dynamic_spread_indication') | float >=
                       states('input_number.dynamic_setting_minimal_spread') |
                       float }}
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - 'off'
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - 'off'
           - condition: not
             conditions:
               - condition: state
@@ -1044,22 +1027,20 @@ actions:
             below: 0
           - condition: or
             conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state: Smart Matching
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state: Smart Discharge Only
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Dynamic Smart Matching
-                  - condition: state
-                    entity_id: input_select.zendure_operation_mode
-                    state:
-                      - Dynamic Trading + Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state: Smart Discharge Only
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Smart Matching
+              - condition: state
+                entity_id: input_select.zendure_operation_mode
+                state:
+                  - Dynamic Trading + Smart Matching
               - condition: and
                 conditions:
                   - condition: state
@@ -1078,16 +1059,14 @@ actions:
                       {{ states('sensor.dynamic_spread_indication') | float >=
                       states('input_number.dynamic_setting_minimal_spread') |
                       float }}
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - 'off'
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - 'off'
           - condition: not
             conditions:
               - condition: state
@@ -1199,16 +1178,14 @@ actions:
               - condition: state
                 entity_id: sensor.zendure_charging_mode
                 state: Standby
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - 'off'
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - 'off'
           - condition: not
             conditions:
               - condition: state
@@ -1304,16 +1281,14 @@ actions:
                 entity_id: input_select.zendure_operation_mode
                 state:
                   - Dynamic Trading + Smart Matching
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - 'off'
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - 'off'
           - condition: not
             conditions:
               - condition: state
@@ -1471,16 +1446,14 @@ actions:
               states('input_text.dynamic_setting_nordpool_sensor').lower().startswith('sensor')
               }}
             alias: input_text.dynamic_setting_nordpool_sensor is gevuld
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: input_boolean.dynamic_charging_running
-                state:
-                  - 'off'
-              - condition: state
-                entity_id: input_boolean.dynamic_discharging_running
-                state:
-                  - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_charging_running
+            state:
+              - 'off'
+          - condition: state
+            entity_id: input_boolean.dynamic_discharging_running
+            state:
+              - 'off'
           - condition: or
             conditions:
               - condition: state
