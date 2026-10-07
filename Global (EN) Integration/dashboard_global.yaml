@@ -2964,7 +2964,7 @@ views:
             badges:
               - type: button
                 icon: mdi:information
-                text: Show Last Releasenotes
+                text: Show Latest Release Notes
                 color: '#01a180'
                 tap_action:
                   action: navigate
@@ -3003,11 +3003,11 @@ views:
           - type: entities
             entities:
               - entity: sensor.zendure_configuration_version
-                name: Installed version
+                name: Installed Version
               - entity: sensor.github_zendure_gielz1986
-                name: Available version
+                name: Available Version
               - entity: sensor.github_zendure_gielz1986_releasecheck
-                name: Releasecheck
+                name: Release Check
           - type: markdown
             content: >
               &nbsp;&nbsp;[![Open
