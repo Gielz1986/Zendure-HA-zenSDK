@@ -777,15 +777,24 @@ actions:
           - condition: trigger
             id:
               - aansturing_trigger
-          - condition: state
-            entity_id: sensor.p1_aansturing_vermogen
-            state:
-              - unavailable
-              - unknown
-            for:
-              hours: 0
-              minutes: 1
-              seconds: 0
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: sensor.p1_aansturing_vermogen
+                state:
+                  - unavailable
+                for:
+                  hours: 0
+                  minutes: 1
+                  seconds: 0
+              - condition: state
+                entity_id: sensor.p1_aansturing_vermogen
+                state:
+                  - unknown
+                for:
+                  hours: 0
+                  minutes: 1
+                  seconds: 0
           - condition: state
             entity_id: input_select.zendure_2400_ac_modus_selecteren
             state:
