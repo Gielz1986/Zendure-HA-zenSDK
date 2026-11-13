@@ -1775,7 +1775,14 @@ rest:
           {% set product = value_json.product %}
           {% if product in ["solarFlow4000MixAC+", "solarFlow4000MixPro", "solarFlow3000MixAC+"] %}
             {% set mapping = {
-              70: 8.00
+              5: 2.88,
+              70: 8.00,
+              250: 0.96,
+              240: 1.92,
+              300: 1.92,
+              350: 2.88,
+              280: 2.88,
+              500: 2.40
             } %}
           {% else %}
             {% set mapping = {
