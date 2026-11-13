@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz) Global
-description: Configuration Version (v20261007)
+description: Configuration Version (v20261113)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -88,7 +88,7 @@ actions:
             data:
               message: ⚠️Switch storage mode to Flash —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Standby
       - conditions:
           - condition: trigger
@@ -250,7 +250,7 @@ actions:
             data:
               message: ⚠️Switch storage mode to RAM —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: When storage mode is set to Flash set it to RAM
       - conditions:
           - condition: trigger
@@ -283,7 +283,7 @@ actions:
                 int(5) }} minutes of inactivity going into full standby (Switch
                 storage mode to Flash) —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Put on standby after xx minutes of inactivity
       - conditions:
           - condition: trigger
@@ -375,7 +375,7 @@ actions:
                   states('sensor.zendure_minimum_state_of_charge') | float | round(0) %}
                   {{ 1200 if soc < min_soc else 0 }} watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Charging to minimum SOC (protection)
       - conditions:
           - condition: or
@@ -412,7 +412,7 @@ actions:
                 states('input_number.zendure_setting_maximum_allowed_state_of_charge')
                 | int }}% —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Adjust maximum allowed state of charge
       - conditions:
           - condition: or
@@ -449,7 +449,7 @@ actions:
                 states('input_number.zendure_setting_minimum_allowed_state_of_charge')
                 | int }}% —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Adjust minimum allowed state of charge
       - conditions:
           - condition: or
@@ -485,7 +485,7 @@ actions:
                 states('input_number.zendure_setting_max_charge_power') | int }}
                 watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Adjust maximum charging power
       - conditions:
           - condition: or
@@ -521,7 +521,7 @@ actions:
                 states('input_number.zendure_setting_max_discharge_power') | int
                 }} watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: ' Adjust maximum discharge power'
       - conditions:
           - condition: trigger
@@ -539,7 +539,7 @@ actions:
             data:
               message: '⚙️Set recommended settings — Standby delay set to 15 minutes — '
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
           - action: input_number.set_value
             metadata: {}
             target:
@@ -558,7 +558,7 @@ actions:
                 ⚙️Set recommended settings — Start discharging at 100 watt
                 import and start charging at -300 watt export — 
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
           - action: input_number.set_value
             metadata: {}
             target:
@@ -577,7 +577,7 @@ actions:
                 ⚙️Set recommended settings — Charge buffer set to 50 watt and
                 discharge buffer set to 5 watt — 
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
           - action: input_number.set_value
             metadata: {}
             target:
@@ -596,7 +596,7 @@ actions:
                 ⚙️Set recommended settings — Minimum allowed state of charge set
                 to 10% and maximum allowed state of charge set to 100% — 
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
           - action: input_text.set_value
             target:
               entity_id:
@@ -633,7 +633,7 @@ actions:
                 ⚠️Dynamic discharging running status is incorrect. Corrected to
                 status off —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Dynamic discharging check
       - conditions:
           - condition: trigger
@@ -663,7 +663,7 @@ actions:
                 ⚠️Dynamic charging running status is incorrect. Corrected to
                 status off —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Dynamic charging check
       - conditions:
           - condition: trigger
@@ -705,7 +705,7 @@ actions:
                 states('input_number.zendure_setting_max_charge_power') | int }}
                 watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Correct current charging power
       - conditions:
           - condition: trigger
@@ -748,7 +748,7 @@ actions:
                 states('input_number.zendure_setting_max_discharge_power') | int
                 }} watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: ' Correct current discharge power'
       - conditions:
           - condition: trigger
@@ -817,7 +817,7 @@ actions:
             data:
               message: ⛔Home energy meter offline for 1 minute, emergency shutdown —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Emergency Shutdown
       - conditions:
           - condition: or
@@ -856,7 +856,7 @@ actions:
                   'on')
                      else "allowed" }} —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: adjust PV export
       - conditions:
           - condition: state
@@ -887,7 +887,7 @@ actions:
             data:
               message: ⚠️Activate AC passthrough for offgrid —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Activate AC passthrough for offgrid
   - alias: Smart Matching Control
     choose:
@@ -1015,7 +1015,7 @@ actions:
                   {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Start discharging at +xxx watt (75% of demand)
       - conditions:
           - condition: trigger
@@ -1123,7 +1123,7 @@ actions:
                   {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: During discharge balance to +xxx watt (100% of the demand)
       - conditions:
           - condition: trigger
@@ -1244,7 +1244,7 @@ actions:
                   {% set beperkt = beperkt if beperkt < cap else cap %}
                   {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: ' Start charging at -xxx watt (75% of demand)'
       - conditions:
           - condition: trigger
@@ -1349,7 +1349,7 @@ actions:
                   {% set beperkt = beperkt if beperkt < cap else cap %}
                   {{ beperkt | int }} watt —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: During charging balance to -xxx watt (100% of the demand)
   - alias: Manual Control
     choose:
@@ -1380,7 +1380,7 @@ actions:
                 states('input_number.zendure_manual_power') | int | abs }} watt
                 —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Manual charging
       - conditions:
           - condition: trigger
@@ -1409,7 +1409,7 @@ actions:
                 states('input_number.zendure_manual_power') | int | abs }} watt
                 —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Manual discharging
   - alias: Dynamic Control (Nordpool HACS sensor required)
     choose:
@@ -1457,7 +1457,7 @@ actions:
             data:
               message: ⚙️Dynamic period settings copied from tomorrow to today —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Set dynamic manual periods from tomorrow into today
       - conditions:
           - condition: trigger
@@ -1507,7 +1507,7 @@ actions:
             data:
               message: 💲Dynamic expensive/cheap period complete back to standby  —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Dynamic expensive/cheap period finished, back to standby
       - conditions:
           - condition: trigger
@@ -1615,7 +1615,7 @@ actions:
             data:
               message: 💲Dynamic Smart Matching cheap charging started —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamic_lowest_price_period
                 to: 'No'
@@ -1656,7 +1656,7 @@ actions:
             data:
               message: 💲Dynamic Smart Matching cheap charging complete   —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Dynamic Smart Matching cheap charging
       - conditions:
           - condition: trigger
@@ -1734,7 +1734,7 @@ actions:
             data:
               message: 💲Dynamic cheap charging started —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamic_lowest_price_period
                 to: 'No'
@@ -1775,7 +1775,7 @@ actions:
             data:
               message: 💲Dynamic cheap charging complete  —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Dynamic cheap charging
       - conditions:
           - condition: trigger
@@ -1847,7 +1847,7 @@ actions:
             data:
               message: 💲Dynamic expensive discharge started —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
           - wait_for_trigger:
               - alias: Tot minimale SOC
                 trigger: template
@@ -1885,6 +1885,6 @@ actions:
             data:
               message: 💲Dynamic expensive discharge complete  —
               entity_id: input_select.zendure_operation_mode
-              name: ' '
+              name: " "
         alias: Dynamic expensive discharging
 mode: parallel

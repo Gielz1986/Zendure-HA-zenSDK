@@ -1,5 +1,5 @@
 alias: Zendure zenSDK (Gielz)
-description: Configuratie Versie (v20261007)
+description: Configuratie Versie (v20261113)
 triggers:
   - seconds: /5
     id: aansturing_trigger
@@ -88,7 +88,7 @@ actions:
             data:
               message: ⚠️Opslagmodus omzetten naar Flash —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Standby
       - conditions:
           - condition: trigger
@@ -249,7 +249,7 @@ actions:
             data:
               message: ⚠️Opslagmodus omzetten naar RAM —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Wanneer opslag modus op Flash staat deze op RAM instellen
       - conditions:
           - condition: trigger
@@ -282,7 +282,7 @@ actions:
                 | int(5) }}                 minuten inactiviteit in standby
                 zetten                 (Opslagmodus omzetten naar Flash) —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Na xx minuten inactiviteit in standby zetten
       - conditions:
           - condition: trigger
@@ -374,7 +374,7 @@ actions:
                   states('sensor.zendure_2400_ac_minimale_laadpercentage') | float | round(0) %}
                   {{ 1200 if soc < min_soc else 0 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Opladen naar minimale SOC (bescherming)
       - conditions:
           - condition: or
@@ -411,7 +411,7 @@ actions:
                 states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Maximaal oplaadvermogen aanpassen
       - conditions:
           - condition: or
@@ -448,7 +448,7 @@ actions:
                 states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Maximaal ontlaadvermogen aanpassen
       - conditions:
           - condition: or
@@ -486,7 +486,7 @@ actions:
                 states('input_number.zendure_2400_ac_minimaal_toegestaan_laadpercentage')
                 | int }}% —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Minimaal toegestane laadpercentage aanpassen
       - conditions:
           - condition: or
@@ -524,7 +524,7 @@ actions:
                 states('input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage')
                 | int }}% —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Maximaal toegestane laadpercentage aanpassen
       - conditions:
           - condition: trigger
@@ -544,7 +544,7 @@ actions:
                 ⚙️Advies instellingen overnemen — Standby vertraging ingesteld
                 op 15 minuten — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
           - action: input_number.set_value
             metadata: {}
             target:
@@ -563,7 +563,7 @@ actions:
                 ⚙️Advies instellingen overnemen — Ontladen starten bij 100 watt
                 verbruik en opladen starten bij -300 watt teruglevering — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
           - action: input_number.set_value
             metadata: {}
             target:
@@ -582,7 +582,7 @@ actions:
                 ⚙️Advies instellingen overnemen — Oplaadmarge ingesteld op 50
                 watt en ontlaadmarge ingesteld op 5 watt — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
           - action: input_number.set_value
             metadata: {}
             target:
@@ -593,8 +593,7 @@ actions:
             metadata: {}
             target:
               entity_id:
-                - >-
-                  input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage
+                - input_number.zendure_2400_ac_maximaal_toegestaan_laadpercentage
             data:
               value: 100
           - action: logbook.log
@@ -604,7 +603,7 @@ actions:
                 laadpercentage ingesteld op 10% en maximaal toegestaan
                 laadpercentage ingesteld op 100% — 
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
           - action: input_text.set_value
             data:
               value: ''
@@ -641,7 +640,7 @@ actions:
                 ⚠️Dynamisch ontladen loopt status is foutief. Gecorrigeerd naar
                 status uit —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Dynamisch ontladen controle
       - conditions:
           - condition: trigger
@@ -671,7 +670,7 @@ actions:
                 ⚠️Dynamisch laden loopt status is foutief. Gecorrigeerd naar
                 status uit —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Dynamisch laden controle
       - conditions:
           - condition: trigger
@@ -714,7 +713,7 @@ actions:
                 states('input_number.zendure_2400_ac_max_oplaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Huidig oplaadvermogen corrigeren
       - conditions:
           - condition: trigger
@@ -758,7 +757,7 @@ actions:
                 states('input_number.zendure_2400_ac_max_ontlaadvermogen') | int
                 }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Huidig ontlaadvermogen corrigeren
       - conditions:
           - condition: trigger
@@ -768,8 +767,7 @@ actions:
           - action: input_datetime.set_datetime
             metadata: {}
             target:
-              entity_id: >-
-                input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd
+              entity_id: input_datetime.zendure_gielz_automatisering_laatste_keer_uitgevoerd
             data:
               datetime: '{{ now() }}'
         alias: Automatisering Hartslag
@@ -828,7 +826,7 @@ actions:
             data:
               message: ⛔P1 aansturing vermogen offline voor 1 minuut, noodstop —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Noodstop
       - conditions:
           - condition: or
@@ -867,7 +865,7 @@ actions:
                   'on')
                      else "toegestaan" }} —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: PV export aanpassen
       - conditions:
           - condition: state
@@ -899,7 +897,7 @@ actions:
             data:
               message: ⚠️Activeer AC doorvoer voor offgrid —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Activeer AC doorvoer voor offgrid
   - alias: NOM Aansturing
     choose:
@@ -1029,7 +1027,7 @@ actions:
                   {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Start met ontladen bij +xxx watt (75% van de vraag)
       - conditions:
           - condition: trigger
@@ -1139,7 +1137,7 @@ actions:
                   {% set totaal = (p1 - zendure - correctie) * factor %} {% set beperkt = [
                   [totaal, 0] | max, cap ] | min %} {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Tijdens ontladen balanceren naar -xxx watt (100% van de vraag)
       - conditions:
           - condition: trigger
@@ -1262,7 +1260,7 @@ actions:
                   {% set beperkt = beperkt if beperkt < cap else cap %}
                   {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Start met opladen bij -xxx watt (75% van aanbod)
       - conditions:
           - condition: trigger
@@ -1369,7 +1367,7 @@ actions:
                   {% set beperkt = beperkt if beperkt < cap else cap %}
                   {{ beperkt | int }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Tijdens opladen balanceren naar -xxx watt (100% van aanbod)
   - alias: Handmatige Aansturing
     choose:
@@ -1402,7 +1400,7 @@ actions:
                 states('input_number.zendure_2400_ac_handmatig_vermogen') | int
                 | abs }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Handmatig laden
       - conditions:
           - condition: trigger
@@ -1433,7 +1431,7 @@ actions:
                 states('input_number.zendure_2400_ac_handmatig_vermogen') | int
                 | abs }} watt —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Handmatig ontladen
   - alias: Dynamisch Aansturing (Nordpool HACS sensor vereist)
     choose:
@@ -1480,7 +1478,7 @@ actions:
             data:
               message: ⚙️Dynamische instelling overzetten van morgen naar vandaag —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Dynamisch omzetten van morgen naar vandaag
       - conditions:
           - condition: trigger
@@ -1532,7 +1530,7 @@ actions:
                 💲Dynamische dure/goedkope periode afgerond terug naar standby 
                 —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Dynamische dure/goedkope periode afgerond terug naar standby
       - conditions:
           - condition: trigger
@@ -1640,7 +1638,7 @@ actions:
             data:
               message: 💲Dynamisch NOM goedkoop laden gestart —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamisch_goedkoopste_periode
                 to: Nee
@@ -1682,7 +1680,7 @@ actions:
             data:
               message: 💲Dynamisch NOM goedkoop laden voltooid  —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Dynamisch NOM goedkoop laden
       - conditions:
           - condition: trigger
@@ -1760,7 +1758,7 @@ actions:
             data:
               message: 💲Dynamisch goedkoop laden gestart —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
           - wait_for_trigger:
               - entity_id: sensor.dynamisch_goedkoopste_periode
                 to: Nee
@@ -1801,7 +1799,7 @@ actions:
             data:
               message: 💲Dynamisch goedkoop laden voltooid  —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Dynamisch goedkoop laden
       - conditions:
           - condition: trigger
@@ -1873,7 +1871,7 @@ actions:
             data:
               message: 💲Dynamisch duur ontladen gestart —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
           - wait_for_trigger:
               - alias: Tot minimale SOC
                 trigger: template
@@ -1911,6 +1909,6 @@ actions:
             data:
               message: 💲Dynamisch duur ontladen voltooid  —
               entity_id: input_select.zendure_2400_ac_modus_selecteren
-              name: ' '
+              name: " "
         alias: Dynamisch duur ontladen
 mode: parallel

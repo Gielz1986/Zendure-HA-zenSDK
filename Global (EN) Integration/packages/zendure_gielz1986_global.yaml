@@ -374,7 +374,7 @@ template:
       - name: "Zendure Configuration Version"
         unique_id: zendure_configuration_version
         icon: mdi:one-up
-        state: "v20261007"
+        state: "v20261113"
 
       - name: "Zendure Last Calibration (Days)"
         unique_id: zendure_last_calibration_days
@@ -1682,7 +1682,7 @@ rest:
 
       - name: "Zendure Power PV To Home"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
@@ -1696,7 +1696,7 @@ rest:
 
       - name: "Zendure Power PV Total"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
@@ -1708,7 +1708,7 @@ rest:
 
       - name: "Zendure Power PV To Battery"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
@@ -1777,7 +1777,14 @@ rest:
           {% set product = value_json.product %}
           {% if product in ["solarFlow4000MixAC+", "solarFlow4000MixPro", "solarFlow3000MixAC+"] %}
             {% set mapping = {
-              70: 8.00
+              5: 2.88,
+              70: 8.00,
+              250: 0.96,
+              240: 1.92,
+              300: 1.92,
+              350: 2.88,
+              280: 2.88,
+              500: 2.40
             } %}
           {% else %}
             {% set mapping = {
@@ -2135,7 +2142,7 @@ rest:
 
       - name: "Zendure Power"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}

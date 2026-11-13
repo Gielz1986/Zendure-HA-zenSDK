@@ -374,7 +374,7 @@ template:
       - name: "Zendure 2400 AC Configuratie Versie"
         unique_id: Zendure_2400_AC_Configuratie_Versie
         icon: mdi:one-up
-        state: "v20261007"
+        state: "v20261113"
 
       - name: "Zendure 2400 AC Laatste Kalibratie (Dagen)"
         unique_id: Zendure_2400_AC_Laatste_Kalibratie_Dagen
@@ -1680,7 +1680,7 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen PV Naar Huis"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
@@ -1694,7 +1694,7 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen PV Totaal"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
@@ -1706,7 +1706,7 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen PV Naar Batterij"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
@@ -1775,7 +1775,14 @@ rest:
           {% set product = value_json.product %}
           {% if product in ["solarFlow4000MixAC+", "solarFlow4000MixPro", "solarFlow3000MixAC+"] %}
             {% set mapping = {
-              70: 8.00
+              5: 2.88,
+              70: 8.00,
+              250: 0.96,
+              240: 1.92,
+              300: 1.92,
+              350: 2.88,
+              280: 2.88,
+              500: 2.40
             } %}
           {% else %}
             {% set mapping = {
@@ -2133,7 +2140,7 @@ rest:
 
       - name: "Zendure 2400 AC Vermogen Aansturing"
         value_template: >
-          {% set pv = value_json['properties']['pvStatus'] | int(0) %}
+          {% set pv = value_json.get('properties', {}).get('pvStatus', 0) | int(0) %}
           {% set solar = value_json['properties']['solarInputPower'] | float(0) %}
           {% set grid_off = value_json.get('properties', {}).get('gridOffPower', 0) | float(0) %}
           {% set pv_active = (pv == 1) or (solar > 0) or (grid_off < 0) %}
