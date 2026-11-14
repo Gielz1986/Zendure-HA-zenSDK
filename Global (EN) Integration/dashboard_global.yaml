@@ -1090,6 +1090,7 @@ views:
               tooltip:
                 enabledOnSeries:
                   - 0
+                  - 1
                 followCursor: true
                 shared: true
                 intersect: false
@@ -1188,6 +1189,41 @@ views:
                       fillColor: kleur
                     };
                   });
+              - entity: sensor.dynamic_lowest_price_period
+                name: Export correction
+                type: column
+                float_precision: 3
+                color: "#c53b2c"
+                show:
+                  in_header: false
+                  legend_value: false
+                  extremas: false
+                data_generator: >
+                  const data = entity.attributes.raw_today;
+
+                  if (!data) return [];
+
+
+                  const correction =
+                  parseFloat(hass.states['input_number.dynamic_export_correction'].state
+                  || 0);
+
+
+                  return data.map((item, index) => {
+                    const tijdStart = new Date(item.start).getTime();
+                    const duration = item.duration
+                                      ? item.duration * 1000
+                                      : (data[index + 1]
+                                          ? new Date(data[index + 1].start).getTime() - tijdStart
+                                          : 3600000);
+                    const verleden = Date.now() >= tijdStart + duration;
+
+                    return {
+                      x: tijdStart,
+                      y: ["ja", "yes"].includes(String(item.duur).toLowerCase()) ? correction : 0,
+                      fillColor: verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,0.45)"
+                    };
+                  });
           - type: horizontal-stack
             cards:
               - type: tile
@@ -1245,6 +1281,7 @@ views:
               tooltip:
                 enabledOnSeries:
                   - 0
+                  - 1
                 followCursor: true
                 shared: true
                 intersect: false
@@ -1341,6 +1378,41 @@ views:
                       x: tijdStart,
                       y: prijs,
                       fillColor: kleur
+                    };
+                  });
+              - entity: sensor.dynamic_lowest_price_period
+                name: Export correction
+                type: column
+                float_precision: 3
+                color: "#c53b2c"
+                show:
+                  in_header: false
+                  legend_value: false
+                  extremas: false
+                data_generator: >
+                  const data = entity.attributes.raw_tomorrow;
+
+                  if (!data) return [];
+
+
+                  const correction =
+                  parseFloat(hass.states['input_number.dynamic_export_correction'].state
+                  || 0);
+
+
+                  return data.map((item, index) => {
+                    const tijdStart = new Date(item.start).getTime();
+                    const duration = item.duration
+                                      ? item.duration * 1000
+                                      : (data[index + 1]
+                                          ? new Date(data[index + 1].start).getTime() - tijdStart
+                                          : 3600000);
+                    const verleden = Date.now() >= tijdStart + duration;
+
+                    return {
+                      x: tijdStart,
+                      y: ["ja", "yes"].includes(String(item.duur).toLowerCase()) ? correction : 0,
+                      fillColor: verleden ? "rgba(197,59,44,0.15)" : "rgba(197,59,44,0.45)"
                     };
                   });
             visibility:
