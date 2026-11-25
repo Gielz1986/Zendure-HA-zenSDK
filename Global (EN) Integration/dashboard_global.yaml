@@ -2841,6 +2841,8 @@ views:
             entities:
               - entity: input_boolean.zendure_setting_pv_export_disabled
                 name: PV Export Disabled
+              - entity: switch.zendure_pv_in_ac_switch
+                name: PV-In AC Switch
             visibility:
               - condition: state
                 entity: input_boolean.dashboard_setting_show_pv

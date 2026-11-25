@@ -353,6 +353,26 @@ template:
             mdi:flash
           {% endif %}
 
+  - switch:
+      - name: "Zendure PV-In AC Switch"
+        unique_id: zendure_pv_in_ac_switch
+        icon: mdi:solar-power-variant
+        state: "{{ is_state('sensor.zendure_pv_in_ac_switch_status', 'On') }}"
+        # Unavailable (not switchable) when the device does not report pvacSwitch
+        availability: "{{ states('sensor.zendure_pv_in_ac_switch_status') in ['On', 'Off'] }}"
+        turn_on:
+          - action: rest_command.zendure_setting
+            data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+              instellingitem: pvacSwitch
+              instellinginhoud: 1
+        turn_off:
+          - action: rest_command.zendure_setting
+            data:
+              sn: "{{ states('sensor.zendure_serial_number') }}"
+              instellingitem: pvacSwitch
+              instellinginhoud: 0
+
   - trigger:
       - platform: state
         entity_id: sensor.zendure_total_state_of_charge
@@ -1494,6 +1514,17 @@ rest:
           {% set states = {1: "Allow", 2: "Forbidden"} %}
           {% set packState = value_json.get('properties', {}).get('gridReverse', 0) | int %}
           {{ states.get(packState, "Unknown") }}
+
+      - name: "Zendure PV-In AC Switch Status"
+        unique_id: zendure_pv_in_ac_switch_status
+        icon: mdi:solar-power-variant
+        value_template: >
+          {% set props = value_json.get('properties', {}) %}
+          {% if 'pvacSwitch' in props %}
+            {{ 'On' if props.get('pvacSwitch', 0) | int(0) == 1 else 'Off' }}
+          {% else %}
+            Not Supported
+          {% endif %}
 
       - name: "Zendure Battery 1 Cell Balance Status"
         unique_id: zendure_battery_1_cell_balance_status

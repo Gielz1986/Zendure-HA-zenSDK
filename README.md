@@ -83,6 +83,7 @@ homeassistant:
 | `zendure_setting_maximum_allowed_state_of_charge` | **(Recommended: 100%) 70% to 100%** – Set the maximum allowed state of charge percentage here. At 100%, an SOC calibration is performed to accurately estimate the state of charge level. | 
 | **Configuration (PV)** |**Information**|  
 | `zendure_setting_pv_export_disabled`    | Check this to disable the pv export. When the battery is full it will no longer export the energy of connected solarpanels. | 
+| `zendure_pv_in_ac_switch`    | Turn the PV-In AC Switch on or off (`pvacSwitch`). The switch shows the current status reported by the Zendure. If your Zendure has no PV-In AC Switch, the switch is unavailable and cannot be changed. | 
 | **Configuration (Optional)** | **Information** |
 | `home_energy_setting_meter_sensor` | **e.g. sensor.custom_energy** – Add your own home energy sensor (+watt import / -watt export). This will take priority. [Go to WIKI](https://github.com/Gielz1986/Zendure-HA-zenSDK/wiki/Global-and-NL-%E2%80%90-P1-CT-meters-(API's))) for P1/CT API's. |
 | `zendure_setting_battery_order` | **e.g. 1;5;3;4;2** – Manually define battery order based on serial numbers and physical stacking. |

@@ -2853,6 +2853,8 @@ views:
             entities:
               - entity: input_boolean.zendure_2400_ac_pv_export_uitgeschakeld
                 name: PV Export Uitgeschakeld
+              - entity: switch.zendure_2400_ac_pv_in_ac_schakelaar
+                name: PV-In AC Schakelaar
             visibility:
               - condition: state
                 entity: input_boolean.pv_tonen_op_dashboard

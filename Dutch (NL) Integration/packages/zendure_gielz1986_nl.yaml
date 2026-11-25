@@ -353,6 +353,26 @@ template:
             mdi:flash
           {% endif %}
 
+  - switch:
+      - name: "Zendure 2400 AC PV-In AC Schakelaar"
+        unique_id: zendure_2400_ac_pv_in_ac_schakelaar
+        icon: mdi:solar-power-variant
+        state: "{{ is_state('sensor.zendure_2400_ac_pv_in_ac_schakelaar_status', 'Aan') }}"
+        # Niet beschikbaar (niet schakelbaar) als het apparaat geen pvacSwitch rapporteert
+        availability: "{{ states('sensor.zendure_2400_ac_pv_in_ac_schakelaar_status') in ['Aan', 'Uit'] }}"
+        turn_on:
+          - action: rest_command.zendure_instelling
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              instellingitem: pvacSwitch
+              instellinginhoud: 1
+        turn_off:
+          - action: rest_command.zendure_instelling
+            data:
+              sn: "{{ states('sensor.zendure_2400_ac_serienummer') }}"
+              instellingitem: pvacSwitch
+              instellinginhoud: 0
+
   - trigger:
       - platform: state
         entity_id: sensor.zendure_2400_ac_laadpercentage
@@ -1492,6 +1512,17 @@ rest:
           {% set states = {1: "Toegestaan", 2: "Verboden"} %}
           {% set packState = value_json.get('properties', {}).get('gridReverse', 0) | int %}
           {{ states.get(packState, "Onbekend") }}
+
+      - name: "Zendure 2400 AC PV-In AC Schakelaar Status"
+        unique_id: zendure_2400_ac_pv_in_ac_schakelaar_status
+        icon: mdi:solar-power-variant
+        value_template: >
+          {% set props = value_json.get('properties', {}) %}
+          {% if 'pvacSwitch' in props %}
+            {{ 'Aan' if props.get('pvacSwitch', 0) | int(0) == 1 else 'Uit' }}
+          {% else %}
+            Niet Ondersteund
+          {% endif %}
 
       - name: "Zendure 2400 AC Batterij 1 Celbalans Status"
         unique_id: zendure_2400_ac_batterij_1_celbalans_status
